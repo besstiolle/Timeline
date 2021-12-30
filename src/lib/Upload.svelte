@@ -121,7 +121,7 @@
     <form id="box" method="post" action="" enctype="multipart/form-data">
     
     <div class="box__input">
-    <div><img src='static/download.png' alt='Choose a CSV file or drag it here'/></div>
+    <div><img src='download.png' alt='Choose a CSV file or drag it here'/></div>
     <div><input class="box__file" type="file" name="files[]" accept=".csv" id="file"/>
     <label for="file"><strong>Choose a CSV file (.csv) </strong><span class="box__dragndrop"> or drag it here</span>.</label></div>
     <button class="box__button" type="submit">Upload</button>
