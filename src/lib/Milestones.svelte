@@ -1,4 +1,6 @@
 <script lang="ts">
+    
+    import { Constantes } from './constantes.class';
     import type { Graph } from "./graph.class";
     import Milestone from './Milestone.svelte';
 
@@ -17,5 +19,5 @@
     </g>
 </defs>
 
-<use x="150" y="0" href="#milestones"/>
+<use x="{Constantes.GridConstantes.MIDDLE_X}" y="0" href="#milestones"/>
 

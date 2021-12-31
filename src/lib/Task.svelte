@@ -1,6 +1,7 @@
 <script lang="ts">
 
     import type { Graph } from "./graph.class";
+    import { Constantes } from './constantes.class';
 
     export let task: Graph.Task;
     export let start: Date;
@@ -17,20 +18,18 @@
     const rightLabel = "#44546A";
     const leftLabel = "#000000";
     const dottedLine = "#44546A";
-    const Months = ['Jan.','Fev.','Mar.','Avr.','Mai','Juin','Juil.','Aout','Sept.','Oct.','Nov.','Dec.']
-    const maxWidth = 1000 - 150
 
     let styleColor = `fill: ${green}; stroke: ${greenStroke};` //default : full
     if(task.progress < 100){
         styleColor = `fill: ${blue}; stroke: ${blueStroke};`
     }
 
-    let labelRight:string = task.dateStart.getDate() + " " + Months[task.dateStart.getMonth()] + " - " + task.dateEnd.getDate() + " " + Months[task.dateEnd.getMonth()]
+    let labelRight:string = task.dateStart.getDate() + " " + Constantes.Months[task.dateStart.getMonth()] + " - " + task.dateEnd.getDate() + " " + Constantes.Months[task.dateEnd.getMonth()]
     
-    let widthGray = (task.dateEnd.getTime() - task.dateStart.getTime()) / (end.getTime() - start.getTime()) * maxWidth
+    let widthGray = (task.dateEnd.getTime() - task.dateStart.getTime()) / (end.getTime() - start.getTime()) * Constantes.GridConstantes.MIDDLE_WIDTH
     let widthProgress = Math.floor(task.progress as number * widthGray / 100)
     
-    let xGrayPosition =  (task.dateStart.getTime() - start.getTime()) / (end.getTime() - start.getTime()) * maxWidth + 150
+    let xGrayPosition =  (task.dateStart.getTime() - start.getTime()) / (end.getTime() - start.getTime()) * Constantes.GridConstantes.MIDDLE_WIDTH + Constantes.GridConstantes.MIDDLE_X
     let xPercentPosition = xGrayPosition + widthProgress - 5
     let percentTextAnchor = "end"
     if(task.progress < 50){

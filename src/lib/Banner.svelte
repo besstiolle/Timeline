@@ -8,7 +8,7 @@
 
 
     function monthDiff(d1: Date, d2: Date) {
-        var months: number;
+        let months: number;
         months = (d2.getFullYear() - d1.getFullYear()) * 12;
         months -= d1.getMonth();
         months += d2.getMonth();
@@ -37,28 +37,24 @@
         console.info("oneDay");   
     }*/
 
+
     let dateStart = new Date(start);
     let dateInc = new Date(start);
     let dateEnd = new Date(end);
 
-    const months = ['Jan.','Fev.','Mar.','Avr.','Mai','Juin','Juil.','Aout','Sept.','Oct.','Nov.','Dec.']
-
-    let i=0;
-    let sectionWidth = Math.round (Constantes.GridConstantes.MIDDLE_WIDTH / (monthDiff(dateStart,dateEnd) +1));
-    console.info(sectionWidth + " for " + (monthDiff(dateStart,dateEnd) +1) + " months")
+    let i=0
     let jalons=[]
     while (dateEnd.getFullYear() > dateInc.getFullYear() || 
             (dateEnd.getFullYear() == dateInc.getFullYear() && dateEnd.getMonth() >= dateInc.getMonth()) && i < 100){
         i++;
         jalons.push({
-            left:(i-1)*sectionWidth,
-            //label:(dateInc.getMonth()==0?dateInc.getUTCFullYear():months[dateInc.getMonth()])
-            label:months[dateInc.getMonth()]
+            left:(dateInc.getTime() - start.getTime()) / (end.getTime() - start.getTime()) * Constantes.GridConstantes.MIDDLE_WIDTH,
+            label:(dateInc.getMonth()==0?dateInc.getUTCFullYear():Constantes.Months[dateInc.getMonth()])
+            //label:Constantes.Months[dateInc.getMonth()]
         })
 
         dateInc = new Date(dateInc.setMonth(dateInc.getMonth()+1));
     }
-    console.info((monthDiff(dateStart,dateEnd) +1) + " Months for " + i + " iterations" )
 </script>
 
     

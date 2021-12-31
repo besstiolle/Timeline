@@ -65,6 +65,7 @@
         return new Date(max)
     }
 
+
     let start = getMin($datas.tasks, $datas.milestones)
     let end = getMax($datas.tasks, $datas.milestones)
     //TODO prévoir le cas des années / périodes très longues / très courtes
