@@ -3,7 +3,7 @@
     import { Graph } from './graph.class';
     import { datas } from './stores';
 
-    var hidden = false
+    var hidden = true
 
     function handleClick(event) {
         if (!hidden && !document.getElementById('box').contains(event.target)){
