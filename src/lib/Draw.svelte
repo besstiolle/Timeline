@@ -1,14 +1,20 @@
 <script lang="ts">
     import html2canvas from 'html2canvas';
+
+    import { datas } from './stores';
+        
+    import { Constantes } from './constantes.class'
+    import { Helpers } from './helpers.class';
+    import { Graph } from './graph.class';
+    
+
     import Banner from './Banner.svelte';
     import Task from './Task.svelte';
     import Milestones from './Milestones.svelte';
     import Today from './Today.svelte';
-    import { Graph } from './graph.class';
     import Upload from './Upload.svelte';
-    import { datas } from './stores';
-    import Grid from '$lib/Grid.svelte';
-    import { Constantes } from './constantes.class';
+    //import Grid from '$lib/Grid.svelte';
+    import Live from './Live.svelte';
 
 
     datas.set(new Graph.Data()
@@ -23,7 +29,7 @@
 
             .addMilestone(new Graph.Milestone("Milestone 1", new Date("2020-12-01")))
             .addMilestone(new Graph.Milestone("Milestone 2", new Date()))
-            .addMilestone(new Graph.Milestone("Milestone 3", new Date("2022-12-15")))
+            .addMilestone(new Graph.Milestone("Milestone 3", new Date("2022-08-15")))
     )
 
     function download(){
@@ -93,9 +99,9 @@
     Download in CSV
 </button>
 <Upload />
-
 <div id="output"></div>
 
+<Live />
 
 <div id="wrapper">
     <svg width="100%" viewBox="0 0 {Constantes.GridConstantes.ALL_WIDTH} {Constantes.GridConstantes.ALL_WIDTH / 2}" xmlns="http://www.w3.org/2000/svg">
@@ -118,30 +124,32 @@
 
 
         </defs>
-
-        {#each $datas.tasks as task, i}
-            <Task start={start} end={end} i={i} task={task}/>
-            <use x="0" y="{i*taskHeight + 115}" href="#T{i}"/>
-        {/each}
+        {#key $datas}
+            {#each $datas.tasks as task, i}
+                <Task start={start} end={end} i={i} task={task}/>
+                <use x="0" y="{i*taskHeight + 115}" href="#T{i}"/>
+            {/each}
         
-        <!-- SWIMLINES-- >
-        <use x="0" y="270" href="#swimline"/>
         
-        <use x="200" y="275" href="#JComplete"/><! -- +30 / jalon au dessus-- >
-        <text text-anchor="end" x="195" y="286" font-family="Verdana" font-size="9" fill="#000">Random task</text> <! -- y+11 / au dessus-- >  <! -- x-5 / au dessus-- > 
+            <!-- SWIMLINES-- >
+            <use x="0" y="270" href="#swimline"/>
+            
+            <use x="200" y="275" href="#JComplete"/><! -- +30 / jalon au dessus-- >
+            <text text-anchor="end" x="195" y="286" font-family="Verdana" font-size="9" fill="#000">Random task</text> <! -- y+11 / au dessus-- >  <! -- x-5 / au dessus-- > 
 
-        <use x="225" y="305" href="#JUncompleteL"/>
-        <text text-anchor="end" x="220" y="316" font-family="Verdana" font-size="9" fill="#000">Random task</text>
+            <use x="225" y="305" href="#JUncompleteL"/>
+            <text text-anchor="end" x="220" y="316" font-family="Verdana" font-size="9" fill="#000">Random task</text>
+            
+            <use x="250" y="335" href="#JUncompleteR"/>
+            <text text-anchor="end" x="245" y="346" font-family="Verdana" font-size="9" fill="#000">Random task</text>
+            <! -- SWIMLINES-->
+
+            <Banner start={start} end={end}/>
+            <Today  start={start} end={end}/>        
+            <Milestones start={start} end={end} milestones={$datas.milestones}/>
         
-        <use x="250" y="335" href="#JUncompleteR"/>
-        <text text-anchor="end" x="245" y="346" font-family="Verdana" font-size="9" fill="#000">Random task</text>
-        <! -- SWIMLINES-->
-
-        <Banner start={start} end={end}/>
-        <Today  start={start} end={end}/>        
-        <Milestones start={start} end={end} milestones={$datas.milestones}/>
-         
+        {/key}
 
     </svg>
 </div>
-<Grid start={start} end={end}/>
+<!--Grid start={start} end={end}/-->
