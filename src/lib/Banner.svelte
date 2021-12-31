@@ -1,6 +1,7 @@
 <script lang="ts">
 
     import BannerLabel from './BannerLabel.svelte';
+    import { Constantes } from './constantes.class';
 
     export let start: Date;
     export let end: Date;
@@ -14,7 +15,6 @@
         return months <= 0 ? 0 : months;
     }
 
-    let maxWidth = 1000 - 150; // margin left
  //   let oneDay = 86400 * 1000
  //   let days = oneDay * 15 // < 15 days
  //   let weeks = oneDay * 7 * 15 // < 15 weeks
@@ -44,17 +44,21 @@
     const months = ['Jan.','Fev.','Mar.','Avr.','Mai','Juin','Juil.','Aout','Sept.','Oct.','Nov.','Dec.']
 
     let i=0;
-    let sectionWidth = Math.floor (maxWidth / (monthDiff(dateStart,dateEnd) +1));
+    let sectionWidth = Math.round (Constantes.GridConstantes.MIDDLE_WIDTH / (monthDiff(dateStart,dateEnd) +1));
+    console.info(sectionWidth + " for " + (monthDiff(dateStart,dateEnd) +1) + " months")
     let jalons=[]
-    while ((dateEnd.getFullYear() >= dateInc.getFullYear() || dateEnd.getMonth() >= dateInc.getMonth()) && i < 100){
+    while (dateEnd.getFullYear() > dateInc.getFullYear() || 
+            (dateEnd.getFullYear() == dateInc.getFullYear() && dateEnd.getMonth() >= dateInc.getMonth()) && i < 100){
         i++;
         jalons.push({
             left:(i-1)*sectionWidth,
+            //label:(dateInc.getMonth()==0?dateInc.getUTCFullYear():months[dateInc.getMonth()])
             label:months[dateInc.getMonth()]
         })
 
         dateInc = new Date(dateInc.setMonth(dateInc.getMonth()+1));
     }
+    console.info((monthDiff(dateStart,dateEnd) +1) + " Months for " + i + " iterations" )
 </script>
 
     
@@ -73,8 +77,8 @@
     
 
     <g id="annual">
-        <rect x="-10" y="0" width="{maxWidth}" height="25" fill="url(#Gradient1)"/>
-        <rect x="-10" y="30" width="{maxWidth}" height="25" fill="url(#Gradient2)"/>
+        <rect x="-10" y="0" width="{Constantes.GridConstantes.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient1)"/>
+        <rect x="-10" y="30" width="{Constantes.GridConstantes.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient2)"/>
         {#each jalons as { left, label }, i}
             <BannerLabel left={left} label={label}/>
         {/each}
@@ -82,4 +86,4 @@
 
 </defs>
 
-<use x="150" y="50" href="#annual"/>
+<use x="{Constantes.GridConstantes.LEFT_WIDTH}" y="50" href="#annual"/>

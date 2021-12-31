@@ -7,6 +7,8 @@
     import { Graph } from './graph.class';
     import Upload from './Upload.svelte';
     import { datas } from './stores';
+    import Grid from '$lib/Grid.svelte';
+    import { Constantes } from './constantes.class';
 
 
     datas.set(new Graph.Data()
@@ -65,6 +67,11 @@
 
     let start = getMin($datas.tasks, $datas.milestones)
     let end = getMax($datas.tasks, $datas.milestones)
+    //TODO prévoir le cas des années / périodes très longues / très courtes
+    start.setDate(1)
+    end.setDate(1)
+    end.setMonth(end.getMonth() + 1)
+
     let taskHeight = 30;
 
     function takeshot() {  
@@ -90,7 +97,7 @@
 
 
 <div id="wrapper">
-    <svg viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
+    <svg width="100%" viewBox="0 0 {Constantes.GridConstantes.ALL_WIDTH} {Constantes.GridConstantes.ALL_WIDTH / 2}" xmlns="http://www.w3.org/2000/svg">
 
         <defs>
             <g id="target">
@@ -136,3 +143,4 @@
 
     </svg>
 </div>
+<Grid start={start} end={end}/>
