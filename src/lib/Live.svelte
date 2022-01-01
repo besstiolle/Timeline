@@ -73,10 +73,23 @@
         });
         $datas.tasks = $datas.tasks
     }
-    function b_add(event){
+    function b_add(){
         console.info("add")
-        $datas.tasks.push(new Graph.Task("Some task", start, end))
+        let diffSec : number = end.getTime() - start.getTime()
+        $datas.tasks.push(new Graph.Task(
+                "Some task", 
+                new Date(start.getTime() + (0.1 * diffSec)), 
+                new Date(end.getTime() - (0.1 * diffSec))))
         $datas.tasks = $datas.tasks
+    }
+    function m_add(){
+        console.info("add")
+        let diffSec : number = end.getTime() - start.getTime()
+        $datas.milestones.push(new Graph.Milestone(
+                "My Milestone", 
+                new Date(start.getTime() + (0.5 * diffSec))
+                ))
+        $datas.milestones = $datas.milestones
     }
 
     function m_delete(event){
@@ -200,6 +213,15 @@
             <input type="date" name="{MD}{i}" value="{Helpers.toISODateString(milestone.date)}" min="1900-01-01" max="2999-12-31" on:change="{updateStore}">
         </div>
         {/each}
+        
+        <div class="live__action">
+            <div class="live__action__button" on:click="{m_add}" >
+                <svg class="svg-icon" viewBox="0 0 20 20">
+                    <use x="0" y="0" href="#b_add"/>
+                </svg>
+                <span>Add a new Milestone</span>
+            </div>
+        </div>
 </div>
 </div>
 
