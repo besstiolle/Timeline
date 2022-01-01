@@ -30,31 +30,43 @@ export module Graph {
 		dateStart: Date
 		dateEnd: Date
 		progress: number
+		isShow: boolean
 	
-		constructor(label : string, dateStart : Date, dateEnd : Date, progress : number = 0) {
-		this.label = label;
-		this.dateStart = dateStart;
-		this.dateEnd = dateEnd;
-		this.progress = progress;
+		constructor(label : string, dateStart : Date, dateEnd : Date, progress : number = 0, isShow = true) {
+			this.label = label
+			this.dateStart = dateStart
+			this.dateEnd = dateEnd
+			this.progress = progress
+			this.isShow = isShow
 		}
 
 		join(car : string){
 		
 			return "task" + car + this.label + car + Helpers.toISODateString(this.dateStart) + car + Helpers.toISODateString(this.dateEnd) + car + this.progress
 		}
+
+		clone(){
+			return new Task(this.label, this.dateStart, this.dateEnd,this.progress, this.isShow)
+		}
 	}
 
 	export class Milestone {
 		label: string
 		date: Date
+		isShow: boolean
 	
-		constructor(label : string, date : Date) {
+		constructor(label : string, date : Date, isShow = true) {
 		this.label = label;
 		this.date = date;
+		this.isShow = isShow
 		}
 
 		join(car : string){
 			return "milestone" + car + this.label + car + Helpers.toISODateString(this.date)
+		}
+		
+		clone(){
+			return new Milestone(this.label, this.date)
 		}
 	}
 }
