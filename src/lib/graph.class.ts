@@ -1,25 +1,60 @@
-
 import { Helpers } from './helpers.class';
+import { browser } from "$app/env";
 
 export module Graph {
+
 
 	export class Data {
 		tasks : Array<Task>
         milestones : Array<Milestone>
+		isInitiate : boolean = false;
 
 		constructor(tasks : Array<Task> = [], milestones : Array<Milestone> = []){
 			this.tasks = tasks
 			this.milestones = milestones
+			this.isInitiate = !(!tasks.length && !milestones.length)
 		}
 
 		addTask(task: Task) : Data{
 			this.tasks.push(task)
+			this.isInitiate = true
 			return this
 		}
 
 		addMilestone(milestone: Milestone) : Data{
 			this.milestones.push(milestone)
+			this.isInitiate = true
 			return this
+		}
+
+		initiate() : Data{
+			if(browser){
+				let localData: Data = JSON.parse(localStorage.getItem("store"), Helpers.dateTimeReviver)
+				if(localData && localData.isInitiate){
+					return localData
+				}  else {
+					return this._initiate()
+				}
+			} else {
+				return this._initiate()
+			}
+			
+		}
+
+		_initiate() : Data{
+			return this
+				.addTask(new Graph.Task("Random Task 0", new Date("2021-01-15"), new Date("2021-04-01"),100))
+				.addTask(new Graph.Task("Random Task 1", new Date("2021-12-01"), new Date("2022-04-01")))
+				.addTask(new Graph.Task("Random Task 2", new Date("2021-02-01"), new Date("2021-03-05"),15))
+				.addTask(new Graph.Task("Random Task 3", new Date("2021-03-10"), new Date("2021-03-30"),0))
+				.addTask(new Graph.Task("Random Task 4", new Date("2021-02-01"), new Date("2021-05-01"),30))
+				.addTask(new Graph.Task("Random Task 5", new Date("2021-01-31"), new Date("2021-03-01"),100))
+				.addTask(new Graph.Task("Random Task 6", new Date("2021-05-01"), new Date("2021-05-05"),25))
+				.addTask(new Graph.Task("Random Task 7", new Date("2021-12-01"), new Date("2022-04-01"),75))
+
+				.addMilestone(new Graph.Milestone("Milestone 1", new Date("2020-12-01")))
+				.addMilestone(new Graph.Milestone("Milestone 2", new Date()))
+				.addMilestone(new Graph.Milestone("Milestone 3", new Date("2022-08-15")))
 		}
 	}
 

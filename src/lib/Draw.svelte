@@ -4,7 +4,7 @@
     import { datas } from './stores';
         
     import { Constantes } from './constantes.class'
-    import { Graph } from './graph.class';
+    import type { Graph } from './graph.class';
     
 
     import Banner from './Banner.svelte';
@@ -12,24 +12,9 @@
     import Milestones from './Milestones.svelte';
     import Today from './Today.svelte';
     import Upload from './Upload.svelte';
-    //import Grid from '$lib/Grid.svelte';
     import Live from './Live.svelte';
-
-
-    datas.set(new Graph.Data()
-            .addTask(new Graph.Task("Random Task 0", new Date("2021-01-15"), new Date("2021-04-01"),100))
-            .addTask(new Graph.Task("Random Task 1", new Date("2021-12-01"), new Date("2022-04-01")))
-            .addTask(new Graph.Task("Random Task 2", new Date("2021-02-01"), new Date("2021-03-05"),15))
-            .addTask(new Graph.Task("Random Task 3", new Date("2021-03-10"), new Date("2021-03-30"),0))
-            .addTask(new Graph.Task("Random Task 4", new Date("2021-02-01"), new Date("2021-05-01"),30))
-            .addTask(new Graph.Task("Random Task 5", new Date("2021-01-31"), new Date("2021-03-01"),100))
-            .addTask(new Graph.Task("Random Task 6", new Date("2021-05-01"), new Date("2021-05-05"),25))
-            .addTask(new Graph.Task("Random Task 7", new Date("2021-12-01"), new Date("2022-04-01"),75))
-
-            .addMilestone(new Graph.Milestone("Milestone 1", new Date("2020-12-01")))
-            .addMilestone(new Graph.Milestone("Milestone 2", new Date()))
-            .addMilestone(new Graph.Milestone("Milestone 3", new Date("2022-08-15")))
-    )
+    import { Helpers } from './helpers.class';
+    
 
     function download(){
         let csvContent = "data:text/csv;charset=utf-8," 
@@ -40,39 +25,9 @@
         window.open(encodedUri);
     }
 
-    function getMin(tasks : Array<Graph.Task>, milestones : Array<Graph.Milestone>): Date{
-        let min : Date = new Date("2999-12-31");
-        tasks.forEach(task => {
-            if(min > task.dateStart){
-                min = task.dateStart
-            }
-        });
-        milestones.forEach(milestone => {
-            if(min > milestone.date){
-                min = milestone.date
-            }
-        });
-        return new Date(min)
-    }
+    let start = Helpers.getMin($datas.tasks, $datas.milestones)
+    let end = Helpers.getMax($datas.tasks, $datas.milestones)
 
-    function getMax(tasks : Array<Graph.Task>, milestones : Array<Graph.Milestone>): Date{
-        let max : Date = new Date("1900-01-01");
-        tasks.forEach(task => {
-            if(max < task.dateEnd){
-                max = task.dateEnd
-            }
-        });
-        milestones.forEach(milestone => {
-            if(max < milestone.date){
-                max = milestone.date
-            }
-        });
-        return new Date(max)
-    }
-
-
-    let start = getMin($datas.tasks, $datas.milestones)
-    let end = getMax($datas.tasks, $datas.milestones)
     //TODO prévoir le cas des années / périodes très longues / très courtes
     start.setDate(1)
     end.setDate(1)
@@ -87,6 +42,7 @@
         )
     }
 
+    
 
 </script>
 
@@ -141,7 +97,7 @@
         </defs>
         {#key $datas}
             {#each $datas.tasks as task, i}
-                <Task start={start} end={end} i={i} task={task}/>
+                <Task start={start} end={end} i={i}/>
                 <use x="0" y="{i*taskHeight + 115}" href="#T{i}"/>
             {/each}
         
