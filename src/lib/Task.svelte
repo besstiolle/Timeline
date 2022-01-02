@@ -1,10 +1,8 @@
 <script lang="ts">
 
-    import type { Graph } from "./graph.class";
     import { Constantes } from './constantes.class';
     import { datas } from './stores';
 
-    export let task: Graph.Task;
     export let start: Date;
     export let end: Date;
     export let i: number;
