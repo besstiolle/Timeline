@@ -1,13 +1,12 @@
 <script lang="ts">
     import type { Struct } from "./struct.class";
     import { Constantes } from './constantes.class';
+    import { store } from "./stores";
 
-    export let start: Date;
-    export let end: Date;
     export let milestone: Struct.Milestone;
     export let i : number;
 
-    let xMilestonePosition =  (milestone.date.getTime() - start.getTime()) / (end.getTime() - start.getTime()) * Constantes.GRID.MIDDLE_WIDTH
+    let xMilestonePosition =  (milestone.date.getTime() - $store.start.getTime()) / ($store.end.getTime() - $store.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH
 </script>
 
     

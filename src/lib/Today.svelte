@@ -1,15 +1,14 @@
 <script lang="ts">
 
     import { Constantes } from './constantes.class';
-    export let start: Date;
-    export let end: Date;
+    import { store } from './stores';
 
-    let toDisplay = (start <= new Date() && end >= new Date())
+    let toDisplay = ($store.start <= new Date() && $store.end >= new Date())
 
     const todayColor = "#D41E24"
     const todayLabelColor = "#000000"
     
-    let widthToday = (new Date().getTime() - start.getTime()) / (end.getTime() - start.getTime()) * Constantes.GRID.MIDDLE_WIDTH
+    let widthToday = (new Date().getTime() - $store.start.getTime()) / ($store.end.getTime() - $store.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH
  
 </script>
 

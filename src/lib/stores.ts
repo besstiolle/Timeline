@@ -12,6 +12,7 @@ function updateLocalStorage(val){
     if(browser){
         if( typeof val === "object"){
             //Refresh datemin / max
+            val.processLimites()
 
             //Saving into LocalStorage
             localStorage.setItem("store", JSON.stringify(val))

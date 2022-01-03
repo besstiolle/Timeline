@@ -1,7 +1,5 @@
 <script lang="ts">
 
-    
-
     import { store } from './stores';
     import { Helpers } from './helpers.class';
     import { Struct } from './struct.class';
@@ -9,10 +7,6 @@
 
     export let getIndex = (event) => {return 0}
     export let updateStore =  (event) => {}
-
-    export let start: Date;
-    export let end: Date;
-
 
     function b_delete(event){
         $store.tasks.splice(getIndex(event), 1)
@@ -50,11 +44,11 @@
         $store.tasks = $store.tasks
     }
     function b_add(){
-        let diffSec : number = end.getTime() - start.getTime()
+        let diffSec : number = $store.end.getTime() - $store.start.getTime()
         $store.tasks.push(new Struct.Task(
                 "Some task", 
-                new Date(start.getTime() + (0.1 * diffSec)), 
-                new Date(end.getTime() - (0.1 * diffSec))))
+                new Date($store.start.getTime() + (0.1 * diffSec)), 
+                new Date($store.end.getTime() - (0.1 * diffSec))))
         $store.tasks = $store.tasks
     }
 

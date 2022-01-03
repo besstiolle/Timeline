@@ -1,11 +1,10 @@
 <script lang="ts">
     import { Helpers } from './helpers.class';
     import { Constantes } from './constantes.class';
-    export let start: Date;
-    export let end: Date;
+    import { store } from './stores';
 
-    let startString = Helpers.toISODateString(start)
-    let endString = Helpers.toISODateString(end)
+    let startString = Helpers.toISODateString($store.start)
+    let endString = Helpers.toISODateString($store.end)
 </script>
 
 <div id='grid'>

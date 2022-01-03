@@ -8,6 +8,8 @@ export module Struct {
 		tasks : Array<Task> = new Array<Task>()
         milestones : Array<Milestone> = new Array<Milestone>()
 		isInitiate : boolean = false
+		start: Date
+		end: Date
 
 		constructor(){
 		}
@@ -28,6 +30,18 @@ export module Struct {
 			this.tasks = new Array<Task>()
 			this.milestones = new Array<Milestone>()
 			this.isInitiate = false
+		}
+
+		processLimites() : Data{
+			this.start = Helpers.getMin(this.tasks, this.milestones)
+    		this.end = Helpers.getMax(this.tasks, this.milestones)
+
+			//TODO prévoir le cas des années / périodes très longues / très courtes
+			this.start.setDate(1)
+			this.end.setDate(1)
+			this.end.setMonth(this.end.getMonth() + 1)
+
+			return this
 		}
 
 		initiate() : Data{
@@ -59,6 +73,8 @@ export module Struct {
 				.addMilestone(new Struct.Milestone("Milestone 1", new Date("2020-12-01")))
 				.addMilestone(new Struct.Milestone("Milestone 2", new Date()))
 				.addMilestone(new Struct.Milestone("Milestone 3", new Date("2022-08-15")))
+
+				.processLimites()
 		}
 	}
 

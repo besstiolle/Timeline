@@ -7,9 +7,6 @@
     const TE : string = "taskEnd_"
     const MD : string = "milestoneDate_"
 
-    export let start: Date;
-    export let end: Date;
-
     let live__open: boolean = false // Define a non-visibility (display: hidden) for the live__wrapper html node
     let live__weak_opacity: boolean = false // Define a full opacity by default for the live__shadow html node
 
@@ -63,8 +60,8 @@
     </div>
     <div id='live__shadow' class:live__weak_opacity>
         <div id='live'>
-            <LiveTableTask getIndex={(event) => getIndex(event)} updateStore={(event) => updateStore(event)} start={start} end={end} />
-            <LiveTableMilestone getIndex={(event) => getIndex(event)} updateStore={(event) => updateStore(event)} start={start} end={end} />
+            <LiveTableTask getIndex={(event) => getIndex(event)} updateStore={(event) => updateStore(event)} />
+            <LiveTableMilestone getIndex={(event) => getIndex(event)} updateStore={(event) => updateStore(event)} />
         </div>
     </div>
 </div>

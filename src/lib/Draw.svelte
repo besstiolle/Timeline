@@ -24,14 +24,6 @@
         window.open(encodedUri)
     }
 
-    let start = Helpers.getMin($store.tasks, $store.milestones)
-    let end = Helpers.getMax($store.tasks, $store.milestones)
-
-    //TODO prévoir le cas des années / périodes très longues / très courtes
-    start.setDate(1)
-    end.setDate(1)
-    end.setMonth(end.getMonth() + 1)
-
     let taskHeight = 30;
 
     function takeshot() {  
@@ -57,7 +49,7 @@
 </button>
 
 <div id="output"></div>
-<Live start={start} end={end} bind:this={liveComponent}/>
+<Live bind:this={liveComponent}/>
 
 <div id="wrapper">
     <svg width="100%" viewBox="0 0 {Constantes.GRID.ALL_WIDTH} {Constantes.GRID.ALL_WIDTH / 2}" xmlns="http://www.w3.org/2000/svg">
@@ -102,7 +94,7 @@
         </defs>
         {#key $store}
             {#each $store.tasks as task, i}
-                <Task start={start} end={end} i={i}/>
+                <Task i={i}/>
                 <use x="0" y="{i*taskHeight + 115}" href="#T{i}"/>
             {/each}
         
@@ -120,12 +112,12 @@
             <text text-anchor="end" x="245" y="346" font-family="Verdana" font-size="9" fill="#000">Random task</text>
             <! -- SWIMLINES-->
 
-            <Banner start={start} end={end}/>
-            <Today  start={start} end={end}/>        
-            <Milestones start={start} end={end} milestones={$store.milestones}/>
+            <Banner/>
+            <Today/>        
+            <Milestones milestones={$store.milestones}/>
         
         {/key}
 
     </svg>
 </div>
-<!--Grid start={start} end={end}/-->
+<!--Grid/-->

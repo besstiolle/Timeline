@@ -8,10 +8,6 @@
     export let getIndex = (event) => {return 0}
     export let updateStore =  (event) => {}
 
-    export let start: Date;
-    export let end: Date;
-
-
     function m_delete(event){
         $store.milestones.splice(getIndex(event), 1)
         $store.milestones = $store.milestones
@@ -48,10 +44,10 @@
         $store.milestones = $store.milestones
     }
     function m_add(){
-        let diffSec : number = end.getTime() - start.getTime()
+        let diffSec : number = $store.end.getTime() - $store.start.getTime()
         $store.milestones.push(new Struct.Milestone(
                 "My Milestone", 
-                new Date(start.getTime() + (0.5 * diffSec))
+                new Date($store.start.getTime() + (0.5 * diffSec))
                 ))
         $store.milestones = $store.milestones
     }

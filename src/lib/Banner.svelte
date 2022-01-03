@@ -2,10 +2,7 @@
 
     import BannerLabel from './BannerLabel.svelte';
     import { Constantes } from './constantes.class';
-
-    export let start: Date;
-    export let end: Date;
-
+    import { store } from './stores';
 
     function monthDiff(d1: Date, d2: Date) {
         let months: number;
@@ -38,17 +35,15 @@
     }*/
 
 
-    let dateStart = new Date(start);
-    let dateInc = new Date(start);
-    let dateEnd = new Date(end);
+    let dateInc = new Date($store.start);
 
     let i=0
     let jalons=[]
-    while (dateEnd.getFullYear() > dateInc.getFullYear() || 
-            (dateEnd.getFullYear() == dateInc.getFullYear() && dateEnd.getMonth() >= dateInc.getMonth()) && i < 100){
+    while ($store.end.getFullYear() > dateInc.getFullYear() || 
+            ($store.end.getFullYear() == dateInc.getFullYear() && $store.end.getMonth() >= dateInc.getMonth()) && i < 100){
         i++;
         jalons.push({
-            left:(dateInc.getTime() - start.getTime()) / (end.getTime() - start.getTime()) * Constantes.GRID.MIDDLE_WIDTH,
+            left:(dateInc.getTime() - $store.start.getTime()) / ($store.end.getTime() - $store.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH,
             label:(dateInc.getMonth()==0?dateInc.getUTCFullYear():Constantes.MONTHS[dateInc.getMonth()])
             //label:Constantes.MONTHS[dateInc.getMonth()]
         })

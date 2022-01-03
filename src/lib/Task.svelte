@@ -3,8 +3,6 @@
     import { Constantes } from './constantes.class';
     import { store } from './stores';
 
-    export let start: Date;
-    export let end: Date;
     export let i: number;
     
     const green = "#16A085";
@@ -26,10 +24,10 @@
     let labelRight:string = $store.tasks[i].dateStart.getDate() + " " + Constantes.MONTHS[$store.tasks[i].dateStart.getMonth()] 
                     + " - " + $store.tasks[i].dateEnd.getDate() + " " + Constantes.MONTHS[$store.tasks[i].dateEnd.getMonth()]
     
-    let widthGray = ($store.tasks[i].dateEnd.getTime() - $store.tasks[i].dateStart.getTime()) / (end.getTime() - start.getTime()) * Constantes.GRID.MIDDLE_WIDTH
+    let widthGray = ($store.tasks[i].dateEnd.getTime() - $store.tasks[i].dateStart.getTime()) / ($store.end.getTime() - $store.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH
     let widthProgress = $store.tasks[i].progress * widthGray / 100
     
-    let xGrayPosition =  ($store.tasks[i].dateStart.getTime() - start.getTime()) / (end.getTime() - start.getTime()) * Constantes.GRID.MIDDLE_WIDTH + Constantes.GRID.MIDDLE_X
+    let xGrayPosition =  ($store.tasks[i].dateStart.getTime() - $store.start.getTime()) / ($store.end.getTime() - $store.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH + Constantes.GRID.MIDDLE_X
     let xPercentPosition = xGrayPosition + widthProgress - 5
     let percentTextAnchor = "end"
     if($store.tasks[i].progress < 50){

@@ -4,8 +4,6 @@
     import type { Struct } from "./struct.class";
     import Milestone from './Milestone.svelte';
 
-    export let start: Date;
-    export let end: Date;
     export let milestones: Array<Struct.Milestone>;
 
 </script>
@@ -14,7 +12,7 @@
 <defs>
     <g id="milestones">
         {#each milestones as milestone, i}
-            <Milestone start={start} end={end} i={i} milestone={milestone}/>
+            <Milestone i={i} milestone={milestone}/>
         {/each}
     </g>
 </defs>
