@@ -77,7 +77,12 @@ export module Graph {
 
 		join(car : string){
 		
-			return "task" + car + this.label + car + Helpers.toISODateString(this.dateStart) + car + Helpers.toISODateString(this.dateEnd) + car + this.progress
+			return "task" + car 
+			+ this.label + car 
+			+ this.isShow + car 
+			+ Helpers.toISODateString(this.dateStart) + car
+			+ Helpers.toISODateString(this.dateEnd) + car 
+			+ this.progress
 		}
 
 		clone(){
@@ -97,7 +102,10 @@ export module Graph {
 		}
 
 		join(car : string){
-			return "milestone" + car + this.label + car + Helpers.toISODateString(this.date)
+			return "milestone" + car 
+				+ this.label + car 
+				+ this.isShow + car 
+				+ Helpers.toISODateString(this.date)
 		}
 		
 		clone(){
