@@ -23,12 +23,13 @@
         styleColor = `fill: ${blue}; stroke: ${blueStroke};`
     }
 
-    let labelRight:string = $datas.tasks[i].dateStart.getDate() + " " + Constantes.Months[$datas.tasks[i].dateStart.getMonth()] + " - " + $datas.tasks[i].dateEnd.getDate() + " " + Constantes.Months[$datas.tasks[i].dateEnd.getMonth()]
+    let labelRight:string = $datas.tasks[i].dateStart.getDate() + " " + Constantes.MONTHS[$datas.tasks[i].dateStart.getMonth()] 
+                    + " - " + $datas.tasks[i].dateEnd.getDate() + " " + Constantes.MONTHS[$datas.tasks[i].dateEnd.getMonth()]
     
-    let widthGray = ($datas.tasks[i].dateEnd.getTime() - $datas.tasks[i].dateStart.getTime()) / (end.getTime() - start.getTime()) * Constantes.GridConstantes.MIDDLE_WIDTH
+    let widthGray = ($datas.tasks[i].dateEnd.getTime() - $datas.tasks[i].dateStart.getTime()) / (end.getTime() - start.getTime()) * Constantes.GRID.MIDDLE_WIDTH
     let widthProgress = $datas.tasks[i].progress * widthGray / 100
     
-    let xGrayPosition =  ($datas.tasks[i].dateStart.getTime() - start.getTime()) / (end.getTime() - start.getTime()) * Constantes.GridConstantes.MIDDLE_WIDTH + Constantes.GridConstantes.MIDDLE_X
+    let xGrayPosition =  ($datas.tasks[i].dateStart.getTime() - start.getTime()) / (end.getTime() - start.getTime()) * Constantes.GRID.MIDDLE_WIDTH + Constantes.GRID.MIDDLE_X
     let xPercentPosition = xGrayPosition + widthProgress - 5
     let percentTextAnchor = "end"
     if($datas.tasks[i].progress < 50){

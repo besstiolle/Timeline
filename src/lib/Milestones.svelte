@@ -19,5 +19,5 @@
     </g>
 </defs>
 
-<use x="{Constantes.GridConstantes.MIDDLE_X}" y="0" href="#milestones"/>
+<use x="{Constantes.GRID.MIDDLE_X}" y="0" href="#milestones"/>
 

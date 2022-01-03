@@ -48,9 +48,9 @@
             (dateEnd.getFullYear() == dateInc.getFullYear() && dateEnd.getMonth() >= dateInc.getMonth()) && i < 100){
         i++;
         jalons.push({
-            left:(dateInc.getTime() - start.getTime()) / (end.getTime() - start.getTime()) * Constantes.GridConstantes.MIDDLE_WIDTH,
-            label:(dateInc.getMonth()==0?dateInc.getUTCFullYear():Constantes.Months[dateInc.getMonth()])
-            //label:Constantes.Months[dateInc.getMonth()]
+            left:(dateInc.getTime() - start.getTime()) / (end.getTime() - start.getTime()) * Constantes.GRID.MIDDLE_WIDTH,
+            label:(dateInc.getMonth()==0?dateInc.getUTCFullYear():Constantes.MONTHS[dateInc.getMonth()])
+            //label:Constantes.MONTHS[dateInc.getMonth()]
         })
 
         dateInc = new Date(dateInc.setMonth(dateInc.getMonth()+1));
@@ -73,8 +73,8 @@
     
 
     <g id="annual">
-        <rect x="-10" y="0" width="{Constantes.GridConstantes.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient1)"/>
-        <rect x="-10" y="30" width="{Constantes.GridConstantes.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient2)"/>
+        <rect x="-10" y="0" width="{Constantes.GRID.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient1)"/>
+        <rect x="-10" y="30" width="{Constantes.GRID.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient2)"/>
         {#each jalons as { left, label }, i}
             <BannerLabel left={left} label={label}/>
         {/each}
@@ -82,4 +82,4 @@
 
 </defs>
 
-<use x="{Constantes.GridConstantes.LEFT_WIDTH}" y="50" href="#annual"/>
+<use x="{Constantes.GRID.LEFT_WIDTH}" y="50" href="#annual"/>

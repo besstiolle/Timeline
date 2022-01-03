@@ -9,7 +9,7 @@
     const todayColor = "#D41E24"
     const todayLabelColor = "#000000"
     
-    let widthToday = (new Date().getTime() - start.getTime()) / (end.getTime() - start.getTime()) * Constantes.GridConstantes.MIDDLE_WIDTH
+    let widthToday = (new Date().getTime() - start.getTime()) / (end.getTime() - start.getTime()) * Constantes.GRID.MIDDLE_WIDTH
  
 </script>
 
@@ -23,5 +23,5 @@
         </g>
     </defs>
 
-    <use x="{Constantes.GridConstantes.MIDDLE_X}" y="50" href="#today"/>
+    <use x="{Constantes.GRID.MIDDLE_X}" y="50" href="#today"/>
 {/if}

@@ -1,6 +1,6 @@
 export module Constantes {
 
-    export const GridConstantes = {
+    export const GRID = {
         ALL_WIDTH:1000,
         LEFT_WIDTH:150,
         RIGHT_WIDTH:75,
@@ -9,7 +9,12 @@ export module Constantes {
         RIGHT_X:(1000-75),
         MIDDLE_X:150,
     }
-
     
-    export const Months = ['Jan.','Fev.','Mar.','Avr.','Mai','Juin','Juil.','Aout','Sept.','Oct.','Nov.','Dec.']
+    export const MONTHS = ['Jan.','Fev.','Mar.','Avr.','Mai','Juin','Juil.','Aout','Sept.','Oct.','Nov.','Dec.']
+
+    export const LIVE_PREFIX = {
+        TS:"taskStart_",
+        TE:"taskEnd_",
+        MD:"milestoneDate_"
+    }
 }
