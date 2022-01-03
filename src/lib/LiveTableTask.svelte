@@ -63,9 +63,10 @@
 
 {#each $datas.tasks as task, i}
 <div class="live__line show_{task.isShow}">
-    <div name="T{i}"  class="live_cmd live_cmd_red" on:click="{b_delete}" title="delete this line">
+    
+    <div name="M{i}"  class="live_cmd" on:click="{b_show}" title="hide/show this line">
         <svg viewBox="0 0 20 20">
-            <use x="0" y="0" href="#b_delete"/>
+            <use x="0" y="0" href="#b_show"/>
         </svg>
     </div>
     <div name="T{i}"  class="live_cmd" on:click="{b_up}" title="go down this line">
@@ -78,14 +79,14 @@
             <use x="0" y="0" href="#b_down"/>
         </svg>
     </div>
-    <div name="T{i}"  class="live_cmd" on:click="{b_show}" title="hide/show this line">
-        <svg viewBox="0 0 20 20">
-            <use x="0" y="0" href="#b_show"/>
-        </svg>
-    </div>
     <div name="T{i}"  class="live_cmd" on:click="{b_duplicate}" title="duplicate this line">
         <svg viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_duplicate"/>
+        </svg>
+    </div>
+    <div name="T{i}"  class="live_cmd live_cmd_red" on:click="{b_delete}" title="delete this line">
+        <svg viewBox="0 0 20 20">
+            <use x="0" y="0" href="#b_delete"/>
         </svg>
     </div>
     <input type="text" bind:value="{task.label}" class="label"/>

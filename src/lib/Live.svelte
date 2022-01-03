@@ -10,6 +10,9 @@
     export let start: Date;
     export let end: Date;
 
+    let live__open: boolean = false // Define a non-visibility (display: hidden) for the live__wrapper html node
+    let live__weak_opacity: boolean = false // Define a full opacity by default for the live__shadow html node
+
     function updateStore(event): void{
         
         let position : number = null;
@@ -32,28 +35,50 @@
     function getIndex(event) : number{
         return  parseInt(event.currentTarget.attributes["name"].nodeValue.substring(1,event.currentTarget.attributes["name"].nodeValue.length))
     }
-</script>
 
-<div id="live__eye">
-    <div  class="live__action__button" >
-    <div class="svg-icon">
-        <svg viewBox="0 0 20 20">
-            <use x="0" y="0" href="#b_watch"/>
-        </svg>
-    </div> 
-    <div class="live__eye_label">See updates</div>
-</div>
-</div>
-<div id='live__shadow'>
-    <div id='live'>
-        <LiveTableTask getIndex={(event) => getIndex(event)} updateStore={(event) => updateStore(event)} start={start} end={end} />
-        <LiveTableMilestone getIndex={(event) => getIndex(event)} updateStore={(event) => updateStore(event)} start={start} end={end} />
+    function hideLive(){live__weak_opacity = true}
+    function showLive(){live__weak_opacity = false}
+    export function openLive(){live__open = true} //export => allow calling function by parent https://www.akashmittal.com/svelte-calling-function-child-parent/
+    function closeLive(){live__open = false}
+</script>
+<div id="live__wrapper" class:live__open>
+
+    <div id="live__eye">
+        <div  class="live__action__button" on:mouseover="{hideLive}" on:focus="{hideLive}" on:mouseout="{showLive}" on:blur="{showLive}">
+            <div class="svg-icon">
+                <svg viewBox="0 0 20 20">
+                    <use x="0" y="0" href="#b_watch"/>
+                </svg>
+            </div> 
+            <div class="live__eye_label">See updates</div>
+        </div>
+        <div  class="live__action__button"  on:click="{closeLive}">
+            <div class="svg-icon">
+                <svg viewBox="0 0 20 20">
+                    <use x="0" y="0" href="#b_delete"/>
+                </svg>
+            </div> 
+            <div class="live__eye_label">Close</div>
+        </div>
+    </div>
+    <div id='live__shadow' class:live__weak_opacity>
+        <div id='live'>
+            <LiveTableTask getIndex={(event) => getIndex(event)} updateStore={(event) => updateStore(event)} start={start} end={end} />
+            <LiveTableMilestone getIndex={(event) => getIndex(event)} updateStore={(event) => updateStore(event)} start={start} end={end} />
+        </div>
     </div>
 </div>
 
 <style>
-    :global(#live__shadow){
-        opacity:0.2;   
+
+    #live__wrapper{
+        display: none;
+    }
+    #live__wrapper.live__open{
+        display: block;
+    }
+
+    #live__shadow{  
         height: 100%;
         width: 100%;
         background-color: rgba(200, 218, 223, 0.5);
@@ -61,10 +86,10 @@
         top:0;
         left:0;
     }
-    :global(#live__shadow:hover){
-        opacity:1;   
+    :global(#live__shadow.live__weak_opacity){
+        opacity:0.2;   
     }
-    :global(#live){
+    #live{
         height: 60%;
         width: 80%;
         margin: 10%;

@@ -63,9 +63,9 @@
 {#each $datas.milestones as milestone, i}
 <div class="live__line show_{milestone.isShow}">
     
-    <div name="M{i}"  class="live_cmd live_cmd_red" on:click="{m_delete}" title="delete this line">
+    <div name="M{i}"  class="live_cmd" on:click="{m_show}" title="hide/show this line">
         <svg viewBox="0 0 20 20">
-            <use x="0" y="0" href="#b_delete"/>
+            <use x="0" y="0" href="#b_show"/>
         </svg>
     </div>
     <div name="M{i}"  class="live_cmd" on:click="{m_up}" title="go down this line">
@@ -78,14 +78,14 @@
             <use x="0" y="0" href="#b_down"/>
         </svg>
     </div>
-    <div name="M{i}"  class="live_cmd" on:click="{m_show}" title="hide/show this line">
-        <svg viewBox="0 0 20 20">
-            <use x="0" y="0" href="#b_show"/>
-        </svg>
-    </div>
     <div name="M{i}"  class="live_cmd" on:click="{m_duplicate}" title="duplicate this line">
         <svg viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_duplicate"/>
+        </svg>
+    </div>
+    <div name="M{i}"  class="live_cmd live_cmd_red" on:click="{m_delete}" title="delete this line">
+        <svg viewBox="0 0 20 20">
+            <use x="0" y="0" href="#b_delete"/>
         </svg>
     </div>
     <input type="text" bind:value="{milestone.label}" class="label"/>
