@@ -1,17 +1,15 @@
 <script lang="ts">
     
     import { Constantes } from './constantes.class';
-    import type { Struct } from "./struct.class";
     import Milestone from './Milestone.svelte';
-
-    export let milestones: Array<Struct.Milestone>;
+    import { store } from './stores';
 
 </script>
 
     
 <defs>
     <g id="milestones">
-        {#each milestones as milestone, i}
+        {#each $store.milestones as milestone, i}
             <Milestone i={i} milestone={milestone}/>
         {/each}
     </g>

@@ -113,7 +113,7 @@
 
             <Banner/>
             <Today/>        
-            <Milestones milestones={$store.milestones}/>
+            <Milestones/>
         
         {/key}
 
