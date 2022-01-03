@@ -10,7 +10,9 @@
 <defs>
     <g id="milestones">
         {#each $store.milestones as milestone, i}
-            <Milestone i={i} milestone={milestone}/>
+            {#if milestone.isShow}
+                <Milestone i={i} milestone={milestone}/>
+            {/if}
         {/each}
     </g>
 </defs>

@@ -93,8 +93,10 @@
         </defs>
         {#key $store}
             {#each $store.tasks as task, i}
-                <Task i={i}/>
-                <use x="0" y="{i*taskHeight + 115}" href="#T{i}"/>
+                {#if task.isShow}
+                    <Task i={i}/>
+                    <use x="0" y="{i*taskHeight + 115}" href="#T{i}"/>
+                {/if}
             {/each}
         
         
