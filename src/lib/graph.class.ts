@@ -3,16 +3,13 @@ import { browser } from "$app/env";
 
 export module Graph {
 
-
 	export class Data {
-		tasks : Array<Task>
-        milestones : Array<Milestone>
-		isInitiate : boolean = false;
+		
+		tasks : Array<Task> = new Array<Task>()
+        milestones : Array<Milestone> = new Array<Milestone>()
+		isInitiate : boolean = false
 
-		constructor(tasks : Array<Task> = [], milestones : Array<Milestone> = []){
-			this.tasks = tasks
-			this.milestones = milestones
-			this.isInitiate = !(!tasks.length && !milestones.length)
+		constructor(){
 		}
 
 		addTask(task: Task) : Data{
@@ -27,9 +24,16 @@ export module Graph {
 			return this
 		}
 
+		purge() : void{
+			this.tasks = new Array<Task>()
+			this.milestones = new Array<Milestone>()
+			this.isInitiate = false
+		}
+
 		initiate() : Data{
 			if(browser){
 				let localData: Data = JSON.parse(localStorage.getItem("store"), Helpers.dateTimeReviver)
+									
 				if(localData && localData.isInitiate){
 					return localData
 				}  else {

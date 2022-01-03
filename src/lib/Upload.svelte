@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { Graph } from './graph.class';
+    import { Helpers } from './helpers.class';
     import { datas } from './stores';
 
     var hidden = true
@@ -78,7 +79,7 @@
                                             
                         let reader = new FileReader();
                         reader.onload = onReaderLoad;
-                        reader.readAsText(droppedFiles[i]);
+                        reader.readAsText(droppedFiles[i], );
                         
                         break
                     }
@@ -86,19 +87,34 @@
             }
 
             function onReaderLoad(event){
-                let csv : string = event.target.result;
                 let elmts : string[]
+                let label: string
+                let isShow : boolean
+                let dateStart : Date
+                let dateEnd : Date
+                let progress: number
+
+                $datas.purge()
+
                 //Process file
-                let newDatas : Graph.Data = new Graph.Data()
-                csv.split(/\r?\n/).forEach(line => {                    
+                event.target.result.split(/\r?\n/).forEach((line: string) => {                    
                     elmts = line.split(";")
-                    if("task" == elmts[0] ){
-                        newDatas.addTask(new Graph.Task(elmts[1], new Date(elmts[2]), new Date(elmts[3]),Number(elmts[4])))
-                    } else if("milestone" == elmts[0] ){
-                        newDatas.addMilestone(new Graph.Milestone(elmts[1], new Date(elmts[2])))
-                    } 
+                    if("task" == elmts[0] || "milestone" == elmts[0]) {
+                        label = elmts[1]
+                        isShow = (elmts[2] === "TRUE")
+                        dateStart = Helpers.IsoStringtoDate(elmts[3])
+                        if("task" == elmts[0] ){
+                            dateEnd = Helpers.IsoStringtoDate(elmts[4])
+                            progress = Number(elmts[5])
+                            $datas.addTask(new Graph.Task(label, dateStart, dateEnd, progress, isShow))
+                        } else if("milestone" == elmts[0] ){
+                            $datas.addMilestone(new Graph.Milestone(label, dateStart, isShow))
+                        } 
+                    }
                 });
-                datas.set(newDatas)
+
+                //refresh store
+                $datas = $datas
 
                 //remove form upload part
                 closeUpload()
