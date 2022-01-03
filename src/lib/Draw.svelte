@@ -3,9 +3,7 @@
 
     import { datas } from './stores';
         
-    import { Constantes } from './constantes.class'
-    import type { Graph } from './graph.class';
-    
+    import { Constantes } from './constantes.class'    ;
 
     import Banner from './Banner.svelte';
     import Task from './Task.svelte';
@@ -15,6 +13,7 @@
     import Live from './Live.svelte';
     import { Helpers } from './helpers.class';
     
+    let liveComponent
 
     function download(){
         let csvContent = "data:text/csv;charset=utf-8," 
@@ -22,7 +21,7 @@
         + "\n"
         + $datas.milestones.map(e => e.join(";")).join("\n")
         var encodedUri = encodeURI(csvContent);
-        window.open(encodedUri);
+        window.open(encodedUri)
     }
 
     let start = Helpers.getMin($datas.tasks, $datas.milestones)
@@ -42,7 +41,6 @@
         )
     }
 
-    
 
 </script>
 
@@ -54,8 +52,12 @@
     Download in CSV
 </button>
 <Upload />
+<button on:click={liveComponent.openLive()}>
+    Open live edition
+</button>
+
 <div id="output"></div>
-<Live start={start} end={end} />
+<Live start={start} end={end} bind:this={liveComponent}/>
 
 <div id="wrapper">
     <svg width="100%" viewBox="0 0 {Constantes.GRID.ALL_WIDTH} {Constantes.GRID.ALL_WIDTH / 2}" xmlns="http://www.w3.org/2000/svg">
