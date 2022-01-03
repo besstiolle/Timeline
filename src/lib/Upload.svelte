@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { Graph } from './graph.class';
+    import { Struct } from './struct.class';
     import { Helpers } from './helpers.class';
     import { store } from './stores';
 
@@ -106,9 +106,9 @@
                         if("task" == elmts[0] ){
                             dateEnd = Helpers.IsoStringtoDate(elmts[4])
                             progress = Number(elmts[5])
-                            $store.addTask(new Graph.Task(label, dateStart, dateEnd, progress, isShow))
+                            $store.addTask(new Struct.Task(label, dateStart, dateEnd, progress, isShow))
                         } else if("milestone" == elmts[0] ){
-                            $store.addMilestone(new Graph.Milestone(label, dateStart, isShow))
+                            $store.addMilestone(new Struct.Milestone(label, dateStart, isShow))
                         } 
                     }
                 });

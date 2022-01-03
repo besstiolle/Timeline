@@ -1,8 +1,8 @@
 import { writable } from 'svelte/store'
-import { Graph } from './graph.class';
+import { Struct } from './struct.class';
 import { browser } from "$app/env";
 
-export const store = writable(new Graph.Data().initiate());
+export const store = writable(new Struct.Data().initiate());
 
 if(browser){
     store.subscribe(val => updateLocalStorage(val))
@@ -16,7 +16,7 @@ function updateLocalStorage(val){
             //Saving into LocalStorage
             localStorage.setItem("store", JSON.stringify(val))
         } else {
-            console.info("erreur : typof val is " + typeof val)
+            console.error("typof val is not an object : " + typeof val)
         }
         
     }

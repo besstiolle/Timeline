@@ -2,7 +2,7 @@
 
     import { store } from './stores';
     import { Helpers } from './helpers.class';
-    import { Graph } from './graph.class';
+    import { Struct } from './struct.class';
     import { Constantes } from './constantes.class';
 
     export let getIndex = (event) => {return 0}
@@ -21,7 +21,7 @@
         if(index == 0){
             return;
         }
-        let tmpMilestone: Graph.Milestone = $store.milestones[index]
+        let tmpMilestone: Struct.Milestone = $store.milestones[index]
         $store.milestones[index] = $store.milestones[index - 1]
         $store.milestones[index - 1] = tmpMilestone
     }
@@ -30,18 +30,17 @@
         if(index == ($store.milestones.length-1)){
             return;
         }
-        let tmpMilestone: Graph.Milestone = $store.milestones[index]
+        let tmpMilestone: Struct.Milestone = $store.milestones[index]
         $store.milestones[index] = $store.milestones[index + 1]
         $store.milestones[index + 1] = tmpMilestone
     }
     function m_show(event){
-        console.info("show : " + getIndex(event))
         let index = getIndex(event)
         $store.milestones[index].isShow = !$store.milestones[index].isShow 
     }
     function m_duplicate(event){
         let index = getIndex(event)
-        let tmpMilestones : Array<Graph.Milestone> = $store.milestones.splice(index+1, $store.milestones.length)
+        let tmpMilestones : Array<Struct.Milestone> = $store.milestones.splice(index+1, $store.milestones.length)
         $store.milestones.push( $store.milestones[index].clone() )
         tmpMilestones.forEach(tmpMilestone => {
             $store.milestones.push( tmpMilestone )
@@ -50,7 +49,7 @@
     }
     function m_add(){
         let diffSec : number = end.getTime() - start.getTime()
-        $store.milestones.push(new Graph.Milestone(
+        $store.milestones.push(new Struct.Milestone(
                 "My Milestone", 
                 new Date(start.getTime() + (0.5 * diffSec))
                 ))

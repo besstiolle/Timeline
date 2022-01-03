@@ -4,7 +4,7 @@
 
     import { store } from './stores';
     import { Helpers } from './helpers.class';
-    import { Graph } from './graph.class';
+    import { Struct } from './struct.class';
     import { Constantes } from './constantes.class';
 
     export let getIndex = (event) => {return 0}
@@ -23,7 +23,7 @@
         if(index == 0){
             return;
         }
-        let tmpTask: Graph.Task = $store.tasks[index]
+        let tmpTask: Struct.Task = $store.tasks[index]
         $store.tasks[index] = $store.tasks[index - 1]
         $store.tasks[index - 1] = tmpTask
     }
@@ -32,7 +32,7 @@
         if(index == ($store.tasks.length-1)){
             return;
         }
-        let tmpTask: Graph.Task = $store.tasks[index]
+        let tmpTask: Struct.Task = $store.tasks[index]
         $store.tasks[index] = $store.tasks[index + 1]
         $store.tasks[index + 1] = tmpTask
     }
@@ -42,7 +42,7 @@
     }
     function b_duplicate(event){
         let index = getIndex(event)
-        let tmpTasks : Array<Graph.Task> = $store.tasks.splice(index+1, $store.tasks.length)
+        let tmpTasks : Array<Struct.Task> = $store.tasks.splice(index+1, $store.tasks.length)
         $store.tasks.push( $store.tasks[index].clone() )
         tmpTasks.forEach(tmpTask => {
             $store.tasks.push( tmpTask )
@@ -51,7 +51,7 @@
     }
     function b_add(){
         let diffSec : number = end.getTime() - start.getTime()
-        $store.tasks.push(new Graph.Task(
+        $store.tasks.push(new Struct.Task(
                 "Some task", 
                 new Date(start.getTime() + (0.1 * diffSec)), 
                 new Date(end.getTime() - (0.1 * diffSec))))

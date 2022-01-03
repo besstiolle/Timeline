@@ -1,5 +1,4 @@
-import { Constantes } from "./constantes.class";
-import { Graph } from "./graph.class";
+import { Struct } from "./struct.class";
 
 export module Helpers {
 
@@ -18,7 +17,7 @@ export module Helpers {
         return new Date(parts[2] + DATE_SEPARATOR + parts[1] + DATE_SEPARATOR + parts[0])
     }
 
-	export function getMin(tasks : Array<Graph.Task>, milestones : Array<Graph.Milestone>): Date{
+	export function getMin(tasks : Array<Struct.Task>, milestones : Array<Struct.Milestone>): Date{
         let min : Date = new Date("2999-12-31");
         tasks.forEach(task => {
             if(min > task.dateStart){
@@ -33,7 +32,7 @@ export module Helpers {
         return new Date(min)
     }
 
-    export function getMax(tasks : Array<Graph.Task>, milestones : Array<Graph.Milestone>): Date{
+    export function getMax(tasks : Array<Struct.Task>, milestones : Array<Struct.Milestone>): Date{
         let max : Date = new Date("1900-01-01");
         tasks.forEach(task => {
             if(max < task.dateEnd){
@@ -51,15 +50,19 @@ export module Helpers {
 	export function dateTimeReviver(key : string, value : any) {
         
         if(key === ''){
-            let obj = Object.assign(new Graph.Data(), value)
-            console.info("> global data : %o", obj)
-            return obj
+            return Object.assign(new Struct.Data(), value)
         }
 
         if(typeof value === 'object' && value.label) { //Un object contenant un label => nos objects
             if(value.date){
+                // Can't do 
+                //  > Object.assign(new Struct.Milestone, value) 
+                // because of Date
                 return ObjectToMilestone(value)
             } else if (value.dateStart) {
+                // Can't do 
+                //  > Object.assign(new Struct.Task, value) 
+                // because of Date
                 return ObjectToTask(value)
             } else {
                 console.error("Case unexpected in dateTimeReviver with value : ")
@@ -67,18 +70,10 @@ export module Helpers {
         }
 
         if(key === 'tasks'){
-            // Can't do 
-            //  > Object.assign(new Graph.Task, value) 
-            // because of Date
-            //return ObjectToTask(value)
-            console.info("> tasks : %o", value)
+            //Nothing to do, it's an array
         }
         if(key === 'milestones'){
-            // Can't do 
-            //  > Object.assign(new Graph.Milestone, value) 
-            // because of Date
-            //return ObjectToMilestone(value)
-            console.info("> milestone : %o", value)
+            //Nothing to do, it's an array
         }
 
 		if (typeof value === 'string') {
@@ -87,22 +82,15 @@ export module Helpers {
 			}
 		}
 
-        //console.info("key : " + key)
-
 		return value;
 	}
 
 	export function ObjectToTask(o: any) {
-        //console.info("o")
-        //console.info(o)
-        //console.info("o")
-		let foo = new Graph.Task(o.label,new Date(o.dateStart), new Date(o.dateEnd), o.progress, o.isShow)
-        //console.info(foo)
-        //console.info("foo")
+		let foo = new Struct.Task(o.label,new Date(o.dateStart), new Date(o.dateEnd), o.progress, o.isShow)
         return foo
 	}
 	export function ObjectToMilestone(o: any) {
-		return new Graph.Milestone(o.label,new Date(o.date), o.isShow)
+		return new Struct.Milestone(o.label,new Date(o.date), o.isShow)
 	}
 
 

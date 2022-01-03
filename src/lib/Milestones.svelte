@@ -1,12 +1,12 @@
 <script lang="ts">
     
     import { Constantes } from './constantes.class';
-    import type { Graph } from "./graph.class";
+    import type { Struct } from "./struct.class";
     import Milestone from './Milestone.svelte';
 
     export let start: Date;
     export let end: Date;
-    export let milestones: Array<Graph.Milestone>;
+    export let milestones: Array<Struct.Milestone>;
 
 </script>
 
