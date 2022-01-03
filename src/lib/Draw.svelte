@@ -1,7 +1,7 @@
 <script lang="ts">
     import html2canvas from 'html2canvas';
 
-    import { datas } from './stores';
+    import { store } from './stores';
         
     import { Constantes } from './constantes.class'    ;
 
@@ -17,15 +17,15 @@
 
     function download(){
         let csvContent = "data:text/csv;charset=utf-8," 
-        + $datas.tasks.map(e => e.join(";")).join("\n")
+        + $store.tasks.map(e => e.join(";")).join("\n")
         + "\n"
-        + $datas.milestones.map(e => e.join(";")).join("\n")
+        + $store.milestones.map(e => e.join(";")).join("\n")
         var encodedUri = encodeURI(csvContent);
         window.open(encodedUri)
     }
 
-    let start = Helpers.getMin($datas.tasks, $datas.milestones)
-    let end = Helpers.getMax($datas.tasks, $datas.milestones)
+    let start = Helpers.getMin($store.tasks, $store.milestones)
+    let end = Helpers.getMax($store.tasks, $store.milestones)
 
     //TODO prévoir le cas des années / périodes très longues / très courtes
     start.setDate(1)
@@ -100,8 +100,8 @@
 
 
         </defs>
-        {#key $datas}
-            {#each $datas.tasks as task, i}
+        {#key $store}
+            {#each $store.tasks as task, i}
                 <Task start={start} end={end} i={i}/>
                 <use x="0" y="{i*taskHeight + 115}" href="#T{i}"/>
             {/each}
@@ -122,7 +122,7 @@
 
             <Banner start={start} end={end}/>
             <Today  start={start} end={end}/>        
-            <Milestones start={start} end={end} milestones={$datas.milestones}/>
+            <Milestones start={start} end={end} milestones={$store.milestones}/>
         
         {/key}
 

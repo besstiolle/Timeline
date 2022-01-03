@@ -2,7 +2,7 @@
 
     
 
-    import { datas } from './stores';
+    import { store } from './stores';
     import { Helpers } from './helpers.class';
     import { Graph } from './graph.class';
     import { Constantes } from './constantes.class';
@@ -15,53 +15,53 @@
 
 
     function b_delete(event){
-        $datas.tasks.splice(getIndex(event), 1)
-        $datas.tasks = $datas.tasks
+        $store.tasks.splice(getIndex(event), 1)
+        $store.tasks = $store.tasks
     }
     function b_up(event){
         let index = getIndex(event)
         if(index == 0){
             return;
         }
-        let tmpTask: Graph.Task = $datas.tasks[index]
-        $datas.tasks[index] = $datas.tasks[index - 1]
-        $datas.tasks[index - 1] = tmpTask
+        let tmpTask: Graph.Task = $store.tasks[index]
+        $store.tasks[index] = $store.tasks[index - 1]
+        $store.tasks[index - 1] = tmpTask
     }
     function b_down(event){
         let index = getIndex(event)
-        if(index == ($datas.tasks.length-1)){
+        if(index == ($store.tasks.length-1)){
             return;
         }
-        let tmpTask: Graph.Task = $datas.tasks[index]
-        $datas.tasks[index] = $datas.tasks[index + 1]
-        $datas.tasks[index + 1] = tmpTask
+        let tmpTask: Graph.Task = $store.tasks[index]
+        $store.tasks[index] = $store.tasks[index + 1]
+        $store.tasks[index + 1] = tmpTask
     }
     function b_show(event){
         let index = getIndex(event)
-        $datas.tasks[index].isShow = !$datas.tasks[index].isShow 
+        $store.tasks[index].isShow = !$store.tasks[index].isShow 
     }
     function b_duplicate(event){
         let index = getIndex(event)
-        let tmpTasks : Array<Graph.Task> = $datas.tasks.splice(index+1, $datas.tasks.length)
-        $datas.tasks.push( $datas.tasks[index].clone() )
+        let tmpTasks : Array<Graph.Task> = $store.tasks.splice(index+1, $store.tasks.length)
+        $store.tasks.push( $store.tasks[index].clone() )
         tmpTasks.forEach(tmpTask => {
-            $datas.tasks.push( tmpTask )
+            $store.tasks.push( tmpTask )
         });
-        $datas.tasks = $datas.tasks
+        $store.tasks = $store.tasks
     }
     function b_add(){
         let diffSec : number = end.getTime() - start.getTime()
-        $datas.tasks.push(new Graph.Task(
+        $store.tasks.push(new Graph.Task(
                 "Some task", 
                 new Date(start.getTime() + (0.1 * diffSec)), 
                 new Date(end.getTime() - (0.1 * diffSec))))
-        $datas.tasks = $datas.tasks
+        $store.tasks = $store.tasks
     }
 
 </script>
 
 
-{#each $datas.tasks as task, i}
+{#each $store.tasks as task, i}
 <div class="live__line show_{task.isShow}">
     
     <div name="M{i}"  class="live_cmd" on:click="{b_show}" title="hide/show this line">

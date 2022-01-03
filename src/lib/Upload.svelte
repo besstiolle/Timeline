@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { Graph } from './graph.class';
     import { Helpers } from './helpers.class';
-    import { datas } from './stores';
+    import { store } from './stores';
 
     var hidden = true
 
@@ -94,7 +94,7 @@
                 let dateEnd : Date
                 let progress: number
 
-                $datas.purge()
+                $store.purge()
 
                 //Process file
                 event.target.result.split(/\r?\n/).forEach((line: string) => {                    
@@ -106,15 +106,15 @@
                         if("task" == elmts[0] ){
                             dateEnd = Helpers.IsoStringtoDate(elmts[4])
                             progress = Number(elmts[5])
-                            $datas.addTask(new Graph.Task(label, dateStart, dateEnd, progress, isShow))
+                            $store.addTask(new Graph.Task(label, dateStart, dateEnd, progress, isShow))
                         } else if("milestone" == elmts[0] ){
-                            $datas.addMilestone(new Graph.Milestone(label, dateStart, isShow))
+                            $store.addMilestone(new Graph.Milestone(label, dateStart, isShow))
                         } 
                     }
                 });
 
                 //refresh store
-                $datas = $datas
+                $store = $store
 
                 //remove form upload part
                 closeUpload()

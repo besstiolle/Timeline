@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { datas } from './stores';
+    import { store } from './stores';
     import LiveTableTask from './LiveTableTask.svelte';
     import LiveTableMilestone from './LiveTableMilestone.svelte';
 
@@ -18,17 +18,17 @@
         let position : number = null;
         if(event.target.name.startsWith(TS)){
             position = parseInt(event.target.name.substring(TS.length, event.target.name.length))
-            $datas.tasks[position].dateStart = new Date(event.target.value)
+            $store.tasks[position].dateStart = new Date(event.target.value)
         }
         
         if(event.target.name.startsWith(TE)){
             position = parseInt(event.target.name.substring(TE.length, event.target.name.length))
-            $datas.tasks[position].dateEnd = new Date(event.target.value)
+            $store.tasks[position].dateEnd = new Date(event.target.value)
         }
         
         if(event.target.name.startsWith(MD)){
             position = parseInt(event.target.name.substring(MD.length, event.target.name.length))            
-            $datas.milestones[position].date = new Date(event.target.value)
+            $store.milestones[position].date = new Date(event.target.value)
         }
     }
 

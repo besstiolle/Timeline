@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { datas } from './stores';
+    import { store } from './stores';
     import { Helpers } from './helpers.class';
     import { Graph } from './graph.class';
     import { Constantes } from './constantes.class';
@@ -13,54 +13,54 @@
 
 
     function m_delete(event){
-        $datas.milestones.splice(getIndex(event), 1)
-        $datas.milestones = $datas.milestones
+        $store.milestones.splice(getIndex(event), 1)
+        $store.milestones = $store.milestones
     }
     function m_up(event){
         let index = getIndex(event)
         if(index == 0){
             return;
         }
-        let tmpMilestone: Graph.Milestone = $datas.milestones[index]
-        $datas.milestones[index] = $datas.milestones[index - 1]
-        $datas.milestones[index - 1] = tmpMilestone
+        let tmpMilestone: Graph.Milestone = $store.milestones[index]
+        $store.milestones[index] = $store.milestones[index - 1]
+        $store.milestones[index - 1] = tmpMilestone
     }
     function m_down(event){
         let index = getIndex(event)
-        if(index == ($datas.milestones.length-1)){
+        if(index == ($store.milestones.length-1)){
             return;
         }
-        let tmpMilestone: Graph.Milestone = $datas.milestones[index]
-        $datas.milestones[index] = $datas.milestones[index + 1]
-        $datas.milestones[index + 1] = tmpMilestone
+        let tmpMilestone: Graph.Milestone = $store.milestones[index]
+        $store.milestones[index] = $store.milestones[index + 1]
+        $store.milestones[index + 1] = tmpMilestone
     }
     function m_show(event){
         console.info("show : " + getIndex(event))
         let index = getIndex(event)
-        $datas.milestones[index].isShow = !$datas.milestones[index].isShow 
+        $store.milestones[index].isShow = !$store.milestones[index].isShow 
     }
     function m_duplicate(event){
         let index = getIndex(event)
-        let tmpMilestones : Array<Graph.Milestone> = $datas.milestones.splice(index+1, $datas.milestones.length)
-        $datas.milestones.push( $datas.milestones[index].clone() )
+        let tmpMilestones : Array<Graph.Milestone> = $store.milestones.splice(index+1, $store.milestones.length)
+        $store.milestones.push( $store.milestones[index].clone() )
         tmpMilestones.forEach(tmpMilestone => {
-            $datas.milestones.push( tmpMilestone )
+            $store.milestones.push( tmpMilestone )
         });
-        $datas.milestones = $datas.milestones
+        $store.milestones = $store.milestones
     }
     function m_add(){
         let diffSec : number = end.getTime() - start.getTime()
-        $datas.milestones.push(new Graph.Milestone(
+        $store.milestones.push(new Graph.Milestone(
                 "My Milestone", 
                 new Date(start.getTime() + (0.5 * diffSec))
                 ))
-        $datas.milestones = $datas.milestones
+        $store.milestones = $store.milestones
     }
 </script>
 
 
 
-{#each $datas.milestones as milestone, i}
+{#each $store.milestones as milestone, i}
 <div class="live__line show_{milestone.isShow}">
     
     <div name="M{i}"  class="live_cmd" on:click="{m_show}" title="hide/show this line">
