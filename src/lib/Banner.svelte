@@ -4,13 +4,13 @@
     import { Constantes } from './constantes.class';
     import { store } from './stores';
 
-    function monthDiff(d1: Date, d2: Date) {
+   /* function monthDiff(d1: Date, d2: Date) {
         let months: number;
         months = (d2.getFullYear() - d1.getFullYear()) * 12;
         months -= d1.getMonth();
         months += d2.getMonth();
         return months <= 0 ? 0 : months;
-    }
+    }*/
 
  //   let oneDay = 86400 * 1000
  //   let days = oneDay * 15 // < 15 days

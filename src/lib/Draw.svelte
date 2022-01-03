@@ -11,7 +11,6 @@
     import Today from './Today.svelte';
     import Upload from './Upload.svelte';
     import Live from './Live.svelte';
-    import { Helpers } from './helpers.class';
     
     let liveComponent
 

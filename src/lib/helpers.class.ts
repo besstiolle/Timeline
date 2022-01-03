@@ -47,13 +47,14 @@ export module Helpers {
         return new Date(max)
     }
 
-	export function dateTimeReviver(key : string, value : any) {
+	export function dataReviver(key : string, value : any) {
         
+        //Case of object Data
         if(key === ''){
             return Object.assign(new Struct.Data(), value)
         }
 
-        if(typeof value === 'object' && value.label) { //Un object contenant un label => nos objects
+        if(typeof value === 'object' && value.label) { //Un object contenant un label => nos objects Task & Milestone
             if(value.date){
                 // Can't do 
                 //  > Object.assign(new Struct.Milestone, value) 
@@ -76,18 +77,16 @@ export module Helpers {
             //Nothing to do, it's an array
         }
 
-		if (typeof value === 'string') {
-			if (/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/.exec(value)) {
-                return new Date(value);
-			}
+        //Case of Date (date, datemin, datemax, min, max, ...)
+		if (typeof value === 'string' && /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/.exec(value)) {
+            return new Date(value);
 		}
 
 		return value;
 	}
 
 	export function ObjectToTask(o: any) {
-		let foo = new Struct.Task(o.label,new Date(o.dateStart), new Date(o.dateEnd), o.progress, o.isShow)
-        return foo
+        return new Struct.Task(o.label,new Date(o.dateStart), new Date(o.dateEnd), o.progress, o.isShow)
 	}
 	export function ObjectToMilestone(o: any) {
 		return new Struct.Milestone(o.label,new Date(o.date), o.isShow)

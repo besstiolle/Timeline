@@ -46,7 +46,7 @@ export module Struct {
 
 		initiate() : Data{
 			if(browser){
-				let localData: Data = JSON.parse(localStorage.getItem("store"), Helpers.dateTimeReviver)
+				let localData: Data = JSON.parse(localStorage.getItem("store"), Helpers.dataReviver)
 									
 				if(localData && localData.isInitiate){
 					return localData
