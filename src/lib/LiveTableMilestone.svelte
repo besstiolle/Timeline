@@ -37,15 +37,16 @@
     function m_duplicate(event){
         let index = getIndex(event)
         let tmpMilestones : Array<Struct.Milestone> = $store.milestones.splice(index+1, $store.milestones.length)
-        $store.milestones.push( $store.milestones[index].clone() )
+        $store.addMilestone( $store.milestones[index].clone() )
         tmpMilestones.forEach(tmpMilestone => {
-            $store.milestones.push( tmpMilestone )
+            $store.addMilestone( tmpMilestone )
         });
         $store.milestones = $store.milestones
     }
     function m_add(){
         let diffSec : number = $store.end.getTime() - $store.start.getTime()
-        $store.milestones.push(new Struct.Milestone(
+        $store.addMilestone(new Struct.Milestone(
+                $store.getNextId(),
                 "My Milestone", 
                 new Date($store.start.getTime() + (0.5 * diffSec))
                 ))

@@ -97,6 +97,9 @@
                 $store.purge()
 
                 //Process file
+                //TODO : guessing encoding
+                // https://guillim.github.io/javascript/2020/08/28/csv-encoding-detection-javascript.html
+                let id: number = 0
                 event.target.result.split(/\r?\n/).forEach((line: string) => {                    
                     elmts = line.split(";")
                     if("task" == elmts[0] || "milestone" == elmts[0]) {
@@ -106,10 +109,11 @@
                         if("task" == elmts[0] ){
                             dateEnd = Helpers.IsoStringtoDate(elmts[4])
                             progress = Number(elmts[5])
-                            $store.addTask(new Struct.Task(label, dateStart, dateEnd, progress, isShow))
+                            $store.addTask(new Struct.Task(id, label, dateStart, dateEnd, progress, isShow))
                         } else if("milestone" == elmts[0] ){
-                            $store.addMilestone(new Struct.Milestone(label, dateStart, isShow))
+                            $store.addMilestone(new Struct.Milestone(id, label, dateStart, isShow))
                         } 
+                        id++
                     }
                 });
 
