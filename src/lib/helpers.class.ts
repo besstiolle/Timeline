@@ -8,15 +8,6 @@ export module Helpers {
 		return date.getFullYear() + DATE_SEPARATOR + (date.getMonth() + 1).toString().padStart(2, '0') + DATE_SEPARATOR + date.getDate().toString().padStart(2, '0');
 	}
 
-    /**
-     * 
-     * @param string 
-     */
-    export function IsoStringtoDate(string: string): Date{
-        let parts = string.split("/")
-        return new Date(parts[2] + DATE_SEPARATOR + parts[1] + DATE_SEPARATOR + parts[0])
-    }
-
 	export function getMin(tasks : Array<Struct.Task>, milestones : Array<Struct.Milestone>): Date{
         let min : Date = new Date("2999-12-31");
         tasks.forEach(task => {
@@ -66,7 +57,7 @@ export module Helpers {
                 // because of Date
                 return ObjectToTask(value)
             } else {
-                console.error("Case unexpected in dateTimeReviver with value : ")
+                console.error("Case unexpected in dateTimeReviver with value : %o", value)
             }
         }
 
@@ -82,15 +73,92 @@ export module Helpers {
             return new Date(value);
 		}
 
+        //console.info("key : %o" , key)
+        //console.info("value : %o" , value)
+
 		return value;
 	}
 
 	export function ObjectToTask(o: any) {
-        return new Struct.Task(o.label,new Date(o.dateStart), new Date(o.dateEnd), o.progress, o.isShow)
+        return new Struct.Task(o.label,new Date(o.dateStart), new Date(o.dateEnd), o.progress, o.isShow, o.swimline)
 	}
 	export function ObjectToMilestone(o: any) {
 		return new Struct.Milestone(o.label,new Date(o.date), o.isShow)
 	}
+
+    export function computeMapSwimlines(tasks : Array<Struct.Task>):  Map<number, Struct.TmpStructSwimline>{
+        let task: Struct.Task;
+        let combo: number = 0
+        let tmpStructSwimline: Struct.TmpStructSwimline
+        let swimlines : Map<number, Struct.TmpStructSwimline> = new Map()
+    
+        let tmpTasks: Array<Struct.Task> = new Array()
+        //Let remove hidden task for our own sanity later
+        tasks.forEach(task => {
+            //if(task.isShow){
+                tmpTasks.push(task)
+            //}
+        });
+    
+        let len: number = tasks.length
+    
+        for(let i: number=0; i < len; i++){
+            task = tasks[i]
+    
+            //console.info("start with task " + i)
+    
+            
+            //No swimline on current task
+            if(!task.swimline || task.swimline ===""){
+                //If a swimline was already open : close it
+                if(tmpStructSwimline){
+                    //Set combo in array/map/struct
+                    tmpStructSwimline.setCountVisibleTasks(combo)
+                    swimlines.set(tmpStructSwimline.id, tmpStructSwimline)
+    
+                    //console.info("closing swimline " + tmpStructSwimline.label + " with " + tmpStructSwimline.countVisibleTasks + " tasks inside (A)")
+                    tmpStructSwimline = null
+                    //Reset combo
+                    combo = 0
+                }
+                continue
+            }
+    
+            //Increase combo if this tasks have same swimline than previous tasks
+            if(tmpStructSwimline && tmpStructSwimline.label === task.swimline){
+                combo++
+                //console.info("increase swimline " + tmpStructSwimline.label + " with 1 more task inside (currently : " + tmpStructSwimline.countVisibleTasks + " )")
+                
+            //If there is no swimline open or no a similare swimline open : create a new one 
+            } else if(!tmpStructSwimline || tmpStructSwimline.label !== task.swimline){
+    
+                // if a different swimline is already open
+                if(tmpStructSwimline && tmpStructSwimline.label !== task.swimline){
+                    //Set combo in array/map/struct
+                    tmpStructSwimline.setCountVisibleTasks(combo)
+                    swimlines.set(tmpStructSwimline.id, tmpStructSwimline)
+    
+                   // console.info("closing swimline " + tmpStructSwimline.label + " with " + tmpStructSwimline.countVisibleTasks + " tasks inside (B)")
+                    tmpStructSwimline = null
+                    //Reset combo
+                    combo = 0
+                }   
+                combo++
+                tmpStructSwimline = new Struct.TmpStructSwimline(i, task.swimline)
+                //console.info("starting swimline " + tmpStructSwimline.label)
+            }    
+        }
+    
+        //Last line : Set combo in array/map/struct
+        if(tmpStructSwimline){
+            tmpStructSwimline.setCountVisibleTasks(combo)
+            swimlines.set(tmpStructSwimline.id, tmpStructSwimline)
+            //console.info("closing swimline " + tmpStructSwimline.label + " with " + tmpStructSwimline.countVisibleTasks + " tasks inside (C)")
+        }
+        
+        //console.info(swimlines)
+        return swimlines
+    }
 
 
 }

@@ -6,11 +6,12 @@
     import { Constantes } from './constantes.class'    ;
 
     import Banner from './Banner.svelte';
-    import Task from './Task.svelte';
     import Milestones from './Milestones.svelte';
     import Today from './Today.svelte';
     import Upload from './Upload.svelte';
     import Live from './Live.svelte';
+    import SwimAndTasks from './SwimAndTasks.svelte';
+    
     
     let liveComponent
 
@@ -23,15 +24,12 @@
         window.open(encodedUri)
     }
 
-    let taskHeight = 30;
-
     function takeshot() {  
         html2canvas(document.getElementById('wrapper')).then(
             function (canvas) {
                 document.getElementById('output').appendChild(canvas);}
         )
     }
-
 
 </script>
 
@@ -81,42 +79,13 @@
             <g id="b_watch">
                 <path d="M18.125,15.804l-4.038-4.037c0.675-1.079,1.012-2.308,1.01-3.534C15.089,4.62,12.199,1.75,8.584,1.75C4.815,1.75,1.982,4.726,2,8.286c0.021,3.577,2.908,6.549,6.578,6.549c1.241,0,2.417-0.347,3.44-0.985l4.032,4.026c0.167,0.166,0.43,0.166,0.596,0l1.479-1.478C18.292,16.234,18.292,15.968,18.125,15.804 M8.578,13.99c-3.198,0-5.716-2.593-5.733-5.71c-0.017-3.084,2.438-5.686,5.74-5.686c3.197,0,5.625,2.493,5.64,5.624C14.242,11.548,11.621,13.99,8.578,13.99 M16.349,16.981l-3.637-3.635c0.131-0.11,0.721-0.695,0.876-0.884l3.642,3.639L16.349,16.981z"></path>
             </g>
-            
-
-            <!--<g id="swimline"> <! -- h = n x 30 -- >
-                <rect x="0" y="0" width="100%" height="90" fill="#EBF1DE"/>
-                <rect x="0" y="0" width="150" height="90" fill="#2980B9"/>
-                <text text-anchor="middle" x="75" y="45" font-family="Verdana" font-size="10" fill="#FFFFFF">Swimline Title</text>
-            </g> -->
-
 
         </defs>
         {#key $store}
-            {#each $store.tasks as task, i}
-                {#if task.isShow}
-                    <Task i={i}/>
-                    <use x="0" y="{i*taskHeight + 115}" href="#T{i}"/>
-                {/if}
-            {/each}
-        
-        
-            <!-- SWIMLINES-- >
-            <use x="0" y="270" href="#swimline"/>
-            
-            <use x="200" y="275" href="#JComplete"/><! -- +30 / jalon au dessus-- >
-            <text text-anchor="end" x="195" y="286" font-family="Verdana" font-size="9" fill="#000">Random task</text> <! -- y+11 / au dessus-- >  <! -- x-5 / au dessus-- > 
-
-            <use x="225" y="305" href="#JUncompleteL"/>
-            <text text-anchor="end" x="220" y="316" font-family="Verdana" font-size="9" fill="#000">Random task</text>
-            
-            <use x="250" y="335" href="#JUncompleteR"/>
-            <text text-anchor="end" x="245" y="346" font-family="Verdana" font-size="9" fill="#000">Random task</text>
-            <! -- SWIMLINES-->
-
+            <SwimAndTasks />
             <Banner/>
             <Today/>        
             <Milestones/>
-        
         {/key}
 
     </svg>

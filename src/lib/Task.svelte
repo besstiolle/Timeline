@@ -35,11 +35,17 @@
         percentTextAnchor = "start"
     }
 
+    let hasSwimline = $store.tasks[i].swimline && $store.tasks[i].swimline !== ""
+
 </script>
 <defs>
     <g id="T{i}">
+        {#if hasSwimline}
+        <text text-anchor="end" x="{xGrayPosition - 5}" y="10.5" font-family="Verdana" font-size="9" fill="{leftLabel}">{$store.tasks[i].label}</text>
+        {:else}
         <text text-anchor="end" x="{Constantes.GRID.MIDDLE_X - 5}" y="10.5" font-family="Verdana" font-size="9" fill="{leftLabel}">{$store.tasks[i].label}</text>
         <line stroke-dasharray="0.5 2" x1="{Constantes.GRID.MIDDLE_X}" y1="8" x2="{xGrayPosition - 5}" y2="8" stroke="{dottedLine}" />
+        {/if}
         {#if $store.tasks[i].progress < 100}
         <rect x="{xGrayPosition}" y="0" width="{widthGray}" height="15" rx="5" ry="5" style="fill: {grey}; stroke: {greyStroke}; stroke-width: 0.05em;"/>    
         {/if}

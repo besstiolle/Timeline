@@ -93,6 +93,7 @@
                 let dateStart : Date
                 let dateEnd : Date
                 let progress: number
+                let swimline: string
 
                 $store.purge()
 
@@ -101,12 +102,13 @@
                     elmts = line.split(";")
                     if("task" == elmts[0] || "milestone" == elmts[0]) {
                         label = elmts[1]
-                        isShow = (elmts[2] === "TRUE")
-                        dateStart = Helpers.IsoStringtoDate(elmts[3])
+                        isShow = (elmts[2] === "TRUE" || elmts[2] === "true") //FIXME prévoir regex
+                        dateStart = new Date(elmts[3])
                         if("task" == elmts[0] ){
-                            dateEnd = Helpers.IsoStringtoDate(elmts[4])
+                            dateEnd = new Date(elmts[4])
                             progress = Number(elmts[5])
-                            $store.addTask(new Struct.Task(label, dateStart, dateEnd, progress, isShow))
+                            swimline = elmts[6]
+                            $store.addTask(new Struct.Task(label, dateStart, dateEnd, progress, isShow, swimline))
                         } else if("milestone" == elmts[0] ){
                             $store.addMilestone(new Struct.Milestone(label, dateStart, isShow))
                         } 

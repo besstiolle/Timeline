@@ -111,7 +111,7 @@
     }
 
     :global(input.label){
-        width: 20em;
+        width: 13em;
     }
     :global(input.progress){
         width: 3em;

@@ -47,7 +47,8 @@
         let diffSec : number = $store.end.getTime() - $store.start.getTime()
         $store.milestones.push(new Struct.Milestone(
                 "My Milestone", 
-                new Date($store.start.getTime() + (0.5 * diffSec))
+                new Date($store.start.getTime() + (0.5 * diffSec)),
+                true
                 ))
         $store.milestones = $store.milestones
     }

@@ -48,7 +48,10 @@
         $store.tasks.push(new Struct.Task(
                 "Some task", 
                 new Date($store.start.getTime() + (0.1 * diffSec)), 
-                new Date($store.end.getTime() - (0.1 * diffSec))))
+                new Date($store.end.getTime() - (0.1 * diffSec)),
+                0,
+                true,
+                ""))
         $store.tasks = $store.tasks
     }
 
@@ -88,6 +91,7 @@
     <input type="date" name="{Constantes.LIVE_PREFIX.TE}{i}" value="{Helpers.toISODateString(task.dateEnd)}" min="1900-01-01" max="2999-12-31" on:change="{updateStore}">
     <input type="number" bind:value="{task.progress}" min="0" max="100" class="progress" />
     <progress max="100" value="{task.progress}"> {task.progress}% </progress>
+    <input type="text" bind:value="{task.swimline}" class="label"/>
 </div>
 {/each}
 <div class="live__action">
