@@ -54,7 +54,8 @@ export module Struct {
 					return this._initiate()
 				}
 			} else {
-				return this._initiate()
+				//Don't initiate data in SSR
+				return this.processLimites()
 			}
 			
 		}
