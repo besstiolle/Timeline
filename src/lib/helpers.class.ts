@@ -9,6 +9,10 @@ export module Helpers {
 	}
 
 	export function getMin(tasks : Array<Struct.Task>, milestones : Array<Struct.Milestone>): Date{
+        if(tasks.length === 0 && milestones.length === 0){
+            return new Date()
+        }
+        
         let min : Date = new Date("2999-12-31");
         tasks.forEach(task => {
             if(min > task.dateStart){
@@ -20,10 +24,16 @@ export module Helpers {
                 min = milestone.date
             }
         });
+        
         return new Date(min)
     }
 
     export function getMax(tasks : Array<Struct.Task>, milestones : Array<Struct.Milestone>): Date{
+        
+        if(tasks.length === 0 && milestones.length === 0){
+            return new Date()
+        }
+
         let max : Date = new Date("1900-01-01");
         tasks.forEach(task => {
             if(max < task.dateEnd){
