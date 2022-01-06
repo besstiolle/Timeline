@@ -49,7 +49,7 @@
 <Live bind:this={liveComponent}/>
 
 <div id="wrapper">
-    <svg width="100%" viewBox="0 0 {Constantes.GRID.ALL_WIDTH} {Constantes.GRID.ALL_WIDTH / 2}" xmlns="http://www.w3.org/2000/svg">
+    <svg width="100%" viewBox="0 0 {Constantes.GRID.ALL_WIDTH} {Constantes.GRID.ALL_WIDTH}" xmlns="http://www.w3.org/2000/svg">
         <!-- http://svgicons.sparkk.fr/ -->
         <defs>
             <g id="target">
