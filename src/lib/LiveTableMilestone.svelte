@@ -52,6 +52,7 @@
                 ))
         $store.milestones = $store.milestones
     }
+
 </script>
 
 
@@ -85,7 +86,7 @@
         </svg>
     </div>
     <input type="text" bind:value="{milestone.label}" class="label"/>
-    <input type="date" name="{Constantes.LIVE_PREFIX.MD}{i}" value="{Helpers.toISODateString(milestone.date)}" min="1900-01-01" max="2999-12-31" on:change="{updateStore}">
+    <input type="date" name="{Constantes.LIVE_PREFIX.MD}{i}" value="{Helpers.toISODateString(milestone.date)}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
 </div>
 {/each}
 

@@ -87,8 +87,8 @@
         </svg>
     </div>
     <input type="text" bind:value="{task.label}" class="label"/>
-    <input type="date" name="{Constantes.LIVE_PREFIX.TS}{i}" value="{Helpers.toISODateString(task.dateStart)}" min="1900-01-01" max="2999-12-31" on:change="{updateStore}">
-    <input type="date" name="{Constantes.LIVE_PREFIX.TE}{i}" value="{Helpers.toISODateString(task.dateEnd)}" min="1900-01-01" max="2999-12-31" on:change="{updateStore}">
+    <input type="date" name="{Constantes.LIVE_PREFIX.TS}{i}" value="{Helpers.toISODateString(task.dateStart)}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
+    <input type="date" name="{Constantes.LIVE_PREFIX.TE}{i}" value="{Helpers.toISODateString(task.dateEnd)}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
     <input type="number" bind:value="{task.progress}" min="0" max="100" class="progress" />
     <progress max="100" value="{task.progress}"> {task.progress}% </progress>
     <input type="text" bind:value="{task.swimline}" class="label"/>
