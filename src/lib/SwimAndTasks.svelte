@@ -3,11 +3,12 @@
 import { Constantes } from "./constantes.class";
 import { Helpers } from "./helpers.class";
 import { store } from "./stores";
+import type { Struct } from "./struct.class";
 import Task from "./Task.svelte";
 
 const taskHeight = 30;
 
-let mapSwimlines = Helpers.computeMapSwimlines($store.tasks)
+
 let colors = [
     ["#90BBD8", "#2980B9"],
     ["#86CBBE", "#16A085"],
@@ -17,6 +18,14 @@ let colors = [
     ["#C6CECE", "#95A5A6"],
     ["#A191A3", "#4B2C50"]
 ]
+
+let tasksShown: Struct.Task[] = []
+$store.tasks.forEach(task => {
+    if(task.isShow){
+        tasksShown.push(task)
+    }
+});
+let mapSwimlines = Helpers.computeMapSwimlines(tasksShown)
 
 </script>         
 
@@ -30,13 +39,10 @@ let colors = [
     {/each}
 </defs>
 
-{#each $store.tasks as task, i}
+{#each tasksShown as task, i}
     {#if mapSwimlines.has(i)}
-    <h1> - i - </h1>
         <use x="0" y="{i*taskHeight + 110}" href="#swimline{i}"/>
     {/if}
-    {#if task.isShow}
-        <Task i={i}/>
-        <use x="0" y="{i*taskHeight + 115}" href="#T{i}"/>
-    {/if}
+    <Task currentTask={task} i={i}/>
+    <use x="0" y="{i*taskHeight + 115}" href="#T{i}"/>
 {/each}

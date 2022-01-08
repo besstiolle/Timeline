@@ -102,21 +102,11 @@ export module Helpers {
         let tmpStructSwimline: Struct.TmpStructSwimline
         let swimlines : Map<number, Struct.TmpStructSwimline> = new Map()
     
-        let tmpTasks: Array<Struct.Task> = new Array()
-        //Let remove hidden task for our own sanity later
-        tasks.forEach(task => {
-            //if(task.isShow){
-                tmpTasks.push(task)
-            //}
-        });
-    
         let len: number = tasks.length
     
         for(let i: number=0; i < len; i++){
             task = tasks[i]
-    
             //console.info("start with task " + i)
-    
             
             //No swimline on current task
             if(!task.swimline || task.swimline ===""){
