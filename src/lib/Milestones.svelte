@@ -10,12 +10,21 @@
         if(a.date < b.date){return -1}
         return 0
     }
+
+    let milestones: Struct.Milestone[] = []
+    $store.milestones.forEach(milestone => {
+        if(milestone.isShow){
+            milestones.push(milestone)
+        }
+    });
+    //Sort by date ASC
+    milestones = milestones.sort(compareMilestone)
 </script>
 
     
 <defs>
     <g id="milestones">
-        {#each $store.milestones.sort(compareMilestone) as milestone, i}
+        {#each milestones as milestone, i}
             {#if milestone.isShow}
                 <Milestone i={i} milestone={milestone}/>
             {/if}
