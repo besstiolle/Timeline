@@ -10,6 +10,7 @@
 
     function b_delete(event){
         $store.tasks.splice(getIndex(event), 1)
+        $store.reorderIds()
         $store.tasks = $store.tasks
     }
     function b_up(event){
@@ -20,6 +21,8 @@
         let tmpTask: Struct.Task = $store.tasks[index]
         $store.tasks[index] = $store.tasks[index - 1]
         $store.tasks[index - 1] = tmpTask
+        $store.reorderIds()
+        $store.tasks = $store.tasks
     }
     function b_down(event){
         let index = getIndex(event)
@@ -29,6 +32,8 @@
         let tmpTask: Struct.Task = $store.tasks[index]
         $store.tasks[index] = $store.tasks[index + 1]
         $store.tasks[index + 1] = tmpTask
+        $store.reorderIds()
+        $store.tasks = $store.tasks
     }
     function b_show(event){
         let index = getIndex(event)
@@ -37,15 +42,16 @@
     function b_duplicate(event){
         let index = getIndex(event)
         let tmpTasks : Array<Struct.Task> = $store.tasks.splice(index+1, $store.tasks.length)
-        $store.tasks.push( $store.tasks[index].clone() )
+        $store.addTask( $store.tasks[index].clone() )
         tmpTasks.forEach(tmpTask => {
-            $store.tasks.push( tmpTask )
+            $store.addTask( tmpTask )
         });
         $store.tasks = $store.tasks
     }
     function b_add(){
         let diffSec : number = $store.end.getTime() - $store.start.getTime()
-        $store.tasks.push(new Struct.Task(
+        $store.addTask(new Struct.Task(
+                $store.getNextId(),
                 "Some task", 
                 new Date($store.start.getTime() + (0.1 * diffSec)), 
                 new Date($store.end.getTime() - (0.1 * diffSec)),

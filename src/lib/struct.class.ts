@@ -10,6 +10,7 @@ export module Struct {
 		isInitiate : boolean = false
 		start: Date
 		end: Date
+		maxId: number = 0
 
 		constructor(){
 		}
@@ -17,12 +18,14 @@ export module Struct {
 		addTask(task: Task) : Data{
 			this.tasks.push(task)
 			this.isInitiate = true
+			this.reorderIds()
 			return this
 		}
 
 		addMilestone(milestone: Milestone) : Data{
 			this.milestones.push(milestone)
 			this.isInitiate = true
+			this.reorderIds()
 			return this
 		}
 
@@ -44,6 +47,27 @@ export module Struct {
 			return this
 		}
 
+		getNextId() : number{
+			return this.maxId + 1
+		}
+
+		reorderIds() : void{
+			let id : number = 1
+			let lenTasks: number = this.tasks.length
+			let lenMilestones: number = this.milestones.length
+			for(let i=0; i < lenTasks; i++){
+				this.tasks[i].id = id
+				this.maxId = id
+				id = this.getNextId()
+			}
+			for(let i=0; i < lenMilestones; i++){
+				//console.info("this.milestones["+i+"].id = " + id)
+				this.milestones[i].id = id
+				this.maxId = id
+				id = this.getNextId()
+			}			
+		}
+
 		initiate() : Data{
 			if(browser){
 				let localData: Data = JSON.parse(localStorage.getItem("store"), Helpers.dataReviver)
@@ -62,26 +86,25 @@ export module Struct {
 
 		_initiate() : Data{
 			return this
-				.addTask(new Struct.Task("Random Task 0", new Date("2021-01-15"), new Date("2021-04-01"),100, true, ""))
-				.addTask(new Struct.Task("Random Task 1", new Date("2021-12-01"), new Date("2022-04-01"),0, true,""))
-				.addTask(new Struct.Task("Random Task 2", new Date("2021-02-01"), new Date("2021-03-05"),15, true,"Swimline1"))
-				.addTask(new Struct.Task("Random Task 3", new Date("2021-03-10"), new Date("2021-03-30"),0, true,"Swimline1"))
-				.addTask(new Struct.Task("Random Task 4", new Date("2021-02-01"), new Date("2021-05-01"),30, false, ""))
-				.addTask(new Struct.Task("Random Task 5", new Date("2021-01-31"), new Date("2021-03-01"),100, true, ""))
-				.addTask(new Struct.Task("Random Task 6", new Date("2021-05-01"), new Date("2021-05-05"),25, true,"Swimline2"))
-				.addTask(new Struct.Task("Random Task 7", new Date("2021-12-01"), new Date("2022-04-01"),75, true, ""))
+				.addTask(new Struct.Task(0, "Random Task 0", new Date("2021-01-15"), new Date("2021-04-01"),100, true, ""))
+				.addTask(new Struct.Task(1, "Random Task 1", new Date("2021-12-01"), new Date("2022-04-01"),0, true,""))
+				.addTask(new Struct.Task(2, "Random Task 2", new Date("2021-02-01"), new Date("2021-03-05"),15, true,"Swimline1"))
+				.addTask(new Struct.Task(3, "Random Task 3", new Date("2021-03-10"), new Date("2021-03-30"),0, true,"Swimline1"))
+				.addTask(new Struct.Task(4, "Random Task 4", new Date("2021-02-01"), new Date("2021-05-01"),30, false, ""))
+				.addTask(new Struct.Task(5, "Random Task 5", new Date("2021-01-31"), new Date("2021-03-01"),100, true, ""))
+				.addTask(new Struct.Task(6, "Random Task 6", new Date("2021-05-01"), new Date("2021-05-05"),25, true,"Swimline2"))
+				.addTask(new Struct.Task(7, "Random Task 7", new Date("2021-12-01"), new Date("2022-04-01"),75, true, ""))
 
-				.addMilestone(new Struct.Milestone("Milestone 1", new Date("2020-12-01"), true))
-				.addMilestone(new Struct.Milestone("Milestone 2", new Date(), true))
-				.addMilestone(new Struct.Milestone("Milestone 3", new Date("2022-08-15"), false))
+				.addMilestone(new Struct.Milestone(8, "Milestone 1", new Date("2020-12-01"), true))
+				.addMilestone(new Struct.Milestone(9, "Milestone 2", new Date(), true))
+				.addMilestone(new Struct.Milestone(10, "Milestone 3", new Date("2022-08-15"), false))
 
 				.processLimites()
 		}
 	}
 
 	export class Task {
-		
-
+		id: number
 		label: string
 		dateStart: Date
 		dateEnd: Date
@@ -89,7 +112,8 @@ export module Struct {
 		isShow: boolean
 		swimline: string
 	
-		constructor(label : string, dateStart : Date, dateEnd : Date, progress : number, isShow : boolean, swimline: string) {
+		constructor(id : number, label : string, dateStart : Date, dateEnd : Date, progress : number, isShow : boolean, swimline: string) {
+			this.id = id
 			this.label = label
 			this.dateStart = dateStart
 			this.dateEnd = dateEnd
@@ -110,19 +134,21 @@ export module Struct {
 		}
 
 		clone(){
-			return new Task(this.label, this.dateStart, this.dateEnd,this.progress, this.isShow, this.swimline)
+			return new Task(-1, this.label, this.dateStart, this.dateEnd,this.progress, this.isShow, this.swimline)
 		}
 	}
 
 	export class Milestone {
+		id: number
 		label: string
 		date: Date
 		isShow: boolean
 	
-		constructor(label : string, date : Date, isShow : boolean) {
-		this.label = label;
-		this.date = date;
-		this.isShow = isShow
+		constructor(id : number, label : string, date : Date, isShow : boolean) {
+			this.id = id
+			this.label = label;
+			this.date = date;
+			this.isShow = isShow
 		}
 
 		join(car : string){
@@ -133,7 +159,7 @@ export module Struct {
 		}
 		
 		clone(){
-			return new Milestone(this.label, this.date, this.isShow)
+			return new Milestone(-1, this.label, this.date, this.isShow)
 		}
 	}
 

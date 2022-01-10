@@ -52,7 +52,9 @@ export module Helpers {
         
         //Case of object Data
         if(key === ''){
-            return Object.assign(new Struct.Data(), value)
+            let structData = Object.assign(new Struct.Data(), value)
+            structData.reorderIds()
+            return structData
         }
 
         if(typeof value === 'object' && value.label) { //Un object contenant un label => nos objects Task & Milestone
@@ -90,10 +92,10 @@ export module Helpers {
 	}
 
 	export function ObjectToTask(o: any) {
-        return new Struct.Task(o.label,new Date(o.dateStart), new Date(o.dateEnd), o.progress, o.isShow, o.swimline)
+        return new Struct.Task(-1, o.label,new Date(o.dateStart), new Date(o.dateEnd), o.progress, o.isShow, o.swimline)
 	}
 	export function ObjectToMilestone(o: any) {
-		return new Struct.Milestone(o.label,new Date(o.date), o.isShow)
+		return new Struct.Milestone(-1, o.label,new Date(o.date), o.isShow)
 	}
 
     export function computeMapSwimlines(tasks : Array<Struct.Task>):  Map<number, Struct.TmpStructSwimline>{
