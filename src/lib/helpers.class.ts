@@ -75,9 +75,14 @@ export module Helpers {
 
         if(key === 'tasks'){
             //Nothing to do, it's an array
+            return value
         }
         if(key === 'milestones'){
             //Nothing to do, it's an array
+            return value
+        }
+        if(key === 'mapperIdIndex'){
+            return  ObjectToMap(value)
         }
 
         //Case of Date (date, datemin, datemax, min, max, ...)
@@ -91,11 +96,19 @@ export module Helpers {
 		return value;
 	}
 
-	export function ObjectToTask(o: any) {
+	function ObjectToTask(o: any) {
         return new Struct.Task(-1, o.label,new Date(o.dateStart), new Date(o.dateEnd), o.progress, o.isShow, o.swimline)
 	}
-	export function ObjectToMilestone(o: any) {
+	function ObjectToMilestone(o: any) {
 		return new Struct.Milestone(-1, o.label,new Date(o.date), o.isShow)
+	}
+	function ObjectToMap(o: any) {
+		let map : Map<number, number> = new Map<number, number>()
+        let k : string
+        for (k of Object.keys(o)) {
+            map.set(parseInt(k), o[parseInt(k)])
+        }
+        return map
 	}
 
     export function computeMapSwimlines(tasks : Array<Struct.Task>):  Map<number, Struct.TmpStructSwimline>{

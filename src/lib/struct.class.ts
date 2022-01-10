@@ -11,6 +11,8 @@ export module Struct {
 		start: Date
 		end: Date
 		maxId: number = 0
+		mapperIdIndex : Map<number, number> = new Map<number, number>()
+		//Check helper.ts > dataReviver() function if you add something here.
 
 		constructor(){
 		}
@@ -32,6 +34,7 @@ export module Struct {
 		purge() : void{
 			this.tasks = new Array<Task>()
 			this.milestones = new Array<Milestone>()
+			this.mapperIdIndex = new Map<number, number>()
 			this.isInitiate = false
 		}
 
@@ -51,6 +54,22 @@ export module Struct {
 			return this.maxId + 1
 		}
 
+		getTasksById(id : number) : Task{
+			//TODO secure code with verification of type returned
+			if(this.mapperIdIndex.has(id)) {
+				return this.tasks[this.mapperIdIndex.get(id)]
+			}
+			throw `Identifiant ${id} for Task doesn't exist in mapperIdIndex`
+		}
+
+		getMilestonesById(id : number) : Milestone{
+			//TODO secure code with verification of type returned
+			if(this.mapperIdIndex.has(id)) {
+				return this.milestones[this.mapperIdIndex.get(id)]
+			}
+			throw `Identifiant ${id} for Milestone doesn't exist in mapperIdIndex`
+		}
+
 		reorderIds() : void{
 			let id : number = 1
 			let lenTasks: number = this.tasks.length
@@ -58,12 +77,13 @@ export module Struct {
 			for(let i=0; i < lenTasks; i++){
 				this.tasks[i].id = id
 				this.maxId = id
+				this.mapperIdIndex.set(id,i)
 				id = this.getNextId()
 			}
 			for(let i=0; i < lenMilestones; i++){
-				//console.info("this.milestones["+i+"].id = " + id)
 				this.milestones[i].id = id
 				this.maxId = id
+				this.mapperIdIndex.set(id,i)
 				id = this.getNextId()
 			}			
 		}
