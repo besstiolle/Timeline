@@ -23,39 +23,30 @@ import { browser } from '$app/env';
     milestones = milestones.sort(compareMilestone)
 
 
-    let svgUseNode: HTMLElement  = null
-    let svgGNode: HTMLElement  = null
-    let svgDefsNode: HTMLElement  = null
-    let target: HTMLElement = null
+    let ghostSVGNode: HTMLElement  = null
+    let currentTarget: HTMLElement = null
     let hoverGroup = false
-    const GHOST_USE_NODE_ID = "ghostUseNode"
-    const GHOST_G_NODE_ID = "ghostGNode"
-    const GHOST_DEFS_NODE_ID = "ghostDefsNode"
+    let recBox: DOMRect = null
+
+    const GHOST_SVG_NODE_ID = "ghostSVGNode"
     /**
      * Triggered every time user try to "grab" an svg group of Milestone
      * @param event the event mousedown
      */
     function down(event){
-        target = event.target
-        svgUseNode = event.target.cloneNode(true)
-        svgGNode = <HTMLElement> document.getElementById(svgUseNode.getAttribute("href").substring(1)).cloneNode(true) // substring : remove prefix '#'
+        currentTarget = event.currentTarget //currentTarget => svg, target => sub element of svg
+        ghostSVGNode = <HTMLElement> currentTarget.cloneNode(true)
+        ghostSVGNode.setAttribute("id", GHOST_SVG_NODE_ID)
     
         //Find the last node of our SVG group
         let endMilestoneNode = document.getElementById("endMilestoneNode")
 
-        //create ghost node <defs>
-        svgDefsNode = document.createElement("defs")
-        svgDefsNode.setAttribute("id", GHOST_DEFS_NODE_ID)
-        endMilestoneNode.parentNode.insertBefore(svgDefsNode, endMilestoneNode)
+        //create ghost node <svg> after the last node of our SVG group
+        endMilestoneNode.parentNode.insertBefore(ghostSVGNode, endMilestoneNode)
+        
+        //Refresh our ghost Node reference
+        ghostSVGNode = document.getElementById(GHOST_SVG_NODE_ID)
 
-        //create ghost node <g>
-        svgGNode.id = GHOST_G_NODE_ID
-        svgDefsNode.appendChild(svgGNode)
-
-        //create ghost node <use>
-        svgUseNode.id = GHOST_USE_NODE_ID
-        svgUseNode.setAttribute("href", "#" + GHOST_G_NODE_ID)
-        endMilestoneNode.parentNode.insertBefore(svgUseNode, endMilestoneNode)
     }
 
     /**
@@ -63,38 +54,25 @@ import { browser } from '$app/env';
      * @param event the event mouseup
      */
     function up(event){
-        if(svgUseNode && hoverGroup){
+        if(ghostSVGNode && hoverGroup){
             let newX = event.clientX / window.innerWidth * Constantes.GRID.ALL_WIDTH
             let date = processNewDate(newX - Constantes.GRID.MIDDLE_X)
-            let idMilestone = target.getAttribute("href").substring(2) // #M999 => 999
+            let idMilestone = currentTarget.getAttribute("id").substring(1) // M999 => 999
 
             let milestones = $store.getMilestonesById(parseInt(idMilestone))
             milestones.date = date
             $store.processLimites()
-            $store.milestones = $store.milestones
-            
+            $store.milestones = $store.milestones 
         }
 
         //Reset vars
-        let ghostUseNode = document.getElementById(GHOST_USE_NODE_ID)
-        if(ghostUseNode) {
-            ghostUseNode.remove()
+        if(ghostSVGNode){
+            ghostSVGNode.remove()
+            ghostSVGNode = null
         }
-        let ghostGNode = document.getElementById(GHOST_G_NODE_ID)
-        if(ghostGNode) {
-            ghostGNode.remove()
-        }
-        let svgDefsNode = document.getElementById(GHOST_DEFS_NODE_ID)
-        if(svgDefsNode) {
-            svgDefsNode.remove()
-        }
-        svgUseNode = null
-        svgGNode = null
-        svgDefsNode = null
-        target = null
+        currentTarget = null
     }
     
-    let recBox: DOMRect = null
 
     /**
      * Triggered every time user move the mouse
@@ -108,27 +86,25 @@ import { browser } from '$app/env';
 
         if(hoverGroup && (event.clientX <= recBox.left || event.clientX >= recBox.right
                 || event.clientY <= recBox.top || event.clientY >= recBox.bottom)){
-            hoverGroup = false
+                    hoverGroup = false
         }
 
         if(!hoverGroup && event.clientX > recBox.left && event.clientX < recBox.right && event.clientY > recBox.top && event.clientY < recBox.bottom){
             hoverGroup = true
         }
 
-        if(hoverGroup){
-            //Moving ghostUseNode on the axe <===> 
-            if(svgUseNode){
-                let newX = event.clientX / window.innerWidth * Constantes.GRID.ALL_WIDTH
-                svgUseNode.setAttribute('x', `${newX - 10}`)
+        //Moving ghostUseNode on the axe <===> 
+        if(ghostSVGNode && hoverGroup){
+            let newX = event.clientX / window.innerWidth * Constantes.GRID.ALL_WIDTH
+            ghostSVGNode.setAttribute('x', `${newX - 10}`)
 
-                //Get new Date
-                let newDate: Date = processNewDate(newX - Constantes.GRID.MIDDLE_X)
-                let newDateLabel = newDate.getDate() + "-" + Constantes.MONTHS[newDate.getMonth()]
-                let svgGDateLabelNode : HTMLElement = <HTMLElement> svgGNode.lastChild
-                if(svgGDateLabelNode){
-                    svgGDateLabelNode.innerHTML = newDateLabel
-                }
-            } 
+            //Get new Date
+            let newDate: Date = processNewDate(newX - Constantes.GRID.MIDDLE_X)
+            let newDateLabel = newDate.getDate() + "-" + Constantes.MONTHS[newDate.getMonth()]
+            let svgGDateLabelNode : HTMLElement = <HTMLElement> ghostSVGNode.lastChild
+            if(svgGDateLabelNode){
+                svgGDateLabelNode.innerHTML = newDateLabel
+            }
         }
     }
 
@@ -142,7 +118,7 @@ import { browser } from '$app/env';
 
 <svelte:window on:mouseup={up} on:mousemove="{move}"/>
 <rect id="milestonesSection" x="{Constantes.GRID.MIDDLE_X}" y="0" width="{Constantes.GRID.MIDDLE_WIDTH}" height="50" 
-    stroke-dasharray="0.5 2" style="" class:onhover={svgUseNode && hoverGroup} />
+    stroke-dasharray="0.5 2" style="" class:onhover={ghostSVGNode && hoverGroup} />
 {#each milestones as milestone, i}
     {#if milestone.isShow}
         <Milestone i={i} milestone={milestone} down={down}/>
@@ -166,7 +142,7 @@ import { browser } from '$app/env';
 :global(.milestoneSection){
     cursor: grab;
 }
-:global(#ghostGNode){
+:global(#GHOST_SVG_NODE_ID){
     opacity: 0.5;
 }
 </style>

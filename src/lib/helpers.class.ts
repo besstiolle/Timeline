@@ -175,5 +175,15 @@ export module Helpers {
         return swimlines
     }
 
+    export function countVisibleTask(allTasks: Struct.Task[]) : number{
+        let count : number = 0
+        allTasks.forEach(task => {
+            if(task.isShow){
+                count++
+            }
+        })
+        return count
+    }
+
 
 }

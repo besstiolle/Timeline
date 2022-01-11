@@ -8,6 +8,11 @@ export module Constantes {
         LEFT_X:0,
         RIGHT_X:(1000-75),
         MIDDLE_X:150,
+
+        MILESTONE_H:50,
+        BANNER_H:65,
+        ONE_TASK_H:30,
+        TODAY_H:0
     }
     
     export const MONTHS = ['Jan.','Fev.','Mar.','Avr.','Mai','Juin','Juil.','Aout','Sept.','Oct.','Nov.','Dec.']

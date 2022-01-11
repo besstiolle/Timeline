@@ -11,23 +11,9 @@
     import Upload from './Upload.svelte';
     import Live from './Live.svelte';
     import SwimAndTasks from './SwimAndTasks.svelte';
+    import { Helpers } from './helpers.class';
 
-    const H_MILESTONE: number = 50
-    const H_BANNER: number = 65
-    const H_TASK: number = 30
-    const H_TODAY: number = 0
-    
-    let liveComponent
-
-    function countVisibleTask() : number{
-        let count : number = 0
-        $store.tasks.forEach(task => {
-            if(task.isShow){
-                count++
-            }
-        })
-        return count
-    }
+    let liveComponent   
 
     function download(){
         let csvContent = "data:text/csv;charset=utf-8," 
@@ -63,7 +49,8 @@
 <Live bind:this={liveComponent}/>
 {#key $store}
 <div id="wrapper">
-    <svg width="100%" viewBox="0 0 {Constantes.GRID.ALL_WIDTH} {H_MILESTONE + H_BANNER + H_TASK * countVisibleTask() + H_TODAY}" xmlns="http://www.w3.org/2000/svg">
+    <svg width="100%" viewBox="0 0 {Constantes.GRID.ALL_WIDTH} {Constantes.GRID.MILESTONE_H + Constantes.GRID.BANNER_H + Constantes.GRID.ONE_TASK_H * Helpers.countVisibleTask($store.tasks) + Constantes.GRID.TODAY_H}" 
+        xmlns="http://www.w3.org/2000/svg">
         <!-- http://svgicons.sparkk.fr/ -->
         <defs>
             <g id="target">
