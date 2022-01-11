@@ -6,9 +6,6 @@ import { store } from "./stores";
 import type { Struct } from "./struct.class";
 import Task from "./Task.svelte";
 
-const taskHeight = 30;
-
-
 let colors = [
     ["#90BBD8", "#2980B9"],
     ["#86CBBE", "#16A085"],
@@ -31,18 +28,19 @@ let mapSwimlines = Helpers.computeMapSwimlines(tasksShown)
 
 <defs>
     {#each [...mapSwimlines] as [key, swimline]}
-    <g id="swimline{key}"> <!-- h = n x 30 -->
-        <rect x="0" y="0" width="{Constantes.GRID.ALL_WIDTH}" height="{swimline.countVisibleTasks * 30 - 0.5}" fill="{colors[key % colors.length][0]}"/>
-        <rect x="0" y="0" width="{Constantes.GRID.LEFT_WIDTH}" height="{swimline.countVisibleTasks * 30 - 0.5}" fill="{colors[key % colors.length][1]}"/>
-        <text text-anchor="middle" x="{Constantes.GRID.LEFT_WIDTH / 2}" y="{swimline.countVisibleTasks * 30 / 2}" font-family="Verdana" font-size="10" fill="#FFFFFF">{swimline.label}</text>
+    <g id="swimline{key}"> <!-- h = n x Constantes.GRID.ONE_TASK_H -->
+        <rect x="0" y="0" width="{Constantes.GRID.ALL_WIDTH}" height="{swimline.countVisibleTasks * Constantes.GRID.ONE_TASK_H - 0.5}" fill="{colors[key % colors.length][0]}"/>
+        <rect x="0" y="0" width="{Constantes.GRID.LEFT_WIDTH}" height="{swimline.countVisibleTasks * Constantes.GRID.ONE_TASK_H - 0.5}" fill="{colors[key % colors.length][1]}"/>
+        <text text-anchor="middle" x="{Constantes.GRID.LEFT_WIDTH / 2}" y="{swimline.countVisibleTasks * Constantes.GRID.ONE_TASK_H / 2}" font-family="Verdana" font-size="10" fill="#FFFFFF">{swimline.label}</text>
     </g>
     {/each}
 </defs>
 
 {#each tasksShown as task, i}
-    {#if mapSwimlines.has(i)}
-        <use x="0" y="{i*taskHeight + 110}" href="#swimline{i}"/>
-    {/if}
-    <Task currentTask={task} i={i}/>
-    <use x="0" y="{i*taskHeight + 115}" href="#T{i}"/>
+
+{#if mapSwimlines.has(i)}
+<use x="0" y="{i * Constantes.GRID.ONE_TASK_H + Constantes.GRID.MILESTONE_H + Constantes.GRID.BANNER_H - 5}" href="#swimline{i}"/>
+{/if}
+<Task currentTask={task} i={i}/>
+<use x="0" y="{i * Constantes.GRID.ONE_TASK_H + Constantes.GRID.MILESTONE_H + Constantes.GRID.BANNER_H}" href="#T{i}"/>
 {/each}
