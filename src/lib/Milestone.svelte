@@ -5,9 +5,8 @@
     import { Helpers } from "./helpers.class";
 
     export let milestone: Struct.Milestone
-    export let i : number
+    export let level:number
     export let down
-    let level = i % 2
 
     let xMilestonePosition =  (milestone.date.getTime() - $store.start.getTime()) / ($store.end.getTime() - $store.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH
 </script>

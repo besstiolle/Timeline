@@ -25,7 +25,7 @@ import { browser } from '$app/env';
 
     let ghostSVGNode: HTMLElement  = null
     let currentTarget: HTMLElement = null
-    let hoverGroup = false
+    let hoverGroup: boolean = false
     let recBox: DOMRect = null
 
     const GHOST_SVG_NODE_ID = "ghostSVGNode"
@@ -121,7 +121,7 @@ import { browser } from '$app/env';
     stroke-dasharray="0.5 2" style="" class:onhover={ghostSVGNode && hoverGroup} />
 {#each milestones as milestone, i}
     {#if milestone.isShow}
-        <Milestone i={i} milestone={milestone} down={down}/>
+        <Milestone level={i%2} milestone={milestone} down={down}/>
         <line id='endMilestoneNode' x1="0" y1="0" x2="0" y2="0" stroke="transparent" />
     {/if}
 {/each}

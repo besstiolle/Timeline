@@ -42,5 +42,4 @@ let mapSwimlines = Helpers.computeMapSwimlines(tasksShown)
 <use x="0" y="{i * Constantes.GRID.ONE_TASK_H + Constantes.GRID.MILESTONE_H + Constantes.GRID.BANNER_H - 5}" href="#swimline{i}"/>
 {/if}
 <Task currentTask={task} i={i}/>
-<use x="0" y="{i * Constantes.GRID.ONE_TASK_H + Constantes.GRID.MILESTONE_H + Constantes.GRID.BANNER_H}" href="#T{i}"/>
 {/each}

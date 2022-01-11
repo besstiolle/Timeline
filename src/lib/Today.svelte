@@ -1,7 +1,7 @@
 <script lang="ts">
 
     import { Constantes } from './constantes.class';
-import { Helpers } from './helpers.class';
+    import { Helpers } from './helpers.class';
     import { store } from './stores';
 
     let toDisplay = ($store.start <= new Date() && $store.end >= new Date())
