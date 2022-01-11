@@ -2,6 +2,7 @@
 
     import BannerLabel from './BannerLabel.svelte';
     import { Constantes } from './constantes.class';
+import { Helpers } from './helpers.class';
     import { store } from './stores';
 
    /* function monthDiff(d1: Date, d2: Date) {
@@ -44,7 +45,8 @@
         i++;
         jalons.push({
             left:(dateInc.getTime() - $store.start.getTime()) / ($store.end.getTime() - $store.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH,
-            label:(dateInc.getMonth()==0?dateInc.getUTCFullYear():Constantes.MONTHS[dateInc.getMonth()])
+            label:(dateInc.getMonth()==0?dateInc.getUTCFullYear():Constantes.MONTHS[dateInc.getMonth()]),
+            classCss:(dateInc.getMonth()==0?"newYear":"")
             //label:Constantes.MONTHS[dateInc.getMonth()]
         })
 
@@ -54,7 +56,6 @@
 
     
 <defs>
-
     <linearGradient id="Gradient1" x1="0" x2="0" y1="0" y2="1">
         <stop offset="0%" stop-color="#475569"/>
         <stop offset="100%" stop-color="#4F5764" />
@@ -64,17 +65,21 @@
         <stop offset="0%" stop-color="#475569" stop-opacity="0.3"/>
         <stop offset="100%" stop-opacity="0"/>
     </linearGradient>
-    
-    
-
-    <g id="annual">
-        <rect x="-10" y="0" width="{Constantes.GRID.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient1)"/>
-        <rect x="-10" y="30" width="{Constantes.GRID.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient2)"/>
-        {#each jalons as { left, label }, i}
-            <BannerLabel left={left} label={label}/>
-        {/each}
-    </g>
-
 </defs>
 
-<use x="{Constantes.GRID.LEFT_WIDTH}" y="50" href="#annual"/>
+<svg viewBox="0 0 {Constantes.GRID.ALL_WIDTH} {Constantes.GRID.MILESTONE_H + Constantes.GRID.BANNER_H + Constantes.GRID.ONE_TASK_H * Helpers.countVisibleTask($store.tasks) + Constantes.GRID.TODAY_H}" 
+xmlns="http://www.w3.org/2000/svg" x="{Constantes.GRID.LEFT_WIDTH}" y="{Constantes.GRID.MILESTONE_H}"
+>
+    <rect x="-10" y="0" width="{Constantes.GRID.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient1)"/>
+    <rect x="-10" y="30" width="{Constantes.GRID.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient2)"/>
+    {#each jalons as { left, label, classCss}, i}
+        <BannerLabel left={left} label={label} classCss={classCss}/>
+    {/each}
+</svg>
+
+<style>
+    :global(.newYear){
+        fill:rgb(222, 184, 135)
+    }
+
+</style>

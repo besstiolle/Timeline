@@ -24,22 +24,33 @@ $store.tasks.forEach(task => {
 });
 let mapSwimlines = Helpers.computeMapSwimlines(tasksShown)
 
+function down(){
+    //TODO
+}
+
 </script>         
 
-<defs>
-    {#each [...mapSwimlines] as [key, swimline]}
-    <g id="swimline{key}"> <!-- h = n x Constantes.GRID.ONE_TASK_H -->
-        <rect x="0" y="0" width="{Constantes.GRID.ALL_WIDTH}" height="{swimline.countVisibleTasks * Constantes.GRID.ONE_TASK_H - 0.5}" fill="{colors[key % colors.length][0]}"/>
-        <rect x="0" y="0" width="{Constantes.GRID.LEFT_WIDTH}" height="{swimline.countVisibleTasks * Constantes.GRID.ONE_TASK_H - 0.5}" fill="{colors[key % colors.length][1]}"/>
-        <text text-anchor="middle" x="{Constantes.GRID.LEFT_WIDTH / 2}" y="{swimline.countVisibleTasks * Constantes.GRID.ONE_TASK_H / 2}" font-family="Verdana" font-size="10" fill="#FFFFFF">{swimline.label}</text>
-    </g>
-    {/each}
-</defs>
+<svg viewBox="0 0 {Constantes.GRID.ALL_WIDTH} {Constantes.GRID.MILESTONE_H + Constantes.GRID.BANNER_H + Constantes.GRID.ONE_TASK_H * Helpers.countVisibleTask($store.tasks) + Constantes.GRID.TODAY_H}" 
+xmlns="http://www.w3.org/2000/svg" x="0" y="{Constantes.GRID.MILESTONE_H + Constantes.GRID.BANNER_H - 5}" 
+>
+{#each tasksShown as task, i}
+    {#if mapSwimlines.has(i)}
+
+        <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
+            width="{Constantes.GRID.ALL_WIDTH}" height="{mapSwimlines.get(i).countVisibleTasks * Constantes.GRID.ONE_TASK_H - 0.5}" 
+            fill="{colors[i % colors.length][0]}"/>
+
+        <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
+            width="{Constantes.GRID.LEFT_WIDTH}" height="{mapSwimlines.get(i).countVisibleTasks * Constantes.GRID.ONE_TASK_H - 0.5}" 
+            fill="{colors[i % colors.length][1]}"/>
+
+        <text text-anchor="middle" x="{Constantes.GRID.LEFT_WIDTH / 2}" y="{i * Constantes.GRID.ONE_TASK_H + mapSwimlines.get(i).countVisibleTasks * Constantes.GRID.ONE_TASK_H / 2}" 
+            font-family="Verdana" font-size="10" fill="#FFFFFF">{mapSwimlines.get(i).label}</text>
+
+    {/if}
+{/each}
+</svg>
 
 {#each tasksShown as task, i}
-
-{#if mapSwimlines.has(i)}
-<use x="0" y="{i * Constantes.GRID.ONE_TASK_H + Constantes.GRID.MILESTONE_H + Constantes.GRID.BANNER_H - 5}" href="#swimline{i}"/>
-{/if}
-<Task currentTask={task} i={i}/>
+    <Task currentTask={task} i={i} down={down}/>
 {/each}

@@ -1,11 +1,13 @@
 <script lang="ts">
 
     import { Constantes } from './constantes.class';
+    import { Helpers } from './helpers.class';
     import { store } from './stores';
     import type { Struct } from './struct.class';
 
-    export let i: number;
+    export let i: number
     export let currentTask: Struct.Task
+    export let down
     
     const green = "#16A085";
     const greenStroke = "#117A65";
@@ -41,8 +43,9 @@
     let hasSwimline = currentTask.swimline && currentTask.swimline !== ""
 
 </script>
-<defs>
-    <g id="T{i}">
+<svg viewBox="0 0 {Constantes.GRID.ALL_WIDTH} {Constantes.GRID.MILESTONE_H + Constantes.GRID.BANNER_H + Constantes.GRID.ONE_TASK_H * Helpers.countVisibleTask($store.tasks) + Constantes.GRID.TODAY_H}" 
+     xmlns="http://www.w3.org/2000/svg" x="0" y="{i * Constantes.GRID.ONE_TASK_H + Constantes.GRID.MILESTONE_H + Constantes.GRID.BANNER_H}"
+     class="taskSVGSection" on:mousedown={down} id="T{currentTask.id}" >
         {#if hasSwimline}
         <text text-anchor="end" x="{xGrayPosition - 5}" y="10.5" font-family="Verdana" font-size="9" fill="{leftLabel}">{currentTask.label}</text>
         {:else}
@@ -55,6 +58,4 @@
         <rect x="{xGrayPosition}" y="0" width="{widthProgress}" height="15" rx="5" ry="5" style="{styleColor} stroke-width: 0.05em;"/>
         <text text-anchor="{percentTextAnchor}" x="{xPercentPosition}" y="10.5" font-family="Verdana" font-size="8" fill="{white}">{currentTask.progress}%</text>
         <text x="{xGrayPosition + widthGray + 5}" y="10.5" font-family="Verdana" font-size="8" fill="{rightLabel}">{labelRight}</text>
-    </g>
-</defs>
-<use x="0" y="{i * Constantes.GRID.ONE_TASK_H + Constantes.GRID.MILESTONE_H + Constantes.GRID.BANNER_H}" href="#T{i}"/>
+</svg>

@@ -139,7 +139,7 @@ import { browser } from '$app/env';
     fill: rgb(164, 185, 185)
 
 }
-:global(.milestoneSection){
+:global(.milestoneSVGSection){
     cursor: grab;
 }
 :global(#GHOST_SVG_NODE_ID){
