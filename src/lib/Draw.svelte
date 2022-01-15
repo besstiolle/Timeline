@@ -2,8 +2,6 @@
     import html2canvas from 'html2canvas';
 
     import { store } from './stores';
-        
-    import { Constantes } from './constantes.class'    ;
 
     import Banner from './Banner.svelte';
     import Milestones from './Milestones.svelte';
@@ -11,18 +9,22 @@
     import Upload from './Upload.svelte';
     import Live from './Live.svelte';
     import SwimAndTasks from './SwimAndTasks.svelte';
-    import { Helpers } from './helpers.class';
 
     let liveComponent   
 
-    //TODO : look at https://svelte.dev/repl/3bf1ad9f2fb2479d8c362d3aa50f7085?version=3.14.1
-    function download(){
-        let csvContent = "data:text/csv;charset=utf-8," 
-        + $store.tasks.map(e => e.join(";")).join("\n")
-        + "\n"
-        + $store.milestones.map(e => e.join(";")).join("\n")
-        var encodedUri = encodeURI(csvContent);
-        window.open(encodedUri)
+    function downloadCsv () {
+        var csvData = $store.tasks.map(e => e.join(";")).join("\n")
+                    + "\n"
+                    + $store.milestones.map(e => e.join(";")).join("\n")
+		var csvBlob = new Blob([csvData], {type:"data:text/csv;charset=utf-8,"});
+		var csvUrl = URL.createObjectURL(csvBlob);
+		var downloadLink = document.createElement("a");
+		downloadLink.href = csvUrl;
+		downloadLink.download = 'download.csv';
+		document.body.appendChild(downloadLink);
+        console.info(downloadLink)
+		downloadLink.click();
+		document.body.removeChild(downloadLink);
     }
 
     function takeshot() {  
@@ -38,7 +40,7 @@
 <button on:click={takeshot}>
     Take Screenshot
 </button>
-<button on:click={download}>
+<button on:click={downloadCsv}>
     Download in CSV
 </button>
 <Upload />
