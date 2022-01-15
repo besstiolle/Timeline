@@ -125,7 +125,7 @@ import { browser } from '$app/env';
             x="{Constantes.GRID.MIDDLE_X + (milestone.date.getTime() - $store.start.getTime()) / ($store.end.getTime() - $store.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH - 10}" y="{i%2 * 25}" 
             class="milestoneSVGSection" on:mousedown={down} id="M{milestone.id}" >
             
-            <use x="0" y="0" href="#mapfiller" fill="transparent"/>
+            <use x="0" y="0" href="#mapfiller" fill="transparent" stroke="transparent" class="toExcludeFromSnapshot"/>
             <use x="0" y="0" href="#map" />
             {#if i%2 == 0}
             <line stroke-dasharray="1" x1="10" y1="20" x2="10" y2="50" stroke="#000" />

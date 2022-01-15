@@ -28,10 +28,11 @@
     }
 
     function takeshot() {  
-        html2canvas(document.getElementById('wrapper')).then(
-            function (canvas) {
-                document.getElementById('output').appendChild(canvas);}
-        )
+        html2canvas(document.getElementById('wrapper'), {
+            ignoreElements: function (el) {return el.classList.contains('toExcludeFromSnapshot')}
+        }).then(function (canvas) {
+            document.getElementById('output').appendChild(canvas);
+        });
     }
 
 </script>
@@ -52,7 +53,7 @@
 <Live bind:this={liveComponent}/>
 {#key $store}
 <div id="wrapper">
-    <svg viewBox="{$store.viewbox}" xmlns="http://www.w3.org/2000/svg">
+    <svg id="titi" viewBox="{$store.viewbox}" xmlns="http://www.w3.org/2000/svg">
         <!-- http://svgicons.sparkk.fr/ -->
         <!-- https://svgedit.netlify.app/editor/index.html -->
         <!-- https://svg-stripe-generator.web.app/ -->
