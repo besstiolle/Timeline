@@ -1,29 +1,22 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { Struct } from './struct.class';
-    import { Helpers } from './helpers.class';
     import { store } from './stores';
 
-    var hidden = true
-
-    function handleClick(event) {
-        if (!hidden && !document.getElementById('box').contains(event.target)){
-            closeUpload()
-        }
-        if(hidden && document.getElementById('openUpload').contains(event.target)){
-            openUpload()
-        }
-    }
+    let hidden = true
 
     function handleKeydown(event) {
         if (!hidden && event.key === 'Escape') {closeUpload()}
     }
 
-    function closeUpload(){
+    function closeUpload(event = null){
+        if(event && (!event.target || (<HTMLElement> event.target).id !== "box__shadow")) {
+            return
+        }
         hidden = true
     }
 
-    function openUpload(){
+    export function openUpload(){
         hidden = false
     }
     
@@ -39,14 +32,14 @@
             formElement.classList.add('has-advanced-upload');
 
             let funcDrag = function(e) {
-            e.preventDefault();
-            e.stopPropagation();
+                e.preventDefault();
+                e.stopPropagation();
             }
             let funcDragOver = function(e) {
-            formElement.classList.add('is-dragover');
+                formElement.classList.add('is-dragover');
             }
             let funcDragLeave = function(e) {
-            formElement.classList.remove('is-dragover');
+                formElement.classList.remove('is-dragover');
             }
 
             formElement.addEventListener('drag', funcDrag)
@@ -135,12 +128,9 @@
   
 </script>
 
-<svelte:window on:keydown={handleKeydown} on:click="{handleClick}"/>
+<svelte:window on:keydown={handleKeydown}/>
 
-<button id="openUpload">
-    Upload your CSV
-</button>
-<div id="box__shadow" class:hidden>
+<div id="box__shadow" class:hidden on:click={closeUpload}>
     <form id="box" method="post" action="" enctype="multipart/form-data">
     
     <div class="box__input">

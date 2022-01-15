@@ -10,6 +10,7 @@
     import Live from './Live.svelte';
     import SwimAndTasks from './SwimAndTasks.svelte';
 
+    let UploadComponent   
     let liveComponent   
 
     function downloadCsv () {
@@ -42,22 +43,20 @@
 
 </script>
 
+<div class="dashButtons">
+    <div class="dashButton" on:click={downloadCsv} title="Downloading the .csv file"><img src='download.png' alt='Downloading the .csv file' /></div>
+    <div class="dashButton" on:click={UploadComponent.openUpload()} title='Uploading the .csv file'><img src='upload.png' alt='Uploading the .csv file' /></div>
+    <div class="dashButton" on:click={takeshot} title='Take a screenshot'><img src='screenshot.png' alt='Take a screenshot' /></div>
+    <div class="dashButton" on:click={liveComponent.openLive()} title='Edit your milestones'><img src='edit.png' alt='Edit your milestones' /></div>
+</div>
 
-<button on:click={takeshot}>
-    Take Screenshot
-</button>
-<button on:click={downloadCsv}>
-    Download in CSV
-</button>
-<Upload />
-<button on:click={liveComponent.openLive()}>
-    Open live edition
-</button>
-
+<Upload bind:this={UploadComponent} />
 <Live bind:this={liveComponent}/>
+
+
 {#key $store}
 <div id="wrapper">
-    <svg id="titi" viewBox="{$store.viewbox}" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="{$store.viewbox}" xmlns="http://www.w3.org/2000/svg">
         <!-- http://svgicons.sparkk.fr/ -->
         <!-- https://svgedit.netlify.app/editor/index.html -->
         <!-- https://svg-stripe-generator.web.app/ -->
@@ -92,4 +91,24 @@
     font-size:8px;
 }
 
-</style>
+.dashButtons{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+}
+.dashButton {
+    border: 1px solid #117A65;
+    background-color: #16A085;
+    border-radius: 45px;
+    margin: 16px;
+    padding: 10px;
+}
+.dashButton:hover{
+    cursor:pointer;
+    background-color: rgb(22, 160, 133, 0.5);
+}
+.dashButton img{
+    width: 32px;
+}
+
+</style> 
