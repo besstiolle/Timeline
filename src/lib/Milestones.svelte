@@ -118,7 +118,7 @@ import { browser } from '$app/env';
 
 <svelte:window on:mouseup={up} on:mousemove="{move}"/>
 <rect id="milestonesSection" x="{Constantes.GRID.MIDDLE_X}" y="0" width="{Constantes.GRID.MIDDLE_WIDTH}" height="{Constantes.GRID.MILESTONE_H}" 
-    stroke-dasharray="0.5 2" class:onhover={ghostSVGNode && hoverGroup} />
+    stroke-dasharray="0.5 2" fill="transparent" class:onhover={ghostSVGNode && hoverGroup} />
 {#each milestones as milestone, i}
     {#if milestone.isShow}
         <svg viewBox="{$store.viewbox}" xmlns="http://www.w3.org/2000/svg" 
