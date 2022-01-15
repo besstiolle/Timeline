@@ -10,7 +10,7 @@ export module Constantes {
         MIDDLE_X:150,
 
         MILESTONE_H:50,
-        BANNER_H:65,
+        ANNUAL_H:65,
         ONE_TASK_H:30,
         TODAY_H:0
     }

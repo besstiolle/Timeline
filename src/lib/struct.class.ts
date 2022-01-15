@@ -1,5 +1,6 @@
 import { Helpers } from './helpers.class';
 import { browser } from "$app/env";
+import { Constantes } from './constantes.class';
 
 export module Struct {
 
@@ -14,6 +15,7 @@ export module Struct {
 		mapperIdIndex : Map<number, number> = new Map<number, number>()
 		//Check helper.ts > dataReviver() function if you add something here.
 
+		viewbox: string = "0 0 0 0"
 		constructor(){
 		}
 
@@ -47,6 +49,9 @@ export module Struct {
 			this.end.setDate(1)
 			this.end.setMonth(this.end.getMonth() + 1)
 
+			//Reprocess viewbox sizing
+			this.viewbox = `0 0 ${Constantes.GRID.ALL_WIDTH} ${Constantes.GRID.MILESTONE_H + Constantes.GRID.ANNUAL_H + Constantes.GRID.ONE_TASK_H * Helpers.countVisibleTask(this.tasks) + Constantes.GRID.TODAY_H}`
+			
 			return this
 		}
 

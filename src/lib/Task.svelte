@@ -24,10 +24,9 @@
     const leftLabel = "#000000";
     const dottedLine = "#44546A";
 
-
-    let styleColor = `fill: ${green}; stroke: ${greenStroke};` //default : full
+    let styleColor = {fill : green, stroke: greenStroke} //default : full
     if(currentTask.progress < 100){
-        styleColor = `fill: ${blue}; stroke: ${blueStroke};`
+        styleColor = {fill : blue, stroke: blueStroke}
     }
 
     let labelRight:string = currentTask.dateStart.getDate() + " " + Constantes.MONTHS[currentTask.dateStart.getMonth()] 
@@ -48,21 +47,22 @@
     
 
 </script>
-<svg viewBox="0 0 {Constantes.GRID.ALL_WIDTH} {Constantes.GRID.MILESTONE_H + Constantes.GRID.BANNER_H + Constantes.GRID.ONE_TASK_H * Helpers.countVisibleTask($store.tasks) + Constantes.GRID.TODAY_H}" 
-     xmlns="http://www.w3.org/2000/svg" x="0" y="{i * Constantes.GRID.ONE_TASK_H + Constantes.GRID.MILESTONE_H + Constantes.GRID.BANNER_H}"
-     class="taskSVGSection" id="T{currentTask.id}" on:mouseover={showActionBar} on:focus={showActionBar} on:mouseout={hideActionBar} on:blur={hideActionBar}>
+<svg viewBox="{$store.viewbox}" xmlns="http://www.w3.org/2000/svg" 
+    x="0" y="{i * Constantes.GRID.ONE_TASK_H + Constantes.GRID.MILESTONE_H + Constantes.GRID.ANNUAL_H}"
+    class="taskSVGSection" id="T{currentTask.id}" on:mouseover={showActionBar} on:focus={showActionBar} on:mouseout={hideActionBar} on:blur={hideActionBar}>
+    
         {#if hasSwimline}
-        <text text-anchor="end" x="{xGrayPosition - 5}" y="10.5" font-family="Verdana" font-size="9" fill="{leftLabel}">{currentTask.label}</text>
+        <text text-anchor="end" x="{xGrayPosition - 5}" y="10.5" font-size="9" fill="{leftLabel}">{currentTask.label}</text>
         {:else}
-        <text text-anchor="end" x="{Constantes.GRID.MIDDLE_X - 5}" y="10.5" font-family="Verdana" font-size="9" fill="{leftLabel}">{currentTask.label}</text>
+        <text text-anchor="end" x="{Constantes.GRID.MIDDLE_X - 5}" y="10.5" font-size="9" fill="{leftLabel}">{currentTask.label}</text>
         <line stroke-dasharray="0.5 2" x1="{Constantes.GRID.MIDDLE_X}" y1="8" x2="{xGrayPosition - 5}" y2="8" stroke="{dottedLine}" />
         {/if}
         {#if currentTask.progress < 100}
-        <rect x="{xGrayPosition}" y="0" width="{widthGray}" height="15" rx="5" ry="5" style="fill: {grey}; stroke: {greyStroke}; stroke-width: 0.05em;"/>    
+        <rect x="{xGrayPosition}" y="0" width="{widthGray}" height="15" rx="5" ry="5" fill="{grey}" stroke="{greyStroke}" stroke-width="0.05em"/>    
         {/if}
-        <rect x="{xGrayPosition}" y="0" width="{widthProgress}" height="15" rx="5" ry="5" style="{styleColor} stroke-width: 0.05em;"/>
-        <text text-anchor="{percentTextAnchor}" x="{xPercentPosition}" y="10.5" font-family="Verdana" font-size="8" fill="{white}">{currentTask.progress}%</text>
-        <text id="T{currentTask.id}_rlabel" x="{xGrayPosition + widthGray + 5}" y="10.5" font-family="Verdana" font-size="8" fill="{rightLabel}">{labelRight}</text>
+        <rect x="{xGrayPosition}" y="0" width="{widthProgress}" height="15" rx="5" ry="5" fill="{styleColor.fill}" stroke="{styleColor.stroke}" stroke-width="0.05em"/>
+        <text text-anchor="{percentTextAnchor}" x="{xPercentPosition}" y="10.5" fill="{white}">{currentTask.progress}%</text>
+        <text id="T{currentTask.id}_rlabel" x="{xGrayPosition + widthGray + 5}" y="10.5" fill="{rightLabel}">{labelRight}</text>
         
         <!-- Draggable overlay -->
         <rect id="T{currentTask.id}_rec" x="{xGrayPosition}" y="0" width="{widthGray}" class="showable hidden" height="15" rx="5" ry="5" fill="url(#pattern_A)" stroke="{dottedLine}"/> 

@@ -202,9 +202,10 @@ function hideActionBar(event){
 </script>         
 
 <svelte:window on:mouseup={up} on:mousemove="{move}"/>
-<svg viewBox="0 0 {Constantes.GRID.ALL_WIDTH} {Constantes.GRID.MILESTONE_H + Constantes.GRID.BANNER_H + Constantes.GRID.ONE_TASK_H * Helpers.countVisibleTask($store.tasks) + Constantes.GRID.TODAY_H}" 
-xmlns="http://www.w3.org/2000/svg" x="0" y="{Constantes.GRID.MILESTONE_H + Constantes.GRID.BANNER_H - 5}" id='svgSwimlineAndTasks' 
->
+<svg viewBox="{$store.viewbox}" xmlns="http://www.w3.org/2000/svg" 
+    x="0" y="{Constantes.GRID.MILESTONE_H + Constantes.GRID.ANNUAL_H - 5}"
+    id='svgSwimlineAndTasks'>
+    
 {#each tasksShown as task, i}
     {#if mapSwimlines.has(i)}
 
@@ -217,7 +218,7 @@ xmlns="http://www.w3.org/2000/svg" x="0" y="{Constantes.GRID.MILESTONE_H + Const
             fill="{colors[i % colors.length][1]}"/>
 
         <text text-anchor="middle" x="{Constantes.GRID.LEFT_WIDTH / 2}" y="{i * Constantes.GRID.ONE_TASK_H + mapSwimlines.get(i).countVisibleTasks * Constantes.GRID.ONE_TASK_H / 2}" 
-            font-family="Verdana" font-size="10" fill="#FFFFFF">{mapSwimlines.get(i).label}</text>
+            font-size="10" fill="#FFFFFF">{mapSwimlines.get(i).label}</text>
 
     {/if}
 {/each}

@@ -3,7 +3,7 @@ import { browser } from '$app/env';
 
     
     import { Constantes } from './constantes.class';
-    import Milestone from './Milestone.svelte';
+    import { Helpers } from './helpers.class';
     import { store } from './stores';
     import type { Struct } from './struct.class';
 
@@ -28,7 +28,7 @@ import { browser } from '$app/env';
     let hoverGroup: boolean = false
     let recBox: DOMRect = null
 
-    const GHOST_SVG_NODE_ID = "ghostSVGNode"
+    const GHOST_SVG_NODE_ID: string = "ghostSVGNode"
     /**
      * Triggered every time user try to "grab" an svg group of Milestone
      * @param event the event mousedown
@@ -117,11 +117,24 @@ import { browser } from '$app/env';
 </script>
 
 <svelte:window on:mouseup={up} on:mousemove="{move}"/>
-<rect id="milestonesSection" x="{Constantes.GRID.MIDDLE_X}" y="0" width="{Constantes.GRID.MIDDLE_WIDTH}" height="50" 
-    stroke-dasharray="0.5 2" style="" class:onhover={ghostSVGNode && hoverGroup} />
+<rect id="milestonesSection" x="{Constantes.GRID.MIDDLE_X}" y="0" width="{Constantes.GRID.MIDDLE_WIDTH}" height="{Constantes.GRID.MILESTONE_H}" 
+    stroke-dasharray="0.5 2" class:onhover={ghostSVGNode && hoverGroup} />
 {#each milestones as milestone, i}
     {#if milestone.isShow}
-        <Milestone level={i%2} milestone={milestone} down={down}/>
+        <svg viewBox="{$store.viewbox}" xmlns="http://www.w3.org/2000/svg" 
+            x="{Constantes.GRID.MIDDLE_X + (milestone.date.getTime() - $store.start.getTime()) / ($store.end.getTime() - $store.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH - 10}" y="{i%2 * 25}" 
+            class="milestoneSVGSection" on:mousedown={down} id="M{milestone.id}" >
+            
+            <use x="0" y="0" href="#mapfiller" fill="transparent"/>
+            <use x="0" y="0" href="#map" />
+            {#if i%2 == 0}
+            <line stroke-dasharray="1" x1="10" y1="20" x2="10" y2="50" stroke="#000" />
+            {:else}
+            <line stroke-dasharray="1" x1="10" y1="20" x2="10" y2="25" stroke="#000" />
+            {/if}
+            <text x="17" y="9" font-size="10" fill="#000">{milestone.label}</text>
+            <text x="17" y="18" fill="#44546A">{milestone.date.getDate()}-{Constantes.MONTHS[milestone.date.getMonth()]}</text>
+        </svg>
         <line id='endMilestoneNode' x1="0" y1="0" x2="0" y2="0" stroke="transparent" />
     {/if}
 {/each}

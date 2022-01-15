@@ -1,8 +1,7 @@
 <script lang="ts">
 
-    import BannerLabel from './BannerLabel.svelte';
     import { Constantes } from './constantes.class';
-import { Helpers } from './helpers.class';
+    import { Helpers } from './helpers.class';
     import { store } from './stores';
 
    /* function monthDiff(d1: Date, d2: Date) {
@@ -67,13 +66,14 @@ import { Helpers } from './helpers.class';
     </linearGradient>
 </defs>
 
-<svg viewBox="0 0 {Constantes.GRID.ALL_WIDTH} {Constantes.GRID.MILESTONE_H + Constantes.GRID.BANNER_H + Constantes.GRID.ONE_TASK_H * Helpers.countVisibleTask($store.tasks) + Constantes.GRID.TODAY_H}" 
-xmlns="http://www.w3.org/2000/svg" x="{Constantes.GRID.LEFT_WIDTH}" y="{Constantes.GRID.MILESTONE_H}"
->
+<svg viewBox="{$store.viewbox}" xmlns="http://www.w3.org/2000/svg" 
+    x="{Constantes.GRID.LEFT_WIDTH}" y="{Constantes.GRID.MILESTONE_H}">
+    
     <rect x="-10" y="0" width="{Constantes.GRID.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient1)"/>
     <rect x="-10" y="30" width="{Constantes.GRID.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient2)"/>
     {#each jalons as { left, label, classCss}, i}
-        <BannerLabel left={left} label={label} classCss={classCss}/>
+        <path d="M{parseInt(left) } 6 v 14" fill="transparent" stroke="#818C9C"/>
+        <text x="{parseInt(left) + 5}" y="17" font-size="12" fill="#818C9C" class="{classCss}">{label}</text>
     {/each}
 </svg>
 
