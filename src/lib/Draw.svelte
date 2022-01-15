@@ -16,23 +16,28 @@
         var csvData = $store.tasks.map(e => e.join(";")).join("\n")
                     + "\n"
                     + $store.milestones.map(e => e.join(";")).join("\n")
-		var csvBlob = new Blob([csvData], {type:"data:text/csv;charset=utf-8,"});
-		var csvUrl = URL.createObjectURL(csvBlob);
-		var downloadLink = document.createElement("a");
-		downloadLink.href = csvUrl;
-		downloadLink.download = 'download.csv';
-		document.body.appendChild(downloadLink);
-        console.info(downloadLink)
-		downloadLink.click();
-		document.body.removeChild(downloadLink);
+		var blob = new Blob([csvData], {type:"data:text/csv;charset=utf-8,"});
+		download(blob, "download.csv") 
     }
 
     function takeshot() {  
         html2canvas(document.getElementById('wrapper'), {
             ignoreElements: function (el) {return el.classList.contains('toExcludeFromSnapshot')}
         }).then(function (canvas) {
-            document.getElementById('output').appendChild(canvas);
+            canvas.toBlob(function(blob) {
+                download(blob, "download.png")      
+            });
         });
+    }
+
+    function download(blob: Blob, fileName:string){
+        var url = URL.createObjectURL(blob)
+        var downloadLink = document.createElement("a")
+        downloadLink.href = url
+        downloadLink.download = fileName
+        document.body.appendChild(downloadLink)
+        downloadLink.click()
+        document.body.removeChild(downloadLink) 
     }
 
 </script>
@@ -49,7 +54,6 @@
     Open live edition
 </button>
 
-<div id="output"></div>
 <Live bind:this={liveComponent}/>
 {#key $store}
 <div id="wrapper">
