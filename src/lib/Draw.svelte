@@ -50,6 +50,11 @@
     <div class="dashButton" on:click={liveComponent.openLive()} title='Edit your milestones'><img src='edit.png' alt='Edit your milestones' /></div>
 </div>
 
+<div class="websiteButtons">
+    <div class="websiteButton" title="Fork me on Github"><a target='_blank' href='https://github.com/besstiolle/Timeline'><img src='github.png' alt='Fork me on Github' /></a></div>
+    <div class="websiteButton" title='Ask me a new feature. Send me your bug description'><a target='_blank' href='https://github.com/besstiolle/Timeline/issues/new'><img src='question.png' alt='Ask me a new feature. Send me your bug description' /></a></div>
+</div>
+
 <Upload bind:this={UploadComponent} />
 <Live bind:this={liveComponent}/>
 
@@ -108,8 +113,34 @@
     cursor:pointer;
     background-color: rgb(22, 160, 133, 0.5);
 }
-.dashButton img{
+
+
+
+.websiteButtons{
+    position: fixed;
+    bottom: 0;
+    left:45%;
+}
+.websiteButton {
+    border: 1px solid #cccccc;
+    background-color: #ffffff;
+    border-radius: 35px;
+    margin: 16px;
+    padding: 5px;
+    display: inline-block;
+    height: 32px;
     width: 32px;
 }
+.websiteButton:hover{
+    cursor:pointer;
+    background-color: rgb(255, 255, 255, 0.5);
+}
+.websiteButtons a{
+    border:none;
+}
 
+.dashButton img, 
+.websiteButton img{
+    width: 32px;
+}
 </style> 
