@@ -32,10 +32,13 @@
     let labelRight:string = currentTask.dateStart.getDate() + " " + Constantes.MONTHS[currentTask.dateStart.getMonth()] 
                     + " - " + currentTask.dateEnd.getDate() + " " + Constantes.MONTHS[currentTask.dateEnd.getMonth()]
     
-    let widthGray = (currentTask.dateEnd.getTime() - currentTask.dateStart.getTime()) / ($store.end.getTime() - $store.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH
+    
+    let xGrayPosition =  Helpers.getViewportXFromDate(currentTask.dateStart, $store.start, $store.end)
+    let x2GrayPosition = Helpers.getViewportXFromDate(currentTask.dateEnd, $store.start, $store.end)
+    
+    let widthGray = x2GrayPosition - xGrayPosition 
     let widthProgress = currentTask.progress * widthGray / 100
     
-    let xGrayPosition =  (currentTask.dateStart.getTime() - $store.start.getTime()) / ($store.end.getTime() - $store.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH + Constantes.GRID.MIDDLE_X
     let xPercentPosition = xGrayPosition + widthProgress - 5
     let percentTextAnchor = "end"
     if(currentTask.progress < 50){
@@ -62,7 +65,7 @@
         {/if}
         <rect x="{xGrayPosition}" y="0" width="{widthProgress}" height="15" rx="5" ry="5" fill="{styleColor.fill}" stroke="{styleColor.stroke}" stroke-width="0.05em"/>
         <text text-anchor="{percentTextAnchor}" x="{xPercentPosition}" y="10.5" fill="{white}">{currentTask.progress}%</text>
-        <text id="T{currentTask.id}_rlabel" x="{xGrayPosition + widthGray + 5}" y="10.5" fill="{rightLabel}">{labelRight}</text>
+        <text id="T{currentTask.id}_rlabel" x="{x2GrayPosition + 5}" y="10.5" fill="{rightLabel}">{labelRight}</text>
         
         <!-- Draggable overlay -->
         <rect id="T{currentTask.id}_rec" x="{xGrayPosition}" y="0" width="{widthGray}" class="showable hidden" height="15" rx="5" ry="5" fill="url(#pattern_A)" stroke="{dottedLine}"/> 
@@ -70,7 +73,7 @@
             <use href="#filler" class="  "  on:mousedown={downLeft} />
             <use href="#drag_left" fill="{rightLabel}" class="  " on:mousedown={downLeft}/>
         </svg>
-        <svg  id="T{currentTask.id}_r" x="{xGrayPosition + widthGray - 10}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class="draggable showable hidden">
+        <svg  id="T{currentTask.id}_r" x="{x2GrayPosition - 10}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class="draggable showable hidden">
             <use href="#filler" class="  "  on:mousedown={downRight} />
             <use href="#drag_right" fill="{rightLabel}" class="  "  on:mousedown={downRight}/>    
         </svg>

@@ -1,3 +1,4 @@
+import { Constantes } from "./constantes.class";
 import { Struct } from "./struct.class";
 
 export module Helpers {
@@ -186,4 +187,18 @@ export module Helpers {
     }
 
 
+    export function getDateFromViewportX(x: number, dmin: Date, dmax: Date) : Date{
+        //Ceil value of x to avoid miscalculation
+        let date = new Date(((Math.ceil(x)  - Constantes.GRID.MIDDLE_X) * (dmax.getTime() - dmin.getTime()) / Constantes.GRID.MIDDLE_WIDTH) + dmin.getTime())
+        //Remove hours & co for the same reason
+        date.setHours(0, 0, 0, 0)
+        return date
+    }
+    export function getViewportXFromDate(date: Date, dmin: Date, dmax: Date) : number{
+        let x = ((date.getTime() - dmin.getTime())  * Constantes.GRID.MIDDLE_WIDTH / (dmax.getTime() - dmin.getTime()))
+                + Constantes.GRID.MIDDLE_X
+        
+        //Ceil value of x to avoid miscalculation
+        return Math.ceil(x)
+    }
 }
