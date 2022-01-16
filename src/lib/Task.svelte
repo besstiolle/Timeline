@@ -69,7 +69,7 @@
         <text id="T{currentTask.id}_rlabel" x="{x2GrayPosition + 5}" y="10.5" fill="{rightLabel}">{labelRight}</text>
         
         <!-- Draggable overlay -->
-        <rect id="T{currentTask.id}_rec" x="{xGrayPosition}" y="0" width="{widthGray}" class="showable hidden" height="15" rx="5" ry="5" fill="url(#pattern_A)" stroke="{dottedLine}"/> 
+        <rect id="T{currentTask.id}_rec" x="{xGrayPosition}" y="0" width="{widthGray}" class="showable hidden" height="15" rx="5" ry="5" fill="url(#pattern_A)"/> 
         <svg  id="T{currentTask.id}_l" x="{xGrayPosition - 5}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class="grabbable showable hidden">
             <use href="#filler" on:mousedown={downLeft} />
             <use href="#drag_left" fill="{rightLabel}" class="  " on:mousedown={downLeft}/>
