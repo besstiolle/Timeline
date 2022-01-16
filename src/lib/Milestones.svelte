@@ -3,7 +3,6 @@ import { browser } from '$app/env';
 
     
     import { Constantes } from './constantes.class';
-    import { Helpers } from './helpers.class';
     import { store } from './stores';
     import type { Struct } from './struct.class';
 
@@ -47,6 +46,7 @@ import { browser } from '$app/env';
         //Refresh our ghost Node reference
         ghostSVGNode = document.getElementById(GHOST_SVG_NODE_ID)
 
+        ghostSVGNode.classList.add("grabbing")
     }
 
     /**
@@ -154,6 +154,9 @@ import { browser } from '$app/env';
 }
 :global(.milestoneSVGSection){
     cursor: grab;
+}
+:global(.milestoneSVGSection.grabbing){
+    cursor: grabbing;
 }
 :global(#GHOST_SVG_NODE_ID){
     opacity: 0.5;

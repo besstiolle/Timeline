@@ -69,11 +69,11 @@
         
         <!-- Draggable overlay -->
         <rect id="T{currentTask.id}_rec" x="{xGrayPosition}" y="0" width="{widthGray}" class="showable hidden" height="15" rx="5" ry="5" fill="url(#pattern_A)" stroke="{dottedLine}"/> 
-        <svg  id="T{currentTask.id}_l" x="{xGrayPosition - 5}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class="draggable showable hidden">
+        <svg  id="T{currentTask.id}_l" x="{xGrayPosition - 5}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class="grabbable showable hidden">
             <use href="#filler" class="  "  on:mousedown={downLeft} />
             <use href="#drag_left" fill="{rightLabel}" class="  " on:mousedown={downLeft}/>
         </svg>
-        <svg  id="T{currentTask.id}_r" x="{x2GrayPosition - 10}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class="draggable showable hidden">
+        <svg  id="T{currentTask.id}_r" x="{x2GrayPosition - 10}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class="grabbable showable hidden">
             <use href="#filler" class="  "  on:mousedown={downRight} />
             <use href="#drag_right" fill="{rightLabel}" class="  "  on:mousedown={downRight}/>    
         </svg>
@@ -82,11 +82,11 @@
 
 <style>
 
-    .draggable{
+    .grabbable{
         cursor:grab;
         display: block;
     }
-    :global(.dragging){
+    :global(.grabbable.grabbing){
         cursor:grabbing;
     }
 

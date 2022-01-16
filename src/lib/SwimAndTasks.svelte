@@ -70,6 +70,10 @@ function down(event){
     TActionBarCoordDefault.L_X = parseInt(left.getAttribute("x"))
     TActionBarCoordDefault.R_X = parseInt(right.getAttribute("x"))
 
+    //Update CSS of buttons
+    left.classList.add("grabbing")
+    right.classList.add("grabbing")
+
     isDragging = true
 }
 function up(event){
@@ -102,6 +106,10 @@ function up(event){
         rec.setAttribute("width", (TActionBarCoordDefault.REC_X2 - TActionBarCoordDefault.REC_X).toString())
         left.setAttribute("x", TActionBarCoordDefault.L_X.toString())
         right.setAttribute("x", TActionBarCoordDefault.R_X.toString())
+        
+        //Update CSS of buttons
+        left.classList.remove("grabbing")
+        right.classList.remove("grabbing")
     }
 
     //in all cases  : Reset vars
@@ -176,7 +184,7 @@ function move(event){
 }
 
 function showActionBar(event){
-    //Avoid showing more overlay when we already dragging something
+    //Avoid showing more overlay when we already grabbing something
     if(isDragging) {
         return
     } 
@@ -186,7 +194,7 @@ function showActionBar(event){
     });        
 }
 function hideActionBar(event){
-    //Avoid hiding overlay when we already dragging something
+    //Avoid hiding overlay when we already grabbing something
     if(isDragging) {
         return
     }
