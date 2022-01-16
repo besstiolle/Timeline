@@ -194,7 +194,7 @@ export module Struct {
 		label: string // the label of the swimline
 		countVisibleTasks: number // Number of visible task
 		
-		constructor(id: number, label:string, ){
+		constructor(id: number, label:string ){
 			this.id = id
 			this.label = label
 		}
