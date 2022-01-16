@@ -11,6 +11,7 @@
     export let hideActionBar
     export let downLeft
     export let downRight
+    export let downProgress
     
     
     const green = "#16A085";
@@ -63,19 +64,23 @@
         {#if currentTask.progress < 100}
         <rect x="{xGrayPosition}" y="0" width="{widthGray}" height="15" rx="5" ry="5" fill="{grey}" stroke="{greyStroke}" stroke-width="0.05em"/>    
         {/if}
-        <rect x="{xGrayPosition}" y="0" width="{widthProgress}" height="15" rx="5" ry="5" fill="{styleColor.fill}" stroke="{styleColor.stroke}" stroke-width="0.05em"/>
-        <text text-anchor="{percentTextAnchor}" x="{xPercentPosition}" y="10.5" fill="{white}">{currentTask.progress}%</text>
+        <rect id="T{currentTask.id}_progressBar" x="{xGrayPosition}" y="0" width="{widthProgress}" height="15" rx="5" ry="5" fill="{styleColor.fill}" stroke="{styleColor.stroke}" stroke-width="0.05em"/>
+        <text id="T{currentTask.id}_plabel" text-anchor="{percentTextAnchor}" x="{xPercentPosition}" y="10.5" fill="{white}">{currentTask.progress}%</text>
         <text id="T{currentTask.id}_rlabel" x="{x2GrayPosition + 5}" y="10.5" fill="{rightLabel}">{labelRight}</text>
         
         <!-- Draggable overlay -->
         <rect id="T{currentTask.id}_rec" x="{xGrayPosition}" y="0" width="{widthGray}" class="showable hidden" height="15" rx="5" ry="5" fill="url(#pattern_A)" stroke="{dottedLine}"/> 
         <svg  id="T{currentTask.id}_l" x="{xGrayPosition - 5}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class="grabbable showable hidden">
-            <use href="#filler" class="  "  on:mousedown={downLeft} />
+            <use href="#filler" on:mousedown={downLeft} />
             <use href="#drag_left" fill="{rightLabel}" class="  " on:mousedown={downLeft}/>
         </svg>
         <svg  id="T{currentTask.id}_r" x="{x2GrayPosition - 10}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class="grabbable showable hidden">
-            <use href="#filler" class="  "  on:mousedown={downRight} />
+            <use href="#filler" on:mousedown={downRight} />
             <use href="#drag_right" fill="{rightLabel}" class="  "  on:mousedown={downRight}/>    
+        </svg>
+        <svg  id="T{currentTask.id}_p" x="{xGrayPosition + ((x2GrayPosition - xGrayPosition) / 2) - 10}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class="grabbable showable hidden">
+            <use href="#filler"  on:mousedown={downProgress} />
+            <use href="#drag_progress" fill="{rightLabel}" class="  "  on:mousedown={downProgress}/>    
         </svg>
         <!-- END overlay-->
 </svg>
