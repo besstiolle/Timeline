@@ -41,9 +41,17 @@
         document.body.removeChild(downloadLink) 
     }
 
+    function toggleShowHide(){
+        $store.showAll = !$store.showAll
+    }
+
 </script>
 
 <div class="dashButtons">
+    {#key $store}
+    <div class="dashButton" class:hidden={!$store.showAll} on:click={toggleShowHide} title="Show regular tasks"><img src='hide.png' alt='Show regular tasks' id="see"/></div>
+    <div class="dashButton" class:hidden={$store.showAll} on:click={toggleShowHide} title="Show all tasks even if they're hidden"><img src='see.png' alt="Show all tasks even if they're hidden" id="hide"/></div>
+    {/key}
     <div class="dashButton" on:click={downloadCsv} title="Downloading the .csv file"><img src='download.png' alt='Downloading the .csv file' /></div>
     <div class="dashButton" on:click={UploadComponent.openUpload()} title='Uploading the .csv file'><img src='upload.png' alt='Uploading the .csv file' /></div>
     <div class="dashButton" on:click={takeshot} title='Take a screenshot'><img src='screenshot.png' alt='Take a screenshot' /></div>
@@ -142,5 +150,12 @@
 .dashButton img, 
 .websiteButton img{
     width: 32px;
+}
+
+:global(.shouldBeHidden, .shouldBeHidden text){
+    fill:#888;
+}
+:global(.shouldBeHidden line){
+    stroke:#888;
 }
 </style> 

@@ -19,7 +19,7 @@ let colors = [
 
 let tasksShown: Struct.Task[] = []
 $store.tasks.forEach(task => {
-    if(task.isShow){
+    if(task.isShow || $store.showAll){
         tasksShown.push(task)
     }
 });

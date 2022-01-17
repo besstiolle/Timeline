@@ -53,10 +53,10 @@
 </script>
 <svg viewBox="{$store.viewbox}" xmlns="http://www.w3.org/2000/svg" 
     x="0" y="{i * Constantes.GRID.ONE_TASK_H + Constantes.GRID.MILESTONE_H + Constantes.GRID.ANNUAL_H}"
-    class="taskSVGSection" id="T{currentTask.id}" on:mouseover={showActionBar} on:focus={showActionBar} on:mouseout={hideActionBar} on:blur={hideActionBar}>
+    class="taskSVGSection" id="T{currentTask.id}" on:mouseover={showActionBar} on:focus={showActionBar} on:mouseout={hideActionBar} on:blur={hideActionBar} class:shouldBeHidden={!currentTask.isShow} >
     
         {#if hasSwimline}
-        <text text-anchor="end" x="{xGrayPosition - 5}" y="10.5" font-size="9" fill="{leftLabel}">{currentTask.label}</text>
+        <text text-anchor="end" x="{xGrayPosition - 5}" y="10.5" font-size="9" fill="{leftLabel}" >{currentTask.label}</text>
         {:else}
         <text text-anchor="end" x="{Constantes.GRID.MIDDLE_X - 5}" y="10.5" font-size="9" fill="{leftLabel}">{currentTask.label}</text>
         <line stroke-dasharray="0.5 2" x1="{Constantes.GRID.MIDDLE_X}" y1="8" x2="{xGrayPosition - 5}" y2="8" stroke="{dottedLine}" />
