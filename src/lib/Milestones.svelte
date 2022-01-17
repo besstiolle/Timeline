@@ -35,6 +35,8 @@ import { browser } from '$app/env';
      * @param event the event mousedown
      */
     function down(event){
+        //Avoid selecting text. source : https://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/
+        event.preventDefault();
         currentTarget = event.currentTarget //currentTarget => svg, target => sub element of svg
         ghostSVGNode = <HTMLElement> currentTarget.cloneNode(true)
         ghostSVGNode.setAttribute("id", GHOST_SVG_NODE_ID)
