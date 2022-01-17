@@ -8,29 +8,45 @@ import type { Struct } from "$lib/struct.class";
 	
 let store = null
 let localData: Struct.Data = null
-let result = "success of parsing"
+let result = "success of parsing ✅"
 if(browser){
     store = localStorage.getItem("store")
     try{
         localData = JSON.parse(store, Helpers.dataReviver)
+        console.info(localData)
     } catch (error) {
         result = error
     }
 } 
+
+function purge(event){
+    localStorage.clear()
+    alert("your localstorage is purged ✅")
+    location.reload()
+}
 
 
 </script>
 
 <h1>Debug page</h1>
 <h2>Dump from your localstorage : </h2>
-<div class='codeW'><textarea>
-    {store}
-</textarea></div>
+<div class='codeW'>
+{#if store}
+    <textarea>{store}</textarea>
+{:else}
+    <p>your localstorage is empty ✅</p>
+{/if}
+</div>
 <h2>JSON parsing your localstorage : </h2>
-<div class='codeW'><pre>
+<div class='codeW'><p>
     {result}
-</pre></div>
+</p></div>
+<h2>Reset your localstorage</h2>
+<div><button on:click={purge}>click me if you dare</button></div>
 <style>
+    :global(body){
+        padding:5px;
+    }
     textarea{  
         width:100%;
         height:100px;
