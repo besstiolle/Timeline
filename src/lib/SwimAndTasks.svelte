@@ -109,6 +109,15 @@ function up(event){
                 task.dateEnd = dateEnd
             } else if(realAction == ACTION.PROGRESS) {
                 let viewportX:number = event.clientX / window.innerWidth * Constantes.GRID.ALL_WIDTH
+
+                //We allow an "hover" zone all left/right but we don't want really "dragging" things too left or too right
+                if(viewportX > TActionBarCoord.REC_X2){
+                    viewportX = TActionBarCoord.REC_X2
+                }
+                if(viewportX < TActionBarCoord.REC_X){
+                    viewportX = TActionBarCoord.REC_X
+                }
+
                 let progressValue:number = (viewportX - TActionBarCoord.REC_X) / (TActionBarCoord.REC_X2 - TActionBarCoord.REC_X) * 100
                 task.progress = Math.round(progressValue)
                 console.info(task.progress)
@@ -177,10 +186,19 @@ function move(event){
     }
 }
 function moveProgress(event, viewportX:number){
-    hoverGroup = viewportX > TActionBarCoord.REC_X && viewportX < TActionBarCoord.REC_X2
+    hoverGroup = viewportX > recBox.left && viewportX < recBox.right
                 && event.clientY > recBox.top && event.clientY < recBox.bottom
     
     if(hoverGroup){
+
+        //We allow an "hover" zone all left/right but we don't want really "dragging" things too left or too right
+        if(viewportX > TActionBarCoord.REC_X2){
+            viewportX = TActionBarCoord.REC_X2
+        }
+        if(viewportX < TActionBarCoord.REC_X){
+            viewportX = TActionBarCoord.REC_X
+        }
+
         let progressValue:number = (viewportX - TActionBarCoord.REC_X) / (TActionBarCoord.REC_X2 - TActionBarCoord.REC_X) * 100
         let widthProgress:number = viewportX - TActionBarCoord.REC_X
         progress.setAttribute("x", viewportX.toString())
