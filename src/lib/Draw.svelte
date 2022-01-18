@@ -113,9 +113,11 @@
 .dashButton {
     border: 1px solid #117A65;
     background-color: #16A085;
-    border-radius: 45px;
+    border-radius: 50%;
     margin: 16px;
     padding: 10px;
+    height: 32px;
+    width: 32px;
 }
 .dashButton:hover{
     cursor:pointer;
@@ -132,7 +134,7 @@
 .websiteButton {
     border: 1px solid #cccccc;
     background-color: #ffffff;
-    border-radius: 35px;
+    border-radius: 50%;
     margin: 16px;
     padding: 5px;
     display: inline-block;
