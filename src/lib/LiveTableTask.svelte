@@ -4,13 +4,14 @@
     import { Helpers } from './helpers.class';
     import { Struct } from './struct.class';
     import { Constantes } from './constantes.class';
+    import { HelperStructData } from './helperStructData.class';
+    import { HelperStructTask } from './helperStructTask.class';
 
     export let getIndex = (event) => {return 0}
     export let updateStore =  (event) => {}
 
     function b_delete(event){
         $store.tasks.splice(getIndex(event), 1)
-        $store.reorderIds()
         $store.tasks = $store.tasks
     }
     function b_up(event){
@@ -21,7 +22,6 @@
         let tmpTask: Struct.Task = $store.tasks[index]
         $store.tasks[index] = $store.tasks[index - 1]
         $store.tasks[index - 1] = tmpTask
-        $store.reorderIds()
         $store.tasks = $store.tasks
     }
     function b_down(event){
@@ -32,7 +32,6 @@
         let tmpTask: Struct.Task = $store.tasks[index]
         $store.tasks[index] = $store.tasks[index + 1]
         $store.tasks[index + 1] = tmpTask
-        $store.reorderIds()
         $store.tasks = $store.tasks
     }
     function b_show(event){
@@ -42,15 +41,16 @@
     function b_duplicate(event){
         let index = getIndex(event)
         let tmpTasks : Array<Struct.Task> = $store.tasks.splice(index+1, $store.tasks.length)
-        $store.addTask( $store.tasks[index].clone() )
+        let clone = HelperStructTask.clone($store.tasks[index])
+        HelperStructData.addTask($store, clone)
         tmpTasks.forEach(tmpTask => {
-            $store.addTask( tmpTask )
+            HelperStructData.addTask($store, tmpTask)
         });
         $store.tasks = $store.tasks
     }
     function b_add(){
         let diffSec : number = $store.end.getTime() - $store.start.getTime()
-        $store.addTask(new Struct.Task(
+        HelperStructData.addTask($store, new Struct.Task(
                 $store.getNextId(),
                 "Some task", 
                 new Date($store.start.getTime() + (0.1 * diffSec)), 

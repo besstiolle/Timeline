@@ -2,6 +2,7 @@
 <script lang="ts">
 import { browser } from "$app/env";
 import { Helpers } from "$lib/helpers.class";
+import { HelperStructData } from "$lib/helperStructData.class";
 import type { Struct } from "$lib/struct.class";
 
 
@@ -13,6 +14,7 @@ if(browser){
     store = localStorage.getItem("store")
     try{
         localData = JSON.parse(store, Helpers.dataReviver)
+        HelperStructData.refresh(localData)
         console.info(localData)
     } catch (error) {
         result = error

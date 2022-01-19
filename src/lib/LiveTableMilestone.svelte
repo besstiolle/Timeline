@@ -4,13 +4,14 @@
     import { Helpers } from './helpers.class';
     import { Struct } from './struct.class';
     import { Constantes } from './constantes.class';
+    import { HelperStructData } from './helperStructData.class';
+    import { HelperStructMilestone } from './helperStructMilestone.class';
 
     export let getIndex = (event) => {return 0}
     export let updateStore =  (event) => {}
 
     function m_delete(event){
         $store.milestones.splice(getIndex(event), 1)
-        $store.reorderIds()
         $store.milestones = $store.milestones
     }
     function m_up(event){
@@ -21,7 +22,6 @@
         let tmpMilestone: Struct.Milestone = $store.milestones[index]
         $store.milestones[index] = $store.milestones[index - 1]
         $store.milestones[index - 1] = tmpMilestone
-        $store.reorderIds()
         $store.milestones = $store.milestones
     }
     function m_down(event){
@@ -32,7 +32,6 @@
         let tmpMilestone: Struct.Milestone = $store.milestones[index]
         $store.milestones[index] = $store.milestones[index + 1]
         $store.milestones[index + 1] = tmpMilestone
-        $store.reorderIds()
         $store.milestones = $store.milestones
     }
     function m_show(event){
@@ -42,21 +41,22 @@
     function m_duplicate(event){
         let index = getIndex(event)
         let tmpMilestones : Array<Struct.Milestone> = $store.milestones.splice(index+1, $store.milestones.length)
-        $store.addMilestone( $store.milestones[index].clone() )
+        let clone = HelperStructMilestone.clone($store.milestones[index])
+        HelperStructData.addMilestone($store, clone )
         tmpMilestones.forEach(tmpMilestone => {
-            $store.addMilestone( tmpMilestone )
+            HelperStructData.addMilestone($store, tmpMilestone)
         });
         $store.milestones = $store.milestones
     }
     function m_add(){
         let diffSec : number = $store.end.getTime() - $store.start.getTime()
-        $store.addMilestone(new Struct.Milestone(
+        HelperStructData.addMilestone($store, new Struct.Milestone(
                 $store.getNextId(),
                 "My Milestone", 
                 new Date($store.start.getTime() + (0.5 * diffSec)),
                 true
                 ))
-        $store.milestones = $store.milestones
+                $store.milestones = $store.milestones
     }
 
 </script>

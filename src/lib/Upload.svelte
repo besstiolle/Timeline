@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import { Struct } from './struct.class';
     import { store } from './stores';
+    import { HelperStructData } from './helperStructData.class';
 
     let hidden = true
 
@@ -88,7 +89,7 @@
                 let progress: number
                 let swimline: string
 
-                $store.purge()
+                HelperStructData.purge($store)
 
                 //Process file
                 //TODO : guessing encoding
@@ -104,18 +105,15 @@
                             dateEnd = new Date(elmts[4])
                             progress = Number(elmts[5])
                             swimline = elmts[6]
-                            $store.addTask(new Struct.Task(id, label, dateStart, dateEnd, progress, isShow, swimline))
+                            HelperStructData.addTask($store, new Struct.Task(id, label, dateStart, dateEnd, progress, isShow, swimline))
 
                         } else if("milestone" == elmts[0] ){
-                            $store.addMilestone(new Struct.Milestone(id, label, dateStart, isShow))
+                            HelperStructData.addMilestone($store, new Struct.Milestone(id, label, dateStart, isShow))
                         } 
                         id = $store.getNextId()
                     }
                 });
-
-                //refresh store
-                $store = $store
-
+                $store.tasks = $store.tasks
                 //remove form upload part
                 closeUpload()
             }

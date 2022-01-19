@@ -3,20 +3,23 @@
 
     import { store } from './stores';
 
+    
     import Banner from './Banner.svelte';
     import Milestones from './Milestones.svelte';
     import Today from './Today.svelte';
     import Upload from './Upload.svelte';
     import Live from './Live.svelte';
     import SwimAndTasks from './SwimAndTasks.svelte';
+    import { HelperStructTask } from './helperStructTask.class';
+    import { HelperStructMilestone } from './helperStructMilestone.class';
 
     let UploadComponent   
     let liveComponent   
 
     function downloadCsv () {
-        var csvData = $store.tasks.map(e => e.join(";")).join("\n")
+        var csvData = $store.tasks.map(e => HelperStructTask.join(e, ";")).join("\n")
                     + "\n"
-                    + $store.milestones.map(e => e.join(";")).join("\n")
+                    + $store.milestones.map(e => HelperStructMilestone.join(e, ";")).join("\n")
 		var blob = new Blob([csvData], {type:"data:text/csv;charset=utf-8,"});
 		download(blob, "download.csv") 
     }

@@ -1,10 +1,12 @@
 
 <script lang="ts">
 
-import { Constantes } from "./constantes.class";
-import { Helpers } from "./helpers.class";
 import { store } from "./stores";
 import type { Struct } from "./struct.class";
+import { Constantes } from "./constantes.class";
+import { Helpers } from "./helpers.class";
+import { HelperStructData } from "./helperStructData.class";
+
 import Task from "./Task.svelte";
 
 let colors = [
@@ -17,14 +19,13 @@ let colors = [
     ["#A191A3", "#4B2C50"]
 ]
 
+
 let tasksShown: Struct.Task[] = []
 $store.tasks.forEach(task => {
     if(task.isShow || $store.showAll){
         tasksShown.push(task)
     }
 });
-let mapSwimlines = Helpers.computeMapSwimlines(tasksShown)
-
 
 let taskId: string = null
 let rightLabel: HTMLElement = null
@@ -96,7 +97,7 @@ function down(event){
 function up(event){
     if(isDragging && hoverGroup){
 
-        let task: Struct.Task = $store.getTasksById(parseInt(taskId.substring(1))) //html id = T999 => 999
+        let task: Struct.Task = HelperStructData.getTasksById($store, parseInt(taskId.substring(1))) //html id = T999 => 999
         if( task ){
             if(realAction == ACTION.LEFT || realAction == ACTION.RIGHT) {
                 let dateStart = Helpers.getDateFromViewportX(TActionBarCoord.REC_X, $store.start, $store.end)
@@ -120,10 +121,8 @@ function up(event){
 
                 let progressValue:number = (viewportX - TActionBarCoord.REC_X) / (TActionBarCoord.REC_X2 - TActionBarCoord.REC_X) * 100
                 task.progress = Math.round(progressValue)
-                console.info(task.progress)
             }
 
-            //Re-affection to refresh Svelte
             $store.tasks = $store.tasks
         }
     }
@@ -285,6 +284,11 @@ function hideActionBar(event){
         element.classList.add("hidden")
     });
 }
+/*
+function toggleSwimlineVisibility(event){
+    let id = event.currentTarget.id
+    $store.swimlines.get(id).isShow = !$store.swimlines.get(id).isShow
+}*/
 </script>         
 
 <svelte:window on:mouseup={up} on:mousemove="{move}"/>
@@ -293,20 +297,24 @@ function hideActionBar(event){
     id='svgSwimlineAndTasks'>
     
 {#each tasksShown as task, i}
-    {#if mapSwimlines.has(i)}
+{#if $store.swimlines.has(i)}
 
-        <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
-            width="{Constantes.GRID.ALL_WIDTH}" height="{mapSwimlines.get(i).countVisibleTasks * Constantes.GRID.ONE_TASK_H - 0.5}" 
-            fill="{colors[i % colors.length][0]}"/>
+    <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
+        width="{Constantes.GRID.ALL_WIDTH}" height="{$store.swimlines.get(i).countVisibleTasks * Constantes.GRID.ONE_TASK_H - 0.5}" 
+        fill="{colors[i % colors.length][0]}"/>
 
-        <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
-            width="{Constantes.GRID.LEFT_WIDTH}" height="{mapSwimlines.get(i).countVisibleTasks * Constantes.GRID.ONE_TASK_H - 0.5}" 
-            fill="{colors[i % colors.length][1]}"/>
+    <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
+        width="{Constantes.GRID.LEFT_WIDTH}" height="{$store.swimlines.get(i).countVisibleTasks * Constantes.GRID.ONE_TASK_H - 0.5}" 
+        fill="{colors[i % colors.length][1]}"/>
 
-        <text text-anchor="middle" x="{Constantes.GRID.LEFT_WIDTH / 2}" y="{i * Constantes.GRID.ONE_TASK_H + mapSwimlines.get(i).countVisibleTasks * Constantes.GRID.ONE_TASK_H / 2}" 
-            font-size="10" fill="#FFFFFF">{mapSwimlines.get(i).label}</text>
-
-    {/if}
+    <text text-anchor="middle" x="{Constantes.GRID.LEFT_WIDTH / 2}" y="{i * Constantes.GRID.ONE_TASK_H + $store.swimlines.get(i).countVisibleTasks * Constantes.GRID.ONE_TASK_H / 2}" 
+        font-size="10" fill="#FFFFFF">{$store.swimlines.get(i).label}</text>
+    <!--{#if $store.swimlines.get(i).isShow}
+        <image xlink:href="/hide.png" x="{i * Constantes.GRID.ONE_TASK_H}" y="0" height="24" width="24" data-html2canvas-ignore="true" on:click={toggleSwimlineVisibility} id="s{i}" />
+    {:else}
+        <image xlink:href="/see.png" x="{i * Constantes.GRID.ONE_TASK_H}" y="0" height="24" width="24" data-html2canvas-ignore="true"  on:click={toggleSwimlineVisibility} id="s{i}" />
+    {/if}-->
+{/if}
 {/each}
 </svg>
 

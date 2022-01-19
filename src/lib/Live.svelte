@@ -2,6 +2,7 @@
     import { store } from './stores';
     import LiveTableTask from './LiveTableTask.svelte';
     import LiveTableMilestone from './LiveTableMilestone.svelte';
+import { HelperStructData } from './helperStructData.class';
 
     const TS : string = "taskStart_"
     const TE : string = "taskEnd_"
@@ -27,6 +28,7 @@
             position = parseInt(event.target.name.substring(MD.length, event.target.name.length))            
             $store.milestones[position].date = new Date(event.target.value)
         }
+        $store.tasks = $store.tasks
     }
 
     function getIndex(event) : number{

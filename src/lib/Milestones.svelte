@@ -3,6 +3,7 @@ import { browser } from '$app/env';
 
     
     import { Constantes } from './constantes.class';
+    import { HelperStructData } from './helperStructData.class';
     import { store } from './stores';
     import type { Struct } from './struct.class';
 
@@ -13,12 +14,10 @@ import { browser } from '$app/env';
     }
 
     let milestones: Struct.Milestone[] = []
-    $store.milestones.forEach(milestone => {
+    $store.milestones.forEach(milestone => { 
         if(milestone.isShow || $store.showAll){
-            console.info("push milestone %o" , milestone.label)
             milestones.push(milestone)
         }
-        console.info($store.showAll)
     });
     //Sort by date ASC
     milestones = milestones.sort(compareMilestone)
@@ -63,9 +62,8 @@ import { browser } from '$app/env';
             let date = processNewDate(newX - Constantes.GRID.MIDDLE_X)
             let idMilestone = currentTarget.getAttribute("id").substring(1) // M999 => 999
 
-            let milestones = $store.getMilestonesById(parseInt(idMilestone))
+            let milestones = HelperStructData.getMilestonesById($store, parseInt(idMilestone))
             milestones.date = date
-            $store.processLimites()
             $store.milestones = $store.milestones 
         }
 
