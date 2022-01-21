@@ -24,8 +24,12 @@
 		"checkJs": true,
 		"paths": {
 			"$lib": ["src/lib"],
-			"$lib/*": ["src/lib/*"]
-		}
+			"$lib/*": ["src/lib/*"],
+			"$env": [".svelte-kit/dev/runtime/app"],
+			"$env/*": [".svelte-kit/dev/runtime/app/*"]
+		},
+		//For Jest https://daveceddia.com/svelte-typescript-jest/
+		"types": ["jest"]
 	},
 	"include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.ts", "src/**/*.svelte"]
 }
