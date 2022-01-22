@@ -5,7 +5,6 @@
     import { Struct } from './struct.class';
     import { Constantes } from './constantes.class';
     import { HelperStructData } from './helperStructData.class';
-    import { HelperStructTask } from './helperStructTask.class';
 
     export let getIndex = (event) => {return 0}
     export let updateStore =  (event) => {}
@@ -41,7 +40,8 @@
     function b_duplicate(event){
         let index = getIndex(event)
         let tmpTasks : Array<Struct.Task> = $store.tasks.splice(index+1, $store.tasks.length)
-        let clone = HelperStructTask.clone($store.tasks[index])
+        let clone = {... $store.tasks[index]}
+        clone.id = $store.getNextId()
         HelperStructData.addTask($store, clone)
         tmpTasks.forEach(tmpTask => {
             HelperStructData.addTask($store, tmpTask)

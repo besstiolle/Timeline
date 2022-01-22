@@ -5,7 +5,6 @@
     import { Struct } from './struct.class';
     import { Constantes } from './constantes.class';
     import { HelperStructData } from './helperStructData.class';
-    import { HelperStructMilestone } from './helperStructMilestone.class';
 
     export let getIndex = (event) => {return 0}
     export let updateStore =  (event) => {}
@@ -41,7 +40,8 @@
     function m_duplicate(event){
         let index = getIndex(event)
         let tmpMilestones : Array<Struct.Milestone> = $store.milestones.splice(index+1, $store.milestones.length)
-        let clone = HelperStructMilestone.clone($store.milestones[index])
+        let clone = {... $store.milestones[index]}
+        clone.id = $store.getNextId()
         HelperStructData.addMilestone($store, clone )
         tmpMilestones.forEach(tmpMilestone => {
             HelperStructData.addMilestone($store, tmpMilestone)

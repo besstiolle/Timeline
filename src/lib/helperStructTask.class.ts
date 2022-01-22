@@ -1,6 +1,6 @@
 
 import { Helpers } from "./helpers.class";
-import { Struct } from "./struct.class";
+import type { Struct } from "./struct.class";
 
 export module HelperStructTask {
 
@@ -13,9 +13,5 @@ export module HelperStructTask {
             + car + Helpers.toISODateString(task.dateEnd)
             + car + task.progress
             + car + task.swimline
-    }
-
-    export function clone(task: Struct.Task){
-        return new Struct.Task(-1, task.label, task.dateStart, task.dateEnd,task.progress, task.isShow, task.swimline)
     }
 }
