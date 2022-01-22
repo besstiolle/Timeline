@@ -336,15 +336,12 @@ function showToggle(event){
     
     <text text-anchor="middle" x="{Constantes.GRID.LEFT_WIDTH / 2}" y="{i * Constantes.GRID.ONE_TASK_H + 5 + swimlinesHeight.get(task.id) / 2}" 
         font-size="10" fill="{swimlinesShown.get(task.id).isShow?"#ffffff":"#888888"}">{swimlinesShown.get(task.id).label}</text>
-    {#if swimlinesShown.get(task.id).isShow}
-        <image xlink:href="/hide.png" x="0" y="{i * Constantes.GRID.ONE_TASK_H}" height="24" width="24" data-html2canvas-ignore="true" 
-            on:click={toggleSwimlineVisibility} id="s{task.swimlineId}" class='toggleVisibility hidden'
-            on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle} />
-    {:else}
-        <image xlink:href="/see.png" x="0" y="{i * Constantes.GRID.ONE_TASK_H}" height="24" width="24" data-html2canvas-ignore="true" 
-             on:click={toggleSwimlineVisibility} id="s{task.swimlineId}" class='toggleVisibility hidden'
-             on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
-    {/if}
+
+    <image xlink:href="{swimlinesShown.get(task.id).isShow?"/hide.png":"/see.png"}" x="0" y="{i * Constantes.GRID.ONE_TASK_H}" height="24" width="24" 
+        data-html2canvas-ignore="true" 
+        on:click={toggleSwimlineVisibility} id="s{task.swimlineId}" class='toggleVisibility hidden'
+        on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle} />
+
 {/if}
 {/each}
 </svg>
