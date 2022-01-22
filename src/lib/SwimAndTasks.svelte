@@ -306,7 +306,6 @@ function toggleSwimlineVisibility(event){
     let value = !$store.swimlines[id].isShow
     $store.tasks.forEach(task => {
         if(task.swimlineId == id) {
-            console.info(task.label + " " + $store.swimlines[id].isShow)
             task.isShow = value
         }
     });
@@ -328,15 +327,15 @@ function showToggle(event){
 {#if swimlinesShown.has(task.id)}
 
     <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
-        width="{Constantes.GRID.ALL_WIDTH}" height="{swimlinesHeight.get(task.id)}" 
-        fill="{colors[i % colors.length][0]}" id="c{task.swimlineId}" on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
+        width="{Constantes.GRID.ALL_WIDTH}" height="{swimlinesHeight.get(task.id)}"  fill="{colors[i % colors.length][0]}" id="c{task.swimlineId}" 
+        on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
 
     <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
-        width="{Constantes.GRID.LEFT_WIDTH}" height="{swimlinesHeight.get(task.id)}" 
-        fill="{colors[i % colors.length][1]}" id="d{task.swimlineId}" on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
-
+        width="{Constantes.GRID.LEFT_WIDTH}" height="{swimlinesHeight.get(task.id)}" fill="{colors[i % colors.length][1]}" id="d{task.swimlineId}" 
+        on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
+    
     <text text-anchor="middle" x="{Constantes.GRID.LEFT_WIDTH / 2}" y="{i * Constantes.GRID.ONE_TASK_H + 5 + swimlinesHeight.get(task.id) / 2}" 
-        font-size="10" fill="#FFFFFF">{swimlinesShown.get(task.id).label}</text>
+        font-size="10" fill="{swimlinesShown.get(task.id).isShow?"#ffffff":"#888888"}">{swimlinesShown.get(task.id).label}</text>
     {#if swimlinesShown.get(task.id).isShow}
         <image xlink:href="/hide.png" x="0" y="{i * Constantes.GRID.ONE_TASK_H}" height="24" width="24" data-html2canvas-ignore="true" 
             on:click={toggleSwimlineVisibility} id="s{task.swimlineId}" class='toggleVisibility hidden'

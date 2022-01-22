@@ -100,11 +100,11 @@ export module HelperStructData {
     }
 
     export function refresh(data : Struct.Data) : void{
-        let start = new Date()
-        console.info("refresh")
+//        let start = new Date()
+//        console.info("refresh")
         _refreshSwimlines(data)
         _processLimites(data)
-        console.info("end refresh in %o ms", (new Date()).getMilliseconds() - start.getMilliseconds())
+//        console.info("end refresh in %o ms", (new Date()).getMilliseconds() - start.getMilliseconds())
     }
 
     function _refreshSwimlines(data : Struct.Data) : void{
