@@ -34,7 +34,8 @@ function purge(event){
 <h2>Dump from your localstorage : </h2>
 <div class='codeW'>
 {#if store}
-    <textarea>{store}</textarea>
+    <textarea rows=20>{JSON.stringify(JSON.parse(store, Helpers.dataReviver), undefined, 2)}</textarea>
+    
 {:else}
     <p>your localstorage is empty ✅</p>
 {/if}
@@ -50,8 +51,8 @@ function purge(event){
         padding:5px;
     }
     textarea{  
-        width:100%;
-        height:100px;
+        width:500px;
+        height:100%;
         
     }
     div.codeW{
