@@ -79,24 +79,7 @@ export module HelperStructData {
     export function purge(data : Struct.Data) : void{
         data.tasks = new Array<Struct.Task>()
         data.milestones = new Array<Struct.Milestone>()
-        data.mapperIdIndex = new Map<number, number>()
         data.isInitiate = false
-    }
-
-    export function getTasksById(data : Struct.Data, id : number) : Struct.Task{
-        //TODO secure code with verification of type returned
-        if(data.mapperIdIndex.has(id)) {
-            return data.tasks[data.mapperIdIndex.get(id)]
-        }
-        throw `Identifiant ${id} for Struct.Task doesn't exist in mapperIdIndex`
-    }
-
-    export function getMilestonesById(data : Struct.Data, id : number) : Struct.Milestone{
-        //TODO secure code with verification of type returned
-        if(data.mapperIdIndex.has(id)) {
-            return data.milestones[data.mapperIdIndex.get(id)]
-        }
-        throw `Identifiant ${id} for Struct.Milestone doesn't exist in mapperIdIndex`
     }
 
     export function refresh(data : Struct.Data) : void{

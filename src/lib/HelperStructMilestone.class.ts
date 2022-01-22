@@ -12,4 +12,20 @@ export module HelperStructMilestone {
     }
     
   
+    export function getById(data : Struct.Data, id : number) : Struct.Milestone{
+        //A simple loop to reach for the good item because it's cheaper
+        // than trying to maintain a map with id => index of array each time 
+        // we change something into the $store
+        let result:Struct.Milestone = null
+        data.milestones.forEach(milestone => {
+            if(milestone.id == id){
+                result = milestone
+            } 
+        });
+        if(result) {
+            return result
+        }
+        
+        throw "Struct.Milestone with id "+id+" was not found"       
+    }
 }

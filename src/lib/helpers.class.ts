@@ -56,9 +56,6 @@ export module Helpers {
             //Nothing to do, it's an array
             return value
         }
-        if(key === 'mapperIdIndex'){
-            return  ObjectToMap(value)
-        }
 
         //Case of Date (date, datemin, datemax, min, max, ...)
 		if (typeof value === 'string' && /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/.exec(value)) {

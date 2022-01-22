@@ -9,7 +9,6 @@ export module Struct {
 		start: Date
 		end: Date
 		maxId: number = 0
-		mapperIdIndex : Map<number, number> = new Map<number, number>()
 		viewbox: string = "0 0 0 0"
 		showAll: boolean = false
 		error: any = null

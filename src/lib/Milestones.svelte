@@ -3,7 +3,7 @@ import { browser } from '$app/env';
 
     
     import { Constantes } from './constantes.class';
-    import { HelperStructData } from './helperStructData.class';
+    import { HelperStructMilestone } from './helperStructMilestone.class';
     import { store } from './stores';
     import type { Struct } from './struct.class';
 
@@ -62,7 +62,7 @@ import { browser } from '$app/env';
             let date = processNewDate(newX - Constantes.GRID.MIDDLE_X)
             let idMilestone = currentTarget.getAttribute("id").substring(1) // M999 => 999
 
-            let milestones = HelperStructData.getMilestonesById($store, parseInt(idMilestone))
+            let milestones = HelperStructMilestone.getById($store, parseInt(idMilestone))
             milestones.date = date
             $store.milestones = $store.milestones 
         }

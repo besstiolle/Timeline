@@ -2,10 +2,11 @@
 <script lang="ts">
 
 import { store } from "./stores";
+
 import type { Struct } from "./struct.class";
 import { Constantes } from "./constantes.class";
 import { Helpers } from "./helpers.class";
-import { HelperStructData } from "./helperStructData.class";
+import { HelperStructTask } from "./helperStructTask.class";
 
 import Task from "./Task.svelte";
 
@@ -113,7 +114,7 @@ function down(event){
 function up(event){
     if(isDragging && hoverGroup){
 
-        let task: Struct.Task = HelperStructData.getTasksById($store, parseInt(taskId.substring(1))) //html id = T999 => 999
+        let task: Struct.Task = HelperStructTask.getById($store, parseInt(taskId.substring(1))) //html id = T999 => 999
         if( task ){
             if(realAction == ACTION.LEFT || realAction == ACTION.RIGHT) {
                 let dateStart = Helpers.getDateFromViewportX(TActionBarCoord.REC_X, $store.start, $store.end)
