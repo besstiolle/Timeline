@@ -2,7 +2,6 @@
     import { store } from './stores';
     import LiveTableTask from './LiveTableTask.svelte';
     import LiveTableMilestone from './LiveTableMilestone.svelte';
-import { HelperStructData } from './helperStructData.class';
 
     const TS : string = "taskStart_"
     const TE : string = "taskEnd_"

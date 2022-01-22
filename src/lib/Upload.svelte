@@ -3,7 +3,7 @@
     import { Struct } from './struct.class';
     import { store } from './stores';
     import { HelperStructData } from './helperStructData.class';
-import { HelperStructSwimline } from './helperStructSwimline.class';
+    import { HelperStructSwimline } from './helperStructSwimline.class';
 
     let hidden = true
 
