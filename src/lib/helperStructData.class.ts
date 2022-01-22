@@ -20,12 +20,12 @@ export module HelperStructData {
         
         let min : Date = new Date("2999-12-31");
         data.tasks.forEach(task => {
-            if(min > task.dateStart){
+            if((data.showAll || task.isShow) && min > task.dateStart){
                 min = task.dateStart
             }
         });
         data.milestones.forEach(milestone => {
-            if(min > milestone.date){
+            if((data.showAll || milestone.isShow) && min > milestone.date){
                 min = milestone.date
             }
         });
@@ -47,12 +47,12 @@ export module HelperStructData {
 
         let max : Date = new Date("1900-01-01");
         data.tasks.forEach(task => {
-            if(max < task.dateEnd){
+            if((data.showAll || task.isShow) && max < task.dateEnd){
                 max = task.dateEnd
             }
         });
         data.milestones.forEach(milestone => {
-            if(max < milestone.date){
+            if((data.showAll || milestone.isShow) && max < milestone.date){
                 max = milestone.date
             }
         });
@@ -130,7 +130,6 @@ export module HelperStructData {
     }
 
     function _processLimites(data : Struct.Data) : void{
-        //TODO :  calcul with / without hidden data ?
         data.start = HelperStructData.getMin(data)
         data.end =  HelperStructData.getMax(data)
 
