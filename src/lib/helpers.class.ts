@@ -11,16 +11,17 @@ export module Helpers {
 
 	export function dataReviver(key : string, value : any) {
         
-        let commons: string[] = [//'value', 'dataType', // Technical field for Map
-                                 'isInitiate', 'maxId', 'viewbox', 'showAll', // Primitive type field of Data
+        const COMMONS: string[] = ['isInitiate', 'maxId', 'viewbox', 'showAll', // Primitive type field of Data
                                  'position','isShow','label', 'id', 'swimline', 'progress',
-                                 'swimlineId',
+                                 'swimlineId', 'countVisibleTasks', 'countAllTasks',
+                                 'tasks', 'milestones', 'swimlines' //Nothing to do, it's an array
                                 ]
-        if(commons.includes(key)){
+        if(COMMONS.includes(key)){
             return value
         }
 
         if(value == null){
+            console.info("value was null for key `%o` in jsonReviverReplacer.reviver() function", key)
             return null
         }
 
@@ -47,14 +48,7 @@ export module Helpers {
             }
         }
 
-        if(key === 'tasks'){
-            //Nothing to do, it's an array
-            return value
-        }
-        if(key === 'milestones'){
-            //Nothing to do, it's an array
-            return value
-        }
+        
 
         //Case of Date (date, datemin, datemax, min, max, ...)
 		if (typeof value === 'string' && /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/.exec(value)) {
@@ -66,7 +60,7 @@ export module Helpers {
             return value
         }
         
-        console.warn("key : %o with value %o was not caught in jsonReviverReplacer.reviver() function" , key, value)
+        console.warn("key : `%o` with value `%o` was not caught in jsonReviverReplacer.reviver() function" , key, value)
 
 		return value;
 	}
@@ -77,15 +71,6 @@ export module Helpers {
 	function ObjectToMilestone(o: any) {
 		return new Struct.Milestone(o.id, o.label,new Date(o.date), o.isShow)
 	}
-	function ObjectToMap(o: any) {
-		let map : Map<number, number> = new Map<number, number>()
-        let k : string
-        for (k of Object.keys(o)) {
-            map.set(parseInt(k), o[parseInt(k)])
-        }
-        return map
-	}
-
 
     export function countVisibleTasksInList(allTasks: Struct.Task[]) : number{
         let count : number = 0
@@ -97,12 +82,18 @@ export module Helpers {
         return count
     }
 
-
     export function getDateFromViewportX(x: number, dmin: Date, dmax: Date) : Date{
+        if(x < Constantes.GRID.MIDDLE_X){
+            x = Constantes.GRID.MIDDLE_X
+        }
+        if(x > Constantes.GRID.MIDDLE_X + Constantes.GRID.MIDDLE_WIDTH){
+            x = Constantes.GRID.MIDDLE_X + Constantes.GRID.MIDDLE_WIDTH
+        }
+
         //Ceil value of x to avoid miscalculation
         let date = new Date(((Math.ceil(x)  - Constantes.GRID.MIDDLE_X) * (dmax.getTime() - dmin.getTime()) / Constantes.GRID.MIDDLE_WIDTH) + dmin.getTime())
         //Remove hours & co for the same reason
-        date.setHours(0, 0, 0, 0)
+        //date.setHours(0, 0, 0, 0)
         return date
     }
     export function getViewportXFromDate(date: Date, dmin: Date, dmax: Date) : number{
