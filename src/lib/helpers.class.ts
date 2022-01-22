@@ -13,7 +13,7 @@ export module Helpers {
 	export function dataReviver(key : string, value : any) {
         
         let commons: string[] = [//'value', 'dataType', // Technical field for Map
-                                 'isInitiate', 'maxId', 'viewbox', 'showAll', 'error', // Primitive type field of Data
+                                 'isInitiate', 'maxId', 'viewbox', 'showAll', // Primitive type field of Data
                                  'position','isShow','label', 'id', 'swimline', 'progress',
                                  'swimlineId',
                                 ]

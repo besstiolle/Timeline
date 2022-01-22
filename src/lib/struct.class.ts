@@ -11,7 +11,6 @@ export module Struct {
 		maxId: number = 0
 		viewbox: string = "0 0 0 0"
 		showAll: boolean = false
-		error: any = null
 		//Check helper.ts > dataReviver() function if you add something here.
 		
 		constructor(){
