@@ -4,7 +4,7 @@ export module Struct {
 		
 		tasks : Array<Task> = new Array<Task>()
         milestones : Array<Milestone> = new Array<Milestone>()
-		swimlines : Map<number, Struct.Swimline> = new Map()
+		swimlines : Array<Swimline> = new Array<Swimline>()
 		isInitiate : boolean = false
 		start: Date
 		end: Date
@@ -19,7 +19,8 @@ export module Struct {
 		}
 
 		getNextId() : number{
-			return this.maxId + 1
+			this.maxId++
+			return this.maxId
 		}
 	}
 
@@ -31,8 +32,9 @@ export module Struct {
 		progress: number
 		isShow: boolean
 		swimline: string
+		swimlineId: number
 	
-		constructor(id : number, label : string, dateStart : Date, dateEnd : Date, progress : number, isShow : boolean, swimline: string) {
+		constructor(id : number, label : string, dateStart : Date, dateEnd : Date, progress : number, isShow : boolean, swimline:string, swimlineId: number) {
 			this.id = id
 			this.label = label
 			this.dateStart = dateStart
@@ -40,6 +42,7 @@ export module Struct {
 			this.progress = progress
 			this.isShow = isShow
 			this.swimline = swimline
+			this.swimlineId = swimlineId
 		}
 
 		
@@ -61,28 +64,17 @@ export module Struct {
 
 	
 	export class Swimline{
-		id: number //The id of the first task
 		label: string // the label of the swimline
 		countVisibleTasks: number // Number of visible task
 		countAllTasks: number // Number of visible task
 		isShow: boolean // If we need to see this Swimline
 
 		
-		constructor(id: number, label:string){
-			this.id = id
+		constructor(label:string){
 			this.label = label
-		}
-
-		setCountVisibleTasks(countVisibleTasks:number){
-			this.countVisibleTasks = countVisibleTasks
-		}
-
-		setCountAllTasks(countVisibleTasks:number){
-			this.countVisibleTasks = countVisibleTasks
-		}
-
-		setIsShow(isShow:boolean){
-			this.isShow = isShow
+			this.countVisibleTasks = 0
+			this.countAllTasks = 0
+			this.isShow = true
 		}
 	}
 }

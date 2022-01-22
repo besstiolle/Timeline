@@ -12,7 +12,16 @@ export module Helpers {
 
 	export function dataReviver(key : string, value : any) {
         
-        if(key=='error' && value==null){
+        let commons: string[] = [//'value', 'dataType', // Technical field for Map
+                                 'isInitiate', 'maxId', 'viewbox', 'showAll', 'error', // Primitive type field of Data
+                                 'position','isShow','label', 'id', 'swimline', 'progress',
+                                 'swimlineId',
+                                ]
+        if(commons.includes(key)){
+            return value
+        }
+
+        if(value == null){
             return null
         }
 
@@ -33,11 +42,9 @@ export module Helpers {
                 //  > Object.assign(new Struct.Task, value) 
                 // because of Date
                 return ObjectToTask(value)
-            } else if(value.countVisibleTasks){
+            } else {
                 //This is a re-processed value, we don't need to reprocessing it right now
                 return value
-            }else {
-                console.error("Case unexpected in dateTimeReviver with value : %o", value)
             }
         }
 
@@ -58,14 +65,18 @@ export module Helpers {
             return new Date(value);
 		}
 
-        //console.info("key : %o" , key)
-        //console.info("value : %o" , value)
+        //We need to test this in last position to be sur to catch object in map with 
+        if(/^\d+$/.exec(key)){
+            return value
+        }
+        
+        console.warn("key : %o with value %o was not caught in jsonReviverReplacer.reviver() function" , key, value)
 
 		return value;
 	}
 
 	function ObjectToTask(o: any) {
-        return new Struct.Task(o.id, o.label,new Date(o.dateStart), new Date(o.dateEnd), o.progress, o.isShow, o.swimline)
+        return new Struct.Task(o.id, o.label,new Date(o.dateStart), new Date(o.dateEnd), o.progress, o.isShow, o.swimline, o.swimlineId)
 	}
 	function ObjectToMilestone(o: any) {
 		return new Struct.Milestone(o.id, o.label,new Date(o.date), o.isShow)

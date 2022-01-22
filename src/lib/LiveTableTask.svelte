@@ -57,7 +57,8 @@
                 new Date($store.end.getTime() - (0.1 * diffSec)),
                 0,
                 true,
-                ""))
+                "",
+                null))
         $store.tasks = $store.tasks
     }
 

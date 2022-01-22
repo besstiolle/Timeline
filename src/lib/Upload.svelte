@@ -3,6 +3,7 @@
     import { Struct } from './struct.class';
     import { store } from './stores';
     import { HelperStructData } from './helperStructData.class';
+import { HelperStructSwimline } from './helperStructSwimline.class';
 
     let hidden = true
 
@@ -88,6 +89,8 @@
                 let dateEnd : Date
                 let progress: number
                 let swimline: string
+                let previousSwimline: string
+                let previousSwimlineId: number
 
                 HelperStructData.purge($store)
 
@@ -105,8 +108,18 @@
                             dateEnd = new Date(elmts[4])
                             progress = Number(elmts[5])
                             swimline = elmts[6]
-                            HelperStructData.addTask($store, new Struct.Task(id, label, dateStart, dateEnd, progress, isShow, swimline))
+                            if(swimline !== "" && previousSwimline == swimline){
+                                //reuse id of previous swimline
+                            } else if(swimline !== "" && previousSwimline != swimline) {
+                                // create new swimline and save its id
+                                previousSwimlineId = HelperStructSwimline.create($store,swimline)
+                            } else {
+                                //reset previous Swimline id
+                                previousSwimlineId = null
+                            }
+                            HelperStructData.addTask($store, new Struct.Task(id, label, dateStart, dateEnd, progress, isShow, swimline, previousSwimlineId))
 
+                            previousSwimline = swimline
                         } else if("milestone" == elmts[0] ){
                             HelperStructData.addMilestone($store, new Struct.Milestone(id, label, dateStart, isShow))
                         } 

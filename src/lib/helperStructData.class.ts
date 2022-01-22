@@ -2,6 +2,7 @@
 import { browser } from "$app/env";
 import { Constantes } from "./constantes.class";
 import { Helpers } from "./helpers.class";
+import { HelperStructSwimline } from "./helperStructSwimline.class";
 import { Struct } from "./struct.class";
 
 export module HelperStructData {
@@ -101,85 +102,47 @@ export module HelperStructData {
     export function refresh(data : Struct.Data) : void{
         let start = new Date()
         console.info("refresh")
-        _refreshMilestones(data)
+        _refreshSwimlines(data)
         _processLimites(data)
         console.info("end refresh in %o ms", (new Date()).getMilliseconds() - start.getMilliseconds())
     }
 
-    function _refreshMilestones(data : Struct.Data) : void{
-
-        let task: Struct.Task;
-        let comboVisible: number = 0
-        let comboAll: number = 0
-        let swimline: Struct.Swimline
-        data.swimlines = new Map()
+    function _refreshSwimlines(data : Struct.Data) : void{
+        data.swimlines = new Array<Struct.Swimline>()
+        
+        let swimlineLabel: string
+        let previousSwimlineLabel: string
+        let previousSwimlineId: number
     
-        let len: number = data.tasks.length
-    
-        for(let i: number=0; i < len; i++){
-            task = data.tasks[i]
-            //console.info("start with task " + i)
-            
-            //No swimline on current task
-            if(!task.swimline || task.swimline ===""){
-                //If a swimline was already open : close it
-                if(swimline){
-                    //Set combo in array/map/struct
-                    swimline.setCountVisibleTasks(comboVisible)
-                    swimline.setCountAllTasks(comboAll)
-                    swimline.setIsShow(comboVisible == 0)
-                    data.swimlines.set(swimline.id, swimline)
-    
-                    //console.info("closing swimline " + tmpStructSwimline.label + " with " + tmpStructSwimline.countVisibleTasks + " tasks inside (A)")
-                    swimline = null
-                    //Reset combo
-                    comboVisible = 0
-                    comboAll = 0
-                }
-                continue
+        //Initiate each swimline
+        for(let i: number=0; i < data.tasks.length; i++){
+            swimlineLabel = data.tasks[i].swimline
+            if(swimlineLabel !== "" && previousSwimlineLabel == swimlineLabel){
+                //reuse id of previous swimline
+            } else if(swimlineLabel !== "" && previousSwimlineLabel != swimlineLabel) {
+                // create new swimline and save its id
+                previousSwimlineId = HelperStructSwimline.create(data,swimlineLabel)
+            } else {
+                //reset previous Swimline id
+                previousSwimlineId = null
             }
-    
-            //Increase combo if data tasks have same swimline than previous tasks
-            if(swimline && swimline.label === task.swimline){
-                comboAll++
-                if(task.isShow){
-                    comboVisible++
-                }
-                //console.info("increase swimline " + tmpStructSwimline.label + " with 1 more task inside (currently : " + tmpStructSwimline.countVisibleTasks + " )")
-                
-            //If there is no swimline open or no a similare swimline open : create a new one 
-            } else if(!swimline || swimline.label !== task.swimline){
-    
-                // if a different swimline is already open
-                if(swimline && swimline.label !== task.swimline){
-                    //Set combo in array/map/struct
-                    swimline.setCountVisibleTasks(comboVisible)
-                    swimline.setCountAllTasks(comboAll)
-                    swimline.setIsShow(comboVisible == 0)
-                    data.swimlines.set(swimline.id, swimline)
-    
-                   // console.info("closing swimline " + tmpStructSwimline.label + " with " + tmpStructSwimline.countVisibleTasks + " tasks inside (B)")
-                    swimline = null
-                    //Reset combo
-                    comboVisible = 0
-                    comboAll = 0
-                }   
-                comboAll++
-                if(task.isShow){
-                    comboVisible++
-                }
-                swimline = new Struct.Swimline(i, task.swimline)
-                //console.info("starting swimline " + tmpStructSwimline.label)
-            }    
+            data.tasks[i].swimlineId = previousSwimlineId
+            previousSwimlineLabel = swimlineLabel
         }
-    
-        //Last line : Set combo in array/map/struct
-        if(swimline){
-            swimline.setCountVisibleTasks(comboVisible)
-            swimline.setCountAllTasks(comboAll)
-            swimline.setIsShow(comboVisible == 0)
-            data.swimlines.set(swimline.id, swimline)
-            //console.info("closing swimline " + tmpStructSwimline.label + " with " + tmpStructSwimline.countVisibleTasks + " tasks inside (C)")
+        //update swimlines count of visibles / invisibles tasks
+        for(let i: number=0; i < data.tasks.length; i++){
+            if(data.tasks[i].swimlineId != null){
+                data.swimlines[data.tasks[i].swimlineId].countAllTasks++
+                if(data.tasks[i].isShow){
+                    data.swimlines[data.tasks[i].swimlineId].countVisibleTasks++
+                }
+            }
+        }
+        //update swimlines isShow to false if there is no shown task
+        for(let i: number=0; i < data.swimlines.length; i++){
+            if(data.swimlines[i].countVisibleTasks == 0){
+                data.swimlines[i].isShow = false
+            }
         }
     }
 
@@ -209,14 +172,18 @@ export module HelperStructData {
             if(localData && localData.isInitiate){
                 data = localData
             }  else {
-                addTask(data, new Struct.Task(0, "Random Task 0", new Date("2021-01-15"), new Date("2021-04-01"),100, true, ""))
-                addTask(data, new Struct.Task(1, "Random Task 1", new Date("2021-12-01"), new Date("2022-04-01"),0, true,""))
-                addTask(data, new Struct.Task(2, "Random Task 2", new Date("2021-02-01"), new Date("2021-03-05"),15, true,"Swimline1"))
-                addTask(data, new Struct.Task(3, "Random Task 3", new Date("2021-03-10"), new Date("2021-03-30"),0, true,"Swimline1"))
-                addTask(data, new Struct.Task(4, "Random Task 4", new Date("2021-02-01"), new Date("2021-05-01"),30, false, ""))
-                addTask(data, new Struct.Task(5, "Random Task 5", new Date("2021-01-31"), new Date("2021-03-01"),100, true, ""))
-                addTask(data, new Struct.Task(6, "Random Task 6", new Date("2021-05-01"), new Date("2021-05-05"),25, true,"Swimline2"))
-                addTask(data, new Struct.Task(7, "Random Task 7", new Date("2021-12-01"), new Date("2022-04-01"),75, true, ""))
+
+                let swim1Id = HelperStructSwimline.create(data,"Swimline1")
+                let swim2Id = HelperStructSwimline.create(data,"Swimline2")
+
+                addTask(data, new Struct.Task(0, "Random Task 0", new Date("2021-01-15"), new Date("2021-04-01"),100, true, "", null))
+                addTask(data, new Struct.Task(1, "Random Task 1", new Date("2021-12-01"), new Date("2022-04-01"),0, true, "", null))
+                addTask(data, new Struct.Task(2, "Random Task 2", new Date("2021-02-01"), new Date("2021-03-05"),15, true, "Swimline1", swim1Id))
+                addTask(data, new Struct.Task(3, "Random Task 3", new Date("2021-03-10"), new Date("2021-03-30"),0, true, "Swimline1", swim1Id))
+                addTask(data, new Struct.Task(4, "Random Task 4", new Date("2021-02-01"), new Date("2021-05-01"),30, false, "", null))
+                addTask(data, new Struct.Task(5, "Random Task 5", new Date("2021-01-31"), new Date("2021-03-01"),100, true, "", null))
+                addTask(data, new Struct.Task(6, "Random Task 6", new Date("2021-05-01"), new Date("2021-05-05"),25, true, "Swimline2", swim2Id))
+                addTask(data, new Struct.Task(7, "Random Task 7", new Date("2021-12-01"), new Date("2022-04-01"),75, true, "", null))
         
                 addMilestone(data, new Struct.Milestone(8, "Milestone 1", new Date("2020-12-01"), true))
                 addMilestone(data, new Struct.Milestone(9, "Milestone 2", new Date(), true))

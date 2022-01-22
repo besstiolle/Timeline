@@ -21,9 +21,25 @@ let colors = [
 
 
 let tasksShown: Struct.Task[] = []
+let swimlinesShown: Map<number, Struct.Swimline> = new Map<number, Struct.Swimline>()
+let swimlinesHeight: Map<number, number> = new Map<number, number>()
+let previousSwimlineId:number = null
+let height: number
 $store.tasks.forEach(task => {
     if(task.isShow || $store.showAll){
         tasksShown.push(task)
+
+        if(task.swimlineId != null && previousSwimlineId != task.swimlineId){
+            swimlinesShown.set(task.id, $store.swimlines[task.swimlineId])
+            if(task.isShow && !$store.showAll){
+                height = $store.swimlines[task.swimlineId].countVisibleTasks * Constantes.GRID.ONE_TASK_H - 0.5
+            } else {
+                height = $store.swimlines[task.swimlineId].countAllTasks * Constantes.GRID.ONE_TASK_H - 0.5
+            }   
+            swimlinesHeight.set(task.id,height)
+        }
+
+        previousSwimlineId = task.swimlineId
     }
 });
 
@@ -289,6 +305,7 @@ function toggleSwimlineVisibility(event){
     let id = event.currentTarget.id
     $store.swimlines.get(id).isShow = !$store.swimlines.get(id).isShow
 }*/
+    
 </script>         
 
 <svelte:window on:mouseup={up} on:mousemove="{move}"/>
@@ -297,19 +314,19 @@ function toggleSwimlineVisibility(event){
     id='svgSwimlineAndTasks'>
     
 {#each tasksShown as task, i}
-{#if $store.swimlines.has(i)}
+{#if swimlinesShown.has(task.id)}
 
     <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
-        width="{Constantes.GRID.ALL_WIDTH}" height="{$store.swimlines.get(i).countVisibleTasks * Constantes.GRID.ONE_TASK_H - 0.5}" 
+        width="{Constantes.GRID.ALL_WIDTH}" height="{swimlinesHeight.get(task.id)}" 
         fill="{colors[i % colors.length][0]}"/>
 
     <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
-        width="{Constantes.GRID.LEFT_WIDTH}" height="{$store.swimlines.get(i).countVisibleTasks * Constantes.GRID.ONE_TASK_H - 0.5}" 
+        width="{Constantes.GRID.LEFT_WIDTH}" height="{swimlinesHeight.get(task.id)}" 
         fill="{colors[i % colors.length][1]}"/>
 
-    <text text-anchor="middle" x="{Constantes.GRID.LEFT_WIDTH / 2}" y="{i * Constantes.GRID.ONE_TASK_H + $store.swimlines.get(i).countVisibleTasks * Constantes.GRID.ONE_TASK_H / 2}" 
-        font-size="10" fill="#FFFFFF">{$store.swimlines.get(i).label}</text>
-    <!--{#if $store.swimlines.get(i).isShow}
+    <text text-anchor="middle" x="{Constantes.GRID.LEFT_WIDTH / 2}" y="{i * Constantes.GRID.ONE_TASK_H + 5 + swimlinesHeight.get(task.id) / 2}" 
+        font-size="10" fill="#FFFFFF">{swimlinesShown.get(task.id).label}</text>
+    <!--{#if swimlinesShown.get(task.id).isShow}
         <image xlink:href="/hide.png" x="{i * Constantes.GRID.ONE_TASK_H}" y="0" height="24" width="24" data-html2canvas-ignore="true" on:click={toggleSwimlineVisibility} id="s{i}" />
     {:else}
         <image xlink:href="/see.png" x="{i * Constantes.GRID.ONE_TASK_H}" y="0" height="24" width="24" data-html2canvas-ignore="true"  on:click={toggleSwimlineVisibility} id="s{i}" />
