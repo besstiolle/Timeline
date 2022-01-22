@@ -300,11 +300,22 @@ function hideActionBar(event){
         element.classList.add("hidden")
     });
 }
-/*
+
 function toggleSwimlineVisibility(event){
-    let id = event.currentTarget.id
-    $store.swimlines.get(id).isShow = !$store.swimlines.get(id).isShow
-}*/
+    let id = event.currentTarget.id.substring(1)
+    let value = !$store.swimlines[id].isShow
+    $store.tasks.forEach(task => {
+        if(task.swimlineId == id) {
+            console.info(task.label + " " + $store.swimlines[id].isShow)
+            task.isShow = value
+        }
+    });
+    $store.tasks = $store.tasks
+}
+function showToggle(event){
+    let id = event.currentTarget.id.substring(1)
+    document.getElementById("s"+id).classList.toggle("hidden")
+}
     
 </script>         
 
@@ -318,19 +329,23 @@ function toggleSwimlineVisibility(event){
 
     <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
         width="{Constantes.GRID.ALL_WIDTH}" height="{swimlinesHeight.get(task.id)}" 
-        fill="{colors[i % colors.length][0]}"/>
+        fill="{colors[i % colors.length][0]}" id="c{task.swimlineId}" on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
 
     <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
         width="{Constantes.GRID.LEFT_WIDTH}" height="{swimlinesHeight.get(task.id)}" 
-        fill="{colors[i % colors.length][1]}"/>
+        fill="{colors[i % colors.length][1]}" id="d{task.swimlineId}" on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
 
     <text text-anchor="middle" x="{Constantes.GRID.LEFT_WIDTH / 2}" y="{i * Constantes.GRID.ONE_TASK_H + 5 + swimlinesHeight.get(task.id) / 2}" 
         font-size="10" fill="#FFFFFF">{swimlinesShown.get(task.id).label}</text>
-    <!--{#if swimlinesShown.get(task.id).isShow}
-        <image xlink:href="/hide.png" x="{i * Constantes.GRID.ONE_TASK_H}" y="0" height="24" width="24" data-html2canvas-ignore="true" on:click={toggleSwimlineVisibility} id="s{i}" />
+    {#if swimlinesShown.get(task.id).isShow}
+        <image xlink:href="/hide.png" x="0" y="{i * Constantes.GRID.ONE_TASK_H}" height="24" width="24" data-html2canvas-ignore="true" 
+            on:click={toggleSwimlineVisibility} id="s{task.swimlineId}" class='toggleVisibility hidden'
+            on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle} />
     {:else}
-        <image xlink:href="/see.png" x="{i * Constantes.GRID.ONE_TASK_H}" y="0" height="24" width="24" data-html2canvas-ignore="true"  on:click={toggleSwimlineVisibility} id="s{i}" />
-    {/if}-->
+        <image xlink:href="/see.png" x="0" y="{i * Constantes.GRID.ONE_TASK_H}" height="24" width="24" data-html2canvas-ignore="true" 
+             on:click={toggleSwimlineVisibility} id="s{task.swimlineId}" class='toggleVisibility hidden'
+             on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
+    {/if}
 {/if}
 {/each}
 </svg>
@@ -339,3 +354,8 @@ function toggleSwimlineVisibility(event){
     <Task currentTask={task} i={i} showActionBar={showActionBar} hideActionBar={hideActionBar} downRight={downRight} downLeft={downLeft} downProgress={downProgress}/>
 {/each}
 
+<style>
+    .toggleVisibility{
+        cursor: pointer;
+    }
+</style>
