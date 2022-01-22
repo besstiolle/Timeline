@@ -19,7 +19,6 @@ export module Helpers {
         //Case of object Data
         if(key === ''){
             let structData: Struct.Data = Object.assign(new Struct.Data(), value)
-            HelperStructData.refresh(structData)
             return structData
         }
 
@@ -66,10 +65,10 @@ export module Helpers {
 	}
 
 	function ObjectToTask(o: any) {
-        return new Struct.Task(-1, o.label,new Date(o.dateStart), new Date(o.dateEnd), o.progress, o.isShow, o.swimline)
+        return new Struct.Task(o.id, o.label,new Date(o.dateStart), new Date(o.dateEnd), o.progress, o.isShow, o.swimline)
 	}
 	function ObjectToMilestone(o: any) {
-		return new Struct.Milestone(-1, o.label,new Date(o.date), o.isShow)
+		return new Struct.Milestone(o.id, o.label,new Date(o.date), o.isShow)
 	}
 	function ObjectToMap(o: any) {
 		let map : Map<number, number> = new Map<number, number>()

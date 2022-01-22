@@ -99,27 +99,11 @@ export module HelperStructData {
     }
 
     export function refresh(data : Struct.Data) : void{
-        _refreshIndex(data)
+        let start = new Date()
+        console.info("refresh")
         _refreshMilestones(data)
         _processLimites(data)
-    }
-
-    function _refreshIndex(data : Struct.Data) : void{
-        let id : number = 1
-        let lenTasks: number = data.tasks.length
-        let lenMilestones: number = data.milestones.length
-        for(let i=0; i < lenTasks; i++){
-            data.tasks[i].id = id
-            data.maxId = id
-            data.mapperIdIndex.set(id,i)
-            id = data.getNextId()
-        }
-        for(let i=0; i < lenMilestones; i++){
-            data.milestones[i].id = id
-            data.maxId = id
-            data.mapperIdIndex.set(id,i)
-            id = data.getNextId()
-        }			
+        console.info("end refresh in %o ms", (new Date()).getMilliseconds() - start.getMilliseconds())
     }
 
     function _refreshMilestones(data : Struct.Data) : void{
@@ -237,9 +221,11 @@ export module HelperStructData {
                 addMilestone(data, new Struct.Milestone(8, "Milestone 1", new Date("2020-12-01"), true))
                 addMilestone(data, new Struct.Milestone(9, "Milestone 2", new Date(), true))
                 addMilestone(data, new Struct.Milestone(10, "Milestone 3", new Date("2022-08-15"), false))
+
+                data.maxId=11
             }            
         }
-        refresh(data)
+        //refresh(data)
         return data   
     }
 }
