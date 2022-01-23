@@ -25,8 +25,8 @@
 		"paths": {
 			"$lib": ["src/lib"],
 			"$lib/*": ["src/lib/*"],
-			"$env": [".svelte-kit/dev/runtime/app"],
-			"$env/*": [".svelte-kit/dev/runtime/app/*"]
+			"$app": [".svelte-kit/dev/runtime/app"],
+			"$app/*": [".svelte-kit/dev/runtime/app/*"]
 		},
 		//For Jest https://daveceddia.com/svelte-typescript-jest/
 		"types": ["jest"]
