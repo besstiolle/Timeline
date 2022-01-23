@@ -1,9 +1,18 @@
-
-import { HelperStructMilestone } from "$lib/helperStructMilestone.class";
+import { HelperStructSwimline } from "$lib/helperStructSwimline.class";
 import { Struct } from "$lib/struct.class";
 
-let milestone: Struct.Milestone = new Struct.Milestone(1,"label",new Date("2020-01-01"), true)
-let result:string = "milestone;label;true;2020-01-01"
-test("HelperStructMilestone.join with nominal values", ()=> {
-    expect(HelperStructMilestone.join(milestone,";")).toBe(result)
-})
+function testCreate(){
+
+    let data = new Struct.Data()
+    HelperStructSwimline.create(data, "swimline1")
+    let index2 = HelperStructSwimline.create(data, "swimline2")
+    HelperStructSwimline.create(data, "swimline3")
+
+    test("HelperStructSwimline.create with nominal values", ()=> {
+        expect(index2).toBe(1)
+        expect(data.swimlines.length).toBe(3)
+        expect(data.swimlines[index2].label).toBe("swimline2")
+    })
+
+}
+testCreate()

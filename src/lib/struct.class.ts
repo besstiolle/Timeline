@@ -6,8 +6,8 @@ export module Struct {
         milestones : Array<Milestone> = new Array<Milestone>()
 		swimlines : Array<Swimline> = new Array<Swimline>()
 		isInitiate : boolean = false
-		start: Date
-		end: Date
+		start: Date = null
+		end: Date = null
 		maxId: number = 0
 		viewbox: string = "0 0 0 0"
 		showAll: boolean = false

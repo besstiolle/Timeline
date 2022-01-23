@@ -10,11 +10,12 @@ export module HelperStructData {
     /**
      * Return the min date of all tasks & all minestones.
      *   If there is no tasks/milestones it return the date of the system
-     * @param data the <Struct.Data> to investigate
-     * @returns <Date> the min date of milestones & tasks of the date of the system
+     * @param data the Struct.Data to investigate
+     * @returns <Date> the min date of milestones & tasks in the Struct.Data 
      */
 	export function getMin(data : Struct.Data): Date{
         if(data.tasks.length === 0 && data.milestones.length === 0){
+            console.info("no data, we return the current date")
             return new Date()
         }
         
@@ -32,12 +33,13 @@ export module HelperStructData {
         
         return new Date(min)
     }
+    
 
     /**
      * Return the max date of all tasks & all minestones.
      *   If there is no tasks/milestones it return the date of the system
-     * @param data the <Struct.Data> to investigate
-     * @returns <Date> the max date of milestones & tasks of the date of the system
+     * @param data the Struct.Data to investigate
+     * @returns <Date> the max date of milestones & tasks in the Struct.Data
      */
     export function getMax(data : Struct.Data): Date{
         
@@ -60,26 +62,41 @@ export module HelperStructData {
     }   
 
     /**
-     * Add a <Struct.Task> into the <Struct.Data>
-     *   Refresh the limits / other compiled data
-     * @param data the <Struct.Data> to investigate
-     * @param task the <Struct.Task> to add
-     * @returns <Struct.Data> the min date of milestones & tasks of the date of the system
+     * Add a Struct.Task into the Struct.Data
+     * @param data the Struct.Data to investigate
+     * @param task the Struct.Task to add
      */
 	export function addTask(data : Struct.Data, task: Struct.Task) : void{
         data.tasks.push(task)
+        //TODO : vérification for dupplicate id
         data.isInitiate = true
     }
 
+    /**
+     * Add a Struct.Milestone into the Struct.Data
+     * @param data the Struct.Milestone to investigate
+     * @param milestone the Struct.Milestone to add
+     */
     export function addMilestone(data : Struct.Data,milestone: Struct.Milestone) : void{
         data.milestones.push(milestone)
+        //TODO : vérification for dupplicate id
         data.isInitiate = true
     }
 
+    /**
+     * Remove all data from the Struct.Milestone excepted the user choices like "showAll" options
+     * @param data the Struct.Milestone to purge
+     */
     export function purge(data : Struct.Data) : void{
         data.tasks = new Array<Struct.Task>()
         data.milestones = new Array<Struct.Milestone>()
+        data.swimlines = new Array<Struct.Swimline>()
         data.isInitiate = false
+		data.start = null
+		data.end = null
+		data.maxId = 0
+		data.viewbox = "0 0 0 0"
+		//data.showAll= false //Don't reset this parameter
     }
 
     export function refresh(data : Struct.Data) : void{
@@ -87,6 +104,7 @@ export module HelperStructData {
 //        console.info("refresh")
         _refreshSwimlines(data)
         _processLimites(data)
+        _processViewboxResizing(data)
 //        console.info("end refresh in %o ms", (new Date()).getMilliseconds() - start.getMilliseconds())
     }
 
@@ -129,15 +147,18 @@ export module HelperStructData {
         }
     }
 
-    function _processLimites(data : Struct.Data) : void{
+    export function _processLimites(data : Struct.Data) : void{
         data.start = HelperStructData.getMin(data)
         data.end =  HelperStructData.getMax(data)
 
         //TODO prévoir le cas des années / périodes très longues / très courtes
+        console.info(data.start)
         data.start.setDate(1)
         data.end.setDate(1)
         data.end.setMonth(data.end.getMonth() + 1)
+    }
 
+    function _processViewboxResizing(data: Struct.Data) : void{
         //Reprocess viewbox sizing
         let len = data.tasks.length
         if(!data.showAll){

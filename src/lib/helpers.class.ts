@@ -5,17 +5,28 @@ export module Helpers {
 
     const DATE_SEPARATOR = "-"
 
+    /**
+     * Return the date to a string validating the format YYYY-MM-DD
+     * @param date the date to parse into a ISO date format YYYY-MM-DD
+     * @returns string the format YYYY-MM-DD
+     */
     export function toISODateString(date: Date): string {
 		return date.getFullYear() + DATE_SEPARATOR + (date.getMonth() + 1).toString().padStart(2, '0') + DATE_SEPARATOR + date.getDate().toString().padStart(2, '0');
 	}
 
+    /**
+     * Reviver used for JSON.parse(Struct.Data)
+     * @param key the key for reviver
+     * @param value the value for reviver
+     * @returns the same value of the value processed
+     */
 	export function dataReviver(key : string, value : any) {
         
         const COMMONS: string[] = ['isInitiate', 'maxId', 'viewbox', 'showAll', // Primitive type field of Data
                                  'position','isShow','label', 'id', 'swimline', 'progress',
                                  'swimlineId', 'countVisibleTasks', 'countAllTasks',
                                  'tasks', 'milestones', 'swimlines', //Nothing to do, it's an array
-                                 'date', 'datemin', 'datemax' // date inside object, will be cast by new Date when reviver the object
+                                 'date', 'dateStart', 'dateEnd' // date inside object, will be cast by new Date when reviver the object
                                 ]
         if(COMMONS.includes(key)){
             return value
@@ -26,6 +37,14 @@ export module Helpers {
             let structData: Struct.Data = Object.assign(new Struct.Data(), value)
             return structData
         }
+
+        //Case of Date (min, max, ...)
+        if(['start', 'end'].includes(key)) {
+            if(value == null) {
+                return null
+            }
+            return new Date(value)
+		}
 
         if(typeof value === 'object' && value.label) { //Un object contenant un label => nos objects Task & Milestone
             if(value.date){
@@ -43,11 +62,6 @@ export module Helpers {
             }
         }
 
-        //Case of Date (min, max, ...)
-		if (typeof value === 'string' && /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/.exec(value)) {
-            return new Date(value)
-		}
-
         //We need to test this in last position to be sur to catch object in map & array 
         if(/^\d+$/.exec(key)){
             return value
@@ -64,9 +78,14 @@ export module Helpers {
 		return value;
 	}
 
-    export function countVisibleTasksInList(allTasks: Struct.Task[]) : number{
+    /**
+     * Return the number of tasks visible (task.isShow=true) inside the list of tasks
+     * @param tasks The list of Struct.Task to look inside
+     * @returns number of tasks visibles
+     */
+    export function countVisibleTasksInList(tasks: Struct.Task[]) : number{
         let count : number = 0
-        allTasks.forEach(task => {
+        tasks.forEach(task => {
             if(task.isShow){
                 count++
             }
@@ -74,6 +93,13 @@ export module Helpers {
         return count
     }
 
+    /**
+     * Give the date equivalent to the x value inside the viewport
+     * @param x the value of the x position inside the full viewport ratio (Constantes.GRID.ALL_WIDTH)
+     * @param dmin the minimal date of the viewport 
+     * @param dmax the maximal date of the viewport
+     * @returns the Date equivalent
+     */
     export function getDateFromViewportX(x: number, dmin: Date, dmax: Date) : Date{
         if(x < Constantes.GRID.MIDDLE_X){
             x = Constantes.GRID.MIDDLE_X
@@ -88,6 +114,14 @@ export module Helpers {
         //date.setHours(0, 0, 0, 0)
         return date
     }
+
+    /** 
+     * Give the x value equivalent to the date value inside the viewport
+     * @param date the value of the date inside the full viewport ratio (Constantes.GRID.ALL_WIDTH)
+     * @param dmin the minimal date of the viewport 
+     * @param dmax the maximal date of the viewport
+     * @returns the x value equivalent
+     **/
     export function getViewportXFromDate(date: Date, dmin: Date, dmax: Date) : number{
         let x = ((date.getTime() - dmin.getTime())  * Constantes.GRID.MIDDLE_WIDTH / (dmax.getTime() - dmin.getTime()))
                 + Constantes.GRID.MIDDLE_X
