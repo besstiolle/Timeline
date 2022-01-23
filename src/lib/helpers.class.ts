@@ -14,15 +14,11 @@ export module Helpers {
         const COMMONS: string[] = ['isInitiate', 'maxId', 'viewbox', 'showAll', // Primitive type field of Data
                                  'position','isShow','label', 'id', 'swimline', 'progress',
                                  'swimlineId', 'countVisibleTasks', 'countAllTasks',
-                                 'tasks', 'milestones', 'swimlines' //Nothing to do, it's an array
+                                 'tasks', 'milestones', 'swimlines', //Nothing to do, it's an array
+                                 'date', 'datemin', 'datemax' // date inside object, will be cast by new Date when reviver the object
                                 ]
         if(COMMONS.includes(key)){
             return value
-        }
-
-        if(value == null){
-            console.info("value was null for key `%o` in jsonReviverReplacer.reviver() function", key)
-            return null
         }
 
         //Case of object Data
@@ -33,43 +29,39 @@ export module Helpers {
 
         if(typeof value === 'object' && value.label) { //Un object contenant un label => nos objects Task & Milestone
             if(value.date){
-                // Can't do 
-                //  > Object.assign(new Struct.Milestone, value) 
-                // because of Date
-                return ObjectToMilestone(value)
-            } else if (value.dateStart) {
-                // Can't do 
+                // Because of Date we can't do 
                 //  > Object.assign(new Struct.Task, value) 
-                // because of Date
-                return ObjectToTask(value)
+                return new Struct.Milestone(value.id, value.label,new Date(value.date), value.isShow)
+            } else if (value.dateStart) {
+                // Because of Date we can't do 
+                //  > Object.assign(new Struct.Task, value) 
+                return new Struct.Task(value.id, value.label,new Date(value.dateStart), new Date(value.dateEnd), 
+                                value.progress, value.isShow, value.swimline, value.swimlineId)
             } else {
                 //This is a re-processed value, we don't need to reprocessing it right now
                 return value
             }
         }
 
-        
-
-        //Case of Date (date, datemin, datemax, min, max, ...)
+        //Case of Date (min, max, ...)
 		if (typeof value === 'string' && /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/.exec(value)) {
-            return new Date(value);
+            return new Date(value)
 		}
 
-        //We need to test this in last position to be sur to catch object in map with 
+        //We need to test this in last position to be sur to catch object in map & array 
         if(/^\d+$/.exec(key)){
             return value
         }
+
+
+        if(value == null){
+            console.info("value was null for key `%o` in Helpers.dataReviver() function", key)
+            return null
+        }
         
-        console.warn("key : `%o` with value `%o` was not caught in jsonReviverReplacer.reviver() function" , key, value)
+        console.warn("key : `%o` with value `%o` was not caught in Helpers.dataReviver() function" , key, value)
 
 		return value;
-	}
-
-	function ObjectToTask(o: any) {
-        return new Struct.Task(o.id, o.label,new Date(o.dateStart), new Date(o.dateEnd), o.progress, o.isShow, o.swimline, o.swimlineId)
-	}
-	function ObjectToMilestone(o: any) {
-		return new Struct.Milestone(o.id, o.label,new Date(o.date), o.isShow)
 	}
 
     export function countVisibleTasksInList(allTasks: Struct.Task[]) : number{
