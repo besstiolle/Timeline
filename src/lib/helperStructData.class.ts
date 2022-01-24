@@ -147,12 +147,11 @@ export module HelperStructData {
         }
     }
 
-    export function _processLimites(data : Struct.Data) : void{
+    function _processLimites(data : Struct.Data) : void{
         data.start = HelperStructData.getMin(data)
         data.end =  HelperStructData.getMax(data)
 
         //TODO prévoir le cas des années / périodes très longues / très courtes
-        console.info(data.start)
         data.start.setDate(1)
         data.end.setDate(1)
         data.end.setMonth(data.end.getMonth() + 1)
