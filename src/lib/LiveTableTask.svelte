@@ -4,7 +4,7 @@
     import { Helpers } from './helpers.class';
     import { Struct } from './struct.class';
     import { Constantes } from './constantes.class';
-    import { HelperStructData } from './helperStructData.class';
+    import { HelperStructTimeline } from './helperStructTimeline.class';
 
     export let getIndex = (event) => {return 0}
     export let updateStore =  (event) => {}
@@ -42,15 +42,15 @@
         let tmpTasks : Array<Struct.Task> = $store.tasks.splice(index+1, $store.tasks.length)
         let clone = {... $store.tasks[index]}
         clone.id = $store.getNextId()
-        HelperStructData.addTask($store, clone)
+        HelperStructTimeline.addTask($store, clone)
         tmpTasks.forEach(tmpTask => {
-            HelperStructData.addTask($store, tmpTask)
+            HelperStructTimeline.addTask($store, tmpTask)
         });
         $store.tasks = $store.tasks
     }
     function b_add(){
         let diffSec : number = $store.end.getTime() - $store.start.getTime()
-        HelperStructData.addTask($store, new Struct.Task(
+        HelperStructTimeline.addTask($store, new Struct.Task(
                 $store.getNextId(),
                 "Some task", 
                 new Date($store.start.getTime() + (0.1 * diffSec)), 

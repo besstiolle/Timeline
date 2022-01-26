@@ -18,7 +18,7 @@ function testGetById(){
     let task3 = new Struct.Task(3,"label 3", new Date("2022-01-01"), new Date("2022-02-01"), 100, true, "Swimline 1", 5)
     let task4 = new Struct.Task(4,"label 4", new Date("2022-01-01"), new Date("2022-02-01"), 100, true, "Swimline 1", 5)
     
-    let data = new Struct.Data()
+    let data = new Struct.Timeline()
     data.tasks.push(task1)
     data.tasks.push(task2)
     data.tasks.push(task3)

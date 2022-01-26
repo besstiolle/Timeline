@@ -16,7 +16,7 @@ function testGetById(){
     let milestone2: Struct.Milestone = new Struct.Milestone(2,"label 2",new Date("2020-01-01"), true)
     let milestone3: Struct.Milestone = new Struct.Milestone(3,"label 3",new Date("2020-01-01"), true)
     let milestone4: Struct.Milestone = new Struct.Milestone(4,"label 4",new Date("2020-01-01"), true)
-    let data = new Struct.Data()
+    let data = new Struct.Timeline()
     data.milestones.push(milestone1)
     data.milestones.push(milestone2)
     data.milestones.push(milestone3)

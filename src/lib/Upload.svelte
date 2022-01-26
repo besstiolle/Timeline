@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { Struct } from './struct.class';
     import { store } from './stores';
-    import { HelperStructData } from './helperStructData.class';
+    import { HelperStructTimeline } from './helperStructTimeline.class';
     import { HelperStructSwimline } from './helperStructSwimline.class';
 
     let hidden = true
@@ -92,7 +92,7 @@
                 let previousSwimline: string
                 let previousSwimlineId: number
 
-                HelperStructData.purge($store)
+                HelperStructTimeline.purge($store)
 
                 //Process file
                 //TODO : guessing encoding
@@ -117,11 +117,11 @@
                                 //reset previous Swimline id
                                 previousSwimlineId = null
                             }
-                            HelperStructData.addTask($store, new Struct.Task(id, label, dateStart, dateEnd, progress, isShow, swimline, previousSwimlineId))
+                            HelperStructTimeline.addTask($store, new Struct.Task(id, label, dateStart, dateEnd, progress, isShow, swimline, previousSwimlineId))
 
                             previousSwimline = swimline
                         } else if("milestone" == elmts[0] ){
-                            HelperStructData.addMilestone($store, new Struct.Milestone(id, label, dateStart, isShow))
+                            HelperStructTimeline.addMilestone($store, new Struct.Milestone(id, label, dateStart, isShow))
                         } 
                         id = $store.getNextId()
                     }

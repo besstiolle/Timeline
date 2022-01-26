@@ -17,10 +17,10 @@
     let liveComponent   
 
     function downloadCsv () {
-        var csvData = $store.tasks.map(e => HelperStructTask.join(e, ";")).join("\n")
+        var csvTimeline = $store.tasks.map(e => HelperStructTask.join(e, ";")).join("\n")
                     + "\n"
                     + $store.milestones.map(e => HelperStructMilestone.join(e, ";")).join("\n")
-		var blob = new Blob([csvData], {type:"data:text/csv;charset=utf-8,"});
+		var blob = new Blob([csvTimeline], {type:"data:text/csv;charset=utf-8,"});
 		download(blob, "download.csv") 
     }
 
@@ -62,8 +62,8 @@
 </div>
 
 <div class="websiteButtons">
-    <div class="websiteButton" title="Fork me on Github"><a target='_blank' href='https://github.com/besstiolle/Timeline'><img src='github.png' alt='Fork me on Github' /></a></div>
-    <div class="websiteButton" title='Ask me a new feature. Send me your bug description'><a target='_blank' href='https://github.com/besstiolle/Timeline/issues/new'><img src='question.png' alt='Ask me a new feature. Send me your bug description' /></a></div>
+    <div class="websiteButton" title="Fork me on Github"><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline'><img src='github.png' alt='Fork me on Github' /></a></div>
+    <div class="websiteButton" title='Ask me a new feature. Send me your bug description'><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline/issues/new'><img src='question.png' alt='Ask me a new feature. Send me your bug description' /></a></div>
 </div>
 
 <Upload bind:this={UploadComponent} />

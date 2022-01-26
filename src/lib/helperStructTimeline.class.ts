@@ -5,17 +5,16 @@ import { Helpers } from "./helpers.class";
 import { HelperStructSwimline } from "./helperStructSwimline.class";
 import { Struct } from "./struct.class";
 
-export module HelperStructData {
+export module HelperStructTimeline {
 
     /**
      * Return the min date of all tasks & all minestones.
      *   If there is no tasks/milestones it return the date of the system
-     * @param data the Struct.Data to investigate
-     * @returns <Date> the min date of milestones & tasks in the Struct.Data 
+     * @param data the Struct.Timeline to investigate
+     * @returns <Date> the min date of milestones & tasks in the Struct.Timeline 
      */
-	export function getMin(data : Struct.Data): Date{
+	export function getMin(data : Struct.Timeline): Date{
         if(data.tasks.length === 0 && data.milestones.length === 0){
-            console.info("no data, we return the current date")
             return new Date()
         }
         
@@ -38,10 +37,10 @@ export module HelperStructData {
     /**
      * Return the max date of all tasks & all minestones.
      *   If there is no tasks/milestones it return the date of the system
-     * @param data the Struct.Data to investigate
-     * @returns <Date> the max date of milestones & tasks in the Struct.Data
+     * @param data the Struct.Timeline to investigate
+     * @returns <Date> the max date of milestones & tasks in the Struct.Timeline
      */
-    export function getMax(data : Struct.Data): Date{
+    export function getMax(data : Struct.Timeline): Date{
         
         if(data.tasks.length === 0 && data.milestones.length === 0){
             return new Date()
@@ -62,22 +61,22 @@ export module HelperStructData {
     }   
 
     /**
-     * Add a Struct.Task into the Struct.Data
-     * @param data the Struct.Data to investigate
+     * Add a Struct.Task into the Struct.Timeline
+     * @param data the Struct.Timeline to investigate
      * @param task the Struct.Task to add
      */
-	export function addTask(data : Struct.Data, task: Struct.Task) : void{
+	export function addTask(data : Struct.Timeline, task: Struct.Task) : void{
         data.tasks.push(task)
         //TODO : vérification for dupplicate id
         data.isInitiate = true
     }
 
     /**
-     * Add a Struct.Milestone into the Struct.Data
+     * Add a Struct.Milestone into the Struct.Timeline
      * @param data the Struct.Milestone to investigate
      * @param milestone the Struct.Milestone to add
      */
-    export function addMilestone(data : Struct.Data,milestone: Struct.Milestone) : void{
+    export function addMilestone(data : Struct.Timeline,milestone: Struct.Milestone) : void{
         data.milestones.push(milestone)
         //TODO : vérification for dupplicate id
         data.isInitiate = true
@@ -87,7 +86,7 @@ export module HelperStructData {
      * Remove all data from the Struct.Milestone excepted the user choices like "showAll" options
      * @param data the Struct.Milestone to purge
      */
-    export function purge(data : Struct.Data) : void{
+    export function purge(data : Struct.Timeline) : void{
         data.tasks = new Array<Struct.Task>()
         data.milestones = new Array<Struct.Milestone>()
         data.swimlines = new Array<Struct.Swimline>()
@@ -99,7 +98,7 @@ export module HelperStructData {
 		//data.showAll= false //Don't reset this parameter
     }
 
-    export function refresh(data : Struct.Data) : void{
+    export function refresh(data : Struct.Timeline) : void{
 //        let start = new Date()
 //        console.info("refresh")
         _refreshSwimlines(data)
@@ -108,7 +107,7 @@ export module HelperStructData {
 //        console.info("end refresh in %o ms", (new Date()).getMilliseconds() - start.getMilliseconds())
     }
 
-    function _refreshSwimlines(data : Struct.Data) : void{
+    function _refreshSwimlines(data : Struct.Timeline) : void{
         data.swimlines = new Array<Struct.Swimline>()
         
         let swimlineLabel: string
@@ -147,9 +146,9 @@ export module HelperStructData {
         }
     }
 
-    function _processLimites(data : Struct.Data) : void{
-        data.start = HelperStructData.getMin(data)
-        data.end =  HelperStructData.getMax(data)
+    function _processLimites(data : Struct.Timeline) : void{
+        data.start = HelperStructTimeline.getMin(data)
+        data.end =  HelperStructTimeline.getMax(data)
 
         //TODO prévoir le cas des années / périodes très longues / très courtes
         data.start.setDate(1)
@@ -157,7 +156,7 @@ export module HelperStructData {
         data.end.setMonth(data.end.getMonth() + 1)
     }
 
-    function _processViewboxResizing(data: Struct.Data) : void{
+    function _processViewboxResizing(data: Struct.Timeline) : void{
         //Reprocess viewbox sizing
         let len = data.tasks.length
         if(!data.showAll){
@@ -167,12 +166,12 @@ export module HelperStructData {
         
     }
 
-    export function initiate(data : Struct.Data) : Struct.Data{
+    export function initiate(data : Struct.Timeline) : Struct.Timeline{
         if(browser){
-            let localData: Struct.Data = JSON.parse(localStorage.getItem("store"), Helpers.dataReviver)
+            let localTimeline: Struct.Timeline = JSON.parse(localStorage.getItem("store"), Helpers.dataReviver)
                                 
-            if(localData && localData.isInitiate){
-                data = localData
+            if(localTimeline && localTimeline.isInitiate){
+                data = localTimeline
             }  else {
 
                 let swim1Id = HelperStructSwimline.create(data,"Swimline1")

@@ -1,6 +1,6 @@
 export module Struct {
 
-	export class Data {
+	export class Timeline {
 		
 		tasks : Array<Task> = new Array<Task>()
         milestones : Array<Milestone> = new Array<Milestone>()

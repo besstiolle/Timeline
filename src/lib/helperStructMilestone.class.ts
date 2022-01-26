@@ -19,11 +19,11 @@ export module HelperStructMilestone {
     
     /**
      * Return the Milestone given by its own id
-     * @param data the Struct.Data to look inside
+     * @param data the Struct.Timeline to look inside
      * @param id the id of the Milestone
      * @returns the Milestone found or an exception
      */
-    export function getById(data : Struct.Data, id : number) : Struct.Milestone{
+    export function getById(data : Struct.Timeline, id : number) : Struct.Milestone{
         //A simple loop to reach for the good item because it's cheaper
         // than trying to maintain a map with id => index of array each time 
         // we change something into the $store

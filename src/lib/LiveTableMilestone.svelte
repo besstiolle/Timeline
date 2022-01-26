@@ -4,7 +4,7 @@
     import { Helpers } from './helpers.class';
     import { Struct } from './struct.class';
     import { Constantes } from './constantes.class';
-    import { HelperStructData } from './helperStructData.class';
+    import { HelperStructTimeline } from './helperStructTimeline.class';
 
     export let getIndex = (event) => {return 0}
     export let updateStore =  (event) => {}
@@ -42,15 +42,15 @@
         let tmpMilestones : Array<Struct.Milestone> = $store.milestones.splice(index+1, $store.milestones.length)
         let clone = {... $store.milestones[index]}
         clone.id = $store.getNextId()
-        HelperStructData.addMilestone($store, clone )
+        HelperStructTimeline.addMilestone($store, clone )
         tmpMilestones.forEach(tmpMilestone => {
-            HelperStructData.addMilestone($store, tmpMilestone)
+            HelperStructTimeline.addMilestone($store, tmpMilestone)
         });
         $store.milestones = $store.milestones
     }
     function m_add(){
         let diffSec : number = $store.end.getTime() - $store.start.getTime()
-        HelperStructData.addMilestone($store, new Struct.Milestone(
+        HelperStructTimeline.addMilestone($store, new Struct.Milestone(
                 $store.getNextId(),
                 "My Milestone", 
                 new Date($store.start.getTime() + (0.5 * diffSec)),

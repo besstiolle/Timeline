@@ -15,14 +15,14 @@ export module Helpers {
 	}
 
     /**
-     * Reviver used for JSON.parse(Struct.Data)
+     * Reviver used for JSON.parse(Struct.Timeline)
      * @param key the key for reviver
      * @param value the value for reviver
      * @returns the same value of the value processed
      */
 	export function dataReviver(key : string, value : any) {
         
-        const COMMONS: string[] = ['isInitiate', 'maxId', 'viewbox', 'showAll', // Primitive type field of Data
+        const COMMONS: string[] = ['isInitiate', 'maxId', 'viewbox', 'showAll', // Primitive type field of Timeline
                                  'position','isShow','label', 'id', 'swimline', 'progress',
                                  'swimlineId', 'countVisibleTasks', 'countAllTasks',
                                  'tasks', 'milestones', 'swimlines', //Nothing to do, it's an array
@@ -32,10 +32,10 @@ export module Helpers {
             return value
         }
 
-        //Case of object Data
+        //Case of object Timeline
         if(key === ''){
-            let structData: Struct.Data = Object.assign(new Struct.Data(), value)
-            return structData
+            let structTimeline: Struct.Timeline = Object.assign(new Struct.Timeline(), value)
+            return structTimeline
         }
 
         //Case of Date (min, max, ...)

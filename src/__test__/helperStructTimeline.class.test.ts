@@ -1,5 +1,5 @@
 
-import { HelperStructData } from "$lib/helperStructData.class";
+import { HelperStructTimeline } from "$lib/helperStructTimeline.class";
 import { Struct } from "$lib/struct.class";
 
 jest.mock('$app/env', () => ({
@@ -11,8 +11,8 @@ jest.mock('$app/env', () => ({
 
 function testGetMin(){
 
-    let data1 = new Struct.Data()
-    let data2 = new Struct.Data()
+    let data1 = new Struct.Timeline()
+    let data2 = new Struct.Timeline()
 
     let date1: Date = new Date("2020-01-01")
     let date2: Date = new Date("2021-12-31")
@@ -33,7 +33,7 @@ function testGetMin(){
     data1.milestones.push(new Struct.Milestone(4,"label 4",date2, true))
 
     test("Helpers.getMin with minimal value in task.end and task.start", ()=> {
-        expect(HelperStructData.getMin(data1)).toEqual(date3)
+        expect(HelperStructTimeline.getMin(data1)).toEqual(date3)
     })
     
     
@@ -50,15 +50,15 @@ function testGetMin(){
     data2.milestones.push(new Struct.Milestone(5,"label 5",date6, true))
 
     test("Helpers.getMin with minimal value in milestone", ()=> {
-        expect(HelperStructData.getMin(data2)).toEqual(date6)
+        expect(HelperStructTimeline.getMin(data2)).toEqual(date6)
     })
 }
 testGetMin()
 
 function testGetMax(){
 
-    let data1 = new Struct.Data()
-    let data2 = new Struct.Data()
+    let data1 = new Struct.Timeline()
+    let data2 = new Struct.Timeline()
 
     let date1: Date = new Date("2020-01-01")
     let date2: Date = new Date("2021-12-31")
@@ -79,7 +79,7 @@ function testGetMax(){
     data1.milestones.push(new Struct.Milestone(4,"label 4",date4, true))
 
     test("Helpers.getMax with maximal value in task.end and task.start", ()=> {
-        expect(HelperStructData.getMax(data1)).toEqual(date2)
+        expect(HelperStructTimeline.getMax(data1)).toEqual(date2)
     })
     
     
@@ -96,19 +96,19 @@ function testGetMax(){
     data2.milestones.push(new Struct.Milestone(5,"label 5",date2, true))
 
     test("Helpers.getMax with maximal value in milestone", ()=> {
-        expect(HelperStructData.getMax(data2)).toEqual(date2)
+        expect(HelperStructTimeline.getMax(data2)).toEqual(date2)
     })
 }
 testGetMax()
 
 function testAddTask(){
-    let data = new Struct.Data()
+    let data = new Struct.Timeline()
     let date1: Date = new Date("2020-01-01")
     let date2: Date = new Date("2021-12-31")
 
-    HelperStructData.addTask(data, new Struct.Task(1,"label 1", date1, date2, 100, true, "Swimline 1", 5))
-    HelperStructData.addTask(data, new Struct.Task(2,"label 2", date1, date2, 100, true, "Swimline 1", 5))
-    HelperStructData.addTask(data, new Struct.Task(3,"label 3", date1, date2, 100, true, "Swimline 1", 5))
+    HelperStructTimeline.addTask(data, new Struct.Task(1,"label 1", date1, date2, 100, true, "Swimline 1", 5))
+    HelperStructTimeline.addTask(data, new Struct.Task(2,"label 2", date1, date2, 100, true, "Swimline 1", 5))
+    HelperStructTimeline.addTask(data, new Struct.Task(3,"label 3", date1, date2, 100, true, "Swimline 1", 5))
 
     test("Helpers.addTask with nominal value", ()=> {
         expect(data.tasks.length).toBe(3)
@@ -118,12 +118,12 @@ function testAddTask(){
 testAddTask()
 
 function testAddMilestone(){
-    let data = new Struct.Data()
+    let data = new Struct.Timeline()
     let date1: Date = new Date("2020-01-01")
 
-    HelperStructData.addMilestone(data, new Struct.Milestone(1,"label 1",date1, true))
-    HelperStructData.addMilestone(data, new Struct.Milestone(2,"label 2",date1, true))
-    HelperStructData.addMilestone(data, new Struct.Milestone(3,"label 3",date1, true))
+    HelperStructTimeline.addMilestone(data, new Struct.Milestone(1,"label 1",date1, true))
+    HelperStructTimeline.addMilestone(data, new Struct.Milestone(2,"label 2",date1, true))
+    HelperStructTimeline.addMilestone(data, new Struct.Milestone(3,"label 3",date1, true))
 
     test("Helpers.addMilestone with nominal value", ()=> {
         expect(data.milestones.length).toBe(3)
@@ -135,9 +135,9 @@ testAddMilestone()
 
 
 function testPurge(){
-    let data = new Struct.Data()
+    let data = new Struct.Timeline()
     data.showAll = true
-    let dataPurged = new Struct.Data()
+    let dataPurged = new Struct.Timeline()
     dataPurged.showAll = true
 
     let date: Date = new Date("2020-01-01")
@@ -151,7 +151,7 @@ function testPurge(){
     data.maxId = 99
     data.viewbox = "viewbox Value"
 
-    HelperStructData.purge(data)
+    HelperStructTimeline.purge(data)
 
     test("Helpers.purge with complete data", ()=> {
         expect(data.showAll).toEqual(dataPurged.showAll)
