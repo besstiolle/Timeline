@@ -22,4 +22,8 @@ export module Constantes {
         TE:"taskEnd_",
         MD:"milestoneDate_"
     }
+
+    export const LOCAL_STORAGE = {
+        KEY_CARDS : "cards"
+    }
 }

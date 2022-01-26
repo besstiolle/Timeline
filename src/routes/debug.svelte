@@ -1,28 +1,37 @@
 
 <script lang="ts">
-import { browser } from "$app/env";
+import { Constantes } from "$lib/constantes.class";
+import { CustomLocalStorage } from "$lib/customLocalStorage";
 import { Helpers } from "$lib/helpers.class";
 import { HelperStructTimeline } from "$lib/helperStructTimeline.class";
+import { JsonParser } from "$lib/jsonParser";
 import type { Struct } from "$lib/struct.class";
+import { each } from "svelte/internal";
 
 
 	
-let store = null
-let localTimeline: Struct.Timeline = null
-let result = "success of parsing ✅"
-if(browser){
-    store = localStorage.getItem("store")
-    try{
-        localTimeline = JSON.parse(store, Helpers.dataReviver)
-        HelperStructTimeline.refresh(localTimeline)
-        console.info(localTimeline)
-    } catch (error) {
-        result = error
-    }
-} 
+let timelines: Array<Struct.Timeline> = new Array<Struct.Timeline>()
+let errors: Array<string> = new Array<string>()
+let cards = null
+try{
+    cards = CustomLocalStorage.getCards()
+} catch (error) {
+    errors.push("error during retriving/parsing of Cards : %o" ,error)
+}
 
+if(cards){
+    cards.forEach(card => {
+        try{
+            timelines.push(CustomLocalStorage.getTimeline(card.key))
+        } catch (error) {
+            errors.push("error during retriving/parsing of Timeline '%o' : %o" ,card.key, error)
+        }
+        
+    });
+} 
+    
 function purge(event){
-    localStorage.clear()
+    CustomLocalStorage.clear()
     alert("your localstorage is purged ✅")
     location.reload()
 }
@@ -37,17 +46,22 @@ function purge(event){
 <h1>Debug page</h1>
 <h2>Dump from your localstorage : </h2>
 <div class='codeW'>
-{#if store}
-    <textarea rows=20>{JSON.stringify(JSON.parse(store, Helpers.dataReviver), undefined, 2)}</textarea>
-    
+{#if errors}
+    {#each errors as error}
+        <div style="color:red">{error}</div>
+    {/each}
+{/if}
+{#if cards}
+<h3>Storage "Cards"</h3>
+    <textarea rows=20>{JSON.stringify(cards, undefined, 2)}</textarea> 
+    {#each timelines as timeline}
+    <h3>Storage Timeline "{timeline.key} : {timeline.title}"</h3>
+        <textarea rows=20>{JSON.stringify(timeline, undefined, 2)}</textarea> 
+    {/each}
 {:else}
     <p>your localstorage is empty ✅</p>
 {/if}
 </div>
-<h2>JSON parsing your localstorage : </h2>
-<div class='codeW'><p>
-    {result}
-</p></div>
 <h2>Reset your localstorage</h2>
 <div><button on:click={purge}>click me if you dare</button></div>
 <style>

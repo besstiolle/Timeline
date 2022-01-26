@@ -3,17 +3,17 @@
     import { Constantes } from './constantes.class';
     import { store } from './stores';
 
-    let toDisplay: boolean = ($store.start <= new Date() && $store.end >= new Date())
+    let toDisplay: boolean = ($store.currentTimeline.start <= new Date() && $store.currentTimeline.end >= new Date())
 
     const todayColor = "#D41E24"
     const todayLabelColor = "#000000"
     
-    let widthToday: number = (new Date().getTime() - $store.start.getTime()) / ($store.end.getTime() - $store.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH
+    let widthToday: number = (new Date().getTime() - $store.currentTimeline.start.getTime()) / ($store.currentTimeline.end.getTime() - $store.currentTimeline.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH
  
 </script>
 
 {#if toDisplay}
-<svg viewBox="{$store.viewbox}" xmlns="http://www.w3.org/2000/svg" 
+<svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
     x="{Constantes.GRID.MIDDLE_X}" y="{Constantes.GRID.MILESTONE_H}"  >
 
             <rect x="0" y="20" width="{widthToday}" height="5" fill={todayColor}/>

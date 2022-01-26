@@ -1,4 +1,7 @@
 import { browser } from "$app/env"
+import { Constantes } from "./constantes.class"
+import { JsonParser } from "./jsonParser"
+import type { Struct } from "./struct.class"
 
 export module CustomLocalStorage{
 
@@ -12,8 +15,19 @@ export module CustomLocalStorage{
         if(!browser){
             return
         }
+        //console.info("insert/update data in key '"+key+"'")
         localStorage.setItem(key, JSON.stringify(value, replacer))
     }
+
+    export function getCards() : Array<Struct.Card>{
+        return get(Constantes.LOCAL_STORAGE.KEY_CARDS, JsonParser.cardsReviver)
+    }
+
+    export function getTimeline(key:string):Struct.Timeline{
+        return get(key, JsonParser.timelineReviver)
+    }
+
+    
 
     /**
      * retrive the JSON value for the <key> parameter and return the object parsed with an optionnal Json reviver
@@ -21,7 +35,7 @@ export module CustomLocalStorage{
      * @param reviver the JSON reviver
      * @returns the object.
      */
-    export function get(key:string, reviver?: (this: any, key: string, value: any) => any): any{
+    function get(key:string, reviver?: (this: any, key: string, value: any) => any): any{
         if(!browser){
             return null
         }
@@ -30,6 +44,7 @@ export module CustomLocalStorage{
             return null
         }
 
+        //console.info("get for key '%o'", key)
         return JSON.parse(localStorage.getItem(key), reviver)
     }
 

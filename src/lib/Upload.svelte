@@ -92,7 +92,7 @@
                 let previousSwimline: string
                 let previousSwimlineId: number
 
-                HelperStructTimeline.purge($store)
+                HelperStructTimeline.purge($store.currentTimeline)
 
                 //Process file
                 //TODO : guessing encoding
@@ -112,21 +112,21 @@
                                 //reuse id of previous swimline
                             } else if(swimline !== "" && previousSwimline != swimline) {
                                 // create new swimline and save its id
-                                previousSwimlineId = HelperStructSwimline.create($store,swimline)
+                                previousSwimlineId = HelperStructSwimline.create($store.currentTimeline,swimline)
                             } else {
                                 //reset previous Swimline id
                                 previousSwimlineId = null
                             }
-                            HelperStructTimeline.addTask($store, new Struct.Task(id, label, dateStart, dateEnd, progress, isShow, swimline, previousSwimlineId))
+                            HelperStructTimeline.addTask($store.currentTimeline, new Struct.Task(id, label, dateStart, dateEnd, progress, isShow, swimline, previousSwimlineId))
 
                             previousSwimline = swimline
                         } else if("milestone" == elmts[0] ){
-                            HelperStructTimeline.addMilestone($store, new Struct.Milestone(id, label, dateStart, isShow))
+                            HelperStructTimeline.addMilestone($store.currentTimeline, new Struct.Milestone(id, label, dateStart, isShow))
                         } 
-                        id = $store.getNextId()
+                        id = $store.currentTimeline.getNextId()
                     }
                 });
-                $store.tasks = $store.tasks
+                $store.currentTimeline.tasks = $store.currentTimeline.tasks
                 //remove form upload part
                 closeUpload()
             }
@@ -145,7 +145,7 @@
     <form id="box" method="post" action="" enctype="multipart/form-data">
     
     <div class="box__input">
-    <div><img src='download.png' alt='Choose a CSV file or drag it here'/></div>
+    <div><img src='/download.png' alt='Choose a CSV file or drag it here'/></div>
     <div><input class="box__file" type="file" name="files[]" accept=".csv" id="file"/>
     <label for="file"><strong>Choose a CSV file (.csv) </strong><span class="box__dragndrop"> or drag it here</span>.</label></div>
     <button class="box__button" type="submit">Upload</button>

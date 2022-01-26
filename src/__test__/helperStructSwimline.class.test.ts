@@ -3,7 +3,7 @@ import { Struct } from "$lib/struct.class";
 
 function testCreate(){
 
-    let data = new Struct.Timeline()
+    let data = new Struct.Timeline("key", "title")
     HelperStructSwimline.create(data, "swimline1")
     let index2 = HelperStructSwimline.create(data, "swimline2")
     HelperStructSwimline.create(data, "swimline3")

@@ -10,60 +10,60 @@
     export let updateStore =  (event) => {}
 
     function m_delete(event){
-        $store.milestones.splice(getIndex(event), 1)
-        $store.milestones = $store.milestones
+        $store.currentTimeline.milestones.splice(getIndex(event), 1)
+        $store.currentTimeline.milestones = $store.currentTimeline.milestones
     }
     function m_up(event){
         let index = getIndex(event)
         if(index == 0){
             return;
         }
-        let tmpMilestone: Struct.Milestone = $store.milestones[index]
-        $store.milestones[index] = $store.milestones[index - 1]
-        $store.milestones[index - 1] = tmpMilestone
-        $store.milestones = $store.milestones
+        let tmpMilestone: Struct.Milestone = $store.currentTimeline.milestones[index]
+        $store.currentTimeline.milestones[index] = $store.currentTimeline.milestones[index - 1]
+        $store.currentTimeline.milestones[index - 1] = tmpMilestone
+        $store.currentTimeline.milestones = $store.currentTimeline.milestones
     }
     function m_down(event){
         let index = getIndex(event)
-        if(index == ($store.milestones.length-1)){
+        if(index == ($store.currentTimeline.milestones.length-1)){
             return;
         }
-        let tmpMilestone: Struct.Milestone = $store.milestones[index]
-        $store.milestones[index] = $store.milestones[index + 1]
-        $store.milestones[index + 1] = tmpMilestone
-        $store.milestones = $store.milestones
+        let tmpMilestone: Struct.Milestone = $store.currentTimeline.milestones[index]
+        $store.currentTimeline.milestones[index] = $store.currentTimeline.milestones[index + 1]
+        $store.currentTimeline.milestones[index + 1] = tmpMilestone
+        $store.currentTimeline.milestones = $store.currentTimeline.milestones
     }
     function m_show(event){
         let index = getIndex(event)
-        $store.milestones[index].isShow = !$store.milestones[index].isShow 
+        $store.currentTimeline.milestones[index].isShow = !$store.currentTimeline.milestones[index].isShow 
     }
     function m_duplicate(event){
         let index = getIndex(event)
-        let tmpMilestones : Array<Struct.Milestone> = $store.milestones.splice(index+1, $store.milestones.length)
-        let clone = {... $store.milestones[index]}
-        clone.id = $store.getNextId()
-        HelperStructTimeline.addMilestone($store, clone )
+        let tmpMilestones : Array<Struct.Milestone> = $store.currentTimeline.milestones.splice(index+1, $store.currentTimeline.milestones.length)
+        let clone = {... $store.currentTimeline.milestones[index]}
+        clone.id = $store.currentTimeline.getNextId()
+        HelperStructTimeline.addMilestone($store.currentTimeline, clone )
         tmpMilestones.forEach(tmpMilestone => {
-            HelperStructTimeline.addMilestone($store, tmpMilestone)
+            HelperStructTimeline.addMilestone($store.currentTimeline, tmpMilestone)
         });
-        $store.milestones = $store.milestones
+        $store.currentTimeline.milestones = $store.currentTimeline.milestones
     }
     function m_add(){
-        let diffSec : number = $store.end.getTime() - $store.start.getTime()
-        HelperStructTimeline.addMilestone($store, new Struct.Milestone(
-                $store.getNextId(),
+        let diffSec : number = $store.currentTimeline.end.getTime() - $store.currentTimeline.start.getTime()
+        HelperStructTimeline.addMilestone($store.currentTimeline, new Struct.Milestone(
+                $store.currentTimeline.getNextId(),
                 "My Milestone", 
-                new Date($store.start.getTime() + (0.5 * diffSec)),
+                new Date($store.currentTimeline.start.getTime() + (0.5 * diffSec)),
                 true
                 ))
-                $store.milestones = $store.milestones
+                $store.currentTimeline.milestones = $store.currentTimeline.milestones
     }
 
 </script>
 
 
 
-{#each $store.milestones as milestone, i}
+{#each $store.currentTimeline.milestones as milestone, i}
 <div class="live__line show_{milestone.isShow}">
     
     <div name="M{i}"  class="live_cmd" on:click="{m_show}" title="hide/show this line">

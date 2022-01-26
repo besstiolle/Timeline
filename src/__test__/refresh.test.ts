@@ -14,7 +14,7 @@ jest.mock('$app/env', () => ({
 
 /*
 function testProcessLimites(){
-    let data = new Struct.Timeline()
+    let data = new Struct.Timeline("key", "title")
     
     const mock = {
         getMin : jest.fn(),
@@ -42,7 +42,7 @@ testProcessLimites()
 */
 
 function testProcessLimites(){
-    let data1 = new Struct.Timeline()
+    let data1 = new Struct.Timeline("key", "title")
     data1.tasks.push(new Struct.Task(1,"label 1", new Date("2020-01-01"), new Date("2020-12-31"), 100, true, "Swimline 1", 5))
 
     HelperStructTimeline.refresh(data1)
@@ -51,7 +51,7 @@ function testProcessLimites(){
         expect(data1.end).toEqual(new Date("2021-01-01"))
     })
 
-    let data2 = new Struct.Timeline()
+    let data2 = new Struct.Timeline("key", "title")
     data2.tasks.push(new Struct.Task(1,"label 1", new Date("2020-01-15"), new Date("2020-02-01"), 100, true, "Swimline 1", 5))
 
     HelperStructTimeline.refresh(data2)
@@ -67,7 +67,7 @@ function testProcessViewboxResizing(){
     let date1: Date = new Date("2020-01-01")
     let taskVisible = new Struct.Task(1,"label 1", date1, date1, 100, true, "Swimline 1", 5)
     let taskHidden = new Struct.Task(1,"label 1", date1, date1, 100, false, "Swimline 1", 5)
-    let data1 = new Struct.Timeline()
+    let data1 = new Struct.Timeline("key", "title")
     data1.showAll = false
     data1.tasks.push(taskVisible)
     data1.tasks.push(taskVisible)
@@ -85,7 +85,7 @@ function testProcessViewboxResizing(){
         expect(data1.viewbox).toBe("0 0 1000 265")
     })
 
-    let data2 = new Struct.Timeline()
+    let data2 = new Struct.Timeline("key", "title")
     data2.showAll = true
     HelperStructTimeline.refresh(data2)
 
@@ -93,7 +93,7 @@ function testProcessViewboxResizing(){
         expect(data2.viewbox).toBe("0 0 1000 115")
     })
 
-    let data3 = new Struct.Timeline()
+    let data3 = new Struct.Timeline("key", "title")
     data3.showAll = true
     data3.tasks.push(taskVisible)
     data3.tasks.push(taskVisible)
@@ -109,14 +109,14 @@ function testProcessViewboxResizing(){
 testProcessViewboxResizing()
 
 function testRefreshSwimlines(){
-    let data1 = new Struct.Timeline()
+    let data1 = new Struct.Timeline("key", "title")
     let date1: Date = new Date("2020-01-01")
     data1.tasks.push(new Struct.Task(1,"label 1", date1, date1, 100, true, "Swimline 1", 0))
     data1.tasks.push(new Struct.Task(2,"label 2", date1, date1, 100, false, "Swimline 2", 0))
     data1.tasks.push(new Struct.Task(3,"label 3", date1, date1, 100, false, "Swimline 2", 0))
     data1.tasks.push(new Struct.Task(4,"label 4", date1, date1, 100, false, "Swimline 1", 0))
 
-    let data2 = new Struct.Timeline()
+    let data2 = new Struct.Timeline("key", "title")
     data2.tasks.push(new Struct.Task(1,"label 1", date1, date1, 100, true, "", 0))
     data2.tasks.push(new Struct.Task(2,"label 2", date1, date1, 100, true, "", 0))
     data2.tasks.push(new Struct.Task(3,"label 3", date1, date1, 100, false, "", 0))

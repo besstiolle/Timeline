@@ -35,15 +35,15 @@
     }*/
 
 
-    let dateInc = new Date($store.start);
+    let dateInc = new Date($store.currentTimeline.start);
 
     let i=0
     let jalons=[]
-    while ($store.end.getFullYear() > dateInc.getFullYear() || 
-            ($store.end.getFullYear() == dateInc.getFullYear() && $store.end.getMonth() >= dateInc.getMonth()) && i < 100){
+    while ($store.currentTimeline.end.getFullYear() > dateInc.getFullYear() || 
+            ($store.currentTimeline.end.getFullYear() == dateInc.getFullYear() && $store.currentTimeline.end.getMonth() >= dateInc.getMonth()) && i < 100){
         i++;
         jalons.push({
-            left:(dateInc.getTime() - $store.start.getTime()) / ($store.end.getTime() - $store.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH,
+            left:(dateInc.getTime() - $store.currentTimeline.start.getTime()) / ($store.currentTimeline.end.getTime() - $store.currentTimeline.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH,
             label:(dateInc.getMonth()==0?dateInc.getUTCFullYear():Constantes.MONTHS[dateInc.getMonth()]),
             classCss:(dateInc.getMonth()==0?"newYear":"")
             //label:Constantes.MONTHS[dateInc.getMonth()]
@@ -66,7 +66,7 @@
     </linearGradient>
 </defs>
 
-<svg viewBox="{$store.viewbox}" xmlns="http://www.w3.org/2000/svg" 
+<svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
     x="{Constantes.GRID.LEFT_WIDTH}" y="{Constantes.GRID.MILESTONE_H}">
     
     <rect x="-10" y="0" width="{Constantes.GRID.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient1)"/>

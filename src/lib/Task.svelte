@@ -34,8 +34,8 @@
                     + " - " + currentTask.dateEnd.getDate() + " " + Constantes.MONTHS[currentTask.dateEnd.getMonth()]
     
     
-    let xGrayPosition =  Helpers.getViewportXFromDate(currentTask.dateStart, $store.start, $store.end)
-    let x2GrayPosition = Helpers.getViewportXFromDate(currentTask.dateEnd, $store.start, $store.end)
+    let xGrayPosition =  Helpers.getViewportXFromDate(currentTask.dateStart, $store.currentTimeline.start, $store.currentTimeline.end)
+    let x2GrayPosition = Helpers.getViewportXFromDate(currentTask.dateEnd, $store.currentTimeline.start, $store.currentTimeline.end)
     
     let widthGray = x2GrayPosition - xGrayPosition 
     let widthProgress = currentTask.progress * widthGray / 100
@@ -51,7 +51,7 @@
     
 
 </script>
-<svg viewBox="{$store.viewbox}" xmlns="http://www.w3.org/2000/svg" 
+<svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
     x="0" y="{i * Constantes.GRID.ONE_TASK_H + Constantes.GRID.MILESTONE_H + Constantes.GRID.ANNUAL_H}"
     class="taskSVGSection" id="T{currentTask.id}" on:mouseover={showActionBar} on:focus={showActionBar} on:mouseout={hideActionBar} on:blur={hideActionBar} class:shouldBeHidden={!currentTask.isShow} >
     

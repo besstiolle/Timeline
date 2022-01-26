@@ -26,16 +26,16 @@ let swimlinesShown: Map<number, Struct.Swimline> = new Map<number, Struct.Swimli
 let swimlinesHeight: Map<number, number> = new Map<number, number>()
 let previousSwimlineId:number = null
 let height: number
-$store.tasks.forEach(task => {
-    if(task.isShow || $store.showAll){
+$store.currentTimeline.tasks.forEach(task => {
+    if(task.isShow || $store.currentTimeline.showAll){
         tasksShown.push(task)
 
         if(task.swimlineId != null && previousSwimlineId != task.swimlineId){
-            swimlinesShown.set(task.id, $store.swimlines[task.swimlineId])
-            if(task.isShow && !$store.showAll){
-                height = $store.swimlines[task.swimlineId].countVisibleTasks * Constantes.GRID.ONE_TASK_H - 0.5
+            swimlinesShown.set(task.id, $store.currentTimeline.swimlines[task.swimlineId])
+            if(task.isShow && !$store.currentTimeline.showAll){
+                height = $store.currentTimeline.swimlines[task.swimlineId].countVisibleTasks * Constantes.GRID.ONE_TASK_H - 0.5
             } else {
-                height = $store.swimlines[task.swimlineId].countAllTasks * Constantes.GRID.ONE_TASK_H - 0.5
+                height = $store.currentTimeline.swimlines[task.swimlineId].countAllTasks * Constantes.GRID.ONE_TASK_H - 0.5
             }   
             swimlinesHeight.set(task.id,height)
         }
@@ -114,11 +114,11 @@ function down(event){
 function up(event){
     if(isDragging && hoverGroup){
 
-        let task: Struct.Task = HelperStructTask.getById($store, parseInt(taskId.substring(1))) //html id = T999 => 999
+        let task: Struct.Task = HelperStructTask.getById($store.currentTimeline, parseInt(taskId.substring(1))) //html id = T999 => 999
         if( task ){
             if(realAction == ACTION.LEFT || realAction == ACTION.RIGHT) {
-                let dateStart = Helpers.getDateFromViewportX(TActionBarCoord.REC_X, $store.start, $store.end)
-                let dateEnd = Helpers.getDateFromViewportX(TActionBarCoord.REC_X2, $store.start, $store.end)
+                let dateStart = Helpers.getDateFromViewportX(TActionBarCoord.REC_X, $store.currentTimeline.start, $store.currentTimeline.end)
+                let dateEnd = Helpers.getDateFromViewportX(TActionBarCoord.REC_X2, $store.currentTimeline.start, $store.currentTimeline.end)
 
                 dateStart.setHours(0,0,0,0)
                 dateEnd.setHours(0,0,0,0)
@@ -140,7 +140,7 @@ function up(event){
                 task.progress = Math.round(progressValue)
             }
 
-            $store.tasks = $store.tasks
+            $store.currentTimeline.tasks = $store.currentTimeline.tasks
         }
     }
     if(isDragging){
@@ -272,8 +272,8 @@ function moveResizing(event, viewportX:number){
             rightLabel.setAttribute("x", (viewportX + 5).toString())
         }
         // update content of right label
-        let dateStart = Helpers.getDateFromViewportX(TActionBarCoord.REC_X, $store.start, $store.end)
-        let dateEnd = Helpers.getDateFromViewportX(TActionBarCoord.REC_X2, $store.start, $store.end)
+        let dateStart = Helpers.getDateFromViewportX(TActionBarCoord.REC_X, $store.currentTimeline.start, $store.currentTimeline.end)
+        let dateEnd = Helpers.getDateFromViewportX(TActionBarCoord.REC_X2, $store.currentTimeline.start, $store.currentTimeline.end)
         
         rightLabel.innerHTML = (dateStart).getDate() + " " + Constantes.MONTHS[(dateStart).getMonth()] 
                    + " - " + (dateEnd).getDate() + " " + Constantes.MONTHS[(dateEnd).getMonth()]
@@ -304,13 +304,13 @@ function hideActionBar(event){
 
 function toggleSwimlineVisibility(event){
     let id = event.currentTarget.id.substring(1)
-    let value = !$store.swimlines[id].isShow
-    $store.tasks.forEach(task => {
+    let value = !$store.currentTimeline.swimlines[id].isShow
+    $store.currentTimeline.tasks.forEach(task => {
         if(task.swimlineId == id) {
             task.isShow = value
         }
     });
-    $store.tasks = $store.tasks
+    $store.currentTimeline.tasks = $store.currentTimeline.tasks
 }
 function showToggle(event){
     let id = event.currentTarget.id.substring(1)
@@ -320,7 +320,7 @@ function showToggle(event){
 </script>         
 
 <svelte:window on:mouseup={up} on:mousemove="{move}"/>
-<svg viewBox="{$store.viewbox}" xmlns="http://www.w3.org/2000/svg" 
+<svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
     x="0" y="{Constantes.GRID.MILESTONE_H + Constantes.GRID.ANNUAL_H - 5}"
     id='svgSwimlineAndTasks'>
     

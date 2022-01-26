@@ -15,19 +15,19 @@
         let position : number = null;
         if(event.target.name.startsWith(TS)){
             position = parseInt(event.target.name.substring(TS.length, event.target.name.length))
-            $store.tasks[position].dateStart = new Date(event.target.value)
+            $store.currentTimeline.tasks[position].dateStart = new Date(event.target.value)
         }
         
         if(event.target.name.startsWith(TE)){
             position = parseInt(event.target.name.substring(TE.length, event.target.name.length))
-            $store.tasks[position].dateEnd = new Date(event.target.value)
+            $store.currentTimeline.tasks[position].dateEnd = new Date(event.target.value)
         }
         
         if(event.target.name.startsWith(MD)){
             position = parseInt(event.target.name.substring(MD.length, event.target.name.length))            
-            $store.milestones[position].date = new Date(event.target.value)
+            $store.currentTimeline.milestones[position].date = new Date(event.target.value)
         }
-        $store.tasks = $store.tasks
+        $store.currentTimeline.tasks = $store.currentTimeline.tasks
     }
 
     function getIndex(event) : number{
@@ -39,6 +39,15 @@
     export function openLive(){live__open = true} //export => allow calling function by parent https://www.akashmittal.com/svelte-calling-function-child-parent/
     function closeLive(){live__open = false}
 </script>
+
+
+
+
+
+
+
+
+
 <div id="live__wrapper" class:live__open>
 
     <div id="live__eye">
@@ -61,6 +70,7 @@
     </div>
     <div id='live__shadow' class:live__weak_opacity>
         <div id='live'>
+            <div class='title'><label for='titleOfTimeline'>Title : </label><input id='titleOfTimeline' type='text' bind:value={$store.currentTimeline.title}/></div>
             <LiveTableTask getIndex={(event) => getIndex(event)} updateStore={(event) => updateStore(event)} />
             <LiveTableMilestone getIndex={(event) => getIndex(event)} updateStore={(event) => updateStore(event)} />
         </div>
@@ -109,6 +119,16 @@
         border: 0px none;
         border-radius: 5px;
         font-size:1.5rem
+    }
+
+    div.title{
+        margin: 30px auto;
+        font-size: 2rem;
+        text-align: center;
+    }
+    div.title input{
+        font-size:2rem;
+        width: 25em;
     }
 
     :global(input.label){

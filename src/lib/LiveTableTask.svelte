@@ -10,62 +10,62 @@
     export let updateStore =  (event) => {}
 
     function b_delete(event){
-        $store.tasks.splice(getIndex(event), 1)
-        $store.tasks = $store.tasks
+        $store.currentTimeline.tasks.splice(getIndex(event), 1)
+        $store.currentTimeline.tasks = $store.currentTimeline.tasks
     }
     function b_up(event){
         let index = getIndex(event)
         if(index == 0){
             return;
         }
-        let tmpTask: Struct.Task = $store.tasks[index]
-        $store.tasks[index] = $store.tasks[index - 1]
-        $store.tasks[index - 1] = tmpTask
-        $store.tasks = $store.tasks
+        let tmpTask: Struct.Task = $store.currentTimeline.tasks[index]
+        $store.currentTimeline.tasks[index] = $store.currentTimeline.tasks[index - 1]
+        $store.currentTimeline.tasks[index - 1] = tmpTask
+        $store.currentTimeline.tasks = $store.currentTimeline.tasks
     }
     function b_down(event){
         let index = getIndex(event)
-        if(index == ($store.tasks.length-1)){
+        if(index == ($store.currentTimeline.tasks.length-1)){
             return;
         }
-        let tmpTask: Struct.Task = $store.tasks[index]
-        $store.tasks[index] = $store.tasks[index + 1]
-        $store.tasks[index + 1] = tmpTask
-        $store.tasks = $store.tasks
+        let tmpTask: Struct.Task = $store.currentTimeline.tasks[index]
+        $store.currentTimeline.tasks[index] = $store.currentTimeline.tasks[index + 1]
+        $store.currentTimeline.tasks[index + 1] = tmpTask
+        $store.currentTimeline.tasks = $store.currentTimeline.tasks
     }
     function b_show(event){
         let index = getIndex(event)
-        $store.tasks[index].isShow = !$store.tasks[index].isShow 
+        $store.currentTimeline.tasks[index].isShow = !$store.currentTimeline.tasks[index].isShow 
     }
     function b_duplicate(event){
         let index = getIndex(event)
-        let tmpTasks : Array<Struct.Task> = $store.tasks.splice(index+1, $store.tasks.length)
-        let clone = {... $store.tasks[index]}
-        clone.id = $store.getNextId()
-        HelperStructTimeline.addTask($store, clone)
+        let tmpTasks : Array<Struct.Task> = $store.currentTimeline.tasks.splice(index+1, $store.currentTimeline.tasks.length)
+        let clone = {... $store.currentTimeline.tasks[index]}
+        clone.id = $store.currentTimeline.getNextId()
+        HelperStructTimeline.addTask($store.currentTimeline, clone)
         tmpTasks.forEach(tmpTask => {
-            HelperStructTimeline.addTask($store, tmpTask)
+            HelperStructTimeline.addTask($store.currentTimeline, tmpTask)
         });
-        $store.tasks = $store.tasks
+        $store.currentTimeline.tasks = $store.currentTimeline.tasks
     }
     function b_add(){
-        let diffSec : number = $store.end.getTime() - $store.start.getTime()
-        HelperStructTimeline.addTask($store, new Struct.Task(
-                $store.getNextId(),
+        let diffSec : number = $store.currentTimeline.end.getTime() - $store.currentTimeline.start.getTime()
+        HelperStructTimeline.addTask($store.currentTimeline, new Struct.Task(
+                $store.currentTimeline.getNextId(),
                 "Some task", 
-                new Date($store.start.getTime() + (0.1 * diffSec)), 
-                new Date($store.end.getTime() - (0.1 * diffSec)),
+                new Date($store.currentTimeline.start.getTime() + (0.1 * diffSec)), 
+                new Date($store.currentTimeline.end.getTime() - (0.1 * diffSec)),
                 0,
                 true,
                 "",
                 null))
-        $store.tasks = $store.tasks
+        $store.currentTimeline.tasks = $store.currentTimeline.tasks
     }
 
 </script>
 
 
-{#each $store.tasks as task, i}
+{#each $store.currentTimeline.tasks as task, i}
 <div class="live__line show_{task.isShow}">
     
     <div name="M{i}"  class="live_cmd" on:click="{b_show}" title="hide/show this line">

@@ -13,9 +13,11 @@ import { browser } from '$app/env';
         return 0
     }
 
+    //TODO : fix color assignation for timelines
+
     let milestones: Struct.Milestone[] = []
-    $store.milestones.forEach(milestone => { 
-        if(milestone.isShow || $store.showAll){
+    $store.currentTimeline.milestones.forEach(milestone => { 
+        if(milestone.isShow || $store.currentTimeline.showAll){
             milestones.push(milestone)
         }
     });
@@ -62,9 +64,9 @@ import { browser } from '$app/env';
             let date = processNewDate(newX - Constantes.GRID.MIDDLE_X)
             let idMilestone = currentTarget.getAttribute("id").substring(1) // M999 => 999
 
-            let milestones = HelperStructMilestone.getById($store, parseInt(idMilestone))
+            let milestones = HelperStructMilestone.getById($store.currentTimeline, parseInt(idMilestone))
             milestones.date = date
-            $store.milestones = $store.milestones 
+            $store.currentTimeline.milestones = $store.currentTimeline.milestones 
         }
 
         //Reset vars
@@ -111,7 +113,7 @@ import { browser } from '$app/env';
     }
 
     function processNewDate(newX: number){
-        let ratio = $store.start.getTime() + (newX / Constantes.GRID.MIDDLE_WIDTH * ($store.end.getTime() - $store.start.getTime()))
+        let ratio = $store.currentTimeline.start.getTime() + (newX / Constantes.GRID.MIDDLE_WIDTH * ($store.currentTimeline.end.getTime() - $store.currentTimeline.start.getTime()))
         return new Date(ratio)
     }
 
@@ -122,8 +124,8 @@ import { browser } from '$app/env';
 <rect id="milestonesSection" x="{Constantes.GRID.MIDDLE_X}" y="0" width="{Constantes.GRID.MIDDLE_WIDTH}" height="{Constantes.GRID.MILESTONE_H}" 
     stroke-dasharray="0.5 2" fill="transparent" class:onhover={ghostSVGNode && hoverGroup} />
 {#each milestones as milestone, i}
-    <svg viewBox="{$store.viewbox}" xmlns="http://www.w3.org/2000/svg" 
-        x="{Constantes.GRID.MIDDLE_X + (milestone.date.getTime() - $store.start.getTime()) / ($store.end.getTime() - $store.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH - 10}" y="{i%2 * 25}" 
+    <svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
+        x="{Constantes.GRID.MIDDLE_X + (milestone.date.getTime() - $store.currentTimeline.start.getTime()) / ($store.currentTimeline.end.getTime() - $store.currentTimeline.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH - 10}" y="{i%2 * 25}" 
         class="milestoneSVGSection" class:shouldBeHidden={!milestone.isShow} on:mousedown={down} id="M{milestone.id}" >
         
         <use x="0" y="0" href="#mapfiller" fill="transparent" stroke="transparent" class="toExcludeFromSnapshot"/>

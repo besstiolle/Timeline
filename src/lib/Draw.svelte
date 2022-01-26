@@ -17,9 +17,9 @@
     let liveComponent   
 
     function downloadCsv () {
-        var csvTimeline = $store.tasks.map(e => HelperStructTask.join(e, ";")).join("\n")
+        var csvTimeline = $store.currentTimeline.tasks.map(e => HelperStructTask.join(e, ";")).join("\n")
                     + "\n"
-                    + $store.milestones.map(e => HelperStructMilestone.join(e, ";")).join("\n")
+                    + $store.currentTimeline.milestones.map(e => HelperStructMilestone.join(e, ";")).join("\n")
 		var blob = new Blob([csvTimeline], {type:"data:text/csv;charset=utf-8,"});
 		download(blob, "download.csv") 
     }
@@ -45,25 +45,25 @@
     }
 
     function toggleShowHide(){
-        $store.showAll = !$store.showAll
+        $store.currentTimeline.showAll = !$store.currentTimeline.showAll
     }
 
 </script>
 
 <div class="dashButtons">
     {#key $store}
-    <div class="dashButton" class:hidden={!$store.showAll} on:click={toggleShowHide} title="Show regular tasks"><img src='hide.png' alt='Show regular tasks' id="see"/></div>
-    <div class="dashButton" class:hidden={$store.showAll} on:click={toggleShowHide} title="Show all tasks even if they're hidden"><img src='see.png' alt="Show all tasks even if they're hidden" id="hide"/></div>
+    <div class="dashButton" class:hidden={!$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show regular tasks"><img src='/hide.png' alt='Show regular tasks' id="see"/></div>
+    <div class="dashButton" class:hidden={$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show all tasks even if they're hidden"><img src='/see.png' alt="Show all tasks even if they're hidden" id="hide"/></div>
     {/key}
-    <div class="dashButton" on:click={downloadCsv} title="Downloading the .csv file"><img src='download.png' alt='Downloading the .csv file' /></div>
-    <div class="dashButton" on:click={UploadComponent.openUpload()} title='Uploading the .csv file'><img src='upload.png' alt='Uploading the .csv file' /></div>
-    <div class="dashButton" on:click={takeshot} title='Take a screenshot'><img src='screenshot.png' alt='Take a screenshot' /></div>
-    <div class="dashButton" on:click={liveComponent.openLive()} title='Edit your milestones'><img src='edit.png' alt='Edit your milestones' /></div>
+    <div class="dashButton" on:click={downloadCsv} title="Downloading the .csv file"><img src='/download.png' alt='Downloading the .csv file' /></div>
+    <div class="dashButton" on:click={UploadComponent.openUpload()} title='Uploading the .csv file'><img src='/upload.png' alt='Uploading the .csv file' /></div>
+    <div class="dashButton" on:click={takeshot} title='Take a screenshot'><img src='/screenshot.png' alt='Take a screenshot' /></div>
+    <div class="dashButton" on:click={liveComponent.openLive()} title='Edit your milestones'><img src='/edit.png' alt='Edit your milestones' /></div>
 </div>
 
 <div class="websiteButtons">
-    <div class="websiteButton" title="Fork me on Github"><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline'><img src='github.png' alt='Fork me on Github' /></a></div>
-    <div class="websiteButton" title='Ask me a new feature. Send me your bug description'><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline/issues/new'><img src='question.png' alt='Ask me a new feature. Send me your bug description' /></a></div>
+    <div class="websiteButton" title="Fork me on Github"><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline'><img src='/github.png' alt='Fork me on Github' /></a></div>
+    <div class="websiteButton" title='Ask me a new feature. Send me your bug description'><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline/issues/new'><img src='/question.png' alt='Ask me a new feature. Send me your bug description' /></a></div>
 </div>
 
 <Upload bind:this={UploadComponent} />
@@ -72,7 +72,7 @@
 
 {#key $store}
 <div id="wrapper">
-    <svg viewBox="{$store.viewbox}" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg">
         <!-- http://svgicons.sparkk.fr/ -->
         <!-- https://svgedit.netlify.app/editor/index.html -->
         <!-- https://svg-stripe-generator.web.app/ -->

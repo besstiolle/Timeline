@@ -1,7 +1,26 @@
 export module Struct {
 
+	export class TimelineStore {
+		cards : Array<Card> = new Array<Card>()
+		currentTimeline : Timeline = null
+	}
+
+	export class Card {
+		key : string = null 
+		title : string = null
+		lastUpdated : Date = null
+
+		constructor(key : string, title : string){
+			this.key = key
+			this.title = title
+			this.lastUpdated = new Date()
+		}
+	}
+
 	export class Timeline {
 		
+		key : string = null
+		title : string = null
 		tasks : Array<Task> = new Array<Task>()
         milestones : Array<Milestone> = new Array<Milestone>()
 		swimlines : Array<Swimline> = new Array<Swimline>()
@@ -13,7 +32,9 @@ export module Struct {
 		showAll: boolean = false
 		//Check helper.ts > dataReviver() function if you add something here.
 		
-		constructor(){
+		constructor(key:string, title:string){
+			this.key = key	
+			this.title = title
 		}
 
 		getNextId() : number{

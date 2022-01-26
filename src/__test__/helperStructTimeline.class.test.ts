@@ -11,8 +11,8 @@ jest.mock('$app/env', () => ({
 
 function testGetMin(){
 
-    let data1 = new Struct.Timeline()
-    let data2 = new Struct.Timeline()
+    let data1 = new Struct.Timeline("key", "title")
+    let data2 = new Struct.Timeline("key", "title")
 
     let date1: Date = new Date("2020-01-01")
     let date2: Date = new Date("2021-12-31")
@@ -57,8 +57,8 @@ testGetMin()
 
 function testGetMax(){
 
-    let data1 = new Struct.Timeline()
-    let data2 = new Struct.Timeline()
+    let data1 = new Struct.Timeline("key", "title")
+    let data2 = new Struct.Timeline("key", "title")
 
     let date1: Date = new Date("2020-01-01")
     let date2: Date = new Date("2021-12-31")
@@ -102,7 +102,7 @@ function testGetMax(){
 testGetMax()
 
 function testAddTask(){
-    let data = new Struct.Timeline()
+    let data = new Struct.Timeline("key", "title")
     let date1: Date = new Date("2020-01-01")
     let date2: Date = new Date("2021-12-31")
 
@@ -118,7 +118,7 @@ function testAddTask(){
 testAddTask()
 
 function testAddMilestone(){
-    let data = new Struct.Timeline()
+    let data = new Struct.Timeline("key", "title")
     let date1: Date = new Date("2020-01-01")
 
     HelperStructTimeline.addMilestone(data, new Struct.Milestone(1,"label 1",date1, true))
@@ -135,9 +135,9 @@ testAddMilestone()
 
 
 function testPurge(){
-    let data = new Struct.Timeline()
+    let data = new Struct.Timeline("key", "title")
     data.showAll = true
-    let dataPurged = new Struct.Timeline()
+    let dataPurged = new Struct.Timeline("key", "title")
     dataPurged.showAll = true
 
     let date: Date = new Date("2020-01-01")
