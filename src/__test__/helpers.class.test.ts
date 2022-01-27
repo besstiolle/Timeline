@@ -5,20 +5,27 @@ import { Constantes } from "$lib/constantes.class";
 
 
 
-/************************************* */
 
-function testToISODateString(){
-    let date1 = new Date("2020-01-01")
-    let date2 = new Date("2020-01-01")
-    date2.setHours(10)
-    date2.setMinutes(20)
-    date2.setSeconds(30)
-    test("Helpers.toISODateString with nominal values", ()=> {
-        expect(Helpers.toISODateString(date1)).toBe("2020-01-01")
-        expect(Helpers.toISODateString(date2)).toBe("2020-01-01")
+function testToYYYYMMDDhhmm(){
+    let date1 = new Date("2020-01-01T03:24:00")
+    let date2 = new Date("2020-01-01T13:00:01")
+    test("Helpers.toYYYY_MM_DD with nominal values", ()=> {
+        expect(Helpers.toYYYYMMDDhhmm(date1)).toBe("202001010324")
+        expect(Helpers.toYYYYMMDDhhmm(date2)).toBe("202001011300")
     })
 }
-testToISODateString()
+testToYYYYMMDDhhmm()
+
+function testToYYYY_MM_DD(){
+    let date1 = new Date("2020-01-01")
+    let date2 = new Date("2020-01-01T10:20:30")
+
+    test("Helpers.toYYYY_MM_DD with nominal values", ()=> {
+        expect(Helpers.toYYYY_MM_DD(date1)).toBe("2020-01-01")
+        expect(Helpers.toYYYY_MM_DD(date2)).toBe("2020-01-01")
+    })
+}
+testToYYYY_MM_DD()
 /************************************* */
 
 function testCountVisibleTasksInList(){
@@ -66,6 +73,7 @@ function testGetDateFromViewportX(){
     let expectedDate = new Date("2021-01-2")
     test("Helpers.getDateFromViewportX with out-of bound value", ()=> {
         expect(Helpers.getDateFromViewportX(0, dateMin, dateMax)).toEqual(dateMin)
+        expect(Helpers.getDateFromViewportX(99999, dateMin, dateMax)).toEqual(dateMax)
     })
     test("Helpers.getDateFromViewportX with min value", ()=> {
         expect(Helpers.getDateFromViewportX(Constantes.GRID.MIDDLE_X, dateMin, dateMax)).toEqual(dateMin)

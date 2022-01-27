@@ -14,7 +14,7 @@ export module HelperStructMilestone {
         return "milestone"
             + car + milestone.label
             + car + milestone.isShow
-            + car + Helpers.toISODateString(milestone.date)
+            + car + Helpers.toYYYY_MM_DD(milestone.date)
     }
     
     /**

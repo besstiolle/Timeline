@@ -92,7 +92,7 @@
         </svg>
     </div>
     <input type="text" bind:value="{milestone.label}" class="label"/>
-    <input type="date" name="{Constantes.LIVE_PREFIX.MD}{i}" value="{Helpers.toISODateString(milestone.date)}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
+    <input type="date" name="{Constantes.LIVE_PREFIX.MD}{i}" value="{Helpers.toYYYY_MM_DD(milestone.date)}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
 </div>
 {/each}
 

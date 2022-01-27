@@ -3,14 +3,26 @@ import type { Struct } from "./struct.class";
 
 export module Helpers {
 
-    const DATE_SEPARATOR = "-"
+    /**
+     * Return the date to a string validating the format YYYYMMDDHHmm
+     * @param date the date to parse into a ISO date format YYYYMMDDHHmm
+     * @returns string the format YYYYMMDDHHmm
+     */
+    export function toYYYYMMDDhhmm(date:Date):string{
+        return date.getFullYear().toString().padStart(4, '0')
+            + (date.getMonth()+1).toString().padStart(2, '0')
+            + date.getDate().toString().padStart(2, '0')
+            + date.getHours().toString().padStart(2, '0')
+            + date.getMinutes().toString().padStart(2, '0')
+    }
 
     /**
      * Return the date to a string validating the format YYYY-MM-DD
      * @param date the date to parse into a ISO date format YYYY-MM-DD
      * @returns string the format YYYY-MM-DD
      */
-    export function toISODateString(date: Date): string {
+    export function toYYYY_MM_DD(date: Date): string {
+        const DATE_SEPARATOR = "-"
 		return date.getFullYear() + DATE_SEPARATOR + (date.getMonth() + 1).toString().padStart(2, '0') + DATE_SEPARATOR + date.getDate().toString().padStart(2, '0');
 	}
 

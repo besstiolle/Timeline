@@ -12,16 +12,18 @@
     import SwimAndTasks from './SwimAndTasks.svelte';
     import { HelperStructTask } from './helperStructTask.class';
     import { HelperStructMilestone } from './helperStructMilestone.class';
+import { Helpers } from './helpers.class';
 
     let UploadComponent   
     let liveComponent   
+
 
     function downloadCsv () {
         var csvTimeline = $store.currentTimeline.tasks.map(e => HelperStructTask.join(e, ";")).join("\n")
                     + "\n"
                     + $store.currentTimeline.milestones.map(e => HelperStructMilestone.join(e, ";")).join("\n")
 		var blob = new Blob([csvTimeline], {type:"data:text/csv;charset=utf-8,"});
-		download(blob, "download.csv") 
+		download(blob, ".csv") 
     }
 
     function takeshot() {  
@@ -29,16 +31,16 @@
             ignoreElements: function (el) {return el.classList.contains('toExcludeFromSnapshot')}
         }).then(function (canvas) {
             canvas.toBlob(function(blob) {
-                download(blob, "download.png")      
+                download(blob, ".png")      
             });
         });
     }
 
-    function download(blob: Blob, fileName:string){
+    function download(blob: Blob, extensionName:string){
         var url = URL.createObjectURL(blob)
         var downloadLink = document.createElement("a")
         downloadLink.href = url
-        downloadLink.download = fileName
+        downloadLink.download = $store.currentTimeline.title + Helpers.toYYYYMMDDhhmm(new Date()) +  extensionName
         document.body.appendChild(downloadLink)
         downloadLink.click()
         document.body.removeChild(downloadLink) 

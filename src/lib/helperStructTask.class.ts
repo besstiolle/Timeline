@@ -16,8 +16,8 @@ export module HelperStructTask {
         return "task"
             + car + task.label
             + car + task.isShow
-            + car + Helpers.toISODateString(task.dateStart)
-            + car + Helpers.toISODateString(task.dateEnd)
+            + car + Helpers.toYYYY_MM_DD(task.dateStart)
+            + car + Helpers.toYYYY_MM_DD(task.dateEnd)
             + car + task.progress
             + car + task.swimline
     }
