@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { Helpers } from '$lib/helpers';
-    import { Constantes } from '$lib/constantes';
-    import { store } from '$lib/stores';
+    import { Helpers } from './helpers.class';
+    import { Constantes } from './constantes.class';
+    import { store } from './stores';
 
     let startString = Helpers.toYYYY_MM_DD($store.currentTimeline.start)
     let endString = Helpers.toYYYY_MM_DD($store.currentTimeline.end)

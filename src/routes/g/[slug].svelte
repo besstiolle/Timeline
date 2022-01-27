@@ -5,7 +5,7 @@ import { store } from '$lib/stores';
 
 import { CustomLocalStorage } from '$lib/customLocalStorage';
 import { Struct } from '$lib/struct.class';
-import { FactoryTimeline } from '$lib/factoryTimeline';
+import { HelperStructTimeline } from '$lib/helperStructTimeline.class';
 
 import Draw from '$lib/Draw.svelte';
 
@@ -27,13 +27,13 @@ import Draw from '$lib/Draw.svelte';
 	let currentTimeline: Struct.Timeline = CustomLocalStorage.getTimeline(slug)
 	if(!currentTimeline && browser){
 		currentTimeline = new Struct.Timeline(slug, "My new Project")
-		currentTimeline = FactoryTimeline.initiate(currentTimeline)
+		currentTimeline = HelperStructTimeline.initiate(currentTimeline)
 	}
 	
 	$store.currentTimeline = currentTimeline
 	
 	// Reactivate this line if some pb with title edition of timeline
-	//FactoryCards.updateCardsWithTimeline($store.cards, currentTimeline)
+	//HelperStructCards.updateCardsWithTimeline($store.cards, currentTimeline)
 	
 </script>
 

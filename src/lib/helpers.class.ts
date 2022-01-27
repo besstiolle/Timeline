@@ -1,5 +1,5 @@
-import { Constantes } from "$lib/constantes";
-import type { Struct } from "$lib/struct.class";
+import { Constantes } from "./constantes.class";
+import type { Struct } from "./struct.class";
 
 export module Helpers {
 

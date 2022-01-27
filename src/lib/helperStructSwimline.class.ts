@@ -1,7 +1,7 @@
 
-import { Struct } from "$lib/struct.class";
+import { Struct } from "./struct.class";
 
-export module FactorySwimline {
+export module HelperStructSwimline {
 
     /**
      * create à insert a new Swimline based on its label. Return the new id/index

@@ -1,10 +1,10 @@
 <script lang="ts">
 
-    import { store } from '$lib/stores';
-    import { Helpers } from '$lib/helpers';
-    import { Struct } from '$lib/struct.class';
-    import { Constantes } from '$lib/constantes';
-    import { FactoryTimeline } from '$lib/factoryTimeline';
+    import { store } from './stores';
+    import { Helpers } from './helpers.class';
+    import { Struct } from './struct.class';
+    import { Constantes } from './constantes.class';
+    import { HelperStructTimeline } from './helperStructTimeline.class';
 
     export let getIndex = (event) => {return 0}
     export let updateStore =  (event) => {}
@@ -42,15 +42,15 @@
         let tmpTasks : Array<Struct.Task> = $store.currentTimeline.tasks.splice(index+1, $store.currentTimeline.tasks.length)
         let clone = {... $store.currentTimeline.tasks[index]}
         clone.id = $store.currentTimeline.getNextId()
-        FactoryTimeline.addTask($store.currentTimeline, clone)
+        HelperStructTimeline.addTask($store.currentTimeline, clone)
         tmpTasks.forEach(tmpTask => {
-            FactoryTimeline.addTask($store.currentTimeline, tmpTask)
+            HelperStructTimeline.addTask($store.currentTimeline, tmpTask)
         });
         $store.currentTimeline.tasks = $store.currentTimeline.tasks
     }
     function b_add(){
         let diffSec : number = $store.currentTimeline.end.getTime() - $store.currentTimeline.start.getTime()
-        FactoryTimeline.addTask($store.currentTimeline, new Struct.Task(
+        HelperStructTimeline.addTask($store.currentTimeline, new Struct.Task(
                 $store.currentTimeline.getNextId(),
                 "Some task", 
                 new Date($store.currentTimeline.start.getTime() + (0.1 * diffSec)), 

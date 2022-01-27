@@ -1,9 +1,9 @@
 import { writable } from 'svelte/store'
-import { Struct } from '$lib/struct.class'
-import { FactoryTimeline } from '$lib/factoryTimeline'
-import { CustomLocalStorage } from '$lib/customLocalStorage'
-import { Constantes } from '$lib/constantes'
-import { FactoryCards } from '$lib/factoryCards'
+import { Struct } from './struct.class';
+import { HelperStructTimeline } from './helperStructTimeline.class';
+import { CustomLocalStorage } from './customLocalStorage';
+import { Constantes } from './constantes.class';
+import { HelperStructCards } from './helperStructCards.class';
 
 let timelineStore = new Struct.TimelineStore()
 timelineStore.cards = CustomLocalStorage.getCards()
@@ -23,10 +23,10 @@ function updateLocalStorage(timelineStore: Struct.TimelineStore){
     if(currentTimeline){
 
         //Inserting/Updating information of current Timline into the good card
-        FactoryCards.updateCardsWithTimeline(cards, currentTimeline)
+        HelperStructCards.updateCardsWithTimeline(cards, currentTimeline)
 
         //Refresh datemin / max and other compiled data
-        FactoryTimeline.refresh(currentTimeline)
+        HelperStructTimeline.refresh(currentTimeline)
 
         //Persist both current timeline & cards in localstorage
         CustomLocalStorage.save(currentTimeline.key, currentTimeline)

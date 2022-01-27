@@ -1,5 +1,5 @@
 
-import { FactoryCards } from "$lib/factoryCards";
+import { HelperStructCards } from "$lib/helperStructCards.class";
 import { Struct } from "$lib/struct.class";
 
 jest.mock('$app/env', () => ({
@@ -21,15 +21,15 @@ function testUpdateCardsWithTimeline(){
     let timeline2:Struct.Timeline = new Struct.Timeline("key2","new title2")
     let timeline4:Struct.Timeline = new Struct.Timeline("key4","new title4")
 
-    FactoryCards.updateCardsWithTimeline(cards1, timeline2)
-    FactoryCards.updateCardsWithTimeline(cards2, timeline4)
+    HelperStructCards.updateCardsWithTimeline(cards1, timeline2)
+    HelperStructCards.updateCardsWithTimeline(cards2, timeline4)
     
-    test("FactoryCards.updateCardsWithTimeline with an existing key", ()=> {
+    test("HelperStructCards.updateCardsWithTimeline with an existing key", ()=> {
         expect(cards1.length).toEqual(3)
         expect(cards1[1].title).toEqual(timeline2.title)
     })
     
-    test("FactoryCards.updateCardsWithTimeline with an new key", ()=> {
+    test("HelperStructCards.updateCardsWithTimeline with an new key", ()=> {
         expect(cards2.length).toEqual(4)
         expect(cards2[3].key).toEqual(timeline4.key)
         expect(cards2[3].title).toEqual(timeline4.title)

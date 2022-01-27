@@ -1,6 +1,6 @@
 
 
-import { FactoryTimeline}  from "$lib/factoryTimeline"
+import { HelperStructTimeline}  from "$lib/helperStructTimeline.class"
 import { Struct } from "$lib/struct.class"
 
 jest.mock('$app/env', () => ({
@@ -28,11 +28,11 @@ function testProcessLimites(){
     jest.mock('$lib/helperStructTimeline.class', () => ( mock))
 
     test("test mock result with dates", ()=> {
-        expect(FactoryTimeline.getMin(timeline)).toEqual(new Date("2020-01-01"))
-        expect(FactoryTimeline.getMax(timeline)).toEqual(new Date("2020-12-31"))
+        expect(HelperStructTimeline.getMin(timeline)).toEqual(new Date("2020-01-01"))
+        expect(HelperStructTimeline.getMax(timeline)).toEqual(new Date("2020-12-31"))
     })
 
-    FactoryTimeline._processLimites(timeline)
+    HelperStructTimeline._processLimites(timeline)
 
     test("refresh._processLimites with dates", ()=> {
         expect(timeline.start).toEqual(new Date("2020-01-01"))
@@ -46,7 +46,7 @@ function testProcessLimites(){
     let timeline1 = new Struct.Timeline("key", "title")
     timeline1.tasks.push(new Struct.Task(1,"label 1", new Date("2020-01-01"), new Date("2020-12-31"), 100, true, "Swimline 1", 5))
 
-    FactoryTimeline.refresh(timeline1)
+    HelperStructTimeline.refresh(timeline1)
     test("refresh._processLimites with dates", ()=> {
         expect(timeline1.start).toEqual(new Date("2020-01-01"))
         expect(timeline1.end).toEqual(new Date("2021-01-01"))
@@ -55,7 +55,7 @@ function testProcessLimites(){
     let timeline2 = new Struct.Timeline("key", "title")
     timeline2.tasks.push(new Struct.Task(1,"label 1", new Date("2020-01-15"), new Date("2020-02-01"), 100, true, "Swimline 1", 5))
 
-    FactoryTimeline.refresh(timeline2)
+    HelperStructTimeline.refresh(timeline2)
     test("refresh._processLimites with dates", ()=> {
         expect(timeline2.start).toEqual(new Date("2020-01-01"))
         expect(timeline2.end).toEqual(new Date("2020-03-01"))
@@ -80,7 +80,7 @@ function testProcessViewboxResizing(){
     timeline1.tasks.push(taskHidden)
     timeline1.tasks.push(taskHidden)
     timeline1.tasks.push(taskHidden)
-    FactoryTimeline.refresh(timeline1)
+    HelperStructTimeline.refresh(timeline1)
     
     test("refresh.testProcessViewboxResizing without showall", ()=> {
         expect(timeline1.viewbox).toBe("0 0 1000 265")
@@ -88,7 +88,7 @@ function testProcessViewboxResizing(){
 
     let timeline2 = new Struct.Timeline("key", "title")
     timeline2.showAll = true
-    FactoryTimeline.refresh(timeline2)
+    HelperStructTimeline.refresh(timeline2)
 
     test("refresh.testProcessViewboxResizing with showall & no task", ()=> {
         expect(timeline2.viewbox).toBe("0 0 1000 115")
@@ -101,7 +101,7 @@ function testProcessViewboxResizing(){
     timeline3.tasks.push(taskHidden)
     timeline3.tasks.push(taskHidden)
 
-    FactoryTimeline.refresh(timeline3)
+    HelperStructTimeline.refresh(timeline3)
 
     test("refresh.testProcessViewboxResizing with showall & various task", ()=> {
         expect(timeline3.viewbox).toBe("0 0 1000 235")
@@ -123,8 +123,8 @@ function testRefreshSwimlines(){
     timeline2.tasks.push(new Struct.Task(3,"label 3", date1, date1, 100, false, "", 0))
     timeline2.tasks.push(new Struct.Task(4,"label 4", date1, date1, 100, false, "", 0))
 
-    FactoryTimeline.refresh(timeline1)
-    FactoryTimeline.refresh(timeline2)
+    HelperStructTimeline.refresh(timeline1)
+    HelperStructTimeline.refresh(timeline2)
     
     test("refresh._refreshSwimlines with various swimlines", ()=> {
         expect(timeline1.swimlines.length).toBe(3)

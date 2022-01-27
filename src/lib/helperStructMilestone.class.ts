@@ -1,8 +1,8 @@
 
-import { Helpers } from "$lib/helpers";
-import type { Struct } from "$lib/struct.class";
+import { Helpers } from "./helpers.class";
+import type { Struct } from "./struct.class";
 
-export module FactoryMilestone {
+export module HelperStructMilestone {
 
     /**
      * return the values of the Milestone concatenated for CSV with a custom separator

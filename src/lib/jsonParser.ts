@@ -1,4 +1,4 @@
-import { Struct } from "$lib/struct.class";
+import { Struct } from "./struct.class";
 
 export module JsonParser {
 

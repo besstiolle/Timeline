@@ -1,6 +1,6 @@
-import { Struct } from "$lib/struct.class";
+import { Struct } from "./struct.class";
 
-export module FactoryCards {
+export module HelperStructCards {
 
     /**
 	 * copy information from timline (title/key) and copy them into the (new?) card.
@@ -10,7 +10,7 @@ export module FactoryCards {
 	export function updateCardsWithTimeline(cards:Array<Struct.Card>, timeline:Struct.Timeline):void{
 		//TODO : remove it.
 		if(timeline == null){
-			console.error("Struct.Timeline was null in function FactoryCards.updateCardsWithTimeline()")
+			console.error("Struct.Timeline was null in function HelperStructCards.updateCardsWithTimeline()")
 			return
 		}
 

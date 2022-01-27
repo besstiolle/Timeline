@@ -1,8 +1,8 @@
 <script lang="ts">
 
-    import { Constantes } from '$lib/constantes';
-    import { Helpers } from '$lib/helpers';
-    import { store } from '$lib/stores';
+    import { Constantes } from './constantes.class';
+    import { Helpers } from './helpers.class';
+    import { store } from './stores';
 
    /* function monthDiff(d1: Date, d2: Date) {
         let months: number;
