@@ -1,10 +1,10 @@
 <script lang="ts">
 
-    import { store } from './stores';
-    import { Helpers } from './helpers.class';
-    import { Struct } from './struct.class';
-    import { Constantes } from './constantes.class';
-    import { HelperStructTimeline } from './helperStructTimeline.class';
+    import { store } from '$lib/stores';
+    import { Helpers } from '$lib/helpers';
+    import { Struct } from '$lib/struct.class';
+    import { Constantes } from '$lib/constantes';
+    import { FactoryTimeline } from '$lib/factoryTimeline';
 
     export let getIndex = (event) => {return 0}
     export let updateStore =  (event) => {}
@@ -42,15 +42,15 @@
         let tmpMilestones : Array<Struct.Milestone> = $store.currentTimeline.milestones.splice(index+1, $store.currentTimeline.milestones.length)
         let clone = {... $store.currentTimeline.milestones[index]}
         clone.id = $store.currentTimeline.getNextId()
-        HelperStructTimeline.addMilestone($store.currentTimeline, clone )
+        FactoryTimeline.addMilestone($store.currentTimeline, clone )
         tmpMilestones.forEach(tmpMilestone => {
-            HelperStructTimeline.addMilestone($store.currentTimeline, tmpMilestone)
+            FactoryTimeline.addMilestone($store.currentTimeline, tmpMilestone)
         });
         $store.currentTimeline.milestones = $store.currentTimeline.milestones
     }
     function m_add(){
         let diffSec : number = $store.currentTimeline.end.getTime() - $store.currentTimeline.start.getTime()
-        HelperStructTimeline.addMilestone($store.currentTimeline, new Struct.Milestone(
+        FactoryTimeline.addMilestone($store.currentTimeline, new Struct.Milestone(
                 $store.currentTimeline.getNextId(),
                 "My Milestone", 
                 new Date($store.currentTimeline.start.getTime() + (0.5 * diffSec)),

@@ -1,27 +1,28 @@
 <script lang="ts">
     import html2canvas from 'html2canvas';
 
-    import { store } from './stores';
+    import { store } from '$lib/stores';
+    
+    import { FactoryTask } from '$lib/factoryTask';
+    import { FactoryMilestone } from '$lib/factoryMilestone';
+    import { Helpers } from '$lib/helpers';
 
     
-    import Banner from './Banner.svelte';
-    import Milestones from './Milestones.svelte';
-    import Today from './Today.svelte';
-    import Upload from './Upload.svelte';
-    import Live from './Live.svelte';
-    import SwimAndTasks from './SwimAndTasks.svelte';
-    import { HelperStructTask } from './helperStructTask.class';
-    import { HelperStructMilestone } from './helperStructMilestone.class';
-import { Helpers } from './helpers.class';
+    import Banner from '$lib/Banner.svelte';
+    import Milestones from '$lib/Milestones.svelte';
+    import Today from '$lib/Today.svelte';
+    import Upload from '$lib/Upload.svelte';
+    import Live from '$lib/Live.svelte';
+    import SwimAndTasks from '$lib/SwimAndTasks.svelte';
 
     let UploadComponent   
     let liveComponent   
 
 
     function downloadCsv () {
-        var csvTimeline = $store.currentTimeline.tasks.map(e => HelperStructTask.join(e, ";")).join("\n")
+        var csvTimeline = $store.currentTimeline.tasks.map(e => FactoryTask.join(e, ";")).join("\n")
                     + "\n"
-                    + $store.currentTimeline.milestones.map(e => HelperStructMilestone.join(e, ";")).join("\n")
+                    + $store.currentTimeline.milestones.map(e => FactoryMilestone.join(e, ";")).join("\n")
 		var blob = new Blob([csvTimeline], {type:"data:text/csv;charset=utf-8,"});
 		download(blob, ".csv") 
     }

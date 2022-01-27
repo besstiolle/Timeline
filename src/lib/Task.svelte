@@ -1,10 +1,11 @@
 <script lang="ts">
 
-    import { Constantes } from './constantes.class';
-    import { Helpers } from './helpers.class';
-    import { store } from './stores';
-    import type { Struct } from './struct.class';
+    import { Constantes } from '$lib/constantes';
+    import { Helpers } from '$lib/helpers';
+    import { store } from '$lib/stores';
+    import type { Struct } from '$lib/struct.class';
 
+    //TODO : tester réinsérer fonction ici (size?)
     export let i: number
     export let currentTask: Struct.Task
     export let showActionBar

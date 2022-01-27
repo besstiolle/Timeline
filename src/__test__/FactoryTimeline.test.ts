@@ -1,5 +1,5 @@
 
-import { HelperStructTimeline } from "$lib/helperStructTimeline.class";
+import { FactoryTimeline } from "$lib/factoryTimeline"
 import { Struct } from "$lib/struct.class";
 
 jest.mock('$app/env', () => ({
@@ -33,7 +33,7 @@ function testGetMin(){
     timeline1.milestones.push(new Struct.Milestone(4,"label 4",date2, true))
 
     test("Helpers.getMin with minimal value in task.end and task.start", ()=> {
-        expect(HelperStructTimeline.getMin(timeline1)).toEqual(date3)
+        expect(FactoryTimeline.getMin(timeline1)).toEqual(date3)
     })
     
     
@@ -50,7 +50,7 @@ function testGetMin(){
     timeline2.milestones.push(new Struct.Milestone(5,"label 5",date6, true))
 
     test("Helpers.getMin with minimal value in milestone", ()=> {
-        expect(HelperStructTimeline.getMin(timeline2)).toEqual(date6)
+        expect(FactoryTimeline.getMin(timeline2)).toEqual(date6)
     })
 }
 testGetMin()
@@ -79,7 +79,7 @@ function testGetMax(){
     timeline1.milestones.push(new Struct.Milestone(4,"label 4",date4, true))
 
     test("Helpers.getMax with maximal value in task.end and task.start", ()=> {
-        expect(HelperStructTimeline.getMax(timeline1)).toEqual(date2)
+        expect(FactoryTimeline.getMax(timeline1)).toEqual(date2)
     })
     
     
@@ -96,7 +96,7 @@ function testGetMax(){
     timeline2.milestones.push(new Struct.Milestone(5,"label 5",date2, true))
 
     test("Helpers.getMax with maximal value in milestone", ()=> {
-        expect(HelperStructTimeline.getMax(timeline2)).toEqual(date2)
+        expect(FactoryTimeline.getMax(timeline2)).toEqual(date2)
     })
 }
 testGetMax()
@@ -106,9 +106,9 @@ function testAddTask(){
     let date1: Date = new Date("2020-01-01")
     let date2: Date = new Date("2021-12-31")
 
-    HelperStructTimeline.addTask(timeline, new Struct.Task(1,"label 1", date1, date2, 100, true, "Swimline 1", 5))
-    HelperStructTimeline.addTask(timeline, new Struct.Task(2,"label 2", date1, date2, 100, true, "Swimline 1", 5))
-    HelperStructTimeline.addTask(timeline, new Struct.Task(3,"label 3", date1, date2, 100, true, "Swimline 1", 5))
+    FactoryTimeline.addTask(timeline, new Struct.Task(1,"label 1", date1, date2, 100, true, "Swimline 1", 5))
+    FactoryTimeline.addTask(timeline, new Struct.Task(2,"label 2", date1, date2, 100, true, "Swimline 1", 5))
+    FactoryTimeline.addTask(timeline, new Struct.Task(3,"label 3", date1, date2, 100, true, "Swimline 1", 5))
 
     test("Helpers.addTask with nominal value", ()=> {
         expect(timeline.tasks.length).toBe(3)
@@ -121,9 +121,9 @@ function testAddMilestone(){
     let timeline = new Struct.Timeline("key", "title")
     let date1: Date = new Date("2020-01-01")
 
-    HelperStructTimeline.addMilestone(timeline, new Struct.Milestone(1,"label 1",date1, true))
-    HelperStructTimeline.addMilestone(timeline, new Struct.Milestone(2,"label 2",date1, true))
-    HelperStructTimeline.addMilestone(timeline, new Struct.Milestone(3,"label 3",date1, true))
+    FactoryTimeline.addMilestone(timeline, new Struct.Milestone(1,"label 1",date1, true))
+    FactoryTimeline.addMilestone(timeline, new Struct.Milestone(2,"label 2",date1, true))
+    FactoryTimeline.addMilestone(timeline, new Struct.Milestone(3,"label 3",date1, true))
 
     test("Helpers.addMilestone with nominal value", ()=> {
         expect(timeline.milestones.length).toBe(3)
@@ -151,7 +151,7 @@ function testPurge(){
     timeline.maxId = 99
     timeline.viewbox = "viewbox Value"
 
-    HelperStructTimeline.purge(timeline)
+    FactoryTimeline.purge(timeline)
 
     test("Helpers.purge with complete timeline", ()=> {
         expect(timeline.showAll).toEqual(timelinePurged.showAll)

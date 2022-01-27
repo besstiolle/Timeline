@@ -1,7 +1,7 @@
 import { browser } from "$app/env"
-import { Constantes } from "./constantes.class"
-import { JsonParser } from "./jsonParser"
-import type { Struct } from "./struct.class"
+import { Constantes } from "$lib/constantes"
+import { JsonParser } from "$lib/jsonParser"
+import type { Struct } from "$lib/struct.class"
 
 export module CustomLocalStorage{
 

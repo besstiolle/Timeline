@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { store } from './stores';
-    import LiveTableTask from './LiveTableTask.svelte';
-    import LiveTableMilestone from './LiveTableMilestone.svelte';
+    import { store } from '$lib/stores';
+    import LiveTableTask from '$lib/LiveTableTask.svelte';
+    import LiveTableMilestone from '$lib/LiveTableMilestone.svelte';
 
     const TS : string = "taskStart_"
     const TE : string = "taskEnd_"

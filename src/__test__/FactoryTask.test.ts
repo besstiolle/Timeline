@@ -1,13 +1,13 @@
 
-import { HelperStructTask } from "$lib/helperStructTask.class";
+import { FactoryTask } from "$lib/factoryTask";
 import { Struct } from "$lib/struct.class";
 
 
 function testJoin(){
     let task: Struct.Task = new Struct.Task(1,"label",new Date("2020-01-01"), new Date("2020-01-02"), 99, true, "Swim1", 10)
     let result:string = "task;label;true;2020-01-01;2020-01-02;99;Swim1"
-    test("HelperStructTask.join with nominal values", ()=> {
-        expect(HelperStructTask.join(task,";")).toBe(result)
+    test("FactoryTask.join with nominal values", ()=> {
+        expect(FactoryTask.join(task,";")).toBe(result)
     })
 }
 testJoin()
@@ -24,13 +24,13 @@ function testGetById(){
     timeline.tasks.push(task3)
     timeline.tasks.push(task4)
 
-    test("HelperStructTask.getById with nominal values", ()=> {
-        expect(HelperStructTask.getById(timeline, 2)).toBe(task2)
+    test("FactoryTask.getById with nominal values", ()=> {
+        expect(FactoryTask.getById(timeline, 2)).toBe(task2)
     })
 
-    test("HelperStructTask.getById with unknow values", ()=> {
+    test("FactoryTask.getById with unknow values", ()=> {
         try {
-            HelperStructTask.getById(timeline, 10)
+            FactoryTask.getById(timeline, 10)
         } catch (e) {
             expect(e).toBe("Struct.Task with id 10 was not found")
         }

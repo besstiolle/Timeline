@@ -1,11 +1,11 @@
 
 import { browser } from "$app/env";
-import { Constantes } from "./constantes.class";
-import { Helpers } from "./helpers.class";
-import { HelperStructSwimline } from "./helperStructSwimline.class";
-import { Struct } from "./struct.class";
+import { Constantes } from "$lib/constantes";
+import { Helpers } from "$lib/helpers";
+import { FactorySwimline } from "$lib/factorySwimline";
+import { Struct } from "$lib/struct.class";
 
-export module HelperStructTimeline {
+export module FactoryTimeline {
 
     /**
      * Return the min date of all tasks & all minestones.
@@ -121,7 +121,7 @@ export module HelperStructTimeline {
                 //reuse id of previous swimline
             } else if(swimlineLabel !== "" && previousSwimlineLabel != swimlineLabel) {
                 // create new swimline and save its id
-                previousSwimlineId = HelperStructSwimline.create(timeline,swimlineLabel)
+                previousSwimlineId = FactorySwimline.create(timeline,swimlineLabel)
             } else {
                 //reset previous Swimline id
                 previousSwimlineId = null
@@ -147,8 +147,8 @@ export module HelperStructTimeline {
     }
 
     function _processLimites(timeline : Struct.Timeline) : void{
-        timeline.start = HelperStructTimeline.getMin(timeline)
-        timeline.end =  HelperStructTimeline.getMax(timeline)
+        timeline.start = FactoryTimeline.getMin(timeline)
+        timeline.end =  FactoryTimeline.getMax(timeline)
 
         //TODO prévoir le cas des années / périodes très longues / très courtes
         timeline.start.setDate(1)
@@ -169,8 +169,8 @@ export module HelperStructTimeline {
     export function initiate(timeline : Struct.Timeline) : Struct.Timeline{
         if(browser){
             
-            let swim1Id = HelperStructSwimline.create(timeline,"Swimline1")
-            let swim2Id = HelperStructSwimline.create(timeline,"Swimline2")
+            let swim1Id = FactorySwimline.create(timeline,"Swimline1")
+            let swim2Id = FactorySwimline.create(timeline,"Swimline2")
 
             addTask(timeline, new Struct.Task(0, "Random Task 0", new Date("2021-01-15"), new Date("2021-04-01"),100, true, "", null))
             addTask(timeline, new Struct.Task(1, "Random Task 1", new Date("2021-12-01"), new Date("2022-04-01"),0, true, "", null))

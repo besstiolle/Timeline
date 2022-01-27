@@ -1,8 +1,8 @@
 
-import { Helpers } from "./helpers.class";
-import type { Struct } from "./struct.class";
+import { Helpers } from "$lib/helpers";
+import type { Struct } from "$lib/struct.class";
 
-export module HelperStructTask {
+export module FactoryTask {
 
     
     /**
