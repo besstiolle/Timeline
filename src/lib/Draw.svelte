@@ -62,6 +62,7 @@
 </div>
 
 <div class="websiteButtons">
+    <div class="websiteButton" title="Come to home page"><a href='/'><img src='/home.png' alt='Come to home page'/></a></div>
     <div class="websiteButton" title="Fork me on Github"><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline'><img src='/github.png' alt='Fork me on Github' /></a></div>
     <div class="websiteButton" title='Ask me a new feature. Send me your bug description'><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline/issues/new'><img src='/question.png' alt='Ask me a new feature. Send me your bug description' /></a></div>
 </div>
