@@ -9,6 +9,7 @@ export module Struct {
 		key : string = null 
 		title : string = null
 		lastUpdated : Date = null
+		//Check jsonParser.ts > cardsReviver() function if you add something here.
 
 		constructor(key : string, title : string){
 			this.key = key
@@ -30,7 +31,7 @@ export module Struct {
 		maxId: number = 0
 		viewbox: string = "0 0 0 0"
 		showAll: boolean = false
-		//Check helper.ts > dataReviver() function if you add something here.
+		//Check jsonParser.ts > timelineReviver() function if you add something here.
 		
 		constructor(key:string, title:string){
 			this.key = key	

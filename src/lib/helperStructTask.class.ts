@@ -24,16 +24,16 @@ export module HelperStructTask {
 
     /**
      * Return the Task given by its own id
-     * @param data the Struct.Timeline to look inside
+     * @param timeline the Struct.Timeline to look inside
      * @param id the id of the Task
      * @returns the Task found or an exception
      */
-    export function getById(data : Struct.Timeline, id : number) : Struct.Task{
+    export function getById(timeline : Struct.Timeline, id : number) : Struct.Task{
         //A simple loop to reach for the good item because it's cheaper
         // than trying to maintain a map with id => index of array each time 
         // we change something into the $store
         let result:Struct.Task = null
-        data.tasks.forEach(task => {
+        timeline.tasks.forEach(task => {
             if(task.id == id){
                 result = task
             } 

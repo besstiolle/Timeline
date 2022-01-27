@@ -5,12 +5,12 @@ export module HelperStructSwimline {
 
     /**
      * create à insert a new Swimline based on its label. Return the new id/index
-     * @param data the Struct.Timeline to insert to
+     * @param timeline the Struct.Timeline to insert to
      * @param label the label of the Swimline to create
      * @returns the id/index of the new Swimline.
      */
-    export function create(data : Struct.Timeline, label : string):number{
-        data.swimlines.push(new Struct.Swimline(label))
-        return data.swimlines.length -1
+    export function create(timeline : Struct.Timeline, label : string):number{
+        timeline.swimlines.push(new Struct.Swimline(label))
+        return timeline.swimlines.length -1
     }
 }

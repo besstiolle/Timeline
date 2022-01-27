@@ -16,19 +16,19 @@ function testGetById(){
     let milestone2: Struct.Milestone = new Struct.Milestone(2,"label 2",new Date("2020-01-01"), true)
     let milestone3: Struct.Milestone = new Struct.Milestone(3,"label 3",new Date("2020-01-01"), true)
     let milestone4: Struct.Milestone = new Struct.Milestone(4,"label 4",new Date("2020-01-01"), true)
-    let data = new Struct.Timeline("key", "title")
-    data.milestones.push(milestone1)
-    data.milestones.push(milestone2)
-    data.milestones.push(milestone3)
-    data.milestones.push(milestone4)
+    let timeline = new Struct.Timeline("key", "title")
+    timeline.milestones.push(milestone1)
+    timeline.milestones.push(milestone2)
+    timeline.milestones.push(milestone3)
+    timeline.milestones.push(milestone4)
 
     test("HelperStructMilestone.getById with nominal values", ()=> {
-        expect(HelperStructMilestone.getById(data, 2)).toBe(milestone2)
+        expect(HelperStructMilestone.getById(timeline, 2)).toBe(milestone2)
     })
 
     test("HelperStructMilestone.getById with unknow values", ()=> {
         try {
-            HelperStructMilestone.getById(data, 10)
+            HelperStructMilestone.getById(timeline, 10)
         } catch (e) {
             expect(e).toBe("Struct.Milestone with id 10 was not found")
         }
