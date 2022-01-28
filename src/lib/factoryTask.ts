@@ -1,5 +1,5 @@
 
-import { Helpers } from "./helpers.class";
+import { Helpers } from "./helpers"
 import type { Struct } from "./struct.class";
 
 export module FactoryTask {

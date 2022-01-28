@@ -10,7 +10,7 @@
     import Upload from './Upload.svelte';
     import Live from './Live.svelte';
     import SwimAndTasks from './SwimAndTasks.svelte';
-    import { Helpers } from './helpers.class';
+    import { Helpers } from './helpers';
     import { FactoryTask } from './factoryTask';
     import { FactoryMilestone } from './factoryMilestone';
 

@@ -1,6 +1,6 @@
 
 import { Struct } from "$lib/struct.class";
-import { Helpers } from "$lib/helpers.class";
+import { Helpers } from "$lib/helpers";
 import { Constantes } from "$lib/constantes";
 
 

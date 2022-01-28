@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Helpers } from './helpers.class';
+    import { Helpers } from './helpers';
     import { Constantes } from './constantes';
     import { store } from './stores';
 

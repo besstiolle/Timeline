@@ -1,7 +1,7 @@
 <script lang="ts">
 
     import { Constantes } from './constantes';
-    import { Helpers } from './helpers.class';
+    import { Helpers } from './helpers';
     import { store } from './stores';
     import type { Struct } from './struct.class';
 

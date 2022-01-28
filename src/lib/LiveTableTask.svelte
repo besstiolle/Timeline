@@ -1,7 +1,7 @@
 <script lang="ts">
 
     import { store } from './stores';
-    import { Helpers } from './helpers.class';
+    import { Helpers } from './helpers';
     import { Struct } from './struct.class';
     import { Constantes } from './constantes';
 import { FactoryTimeline } from './factoryTimeline';

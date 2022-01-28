@@ -1,7 +1,7 @@
 
 import { browser } from "$app/env";
 import { Constantes } from "./constantes";
-import { Helpers } from "./helpers.class";
+import { Helpers } from "./helpers"
 import { FactorySwimline } from "./factorySwimline";
 import { Struct } from "./struct.class";
 

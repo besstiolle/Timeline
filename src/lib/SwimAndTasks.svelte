@@ -5,7 +5,7 @@ import { store } from "./stores";
 
 import type { Struct } from "./struct.class";
 import { Constantes } from "./constantes";
-import { Helpers } from "./helpers.class";
+import { Helpers } from "./helpers";
 
 import Task from "./Task.svelte";
 import { FactoryTask } from "./factoryTask";
