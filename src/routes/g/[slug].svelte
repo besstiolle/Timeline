@@ -5,9 +5,9 @@ import { store } from '$lib/stores';
 
 import { CustomLocalStorage } from '$lib/customLocalStorage';
 import { Struct } from '$lib/struct.class';
-import { HelperStructTimeline } from '$lib/helperStructTimeline.class';
 
 import Draw from '$lib/Draw.svelte';
+import { FactoryTimeline } from '$lib/factoryTimeline';
 
 
 //TODO : disabling SSR or not on this page ?
@@ -27,13 +27,13 @@ import Draw from '$lib/Draw.svelte';
 	let currentTimeline: Struct.Timeline = CustomLocalStorage.getTimeline(slug)
 	if(!currentTimeline && browser){
 		currentTimeline = new Struct.Timeline(slug, "My new Project")
-		currentTimeline = HelperStructTimeline.initiate(currentTimeline)
+		currentTimeline = FactoryTimeline.initiate(currentTimeline)
 	}
 	
 	$store.currentTimeline = currentTimeline
 	
 	// Reactivate this line if some pb with title edition of timeline
-	//HelperStructCards.updateCardsWithTimeline($store.cards, currentTimeline)
+	//FactoryCards.updateCardsWithTimeline($store.cards, currentTimeline)
 	
 </script>
 

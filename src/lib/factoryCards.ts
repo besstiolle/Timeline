@@ -10,7 +10,7 @@ export module FactoryCards {
 	export function updateCardsWithTimeline(cards:Array<Struct.Card>, timeline:Struct.Timeline):void{
 		//TODO : remove it.
 		if(timeline == null){
-			console.error("Struct.Timeline was null in function HelperStructCards.updateCardsWithTimeline()")
+			console.error("Struct.Timeline was null in function FactoryCards.updateCardsWithTimeline()")
 			return
 		}
 

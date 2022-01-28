@@ -28,11 +28,11 @@ function testProcessLimites(){
     jest.mock('$lib/helperStructTimeline.class', () => ( mock))
 
     test("test mock result with dates", ()=> {
-        expect(HelperStructTimeline.getMin(timeline)).toEqual(new Date("2020-01-01"))
-        expect(HelperStructTimeline.getMax(timeline)).toEqual(new Date("2020-12-31"))
+        expect(FactoryTimeline.getMin(timeline)).toEqual(new Date("2020-01-01"))
+        expect(FactoryTimeline.getMax(timeline)).toEqual(new Date("2020-12-31"))
     })
 
-    HelperStructTimeline._processLimites(timeline)
+    FactoryTimeline._processLimites(timeline)
 
     test("refresh._processLimites with dates", ()=> {
         expect(timeline.start).toEqual(new Date("2020-01-01"))

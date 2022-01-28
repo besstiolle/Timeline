@@ -4,11 +4,11 @@
 import { store } from "./stores";
 
 import type { Struct } from "./struct.class";
-import { Constantes } from "./constantes.class";
+import { Constantes } from "./constantes";
 import { Helpers } from "./helpers.class";
-import { HelperStructTask } from "./helperStructTask.class";
 
 import Task from "./Task.svelte";
+import { FactoryTask } from "./factoryTask";
 
 let colors = [
     ["#90BBD8", "#2980B9"],
@@ -114,7 +114,7 @@ function down(event){
 function up(event){
     if(isDragging && hoverGroup){
 
-        let task: Struct.Task = HelperStructTask.getById($store.currentTimeline, parseInt(taskId.substring(1))) //html id = T999 => 999
+        let task: Struct.Task = FactoryTask.getById($store.currentTimeline, parseInt(taskId.substring(1))) //html id = T999 => 999
         if( task ){
             if(realAction == ACTION.LEFT || realAction == ACTION.RIGHT) {
                 let dateStart = Helpers.getDateFromViewportX(TActionBarCoord.REC_X, $store.currentTimeline.start, $store.currentTimeline.end)

@@ -24,12 +24,12 @@ function testUpdateCardsWithTimeline(){
     FactoryCards.updateCardsWithTimeline(cards1, timeline2)
     FactoryCards.updateCardsWithTimeline(cards2, timeline4)
     
-    test("HelperStructCards.updateCardsWithTimeline with an existing key", ()=> {
+    test("FactoryCards.updateCardsWithTimeline with an existing key", ()=> {
         expect(cards1.length).toEqual(3)
         expect(cards1[1].title).toEqual(timeline2.title)
     })
     
-    test("HelperStructCards.updateCardsWithTimeline with an new key", ()=> {
+    test("FactoryCards.updateCardsWithTimeline with an new key", ()=> {
         expect(cards2.length).toEqual(4)
         expect(cards2[3].key).toEqual(timeline4.key)
         expect(cards2[3].title).toEqual(timeline4.title)

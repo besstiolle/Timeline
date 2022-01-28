@@ -1,12 +1,7 @@
 
 <script lang="ts">
-import { Constantes } from "$lib/constantes.class";
 import { CustomLocalStorage } from "$lib/customLocalStorage";
-import { Helpers } from "$lib/helpers.class";
-import { HelperStructTimeline } from "$lib/helperStructTimeline.class";
-import { JsonParser } from "$lib/jsonParser";
 import type { Struct } from "$lib/struct.class";
-import { each } from "svelte/internal";
 
 
 	

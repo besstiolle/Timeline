@@ -2,8 +2,8 @@
     import { onMount } from 'svelte';
     import { Struct } from './struct.class';
     import { store } from './stores';
-import { FactoryTimeline } from './factoryTimeline';
-import { FactorySwimline } from './factorySwimline';
+    import { FactoryTimeline } from './factoryTimeline';
+    import { FactorySwimline } from './factorySwimline';
 
     let hidden = true
 

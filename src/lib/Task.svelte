@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { Constantes } from './constantes.class';
+    import { Constantes } from './constantes';
     import { Helpers } from './helpers.class';
     import { store } from './stores';
     import type { Struct } from './struct.class';

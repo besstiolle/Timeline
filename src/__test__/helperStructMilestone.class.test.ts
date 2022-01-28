@@ -5,7 +5,7 @@ import { Struct } from "$lib/struct.class";
 function testJoin(){
     let milestone: Struct.Milestone = new Struct.Milestone(1,"label",new Date("2020-01-01"), true)
     let result:string = "milestone;label;true;2020-01-01"
-    test("HelperStructMilestone.join with nominal values", ()=> {
+    test("FactoryMilestone.join with nominal values", ()=> {
         expect(FactoryMilestone.join(milestone,";")).toBe(result)
     })
 }
@@ -22,11 +22,11 @@ function testGetById(){
     timeline.milestones.push(milestone3)
     timeline.milestones.push(milestone4)
 
-    test("HelperStructMilestone.getById with nominal values", ()=> {
+    test("FactoryMilestone.getById with nominal values", ()=> {
         expect(FactoryMilestone.getById(timeline, 2)).toBe(milestone2)
     })
 
-    test("HelperStructMilestone.getById with unknow values", ()=> {
+    test("FactoryMilestone.getById with unknow values", ()=> {
         try {
             FactoryMilestone.getById(timeline, 10)
         } catch (e) {

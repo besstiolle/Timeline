@@ -1,11 +1,11 @@
 <script lang="ts">
 import { browser } from '$app/env';
+    import { store } from './stores';
 
     
-    import { Constantes } from './constantes.class';
-    import { HelperStructMilestone } from './helperStructMilestone.class';
-    import { store } from './stores';
+    import { Constantes } from './constantes';
     import type { Struct } from './struct.class';
+import { FactoryMilestone } from './factoryMilestone';
 
     function compareMilestone(a : Struct.Milestone, b : Struct.Milestone){
         if(a.date > b.date){return 1}
@@ -64,7 +64,7 @@ import { browser } from '$app/env';
             let date = processNewDate(newX - Constantes.GRID.MIDDLE_X)
             let idMilestone = currentTarget.getAttribute("id").substring(1) // M999 => 999
 
-            let milestones = HelperStructMilestone.getById($store.currentTimeline, parseInt(idMilestone))
+            let milestones = FactoryMilestone.getById($store.currentTimeline, parseInt(idMilestone))
             milestones.date = date
             $store.currentTimeline.milestones = $store.currentTimeline.milestones 
         }

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Helpers } from './helpers.class';
-    import { Constantes } from './constantes.class';
+    import { Constantes } from './constantes';
     import { store } from './stores';
 
     let startString = Helpers.toYYYY_MM_DD($store.currentTimeline.start)

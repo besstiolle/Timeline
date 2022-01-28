@@ -10,18 +10,18 @@
     import Upload from './Upload.svelte';
     import Live from './Live.svelte';
     import SwimAndTasks from './SwimAndTasks.svelte';
-    import { HelperStructTask } from './helperStructTask.class';
-    import { HelperStructMilestone } from './helperStructMilestone.class';
-import { Helpers } from './helpers.class';
+    import { Helpers } from './helpers.class';
+    import { FactoryTask } from './factoryTask';
+    import { FactoryMilestone } from './factoryMilestone';
 
     let UploadComponent   
     let liveComponent   
 
 
     function downloadCsv () {
-        var csvTimeline = $store.currentTimeline.tasks.map(e => HelperStructTask.join(e, ";")).join("\n")
+        var csvTimeline = $store.currentTimeline.tasks.map(e => FactoryTask.join(e, ";")).join("\n")
                     + "\n"
-                    + $store.currentTimeline.milestones.map(e => HelperStructMilestone.join(e, ";")).join("\n")
+                    + $store.currentTimeline.milestones.map(e => FactoryMilestone.join(e, ";")).join("\n")
 		var blob = new Blob([csvTimeline], {type:"data:text/csv;charset=utf-8,"});
 		download(blob, ".csv") 
     }

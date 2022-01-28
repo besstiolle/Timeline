@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { Constantes } from './constantes.class';
+    import { Constantes } from './constantes';
     import { store } from './stores';
 
     let toDisplay: boolean = ($store.currentTimeline.start <= new Date() && $store.currentTimeline.end >= new Date())
