@@ -52,21 +52,21 @@
 
 </script>
 
-<div class="dashButtons">
+<div class="rightButtons">
     {#key $store}
-    <div class="dashButton" class:hidden={!$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show regular tasks"><img src='/hide.png' alt='Show regular tasks' id="see"/></div>
-    <div class="dashButton" class:hidden={$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show all tasks even if they're hidden"><img src='/see.png' alt="Show all tasks even if they're hidden" id="hide"/></div>
+    <div class="rightButton" class:hidden={!$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show regular tasks"><i class='hide'></i></div>
+    <div class="rightButton" class:hidden={$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show all tasks even if they're hidden"><i class='show'></i></div>
     {/key}
-    <div class="dashButton" on:click={downloadCsv} title="Downloading the .csv file"><img src='/download.png' alt='Downloading the .csv file' /></div>
-    <div class="dashButton" on:click={UploadComponent.openUpload()} title='Uploading the .csv file'><img src='/upload.png' alt='Uploading the .csv file' /></div>
-    <div class="dashButton" on:click={takeshot} title='Take a screenshot'><img src='/screenshot.png' alt='Take a screenshot' /></div>
-    <div class="dashButton" on:click={liveComponent.openLive()} title='Edit your milestones'><img src='/edit.png' alt='Edit your milestones' /></div>
+    <div class="rightButton" on:click={downloadCsv} title="Downloading the .csv file"><i class='download'></i></div>
+    <div class="rightButton" on:click={UploadComponent.openUpload()} title='Uploading the .csv file'><i class='upload'></i></div>
+    <div class="rightButton" on:click={takeshot} title='Take a screenshot'><i class='photo'></i></div>
+    <div class="rightButton" on:click={liveComponent.openLive()} title='Edit your milestones'><i class='edit'></i></div>
 </div>
 
-<div class="websiteButtons">
-    <div class="websiteButton" title="Come to home page"><a href='/'><img src='/home.png' alt='Come to home page'/></a></div>
-    <div class="websiteButton" title="Fork me on Github"><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline'><img src='/github.png' alt='Fork me on Github' /></a></div>
-    <div class="websiteButton" title='Ask me a new feature. Send me your bug description'><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline/issues/new'><img src='/question.png' alt='Ask me a new feature. Send me your bug description' /></a></div>
+<div class="bottomButtons">
+    <div class="bottomButton" title="Come to home page"><a href='/'><i class='home'></i></a></div>
+    <div class="bottomButton" title="Fork me on Github"><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline'><i class='github'></i></a></div>
+    <div class="bottomButton" title='Ask me a new feature. Send me your bug description'><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline/issues/new'><i class='questions'></i></a></div>
 </div>
 
 <Upload bind:this={UploadComponent} />
@@ -111,54 +111,49 @@
     font-size:8px;
 }
 
-.dashButtons{
+.rightButtons{
     position: fixed;
     bottom: 0;
     right: 0;
 }
-.dashButton {
-    border: 1px solid #117A65;
-    background-color: #16A085;
+
+.rightButton, .bottomButton{
     border-radius: 50%;
     margin: 16px;
-    padding: 10px;
     height: 32px;
     width: 32px;
+    padding: 10px;
 }
-.dashButton:hover{
+.rightButton:hover, .bottomButton:hover{
     cursor:pointer;
+}
+
+.rightButton {
+    border: 1px solid #117A65;
+    background-color: #16A085;
+}
+.rightButton:hover{
     background-color: rgb(22, 160, 133, 0.5);
 }
 
-
-
-.websiteButtons{
+.bottomButtons{
     position: fixed;
     bottom: 0;
     left:45%;
 }
-.websiteButton {
+.bottomButton {
     border: 1px solid #cccccc;
     background-color: #ffffff;
-    border-radius: 50%;
-    margin: 16px;
     padding: 5px;
     display: inline-block;
-    height: 32px;
-    width: 32px;
 }
-.websiteButton:hover{
-    cursor:pointer;
+.bottomButton:hover{
     background-color: rgb(255, 255, 255, 0.5);
 }
-.websiteButton a{
+.bottomButton a{
     border:none;
 }
 
-.dashButton img, 
-.websiteButton img{
-    width: 32px;
-}
 
 :global(.shouldBeHidden, .shouldBeHidden text){
     fill:#888;
@@ -166,4 +161,20 @@
 :global(.shouldBeHidden line){
     stroke:#888;
 }
+
+i{
+    width: 32px;
+    height: 32px;
+    background-image: url('/pics.png');
+    display: inline-block;
+}
+.github{background-position: 0 0;}
+.home{background-position: 0 -64px;}
+.questions{background-position: -32px -64px;}
+.edit{background-position: -32px -32px;}
+.photo{background-position: 0 -32px;}
+.upload{background-position: -32px 0;}
+.download{background-position: -64px 0;}
+.show{background-position: -96px -32px;}
+.hide{background-position: -96px 0;}
 </style> 
