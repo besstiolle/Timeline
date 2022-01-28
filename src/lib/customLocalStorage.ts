@@ -1,5 +1,5 @@
 import { browser } from "$app/env"
-import { Constantes } from "./constantes.class"
+import { Constantes } from "./constantes"
 import { JsonParser } from "./jsonParser"
 import type { Struct } from "./struct.class"
 

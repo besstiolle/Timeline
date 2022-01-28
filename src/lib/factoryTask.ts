@@ -2,7 +2,7 @@
 import { Helpers } from "./helpers.class";
 import type { Struct } from "./struct.class";
 
-export module HelperStructTask {
+export module FactoryTask {
 
     
     /**

@@ -1,12 +1,12 @@
-import { HelperStructSwimline } from "$lib/helperStructSwimline.class";
+import { FactorySwimline } from "$lib/factorySwimline";
 import { Struct } from "$lib/struct.class";
 
 function testCreate(){
 
     let timeline = new Struct.Timeline("key", "title")
-    HelperStructSwimline.create(timeline, "swimline1")
-    let index2 = HelperStructSwimline.create(timeline, "swimline2")
-    HelperStructSwimline.create(timeline, "swimline3")
+    FactorySwimline.create(timeline, "swimline1")
+    let index2 = FactorySwimline.create(timeline, "swimline2")
+    FactorySwimline.create(timeline, "swimline3")
 
     test("HelperStructSwimline.create with nominal values", ()=> {
         expect(index2).toBe(1)

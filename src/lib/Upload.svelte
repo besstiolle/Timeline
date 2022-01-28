@@ -2,8 +2,8 @@
     import { onMount } from 'svelte';
     import { Struct } from './struct.class';
     import { store } from './stores';
-    import { HelperStructTimeline } from './helperStructTimeline.class';
-    import { HelperStructSwimline } from './helperStructSwimline.class';
+import { FactoryTimeline } from './factoryTimeline';
+import { FactorySwimline } from './factorySwimline';
 
     let hidden = true
 
@@ -92,7 +92,7 @@
                 let previousSwimline: string
                 let previousSwimlineId: number
 
-                HelperStructTimeline.purge($store.currentTimeline)
+                FactoryTimeline.purge($store.currentTimeline)
 
                 //Process file
                 //TODO : guessing encoding
@@ -112,16 +112,16 @@
                                 //reuse id of previous swimline
                             } else if(swimline !== "" && previousSwimline != swimline) {
                                 // create new swimline and save its id
-                                previousSwimlineId = HelperStructSwimline.create($store.currentTimeline,swimline)
+                                previousSwimlineId = FactorySwimline.create($store.currentTimeline,swimline)
                             } else {
                                 //reset previous Swimline id
                                 previousSwimlineId = null
                             }
-                            HelperStructTimeline.addTask($store.currentTimeline, new Struct.Task(id, label, dateStart, dateEnd, progress, isShow, swimline, previousSwimlineId))
+                            FactoryTimeline.addTask($store.currentTimeline, new Struct.Task(id, label, dateStart, dateEnd, progress, isShow, swimline, previousSwimlineId))
 
                             previousSwimline = swimline
                         } else if("milestone" == elmts[0] ){
-                            HelperStructTimeline.addMilestone($store.currentTimeline, new Struct.Milestone(id, label, dateStart, isShow))
+                            FactoryTimeline.addMilestone($store.currentTimeline, new Struct.Milestone(id, label, dateStart, isShow))
                         } 
                         id = $store.currentTimeline.getNextId()
                     }

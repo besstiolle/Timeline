@@ -1,6 +1,6 @@
 import { Struct } from "./struct.class";
 
-export module HelperStructCards {
+export module FactoryCards {
 
     /**
 	 * copy information from timline (title/key) and copy them into the (new?) card.

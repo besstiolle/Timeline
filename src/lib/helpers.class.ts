@@ -1,4 +1,4 @@
-import { Constantes } from "./constantes.class";
+import { Constantes } from "./constantes";
 import type { Struct } from "./struct.class";
 
 export module Helpers {

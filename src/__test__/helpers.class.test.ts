@@ -1,7 +1,7 @@
 
 import { Struct } from "$lib/struct.class";
 import { Helpers } from "$lib/helpers.class";
-import { Constantes } from "$lib/constantes.class";
+import { Constantes } from "$lib/constantes";
 
 
 
