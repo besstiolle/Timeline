@@ -41,8 +41,9 @@
   },
   "type": "module",
   "dependencies": {
+    "faunadb": "^4.4.2",
     "html2canvas": "^1.3.3"
-  }, 
+  },
   "jest": {
     "transform": {
       "^.+\\.svelte$": [
@@ -63,7 +64,8 @@
       "^\\$lib(.*)$": "<rootDir>/src/lib$1",
       "^\\$app(.*)$": [
         "<rootDir>/.svelte-kit/dev/runtime/app$1",
-        "<rootDir>/.svelte-kit/build/runtime/app$1"]
+        "<rootDir>/.svelte-kit/build/runtime/app$1"
+      ]
     }
   }
 }
