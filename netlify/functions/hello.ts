@@ -23,7 +23,7 @@ exports.handler = async function () {
         scheme: 'https',
     })
 
-    client.query(
+    await client.query(
       q.CreateCollection({ name: 'myCollection_' + Math.floor(Math.random() * 100) })
     ).then((ret) => {
       return {
