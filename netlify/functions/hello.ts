@@ -19,7 +19,7 @@ exports.handler = async function () {
         port: 443,
         scheme: 'https',
     })
-
+/*
     await client.query(
       q.CreateCollection({ name: 'myCollection_' + Math.floor(Math.random() * 100) })
     ).then((ret) => {
@@ -31,5 +31,11 @@ exports.handler = async function () {
     })
     .catch((err) => {
       return (new FaunaError(err)).return()
-    })
+    })*/
+
+    return {
+      statusCode: 200,
+      body: "{'good':'foobar'}"
   };
+
+};
