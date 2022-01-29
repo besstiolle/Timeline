@@ -4,10 +4,7 @@ import { FaunaError } from "../FaunaError";
 
 exports.handler = async function () {
     
-    const q = faunadb.query
-
-    let foo_secret = process.env.FOO_SECRET
-    
+    const q = faunadb.query    
     const secret = process.env.FAUNADB_SECRET
     const endpoint = process.env.FAUNADB_ENDPOINT
     
