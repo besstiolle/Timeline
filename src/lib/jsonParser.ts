@@ -63,9 +63,9 @@ export module JsonParser {
             return value
         }
         
-        console.warn("key : `%o` with value `%o` was not caught in JsonReviver.timelineReviver() function" , key, value)
-
-		return value;
+        //console.warn("key : `%o` with value `%o` was not caught in JsonReviver.timelineReviver() function" , key, value)
+        //return value
+        throw "key : `"+key+"` with value `"+value+"` was not caught in JsonReviver.timelineReviver() function"
 	}
 
     /**

@@ -31,5 +31,5 @@
 		//For Jest https://daveceddia.com/svelte-typescript-jest/
 		"types": ["jest"]
 	},
-	"include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.ts", "src/**/*.svelte", "netlify/FaunaError.ts"]
+	"include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.ts", "src/**/*.svelte", "netlify/**/*.ts"]
 }
