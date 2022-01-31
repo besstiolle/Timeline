@@ -11,10 +11,7 @@
         if (!hidden && event.key === 'Escape') {closeUpload()}
     }
 
-    function closeUpload(event = null){
-        if(event && (!event.target || (<HTMLElement> event.target).id !== "box__shadow")) {
-            return
-        }
+    function closeUpload(){
         hidden = true
     }
 
@@ -141,23 +138,19 @@
 
 <svelte:window on:keydown={handleKeydown}/>
 
-<div id="box__shadow" class:hidden on:click={closeUpload}>
-    <form id="box" method="post" action="" enctype="multipart/form-data">
-    
-    <div class="box__input">
-    <div><input class="box__file" type="file" name="files[]" accept=".csv" id="file"/>
-    <label for="file"><strong>Choose a CSV file (.csv) </strong><span class="box__dragndrop"> or drag it here</span>.</label></div>
-    <button class="box__button" type="submit">Upload</button>
-    <div class="box__advice" on:click={closeUpload}>Click <strong>here</strong> or tape <strong>Escape key</strong> to close this windows</div>
+<div id="shadow" class:hidden on:click={closeUpload}></div>
+<form id="box" class:hidden method="post" action="" enctype="multipart/form-data">
+    <div>
+        <input type="file" name="files[]" accept=".csv" id="file"/>
+        <label for="file"><span class='pointer'>Choose a CSV file (.csv) </span> or drag it here.</label>
     </div>
-    <div class="box__error">Error! <span></span>.</div>
-
-  </form>
-</div>
+    <button type="submit">Upload</button>
+    <div>Click <span class='pointer' on:click={closeUpload}>here</span> or tape <span>Escape key</span> to close this windows</div>
+</form>
 
 <style>
 
-    #box__shadow{
+    #shadow{
         height: 100%;
         width: 100%;
         background-color: rgba(200, 218, 223, 0.5);
@@ -166,16 +159,33 @@
         left:0;
     }
     #box{
-        height: 60%;
-        width: 80%;
-        margin: 10%;
+        height: 80%;
+        max-height: 80%;
+        width: 90%;
         font-size: 1.5rem;
         background-color: #c8dadf;
-        position: relative;
-        text-align:center;
+        position: absolute;
+        text-align: center;
+        top: 10%;
+        left: 5%;
+        line-height: 3em;
+        outline: 2px dashed #92b0b3 !important;
+        outline-offset: -10px !important;
+    }
+    #box > div:first-child{
+        margin-top: 10%;
+    }
+  
+    :global(#box.has-advanced-upload) {
+        -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear !important;
+        transition: outline-offset .15s ease-in-out, background-color .15s linear !important;
     }
 
-    .box__file {
+    :global(#box.is-dragover) {
+        background-color: grey !important;
+    }
+
+    input {
         width: 0.1px;
         height: 0.1px;
         opacity: 0;
@@ -183,15 +193,7 @@
         position: absolute;
         z-index: -1;
     }
-    .box__file + label {
-        max-width: 80%;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        cursor: pointer;
-        display: inline-block;
-        overflow: hidden;
-    }
-    .box__button {
+    button {
         font-weight: 700;
         color: #e5edf1;
         background-color: #39bfd3;
@@ -199,33 +201,10 @@
         padding: 8px 16px;
         margin: 40px auto 0;
     }
-    .box__input{
-        padding: 10% 20px 0 20px;
+    span{
+        font-weight: bold;
     }
-    .box__dragndrop,
-    :global(.box__uploading),
-    :global(.box__success),
-    :global(.box__error) {
-        display: none !important;
-    }
-
-    :global(#box.has-advanced-upload) {
-        outline: 2px dashed #92b0b3 !important;
-        outline-offset: -10px !important;
-        -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear !important;
-        transition: outline-offset .15s ease-in-out, background-color .15s linear !important;
-    }
-
-    :global(#box.has-advanced-upload) .box__dragndrop {
-        display: inline !important;
-    }
-
-    :global(#box.is-dragover) {
-        background-color: grey !important;
-    }
-
-    .box__advice{
-        margin-top:2em;
-        cursor: pointer;
+    .pointer{
+        cursor: pointer;    
     }
 </style>
