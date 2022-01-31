@@ -10,7 +10,8 @@ export class FaunaError extends Error {
       ["unauthorized",401],
       ["instance not found",404],
       ["permission denied",403],
-      ["Malformed Request Body",400]
+      ["Malformed Request Body",400],
+      ["Malformed Request parameter",400]
     ])
   
     constructor (error) {

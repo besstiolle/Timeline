@@ -22,9 +22,10 @@ import { JsonParser } from "../src/lib/jsonParser"
  *  }
  *  @see : https://docs.netlify.com/functions/build-with-javascript/
  */
-export async function create(fauna, client, event, context) {
+export async function create(q, client, event, context) {
     console.info("create timeline with informations : ")
     
+    const COLLECTION = 'myCollection'
     const object = <FaunaStruct> JSON.parse(event.body)
     const validStringProperties = ['ownerKey','writeKey','readKey','hash']
     const validProperties = [...validStringProperties, 'timeline']
@@ -56,8 +57,10 @@ export async function create(fauna, client, event, context) {
     
 
     return await client.query(
-        //TODO Db stuff
-        "done"
+        q.Create(
+            q.Collection(COLLECTION),
+            {data: faunaStruct}
+        )
 
       ).then((ret) => {
         return {

@@ -2,6 +2,7 @@
 import faunadb from "faunadb"
 import {get} from "../timelineGet"
 import {create} from "../timelineCreate"
+import {remove} from "../timelineDelete"
 import {HTTP_WORDS} from "../../src/faunadb/constantes"
 
 
@@ -26,12 +27,9 @@ import {HTTP_WORDS} from "../../src/faunadb/constantes"
  */
 exports.handler = async function (event, context) {
     
-    const fauna = faunadb.query    
-    //const secret = process.env.FAUNADB_SECRET
-    //const endpoint = process.env.FAUNADB_ENDPOINT
-
-    const secret = 'fnAEeCNDPFAAwH_FYsk3zaEBQPDXa8adEAdO4Xp2'
-    const endpoint = 'db.eu.fauna.com'
+    const q = faunadb.query    
+    const secret = process.env.FAUNADB_SECRET
+    const endpoint = process.env.FAUNADB_ENDPOINT
     
     if (typeof secret === 'undefined' || secret === '') {
       console.error('The FAUNADB_SECRET environment variable is not set, exiting.')
@@ -46,26 +44,22 @@ exports.handler = async function (event, context) {
     })
 
     switch (event.httpMethod) {
-      case HTTP_WORDS.GET: 
-        return get(fauna, client, event, context)
-    
-      case HTTP_WORDS.POST: 
-        return create(fauna, client, event, context)
-    
-      case HTTP_WORDS.DELETE: 
-        break;
-    
+      
+      case HTTP_WORDS.GET:    return get(   q, client, event, context)
+      case HTTP_WORDS.POST:   return create(q, client, event, context)
+      case HTTP_WORDS.DELETE: return remove(q, client, event, context)
+      
+      case HTTP_WORDS.OPTIONS: 
+        return {
+          statusCode: 200,
+          body: JSON.stringify({}, null, 2),
+        }
+
       default:
-        break;
-    }
-
-    
-    //
-    //console.log('Function `todo-create` invoked', data)
-
-
-  //fauna.CreateCollection({ name: 'myCollection'})
-  //fauna.Collection( 'myCollection' )
-    
+        return {
+          statusCode: 405,
+          body: JSON.stringify({message: `Method ${event.httpMethod} Not Allowed`}, null, 2)
+        }
+    } 
 
 };

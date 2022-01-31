@@ -54,3 +54,36 @@ You can also ask for coverage
 npm run test --coverage
 ```
 
+### Running with Netlify function & FaunaDb
+
+set your secret in your own OS. Example bellow for Windows
+
+```bash
+SET FAUNADB_SECRET='someFaunaDbSecret'
+SET FAUNADB_ENDPOINT='someFaunaDbEndpoint'
+```
+
+install the netlify bundle
+
+```bash
+npm install netlify-cli -g
+```
+run the server
+
+```bash
+netlify dev
+```
+
+#### Bug with the netlify bundle
+
+if you have : 
+
+ > ◈ Netlify Dev could not connect to localhost:3000.
+ > ◈ Please make sure your framework server is running on port 3000
+
+ you may what to kill the process behind the port 3000
+
+```bash
+netstat -ano | findstr :3000
+tskill  <THE PID>
+```
