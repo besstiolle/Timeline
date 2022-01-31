@@ -56,6 +56,8 @@ npm run test --coverage
 
 ### Running with Netlify function & FaunaDb
 
+[learn more about FaunaDb](./FAUNADB.md)
+
 set your secret in your own OS. Example bellow for Windows
 
 ```bash
