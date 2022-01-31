@@ -82,7 +82,7 @@ async function remove2(q, client, timelineKey: string, ownerKey: string, writeKe
         
     ).then((ret) => {
         return {
-            statusCode: 200,
+            statusCode: 202,
             body: JSON.stringify({ message: ret }, null, 2),
         }
     })

@@ -54,6 +54,10 @@
 
 <div class="rightButtons">
     {#key $store}
+    <div class="rightButton" class:hidden={!$store.currentTimeline.showAll} on:click={toggleShowHide} title="Share & save your chart online"><i class='online'></i></div>
+    <div class="rightButton" class:hidden={$store.currentTimeline.showAll} on:click={toggleShowHide} title="Remove & save your chart online"><i class='offline'></i></div>
+
+    
     <div class="rightButton" class:hidden={!$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show regular tasks"><i class='hide'></i></div>
     <div class="rightButton" class:hidden={$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show all tasks even if they're hidden"><i class='show'></i></div>
     {/key}
@@ -177,4 +181,6 @@ i{
 .download{background-position: -64px 0;}
 .show{background-position: -96px -32px;}
 .hide{background-position: -96px 0;}
+.online{background-position: -64px -32px;}
+.offline{background-position: -64px -64px;}
 </style> 

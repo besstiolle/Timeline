@@ -39,7 +39,7 @@ export async function create(q, client, event, context) {
         }
     }
 
-    let fieldName 
+    let fieldName: string = null 
     //Sanitize object
     for (let index in validStringProperties) {
         fieldName = validStringProperties[index]
