@@ -5,5 +5,6 @@
   # This is the directory is publishing to netlify's CDN
   publish = "build"
 
-  # Don't do this at home kids
-  FOO_SECRET = "localhost value"
+[dev]
+  # Force a static port to serve Netlify's Lambda Functions
+	functionsPort = 3001

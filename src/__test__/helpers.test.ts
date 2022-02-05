@@ -140,3 +140,14 @@ function testBothViewportFunctions(){
 testBothViewportFunctions()
 /************************************* */
 
+
+function testRandomeString(){
+
+    test("Helpers.randomeString with various size", ()=> {
+        expect(Helpers.randomeString(0).length).toBe(0)
+        expect(Helpers.randomeString(15).length).toBe(15)
+    })
+}
+testRandomeString()
+/************************************* */
+

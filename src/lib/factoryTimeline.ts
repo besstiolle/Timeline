@@ -95,16 +95,18 @@ export module FactoryTimeline {
 		timeline.end = null
 		timeline.maxId = 0
 		timeline.viewbox = "0 0 0 0"
-		//timeline.showAll= false //Don't reset this parameter
+		//timeline.showAll = false //Don't reset this parameter
+		//timeline.isOnline = false //Don't reset this parameter
+		//timeline.ownerKey = null //Don't reset this parameter
+		//timeline.writeKey = null //Don't reset this parameter
+        //timeline.readKey = null //Don't reset this parameter
+        //timeline.key = null //Don't reset this parameter
     }
 
     export function refresh(timeline : Struct.Timeline) : void{
-//        let start = new Date()
-//        console.info("refresh")
         _refreshSwimlines(timeline)
         _processLimites(timeline)
         _processViewboxResizing(timeline)
-//        console.info("end refresh in %o ms", (new Date()).getMilliseconds() - start.getMilliseconds())
     }
 
     function _refreshSwimlines(timeline : Struct.Timeline) : void{

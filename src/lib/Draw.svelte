@@ -2,7 +2,6 @@
     import html2canvas from 'html2canvas';
 
     import { store } from './stores';
-
     
     import Banner from './Banner.svelte';
     import Milestones from './Milestones.svelte';
@@ -13,9 +12,9 @@
     import { Helpers } from './helpers';
     import { FactoryTask } from './factoryTask';
     import { FactoryMilestone } from './factoryMilestone';
+    import Online from './Online.svelte';
 
-    let UploadComponent   
-    let liveComponent   
+    let uploadComponent, liveComponent, onlineComponent   
 
 
     function downloadCsv () {
@@ -54,15 +53,15 @@
 
 <div class="rightButtons">
     {#key $store}
-    <div class="rightButton" class:hidden={!$store.currentTimeline.showAll} on:click={toggleShowHide} title="Share & save your chart online"><i class='online'></i></div>
-    <div class="rightButton" class:hidden={$store.currentTimeline.showAll} on:click={toggleShowHide} title="Remove & save your chart online"><i class='offline'></i></div>
+    <div class="rightButton" class:hidden={$store.currentTimeline.isOnline} on:click={onlineComponent.openComponent()} title="Share & save your chart online"><i class='online'></i></div>
+    <div class="rightButton" class:hidden={!$store.currentTimeline.isOnline} on:click={onlineComponent.openComponent()} title="Save your chart on your computer only"><i class='offline'></i></div>
 
     
     <div class="rightButton" class:hidden={!$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show regular tasks"><i class='hide'></i></div>
     <div class="rightButton" class:hidden={$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show all tasks even if they're hidden"><i class='show'></i></div>
     {/key}
     <div class="rightButton" on:click={downloadCsv} title="Downloading the .csv file"><i class='download'></i></div>
-    <div class="rightButton" on:click={UploadComponent.openUpload()} title='Uploading the .csv file'><i class='upload'></i></div>
+    <div class="rightButton" on:click={uploadComponent.openUpload()} title='Uploading the .csv file'><i class='upload'></i></div>
     <div class="rightButton" on:click={takeshot} title='Take a screenshot'><i class='photo'></i></div>
     <div class="rightButton" on:click={liveComponent.openLive()} title='Edit your milestones'><i class='edit'></i></div>
 </div>
@@ -73,8 +72,9 @@
     <div class="bottomButton" title='Ask me a new feature. Send me your bug description'><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline/issues/new'><i class='questions'></i></a></div>
 </div>
 
-<Upload bind:this={UploadComponent} />
+<Upload bind:this={uploadComponent} />
 <Live bind:this={liveComponent}/>
+<Online bind:this={onlineComponent}/>
 
 
 {#key $store}

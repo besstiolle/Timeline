@@ -1,20 +1,10 @@
 
 <script lang="ts">
+import { Helpers } from "$lib/helpers";
 import { store } from "$lib/stores";
 
 import type { Struct } from "$lib/struct.class";
 
-
-
-function makeid(length: number) {
-    let result: string = '';
-    const characters : string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    for ( let i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-   }
-   return result;
-}
 
 function toStringDate(date: Date): string {
 	const DATE_SEPARATOR = "/"
@@ -28,7 +18,7 @@ function toStringDate(date: Date): string {
 
 function goto(event, id = null){
 	if(id == null){
-		id = makeid(10)
+		id = Helpers.randomeString(64)
 	}
 	window.location.href = '/g/'+id
 }

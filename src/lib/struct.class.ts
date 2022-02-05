@@ -31,6 +31,10 @@ export module Struct {
 		maxId: number = 0
 		viewbox: string = "0 0 0 0"
 		showAll: boolean = false
+		isOnline: boolean = false
+		ownerKey: string = null
+		writeKey: string = null
+		readKey: string = null
 		//Check jsonParser.ts > timelineReviver() function if you add something here.
 		
 		constructor(key:string, title:string){
