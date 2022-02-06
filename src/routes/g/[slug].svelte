@@ -52,11 +52,12 @@ if(access === Constantes.ACCESS.LOCAL){
         currentTimeline = FactoryTimeline.initiate(currentTimeline)
     }
 
+    $store.currentTimeline = currentTimeline
 } else {
     get(slug, o, w, r).then((json)=>{
         console.info("get.then")
-        currentTimeline = JSON.parse(JSON.stringify(json["message"]["data"]["timeline"]), JsonParser.timelineReviver)        
-        console.info(currentTimeline)
+        currentTimeline = JSON.parse(JSON.stringify(json["message"]["data"]), JsonParser.timelineReviver)     
+        $store.currentTimeline = currentTimeline   
     }).catch((err) => {
         console.info("get.catch")
         console.info(err)
@@ -64,9 +65,10 @@ if(access === Constantes.ACCESS.LOCAL){
         console.info("get.finnaly")
     })
 
+
 }
 //TODO here
-$store.currentTimeline = currentTimeline
+        console.info(currentTimeline)
     
     
             

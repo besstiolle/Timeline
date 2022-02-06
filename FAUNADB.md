@@ -19,7 +19,7 @@ CreateIndex({
     unique: false,
     serialized: true,
     source: Collection("myCollection"),
-    terms: [{field: ["data", "readKey"]},{field: ["data", "timeline", "key"]}],
+    terms: [{field: ["data", "readKey"]},{field: ["data", "key"]}],
     values: [{ field: ["ref"], reverse: true } ]
   })
   
@@ -28,7 +28,7 @@ CreateIndex({
     unique: false,
     serialized: true,
     source: Collection("myCollection"),
-    terms: [{field: ["data", "writeKey"]},{field: ["data", "timeline", "key"]}],
+    terms: [{field: ["data", "writeKey"]},{field: ["data", "key"]}],
     values: [{ field: ["ref"], reverse: true }]
   })
   
@@ -37,7 +37,7 @@ CreateIndex({
     unique: false,
     serialized: true,
     source: Collection("myCollection"),
-    terms: [{field: ["data", "ownerKey"]},{field: ["data", "timeline", "key"]}],
+    terms: [{field: ["data", "ownerKey"]},{field: ["data", "key"]}],
     values: [{ field: ["ref"], reverse: true }]
   })
   CreateIndex({
@@ -45,6 +45,6 @@ CreateIndex({
     unique: false,
     serialized: true,
     source: Collection("myCollection"),
-    terms: [{field: ["data", "ownerKey"]},{field: ["data", "timeline", "key"]}]
+    terms: [{field: ["data", "ownerKey"]},{field: ["data", "key"]}]
   })
 ```

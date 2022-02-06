@@ -5,6 +5,7 @@ import { CustomLocalStorage } from './customLocalStorage';
 import { Constantes } from './constantes';
 import { FactoryCards } from './factoryCards';
 import { FactoryTimeline } from './factoryTimeline';
+import { create } from './timelineRepository';
 
 
 let timelineStore = new Struct.TimelineStore()
@@ -29,6 +30,19 @@ function updateLocalStorage(timelineStore: Struct.TimelineStore){
 
         //Refresh datemin / max and other compiled data
         FactoryTimeline.refresh(currentTimeline)
+
+        //Refresh remote instance
+        if(currentTimeline.isOnline && (currentTimeline.ownerKey || currentTimeline.writeKey)){
+            create(currentTimeline).then((json) => {
+                console.info("create.then")
+                console.info(json)
+            }).catch((err) => {
+                console.info("create.catch")
+                console.info(err)
+            }).finally(()=>{
+                console.info("create.finnaly")
+            })
+        }
 
         //Persist both current timeline & cards in localstorage
         CustomLocalStorage.save(currentTimeline.key, currentTimeline)
