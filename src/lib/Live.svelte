@@ -15,17 +15,17 @@
         let position : number = null;
         if(event.target.name.startsWith(TS)){
             position = parseInt(event.target.name.substring(TS.length, event.target.name.length))
-            $store.currentTimeline.tasks[position].dateStart = new Date(event.target.value)
+            $store.currentTimeline.tasks[position].dateStart = event.target.value
         }
         
         if(event.target.name.startsWith(TE)){
             position = parseInt(event.target.name.substring(TE.length, event.target.name.length))
-            $store.currentTimeline.tasks[position].dateEnd = new Date(event.target.value)
+            $store.currentTimeline.tasks[position].dateEnd = event.target.value
         }
         
         if(event.target.name.startsWith(MD)){
             position = parseInt(event.target.name.substring(MD.length, event.target.name.length))            
-            $store.currentTimeline.milestones[position].date = new Date(event.target.value)
+            $store.currentTimeline.milestones[position].date = event.target.value
         }
         $store.currentTimeline.tasks = $store.currentTimeline.tasks
     }

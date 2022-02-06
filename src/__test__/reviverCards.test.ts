@@ -11,12 +11,12 @@ function withoutCards(){
     
     let jsonResult = JSON.stringify(timelineStore.cards)
     let jsonExpected = '[]'
-    test("TimelineReviver.replacer with tasks values", ()=> {
+    test("JsonParser.cardsReplacer with cards values", ()=> {
         expect(jsonResult).toBe(jsonExpected)  
     })
 
     let object = JSON.parse(jsonResult, JsonParser.cardsReviver)
-    test("TimelineReviver.reviver with tasks values", ()=> {
+    test("JsonParser.cardsReviver with cards values", ()=> {
         expect(object.constructor.name).toEqual("Array")
         expect((<Array<Struct.Card>>object).length).toBe(0)
     })
@@ -39,12 +39,12 @@ function withCards(){
     
     let jsonResult = JSON.stringify(timelineStore.cards)
     let jsonExpected = '[{"key":"key1","title":"title1","lastUpdated":"2020-12-31T00:00:00.000Z"},{"key":"key2","title":"title2","lastUpdated":"2022-01-01T00:00:00.000Z"},{"key":"key3","title":"title3","lastUpdated":"2021-02-01T00:00:00.000Z"}]'
-    test("TimelineReviver.replacer with tasks values", ()=> {
+    test("JsonParser.cardsReplacer with cards values", ()=> {
         expect(jsonResult).toBe(jsonExpected)  
     })
 
     let object = JSON.parse(jsonResult, JsonParser.cardsReviver)
-    test("TimelineReviver.reviver with tasks values", ()=> {
+    test("JsonParser.cardsReviver with cards values", ()=> {
         expect(object.constructor.name).toEqual("Array")
         expect((<Array<Struct.Card>>object).length).toBe(3)
         expect((<Array<Struct.Card>>object)[0].key).toBe("key1")

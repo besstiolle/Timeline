@@ -40,7 +40,7 @@ import { FactoryTimeline } from './factoryTimeline';
     function m_duplicate(event){
         let index = getIndex(event)
         let tmpMilestones : Array<Struct.Milestone> = $store.currentTimeline.milestones.splice(index+1, $store.currentTimeline.milestones.length)
-        let clone = {... $store.currentTimeline.milestones[index]}
+        let clone = <Struct.Milestone> {... $store.currentTimeline.milestones[index]}
         clone.id = $store.currentTimeline.getNextId()
         FactoryTimeline.addMilestone($store.currentTimeline, clone )
         tmpMilestones.forEach(tmpMilestone => {
@@ -49,11 +49,11 @@ import { FactoryTimeline } from './factoryTimeline';
         $store.currentTimeline.milestones = $store.currentTimeline.milestones
     }
     function m_add(){
-        let diffSec : number = $store.currentTimeline.end.getTime() - $store.currentTimeline.start.getTime()
+        let diffSec : number = $store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()
         FactoryTimeline.addMilestone($store.currentTimeline, new Struct.Milestone(
                 $store.currentTimeline.getNextId(),
                 "My Milestone", 
-                new Date($store.currentTimeline.start.getTime() + (0.5 * diffSec)),
+                Helpers.toYYYY_MM_DD(new Date($store.currentTimeline.getStart().getTime() + (0.5 * diffSec))),
                 true
                 ))
                 $store.currentTimeline.milestones = $store.currentTimeline.milestones
@@ -92,7 +92,7 @@ import { FactoryTimeline } from './factoryTimeline';
         </svg>
     </div>
     <input type="text" bind:value="{milestone.label}" class="label"/>
-    <input type="date" name="{Constantes.LIVE_PREFIX.MD}{i}" value="{Helpers.toYYYY_MM_DD(milestone.date)}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
+    <input type="date" name="{Constantes.LIVE_PREFIX.MD}{i}" value="{milestone.date}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
 </div>
 {/each}
 

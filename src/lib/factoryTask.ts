@@ -16,8 +16,8 @@ export module FactoryTask {
         return "task"
             + car + task.label
             + car + task.isShow
-            + car + Helpers.toYYYY_MM_DD(task.dateStart)
-            + car + Helpers.toYYYY_MM_DD(task.dateEnd)
+            + car + task.dateStart
+            + car + task.dateEnd
             + car + task.progress
             + car + task.swimline
     }

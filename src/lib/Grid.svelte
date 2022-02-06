@@ -3,8 +3,8 @@
     import { Constantes } from './constantes';
     import { store } from './stores';
 
-    let startString = Helpers.toYYYY_MM_DD($store.currentTimeline.start)
-    let endString = Helpers.toYYYY_MM_DD($store.currentTimeline.end)
+    let startString = $store.currentTimeline.start
+    let endString = $store.currentTimeline.end
 </script>
 
 <div id='grid'>

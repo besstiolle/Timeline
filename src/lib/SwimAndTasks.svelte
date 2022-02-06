@@ -117,14 +117,14 @@ function up(event){
         let task: Struct.Task = FactoryTask.getById($store.currentTimeline, parseInt(taskId.substring(1))) //html id = T999 => 999
         if( task ){
             if(realAction == ACTION.LEFT || realAction == ACTION.RIGHT) {
-                let dateStart = Helpers.getDateFromViewportX(TActionBarCoord.REC_X, $store.currentTimeline.start, $store.currentTimeline.end)
-                let dateEnd = Helpers.getDateFromViewportX(TActionBarCoord.REC_X2, $store.currentTimeline.start, $store.currentTimeline.end)
+                let dateStart = Helpers.getDateFromViewportX(TActionBarCoord.REC_X, $store.currentTimeline.getStart(), $store.currentTimeline.getEnd())
+                let dateEnd = Helpers.getDateFromViewportX(TActionBarCoord.REC_X2, $store.currentTimeline.getStart(), $store.currentTimeline.getEnd())
 
                 dateStart.setHours(0,0,0,0)
                 dateEnd.setHours(0,0,0,0)
 
-                task.dateStart = dateStart
-                task.dateEnd = dateEnd
+                task.setStart(dateStart)
+                task.setEnd(dateEnd)
             } else if(realAction == ACTION.PROGRESS) {
                 let viewportX:number = event.clientX / window.innerWidth * Constantes.GRID.ALL_WIDTH
 
@@ -272,8 +272,8 @@ function moveResizing(event, viewportX:number){
             rightLabel.setAttribute("x", (viewportX + 5).toString())
         }
         // update content of right label
-        let dateStart = Helpers.getDateFromViewportX(TActionBarCoord.REC_X, $store.currentTimeline.start, $store.currentTimeline.end)
-        let dateEnd = Helpers.getDateFromViewportX(TActionBarCoord.REC_X2, $store.currentTimeline.start, $store.currentTimeline.end)
+        let dateStart = Helpers.getDateFromViewportX(TActionBarCoord.REC_X, $store.currentTimeline.getStart(), $store.currentTimeline.getEnd())
+        let dateEnd = Helpers.getDateFromViewportX(TActionBarCoord.REC_X2, $store.currentTimeline.getStart(), $store.currentTimeline.getEnd())
         
         rightLabel.innerHTML = (dateStart).getDate() + " " + Constantes.MONTHS[(dateStart).getMonth()] 
                    + " - " + (dateEnd).getDate() + " " + Constantes.MONTHS[(dateEnd).getMonth()]

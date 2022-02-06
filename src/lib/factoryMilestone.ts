@@ -14,7 +14,7 @@ export module FactoryMilestone {
         return "milestone"
             + car + milestone.label
             + car + milestone.isShow
-            + car + Helpers.toYYYY_MM_DD(milestone.date)
+            + car + milestone.date
     }
     
     /**

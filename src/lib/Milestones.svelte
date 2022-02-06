@@ -65,7 +65,7 @@ import { FactoryMilestone } from './factoryMilestone';
             let idMilestone = currentTarget.getAttribute("id").substring(1) // M999 => 999
 
             let milestones = FactoryMilestone.getById($store.currentTimeline, parseInt(idMilestone))
-            milestones.date = date
+            milestones.setDate(date)
             $store.currentTimeline.milestones = $store.currentTimeline.milestones 
         }
 
@@ -113,7 +113,7 @@ import { FactoryMilestone } from './factoryMilestone';
     }
 
     function processNewDate(newX: number){
-        let ratio = $store.currentTimeline.start.getTime() + (newX / Constantes.GRID.MIDDLE_WIDTH * ($store.currentTimeline.end.getTime() - $store.currentTimeline.start.getTime()))
+        let ratio = $store.currentTimeline.getStart().getTime() + (newX / Constantes.GRID.MIDDLE_WIDTH * ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()))
         return new Date(ratio)
     }
 
@@ -125,7 +125,7 @@ import { FactoryMilestone } from './factoryMilestone';
     stroke-dasharray="0.5 2" fill="transparent" class:onhover={ghostSVGNode && hoverGroup} />
 {#each milestones as milestone, i}
     <svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
-        x="{Constantes.GRID.MIDDLE_X + (milestone.date.getTime() - $store.currentTimeline.start.getTime()) / ($store.currentTimeline.end.getTime() - $store.currentTimeline.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH - 10}" y="{i%2 * 25}" 
+        x="{Constantes.GRID.MIDDLE_X + (milestone.getDate().getTime() - $store.currentTimeline.getStart().getTime()) / ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()) * Constantes.GRID.MIDDLE_WIDTH - 10}" y="{i%2 * 25}" 
         class="milestoneSVGSection" class:shouldBeHidden={!milestone.isShow} on:mousedown={down} id="M{milestone.id}" >
         
         <use x="0" y="0" href="#mapfiller" fill="transparent" stroke="transparent" class="toExcludeFromSnapshot"/>
@@ -136,7 +136,7 @@ import { FactoryMilestone } from './factoryMilestone';
         <line stroke-dasharray="1" x1="10" y1="20" x2="10" y2="25" stroke="#000" />
         {/if}
         <text x="17" y="9" font-size="10" fill="#000">{milestone.label}</text>
-        <text x="17" y="18" fill="#44546A">{milestone.date.getDate()}-{Constantes.MONTHS[milestone.date.getMonth()]}</text>
+        <text x="17" y="18" fill="#44546A">{milestone.getDate().getDate()}-{Constantes.MONTHS[milestone.getDate().getMonth()]}</text>
     </svg>
     <line id='endMilestoneNode' x1="0" y1="0" x2="0" y2="0" stroke="transparent" />
 {/each}

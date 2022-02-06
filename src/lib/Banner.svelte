@@ -39,11 +39,11 @@
 
     let i=0
     let jalons=[]
-    while ($store.currentTimeline.end.getFullYear() > dateInc.getFullYear() || 
-            ($store.currentTimeline.end.getFullYear() == dateInc.getFullYear() && $store.currentTimeline.end.getMonth() >= dateInc.getMonth()) && i < 100){
+    while ($store.currentTimeline.getEnd().getFullYear() > dateInc.getFullYear() || 
+            ($store.currentTimeline.getEnd().getFullYear() == dateInc.getFullYear() && $store.currentTimeline.getEnd().getMonth() >= dateInc.getMonth()) && i < 100){
         i++;
         jalons.push({
-            left:(dateInc.getTime() - $store.currentTimeline.start.getTime()) / ($store.currentTimeline.end.getTime() - $store.currentTimeline.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH,
+            left:(dateInc.getTime() - $store.currentTimeline.getStart().getTime()) / ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()) * Constantes.GRID.MIDDLE_WIDTH,
             label:(dateInc.getMonth()==0?dateInc.getUTCFullYear():Constantes.MONTHS[dateInc.getMonth()]),
             classCss:(dateInc.getMonth()==0?"newYear":"")
             //label:Constantes.MONTHS[dateInc.getMonth()]

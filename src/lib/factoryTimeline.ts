@@ -20,17 +20,17 @@ export module FactoryTimeline {
         
         let min : Date = new Date("2999-12-31");
         timeline.tasks.forEach(task => {
-            if((timeline.showAll || task.isShow) && min > task.dateStart){
-                min = task.dateStart
+            if((timeline.showAll || task.isShow) && min > task.getStart()){
+                min = task.getStart()
             }
         });
         timeline.milestones.forEach(milestone => {
-            if((timeline.showAll || milestone.isShow) && min > milestone.date){
-                min = milestone.date
+            if((timeline.showAll || milestone.isShow) && min > milestone.getDate()){
+                min = milestone.getDate()
             }
         });
         
-        return new Date(min)
+        return min
     }
     
 
@@ -48,16 +48,16 @@ export module FactoryTimeline {
 
         let max : Date = new Date("1900-01-01");
         timeline.tasks.forEach(task => {
-            if((timeline.showAll || task.isShow) && max < task.dateEnd){
-                max = task.dateEnd
+            if((timeline.showAll || task.isShow) && max < task.getEnd()){
+                max = task.getEnd()
             }
         });
         timeline.milestones.forEach(milestone => {
-            if((timeline.showAll || milestone.isShow) && max < milestone.date){
-                max = milestone.date
+            if((timeline.showAll || milestone.isShow) && max < milestone.getDate()){
+                max = milestone.getDate()
             }
         });
-        return new Date(max)
+        return max
     }   
 
     /**
@@ -147,13 +147,16 @@ export module FactoryTimeline {
     }
 
     function _processLimites(timeline : Struct.Timeline) : void{
-        timeline.start = FactoryTimeline.getMin(timeline)
-        timeline.end =  FactoryTimeline.getMax(timeline)
+        let start = FactoryTimeline.getMin(timeline)
+        let end = FactoryTimeline.getMax(timeline)
 
         //TODO prévoir le cas des années / périodes très longues / très courtes
-        timeline.start.setDate(1)
-        timeline.end.setDate(1)
-        timeline.end.setMonth(timeline.end.getMonth() + 1)
+        start.setDate(1)
+        end.setDate(1)
+        end.setMonth(end.getMonth() + 1)
+
+        timeline.setStart(start)
+        timeline.setEnd(end)
     }
 
     function _processViewboxResizing(timeline: Struct.Timeline) : void{
@@ -172,18 +175,18 @@ export module FactoryTimeline {
             let swim1Id = FactorySwimline.create(timeline,"Swimline1")
             let swim2Id = FactorySwimline.create(timeline,"Swimline2")
 
-            addTask(timeline, new Struct.Task(0, "Random Task 0", new Date("2021-01-15"), new Date("2021-04-01"),100, true, "", null))
-            addTask(timeline, new Struct.Task(1, "Random Task 1", new Date("2021-12-01"), new Date("2022-04-01"),0, true, "", null))
-            addTask(timeline, new Struct.Task(2, "Random Task 2", new Date("2021-02-01"), new Date("2021-03-05"),15, true, "Swimline1", swim1Id))
-            addTask(timeline, new Struct.Task(3, "Random Task 3", new Date("2021-03-10"), new Date("2021-03-30"),0, true, "Swimline1", swim1Id))
-            addTask(timeline, new Struct.Task(4, "Random Task 4", new Date("2021-02-01"), new Date("2021-05-01"),30, false, "", null))
-            addTask(timeline, new Struct.Task(5, "Random Task 5", new Date("2021-01-31"), new Date("2021-03-01"),100, true, "", null))
-            addTask(timeline, new Struct.Task(6, "Random Task 6", new Date("2021-05-01"), new Date("2021-05-05"),25, true, "Swimline2", swim2Id))
-            addTask(timeline, new Struct.Task(7, "Random Task 7", new Date("2021-12-01"), new Date("2022-04-01"),75, true, "", null))
+            addTask(timeline, new Struct.Task(0, "Random Task 0", "2021-01-15", "2021-04-01",100, true, "", null))
+            addTask(timeline, new Struct.Task(1, "Random Task 1", "2021-12-01", "2022-04-01",0, true, "", null))
+            addTask(timeline, new Struct.Task(2, "Random Task 2", "2021-02-01", "2021-03-05",15, true, "Swimline1", swim1Id))
+            addTask(timeline, new Struct.Task(3, "Random Task 3", "2021-03-10", "2021-03-30",0, true, "Swimline1", swim1Id))
+            addTask(timeline, new Struct.Task(4, "Random Task 4", "2021-02-01", "2021-05-01",30, false, "", null))
+            addTask(timeline, new Struct.Task(5, "Random Task 5", "2021-01-31", "2021-03-01",100, true, "", null))
+            addTask(timeline, new Struct.Task(6, "Random Task 6", "2021-05-01", "2021-05-05",25, true, "Swimline2", swim2Id))
+            addTask(timeline, new Struct.Task(7, "Random Task 7", "2021-12-01", "2022-04-01",75, true, "", null))
     
-            addMilestone(timeline, new Struct.Milestone(8, "Milestone 1", new Date("2020-12-01"), true))
-            addMilestone(timeline, new Struct.Milestone(9, "Milestone 2", new Date(), true))
-            addMilestone(timeline, new Struct.Milestone(10, "Milestone 3", new Date("2022-08-15"), false))
+            addMilestone(timeline, new Struct.Milestone(8, "Milestone 1", "2020-12-01", true))
+            addMilestone(timeline, new Struct.Milestone(9, "Milestone 2", "2021-03-20", true))
+            addMilestone(timeline, new Struct.Milestone(10, "Milestone 3", "2022-08-15", false))
 
             timeline.maxId=11     
         }
