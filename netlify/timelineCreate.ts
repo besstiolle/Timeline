@@ -1,6 +1,6 @@
 
+import type { Struct } from "$lib/struct.class"
 import {FaunaError} from "../src/faunadb/FaunaError.class"
-import { FaunaStruct } from "../src/faunadb/faunaStruct.class"
 import { JsonParser } from "../src/lib/jsonParser"
 
 /**
@@ -23,34 +23,23 @@ import { JsonParser } from "../src/lib/jsonParser"
  *  @see : https://docs.netlify.com/functions/build-with-javascript/
  */
 export async function create(q, client, event, context) {
-    console.info("create timeline with informations : ")
+    console.info("create timeline on lambda ")
     
     const COLLECTION = 'myCollection'
-    const object = <FaunaStruct> JSON.parse(event.body)
-    const validStringProperties = ['ownerKey','writeKey','readKey','hash']
-    const validProperties = [...validStringProperties, 'timeline']
+    let timeline = null
+    //const validStringProperties = ['ownerKey','writeKey','readKey','hash']
+    //const validProperties = [...validStringProperties, 'timeline']
     const cars64 = /^[0-9a-zA-Z]{64}$/g
 
-    let faunaStruct = new FaunaStruct()
-
-    for (let key in object) {
-        if (object.hasOwnProperty(key) && !validProperties.includes(key)) {
-            return (new FaunaError(["Malformed Request Body", "key `" + key + "` wasn't expected"]).return())
-        }
-    }
+    //let faunaStruct = new FaunaStruct()
+    
 
     let fieldName: string = null 
+
     //Sanitize object
-    for (let index in validStringProperties) {
-        fieldName = validStringProperties[index]
-        if(object[fieldName] && object[fieldName].match(cars64)){ 
-            faunaStruct[fieldName] = object[fieldName]
-        } else {
-            return (new FaunaError(["Malformed Request Body", "key `" + fieldName + "` wasn't well formated"]).return())
-        }
-    }
     try{
-        faunaStruct.timeline = JSON.parse(JSON.stringify(object.timeline), JsonParser.timelineReviver)
+        timeline = <Struct.Timeline> JSON.parse(event.body, JsonParser.timelineReviver)
+        console.info("timeline.start : %o", timeline)
     } catch (error){
         return (new FaunaError(["Malformed Request Body", error]).return())
     }
@@ -59,7 +48,8 @@ export async function create(q, client, event, context) {
     return await client.query(
         q.Create(
             q.Collection(COLLECTION),
-            {data: faunaStruct}
+            {data: timeline}
+            //{data: JSON.parse(event.body)}
         )
 
       ).then((ret) => {

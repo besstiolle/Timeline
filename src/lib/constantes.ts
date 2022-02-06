@@ -26,4 +26,11 @@ export module Constantes {
     export const LOCAL_STORAGE = {
         KEY_CARDS : "cards"
     }
+
+    export const ACCESS={
+        READ:"r",
+        WRITE:"w",
+        OWNER:"o",
+        LOCAL:"g"
+    }
 }

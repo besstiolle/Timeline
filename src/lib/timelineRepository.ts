@@ -1,5 +1,3 @@
-
-import { FaunaStruct } from "../../src/faunadb/faunaStruct.class";
 import type { Struct } from "./struct.class";
 
 const endpoint = import.meta.env.VITE_API_ENDPOINT_BASE_URL + '.netlify/functions/timeline?'
@@ -12,13 +10,7 @@ export async function create(timeline : Struct.Timeline): Promise<string>{
 
     const res = await fetch(endpoint, {
         method: 'POST',
-        body: JSON.stringify({
-            timeline: timeline,
-            ownerKey: timeline.ownerKey,
-            writeKey: timeline.writeKey,
-            readKey: timeline.readKey,
-            hash: '1234567890123456789012345678901234567890123456789012345678901234'
-        })
+        body: JSON.stringify(timeline)
     })
 
     return await res.json()
@@ -31,7 +23,7 @@ export async function get(key: string, ownerKey?: string, writeKey?: string, rea
         params =  new URLSearchParams({key: key, ownerKey: ownerKey})
     } else if(writeKey){
         params =  new URLSearchParams({key: key, writeKey: writeKey})
-    } else if(writeKey){
+    } else if(readKey){
         params =  new URLSearchParams({key: key, readKey: readKey})
     } else {
         throw "at least you must provide one of theses : ownerKey, writeKey or readKey"

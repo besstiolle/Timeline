@@ -21,7 +21,7 @@ import {FaunaError} from "../src/faunadb/FaunaError.class"
  *  @see : https://docs.netlify.com/functions/build-with-javascript/
  */
 export async function get(q, client, event, context) {
-    console.info("retrive timeline with informations : ")
+    console.info("retrive timeline on lambda : ")
     
     const INDEXE_READ = 'getTimelineByKeyAndReadKeyDesc'
     const INDEXE_WRITE = 'getTimelineByKeyAndWriteKeyDesc'
