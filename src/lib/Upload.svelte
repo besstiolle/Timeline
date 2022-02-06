@@ -82,8 +82,8 @@
                 let elmts : string[]
                 let label: string
                 let isShow : boolean
-                let dateStart : Date
-                let dateEnd : Date
+                let start : string
+                let end : string
                 let progress: number
                 let swimline: string
                 let previousSwimline: string
@@ -100,9 +100,9 @@
                     if("task" == elmts[0] || "milestone" == elmts[0]) {
                         label = elmts[1]
                         isShow = (elmts[2] === "TRUE" || elmts[2] === "true") //FIXME prévoir regex
-                        dateStart = new Date(elmts[3])
+                        start = elmts[3]
                         if("task" == elmts[0] ){
-                            dateEnd = new Date(elmts[4])
+                            end = elmts[4]
                             progress = Number(elmts[5])
                             swimline = elmts[6]
                             if(swimline !== "" && previousSwimline == swimline){
@@ -114,11 +114,11 @@
                                 //reset previous Swimline id
                                 previousSwimlineId = null
                             }
-                            FactoryTimeline.addTask($store.currentTimeline, new Struct.Task(id, label, dateStart, dateEnd, progress, isShow, swimline, previousSwimlineId))
+                            FactoryTimeline.addTask($store.currentTimeline, new Struct.Task(id, label, start, end, progress, isShow, swimline, previousSwimlineId))
 
                             previousSwimline = swimline
                         } else if("milestone" == elmts[0] ){
-                            FactoryTimeline.addMilestone($store.currentTimeline, new Struct.Milestone(id, label, dateStart, isShow))
+                            FactoryTimeline.addMilestone($store.currentTimeline, new Struct.Milestone(id, label, start, isShow))
                         } 
                         id = $store.currentTimeline.getNextId()
                     }

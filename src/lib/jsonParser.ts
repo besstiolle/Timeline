@@ -30,22 +30,25 @@ export module JsonParser {
         }
 
         //Case of Date (min, max, ...)
+        //TODO rewrite code
         if(['start', 'end'].includes(key)) {
             if(value == null) {
                 return null
             }
-            return new Date(value)
+            return value
 		}
 
         if(typeof value === 'object' && value !== null && value.label) { //Un object contenant un label => nos objects Task & Milestone
             if(value.date){
                 // Because of Date we can't do 
                 //  > Object.assign(new Struct.Task, value) 
-                return new Struct.Milestone(value.id, value.label,new Date(value.date), value.isShow)
+                //TODO rewrite code
+                return new Struct.Milestone(value.id, value.label,value.date, value.isShow)
             } else if (value.dateStart) {
                 // Because of Date we can't do 
                 //  > Object.assign(new Struct.Task, value) 
-                return new Struct.Task(value.id, value.label,new Date(value.dateStart), new Date(value.dateEnd), 
+                //TODO rewrite code
+                return new Struct.Task(value.id, value.label,value.dateStart, value.dateEnd, 
                                 value.progress, value.isShow, value.swimline, value.swimlineId)
             } else {
                 //This is a re-processed value, we don't need to reprocessing it right now

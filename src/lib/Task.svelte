@@ -30,12 +30,12 @@
         styleColor = {fill : blue, stroke: blueStroke}
     }
 
-    let labelRight:string = currentTask.dateStart.getDate() + " " + Constantes.MONTHS[currentTask.dateStart.getMonth()] 
-                    + " - " + currentTask.dateEnd.getDate() + " " + Constantes.MONTHS[currentTask.dateEnd.getMonth()]
+    let labelRight:string = currentTask.getStart().getDate() + " " + Constantes.MONTHS[currentTask.getStart().getMonth()] 
+                    + " - " + currentTask.getEnd().getDate() + " " + Constantes.MONTHS[currentTask.getEnd().getMonth()]
     
     
-    let xGrayPosition =  Helpers.getViewportXFromDate(currentTask.dateStart, $store.currentTimeline.start, $store.currentTimeline.end)
-    let x2GrayPosition = Helpers.getViewportXFromDate(currentTask.dateEnd, $store.currentTimeline.start, $store.currentTimeline.end)
+    let xGrayPosition =  Helpers.getViewportXFromDate(currentTask.getStart(), $store.currentTimeline.getStart(), $store.currentTimeline.getEnd())
+    let x2GrayPosition = Helpers.getViewportXFromDate(currentTask.getEnd(), $store.currentTimeline.getStart(), $store.currentTimeline.getEnd())
     
     let widthGray = x2GrayPosition - xGrayPosition 
     let widthProgress = currentTask.progress * widthGray / 100

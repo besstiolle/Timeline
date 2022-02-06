@@ -3,12 +3,12 @@
     import { Constantes } from './constantes';
     import { store } from './stores';
 
-    let toDisplay: boolean = ($store.currentTimeline.start <= new Date() && $store.currentTimeline.end >= new Date())
+    let toDisplay: boolean = ($store.currentTimeline.getStart() <= new Date() && $store.currentTimeline.getEnd() >= new Date())
 
     const todayColor = "#D41E24"
     const todayLabelColor = "#000000"
     
-    let widthToday: number = (new Date().getTime() - $store.currentTimeline.start.getTime()) / ($store.currentTimeline.end.getTime() - $store.currentTimeline.start.getTime()) * Constantes.GRID.MIDDLE_WIDTH
+    let widthToday: number = (new Date().getTime() - $store.currentTimeline.getStart().getTime()) / ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()) * Constantes.GRID.MIDDLE_WIDTH
  
 </script>
 

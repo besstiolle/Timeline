@@ -1,3 +1,5 @@
+import { Helpers } from "./helpers"
+
 export module Struct {
 
 	export class TimelineStore {
@@ -26,8 +28,8 @@ export module Struct {
         milestones : Array<Milestone> = new Array<Milestone>()
 		swimlines : Array<Swimline> = new Array<Swimline>()
 		isInitiate : boolean = false
-		start: Date = null
-		end: Date = null
+		start: string = null
+		end: string = null
 		maxId: number = 0
 		viewbox: string = "0 0 0 0"
 		showAll: boolean = false
@@ -46,19 +48,35 @@ export module Struct {
 			this.maxId++
 			return this.maxId
 		}
+
+		getStart() : Date{
+			return new Date(this.start)
+		}
+
+		getEnd() : Date{
+			return new Date(this.end)
+		}
+
+		setStart(start: Date) : void{
+			this.start = Helpers.toYYYY_MM_DD(start)
+		}
+
+		setEnd(end: Date) : void{
+			this.end = Helpers.toYYYY_MM_DD(end)
+		}
 	}
 
 	export class Task {
 		id: number
 		label: string
-		dateStart: Date
-		dateEnd: Date
+		dateStart: string
+		dateEnd: string
 		progress: number
 		isShow: boolean
 		swimline: string
 		swimlineId: number
 	
-		constructor(id : number, label : string, dateStart : Date, dateEnd : Date, progress : number, isShow : boolean, swimline:string, swimlineId: number) {
+		constructor(id : number, label : string, dateStart : string, dateEnd : string, progress : number, isShow : boolean, swimline:string, swimlineId: number) {
 			this.id = id
 			this.label = label
 			this.dateStart = dateStart
@@ -69,21 +87,46 @@ export module Struct {
 			this.swimlineId = swimlineId
 		}
 
+		getStart() : Date{
+			return new Date(this.dateStart)
+		}
+
+		getEnd() : Date{
+			return new Date(this.dateEnd)
+		}
+
+		setStart(start: Date) : void{
+			this.dateStart = Helpers.toYYYY_MM_DD(start)
+		}
+
+		setEnd(end: Date) : void{
+			this.dateEnd = Helpers.toYYYY_MM_DD(end)
+		}
+
 		
 	}
 
 	export class Milestone {
 		id: number
 		label: string
-		date: Date
+		date: string
 		isShow: boolean
 	
-		constructor(id : number, label : string, date : Date, isShow : boolean) {
+		constructor(id : number, label : string, date : string, isShow : boolean) {
 			this.id = id
 			this.label = label;
 			this.date = date;
 			this.isShow = isShow
 		}
+		
+		getDate() : Date{
+			return new Date(this.date)
+		}
+
+		setDate(date: Date) : void{
+			this.date = Helpers.toYYYY_MM_DD(date)
+		}
+
 	}
 
 	

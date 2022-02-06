@@ -40,7 +40,7 @@ import { FactoryTimeline } from './factoryTimeline';
     function b_duplicate(event){
         let index = getIndex(event)
         let tmpTasks : Array<Struct.Task> = $store.currentTimeline.tasks.splice(index+1, $store.currentTimeline.tasks.length)
-        let clone = {... $store.currentTimeline.tasks[index]}
+        let clone = <Struct.Task> {... $store.currentTimeline.tasks[index]}
         clone.id = $store.currentTimeline.getNextId()
         FactoryTimeline.addTask($store.currentTimeline, clone)
         tmpTasks.forEach(tmpTask => {
@@ -49,12 +49,12 @@ import { FactoryTimeline } from './factoryTimeline';
         $store.currentTimeline.tasks = $store.currentTimeline.tasks
     }
     function b_add(){
-        let diffSec : number = $store.currentTimeline.end.getTime() - $store.currentTimeline.start.getTime()
+        let diffSec : number = $store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()
         FactoryTimeline.addTask($store.currentTimeline, new Struct.Task(
                 $store.currentTimeline.getNextId(),
                 "Some task", 
-                new Date($store.currentTimeline.start.getTime() + (0.1 * diffSec)), 
-                new Date($store.currentTimeline.end.getTime() - (0.1 * diffSec)),
+                Helpers.toYYYY_MM_DD(new Date($store.currentTimeline.getStart().getTime() + (0.1 * diffSec))), 
+                Helpers.toYYYY_MM_DD(new Date($store.currentTimeline.getEnd().getTime() - (0.1 * diffSec))),
                 0,
                 true,
                 "",
@@ -94,8 +94,8 @@ import { FactoryTimeline } from './factoryTimeline';
         </svg>
     </div>
     <input type="text" bind:value="{task.label}" class="label"/>
-    <input type="date" name="{Constantes.LIVE_PREFIX.TS}{i}" value="{Helpers.toYYYY_MM_DD(task.dateStart)}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
-    <input type="date" name="{Constantes.LIVE_PREFIX.TE}{i}" value="{Helpers.toYYYY_MM_DD(task.dateEnd)}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
+    <input type="date" name="{Constantes.LIVE_PREFIX.TS}{i}" value="{task.dateStart}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
+    <input type="date" name="{Constantes.LIVE_PREFIX.TE}{i}" value="{task.dateEnd}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
     <input type="number" bind:value="{task.progress}" min="0" max="100" class="progress" />
     <progress max="100" value="{task.progress}"> {task.progress}% </progress>
     <input type="text" bind:value="{task.swimline}" class="label"/>

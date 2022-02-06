@@ -44,28 +44,32 @@ testProcessLimites()*/
 
 function testProcessLimites(){
     let timeline1 = new Struct.Timeline("key", "title")
-    timeline1.tasks.push(new Struct.Task(1,"label 1", new Date("2020-01-01"), new Date("2020-12-31"), 100, true, "Swimline 1", 5))
+    timeline1.tasks.push(new Struct.Task(1,"label 1", "2020-01-01", "2020-12-31", 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline1)
     test("refresh._processLimites with dates", ()=> {
-        expect(timeline1.start).toEqual(new Date("2020-01-01"))
-        expect(timeline1.end).toEqual(new Date("2021-01-01"))
+        expect(timeline1.start).toEqual("2020-01-01")
+        expect(timeline1.getStart()).toEqual(new Date("2020-01-01"))
+        expect(timeline1.end).toEqual("2021-01-01")
+        expect(timeline1.getEnd()).toEqual(new Date("2021-01-01"))
     })
 
     let timeline2 = new Struct.Timeline("key", "title")
-    timeline2.tasks.push(new Struct.Task(1,"label 1", new Date("2020-01-15"), new Date("2020-02-01"), 100, true, "Swimline 1", 5))
+    timeline2.tasks.push(new Struct.Task(1,"label 1", "2020-01-15", "2020-02-01", 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline2)
     test("refresh._processLimites with dates", ()=> {
-        expect(timeline2.start).toEqual(new Date("2020-01-01"))
-        expect(timeline2.end).toEqual(new Date("2020-03-01"))
+        expect(timeline2.start).toEqual("2020-01-01")
+        expect(timeline2.getStart()).toEqual(new Date("2020-01-01"))
+        expect(timeline2.end).toEqual("2020-03-01")
+        expect(timeline2.getEnd()).toEqual(new Date("2020-03-01"))
     })
 }
 testProcessLimites()
 
 function testProcessViewboxResizing(){
 
-    let date1: Date = new Date("2020-01-01")
+    let date1: string = "2020-01-01"
     let taskVisible = new Struct.Task(1,"label 1", date1, date1, 100, true, "Swimline 1", 5)
     let taskHidden = new Struct.Task(1,"label 1", date1, date1, 100, false, "Swimline 1", 5)
     let timeline1 = new Struct.Timeline("key", "title")
@@ -111,7 +115,7 @@ testProcessViewboxResizing()
 
 function testRefreshSwimlines(){
     let timeline1 = new Struct.Timeline("key", "title")
-    let date1: Date = new Date("2020-01-01")
+    let date1: string = "2020-01-01"
     timeline1.tasks.push(new Struct.Task(1,"label 1", date1, date1, 100, true, "Swimline 1", 0))
     timeline1.tasks.push(new Struct.Task(2,"label 2", date1, date1, 100, false, "Swimline 2", 0))
     timeline1.tasks.push(new Struct.Task(3,"label 3", date1, date1, 100, false, "Swimline 2", 0))
