@@ -11,7 +11,7 @@ function withTask(){
     timeline.tasks.push(new Struct.Task(1,"label 1", "2022-01-01", "2022-02-01", 100, true, "Swimline 1", 5))
     
     let jsonResult = JSON.stringify(timeline)
-    let jsonExpected = '{"key":"key","title":"title","tasks":[{"id":1,"label":"label 1","dateStart":"2022-01-01","dateEnd":"2022-02-01","progress":100,"isShow":true,"swimline":"Swimline 1","swimlineId":5}],"milestones":[],"swimlines":[],"isInitiate":false,"start":null,"end":null,"maxId":0,"viewbox":"0 0 0 0","showAll":false}'
+    let jsonExpected = '{"key":"key","title":"title","tasks":[{"id":1,"label":"label 1","dateStart":"2022-01-01","dateEnd":"2022-02-01","progress":100,"isShow":true,"swimline":"Swimline 1","swimlineId":5}],"milestones":[],"swimlines":[],"isInitiate":false,"start":null,"end":null,"maxId":0,"viewbox":"0 0 0 0","showAll":false,"isOnline":false,"ownerKey":null,"writeKey":null,"readKey":null}'
     test("JsonParser.timelineReplacer with tasks values", ()=> {
         expect(jsonResult).toBe(jsonExpected)  
     })
@@ -31,7 +31,7 @@ function withMilestone(){
     timeline.milestones.push(new Struct.Milestone(1,"label 1", "2022-01-01",true))
     
     let jsonResult = JSON.stringify(timeline)
-    let jsonExpected = '{"key":"key","title":"title","tasks":[],"milestones":[{"id":1,"label":"label 1","date":"2022-01-01","isShow":true}],"swimlines":[],"isInitiate":false,"start":null,"end":null,"maxId":0,"viewbox":"0 0 0 0","showAll":false}'
+    let jsonExpected = '{"key":"key","title":"title","tasks":[],"milestones":[{"id":1,"label":"label 1","date":"2022-01-01","isShow":true}],"swimlines":[],"isInitiate":false,"start":null,"end":null,"maxId":0,"viewbox":"0 0 0 0","showAll":false,"isOnline":false,"ownerKey":null,"writeKey":null,"readKey":null}'
     test("JsonParser.timelineReplacer with milestones values", ()=> {
         expect(jsonResult).toBe(jsonExpected)  
     })
@@ -54,7 +54,7 @@ function withMetaTimelines(){
     timeline.viewbox = "viewbox"
 
     let jsonResult = JSON.stringify(timeline)
-    let jsonExpected = '{"key":"key","title":"title","tasks":[],"milestones":[],"swimlines":[],"isInitiate":true,"start":"2022-01-01","end":"2022-12-31","maxId":99,"viewbox":"viewbox","showAll":true}'
+    let jsonExpected = '{"key":"key","title":"title","tasks":[],"milestones":[],"swimlines":[],"isInitiate":true,"start":"2022-01-01","end":"2022-12-31","maxId":99,"viewbox":"viewbox","showAll":true,"isOnline":false,"ownerKey":null,"writeKey":null,"readKey":null}'
     test("JsonParser.timelineReplacer with Metadatas", ()=> {
         expect(jsonResult).toBe(jsonExpected)  
     })
@@ -80,7 +80,7 @@ function withAllvalues(){
     timeline.viewbox = "viewbox"
 
     let jsonResult = JSON.stringify(timeline)
-    let jsonExpected = '{"key":"key","title":"title","tasks":[{"id":1,"label":"label 1","dateStart":"2022-01-01","dateEnd":"2022-02-01","progress":100,"isShow":true,"swimline":"Swimline 1","swimlineId":5}],"milestones":[{"id":1,"label":"label 1","date":"2022-01-01","isShow":true}],"swimlines":[],"isInitiate":true,"start":"2022-01-01","end":"2022-12-31","maxId":99,"viewbox":"viewbox","showAll":true}'
+    let jsonExpected = '{"key":"key","title":"title","tasks":[{"id":1,"label":"label 1","dateStart":"2022-01-01","dateEnd":"2022-02-01","progress":100,"isShow":true,"swimline":"Swimline 1","swimlineId":5}],"milestones":[{"id":1,"label":"label 1","date":"2022-01-01","isShow":true}],"swimlines":[],"isInitiate":true,"start":"2022-01-01","end":"2022-12-31","maxId":99,"viewbox":"viewbox","showAll":true,"isOnline":false,"ownerKey":null,"writeKey":null,"readKey":null}'
     test("JsonParser.timelineReplacer with all values", ()=> {
         expect(jsonResult).toBe(jsonExpected)  
     })
