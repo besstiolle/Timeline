@@ -1,5 +1,6 @@
 
-import {FaunaError} from "../src/faunadb/FaunaError.class"
+import {FaunaError} from "./FaunaError.class"
+import { INDEXES, REGEX } from "./faunaConstantes"
 
 /**
  *  @param event : {
@@ -22,13 +23,7 @@ import {FaunaError} from "../src/faunadb/FaunaError.class"
  */
 export async function get(q, client, event, context) {
     
-    const INDEXE_READ = 'getTimelineByKeyAndReadKeyDesc'
-    const INDEXE_WRITE = 'getTimelineByKeyAndWriteKeyDesc'
-    const INDEXE_OWNER = 'getTimelineByKeyAndOwnerKeyDesc'
-    const cars64 = /^[0-9a-zA-Z]{64}$/g
-    const cars10 = /^[0-9a-zA-Z]{10}$/g
-
-    if(!event.queryStringParameters["key"] || !event.queryStringParameters["key"].match(cars10)){
+    if(!event.queryStringParameters["key"] || !event.queryStringParameters["key"].match(REGEX.ALPHANUM10)){
       return (new FaunaError(["Malformed Request Body", "key `" + "key" + "` wasn't well formated"]).return())
     }
 
@@ -37,28 +32,28 @@ export async function get(q, client, event, context) {
     let indexeToUse: string = null
     let keyToUse: string = null
     if(event.queryStringParameters["ownerKey"]) {
-      if(!event.queryStringParameters["ownerKey"].match(cars64)){
+      if(!event.queryStringParameters["ownerKey"].match(REGEX.ALPHANUM64)){
         return (new FaunaError(["Malformed Request parameter", "key `" + "ownerKey" + "` wasn't well formated"]).return())
       }
       owner = true
       keyToUse = event.queryStringParameters["ownerKey"]
-      indexeToUse = INDEXE_OWNER
+      indexeToUse = INDEXES.INDEXE_OWNER_DESC
 
     } else if(event.queryStringParameters["writeKey"]) {
-      if(!event.queryStringParameters["writeKey"].match(cars64)){
+      if(!event.queryStringParameters["writeKey"].match(REGEX.ALPHANUM64)){
         return (new FaunaError(["Malformed Request parameter", "key `" + "writeKey" + "` wasn't well formated"]).return())
       }
       write = true
       keyToUse = event.queryStringParameters["writeKey"]
-      indexeToUse = INDEXE_WRITE
+      indexeToUse = INDEXES.INDEXE_WRITE_DESC
 
     } else if(event.queryStringParameters["readKey"]) {
-      if(!event.queryStringParameters["readKey"].match(cars64)){
+      if(!event.queryStringParameters["readKey"].match(REGEX.ALPHANUM64)){
         return (new FaunaError(["Malformed Request parameter", "key `" + "readKey" + "` wasn't well formated"]).return())
       }
       read = true
       keyToUse = event.queryStringParameters["readKey"]
-      indexeToUse = INDEXE_READ
+      indexeToUse = INDEXES.INDEXE_READ_DESC
     } else {
       return (new FaunaError(["Malformed Request parameter", "missing one of theses keys 'ownerKey','writeKey' or 'readKey'"]).return())
     }

@@ -1,10 +1,8 @@
 
 import type { Struct } from "$lib/struct.class"
-import {FaunaError} from "../src/faunadb/FaunaError.class"
+import {FaunaError} from "./FaunaError.class"
 import { JsonParser } from "../src/lib/jsonParser"
-
-const COLLECTION = 'myCollection'
-const INDEXE_WRITE_ASC = 'getTimelineByKeyAndWriteKeyAsc'
+import { COLLECTION, INDEXES } from "./faunaConstantes"
 
 /**
  *  @param event : {
@@ -28,7 +26,6 @@ const INDEXE_WRITE_ASC = 'getTimelineByKeyAndWriteKeyAsc'
 export async function create(q, client, event, context) {
     
     let timeline: Struct.Timeline = null
-    const cars64 = /^[0-9a-zA-Z]{64}$/g
 
     //Sanitize object
     try{
@@ -42,7 +39,7 @@ export async function create(q, client, event, context) {
       
       return await client.query(
           //Get first
-          q.Get(q.Match(q.Index(INDEXE_WRITE_ASC) , timeline.writeKey, timeline.key))
+          q.Get(q.Match(q.Index(INDEXES.INDEXE_WRITE_ASC) , timeline.writeKey, timeline.key))
       ).then((ret) => {
           timeline.ownerKey = ret.data.ownerKey
           return create2(q, client, timeline)    
@@ -60,7 +57,7 @@ export async function create(q, client, event, context) {
   async function create2(q, client, timeline: Struct.Timeline){
     return await client.query(
         q.Create(
-            q.Collection(COLLECTION),
+            q.Collection(COLLECTION.CURRENT_COLLECTION),
             {data: timeline}
         )
 

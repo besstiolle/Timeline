@@ -3,7 +3,7 @@ import faunadb from "faunadb"
 import {get} from "../timelineGet"
 import {create} from "../timelineCreate"
 import {remove} from "../timelineDelete"
-import {HTTP_WORDS} from "../../src/faunadb/constantes"
+import {HTTP_WORDS} from "../faunaConstantes"
 
 
 /**
