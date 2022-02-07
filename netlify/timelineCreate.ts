@@ -3,6 +3,9 @@ import type { Struct } from "$lib/struct.class"
 import {FaunaError} from "../src/faunadb/FaunaError.class"
 import { JsonParser } from "../src/lib/jsonParser"
 
+const COLLECTION = 'myCollection'
+const INDEXE_WRITE_ASC = 'getTimelineByKeyAndWriteKeyAsc'
+
 /**
  *  @param event : {
  *    "path": "Path parameter (original URL encoding)",
@@ -23,33 +26,42 @@ import { JsonParser } from "../src/lib/jsonParser"
  *  @see : https://docs.netlify.com/functions/build-with-javascript/
  */
 export async function create(q, client, event, context) {
-    console.info("create timeline on lambda ")
     
-    const COLLECTION = 'myCollection'
-    let timeline = null
-    //const validStringProperties = ['ownerKey','writeKey','readKey','hash']
-    //const validProperties = [...validStringProperties, 'timeline']
+    let timeline: Struct.Timeline = null
     const cars64 = /^[0-9a-zA-Z]{64}$/g
-
-    //let faunaStruct = new FaunaStruct()
-    
-
-    let fieldName: string = null 
 
     //Sanitize object
     try{
         timeline = <Struct.Timeline> JSON.parse(event.body, JsonParser.timelineReviver)
-        console.info("timeline.start : %o", timeline)
     } catch (error){
         return (new FaunaError(["Malformed Request Body", error]).return())
     }
     
+    //Case where "writer" user commit a work without "owner" key
+    if(timeline.writeKey && !timeline.ownerKey) {
+      
+      return await client.query(
+          //Get first
+          q.Get(q.Match(q.Index(INDEXE_WRITE_ASC) , timeline.writeKey, timeline.key))
+      ).then((ret) => {
+          timeline.ownerKey = ret.data.ownerKey
+          return create2(q, client, timeline)    
+      })
+      .catch((err) => {
+          return (new FaunaError(err)).return()
+      })
+    
+    //Case where "owner" user commit a work with all keys
+    } else {
+      return create2(q, client, timeline)
+    }
+  }
 
+  async function create2(q, client, timeline: Struct.Timeline){
     return await client.query(
         q.Create(
             q.Collection(COLLECTION),
             {data: timeline}
-            //{data: JSON.parse(event.body)}
         )
 
       ).then((ret) => {

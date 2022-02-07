@@ -5,6 +5,8 @@ export module Struct {
 	export class TimelineStore {
 		cards : Array<Card> = new Array<Card>()
 		currentTimeline : Timeline = null
+		lastUpdatedLocally : number = null
+		lastCommitedRemotely : number = null
 	}
 
 	export class Card {

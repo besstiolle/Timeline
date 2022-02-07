@@ -5,7 +5,23 @@
     import { Helpers } from './helpers';
     import { remove, create } from "./timelineRepository";
 
+    export function commit(){
+        if($store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000){
+            //console.info("gap > 2000 ms : %o", ($store.lastUpdatedLocally - $store.lastCommitedRemotely) / 1000)
 
+            create($store.currentTimeline).then((json) => {
+                $store.lastCommitedRemotely = json['message']['ts']
+
+            }).catch((err) => {
+                console.error("Error where calling create() in Online.commit() : %o", err)
+            }).finally(()=>{
+            })
+        } else {
+            //console.info("gap < 2000 ms : %o", ($store.lastUpdatedLocally - $store.lastCommitedRemotely) / 1000)
+        }
+        
+        
+    }
 
     let hidden = true
     export function openComponent(){hidden = false}   
@@ -15,19 +31,19 @@
     function doOffline(){
 
         remove($store.currentTimeline.key, $store.currentTimeline.ownerKey).then((json) => {
-            console.info("remove.then")
-            console.info(json)
 
             $store.currentTimeline.isOnline = false
             $store.currentTimeline.ownerKey = null
             $store.currentTimeline.writeKey = null
             $store.currentTimeline.readKey = null
+            $store.lastCommitedRemotely = null
+
+            //Rewrite URL
+            window.location.href= protocol + $page.host + "/g/" + $store.currentTimeline.key
 
         }).catch((err) => {
-            console.info("remove.catch")
-            console.info(err)
+            console.error("Error where calling remove() in Online.doOffline() : %o", err)
         }).finally(()=>{
-            console.info("remove.finnaly")
         })
 
 
@@ -39,14 +55,10 @@
         $store.currentTimeline.readKey = Helpers.randomeString(64)
 
         create($store.currentTimeline).then((json) => {
-            console.info("create.then")
-            console.info(json)
-
+            $store.lastCommitedRemotely = json['message']['ts']
         }).catch((err) => {
-            console.info("create.catch")
-            console.info(err)
+            console.error("Error where calling create() in Online.doOnline() : %o", err)
         }).finally(()=>{
-            console.info("create.finnaly")
         })
     }
 

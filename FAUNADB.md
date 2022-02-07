@@ -33,6 +33,15 @@ CreateIndex({
   })
   
   CreateIndex({
+    name: "getTimelineByKeyAndWriteKeyAsc",
+    unique: false,
+    serialized: true,
+    source: Collection("myCollection"),
+    terms: [{field: ["data", "writeKey"]},{field: ["data", "key"]}],
+    values: [{ field: ["ref"] }]
+  })
+  
+  CreateIndex({
     name: "getTimelineByKeyAndOwnerKeyDesc",
     unique: false,
     serialized: true,

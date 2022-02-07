@@ -31,10 +31,17 @@ if(slug.endsWith(".png")){
 }
 let currentTimeline: Struct.Timeline = CustomLocalStorage.getTimeline(slug)
 
-
 let o = $page.query.get('o')
 let w = $page.query.get('w')
 let r = $page.query.get('r')
+
+if(!o && currentTimeline && currentTimeline.ownerKey){
+    window.location.href = window.location.href + '?o=' + currentTimeline.ownerKey
+} else if(!o && !w && currentTimeline && currentTimeline.writeKey){
+    window.location.href = window.location.href + '?w=' + currentTimeline.writeKey
+} else if(!o && !w && !r && currentTimeline && currentTimeline.readKey){
+    window.location.href = window.location.href + '?r=' + currentTimeline.readKey
+}
 
 if(o){
     access = Constantes.ACCESS.OWNER
@@ -54,23 +61,23 @@ if(access === Constantes.ACCESS.LOCAL){
 
     $store.currentTimeline = currentTimeline
 } else {
-    get(slug, o, w, r).then((json)=>{
-        console.info("get.then")
-        currentTimeline = JSON.parse(JSON.stringify(json["message"]["data"]), JsonParser.timelineReviver)     
+    get(slug, o, w, r).then((json)=>{        
+        if(!json["message"]["data"]) {
+            console.error('node data not found in json["message"] : %o', json["message"])    
+            throw 'node data not found in json["message"]'
+        }
+
+        currentTimeline = JSON.parse(JSON.stringify(json["message"]["data"]), JsonParser.timelineReviver) 
         $store.currentTimeline = currentTimeline   
+
+        //Update date of lastUpdated
+        $store.lastUpdatedLocally = json["message"]["ts"]
+        $store.lastCommitedRemotely = json["message"]["ts"]
     }).catch((err) => {
-        console.info("get.catch")
-        console.info(err)
+        console.error("Error where calling get() in [slug].svelte : %o", err)
     }).finally(()=>{
-        console.info("get.finnaly")
     })
-
-
 }
-//TODO here
-        console.info(currentTimeline)
-    
-    
             
 </script>
 

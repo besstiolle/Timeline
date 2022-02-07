@@ -27,7 +27,6 @@ const INDEXE_READ = 'getTimelineByKeyAndReadKeyDesc'
  *  @see : https://docs.netlify.com/functions/build-with-javascript/
  */
 export async function remove(q, client, event, context) {
-    console.info("delete timeline on lambda ")
     
     const cars64 = /^[0-9a-zA-Z]{64}$/g
     const cars10 = /^[0-9a-zA-Z]{10}$/g

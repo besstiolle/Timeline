@@ -13,6 +13,8 @@
     import { FactoryTask } from './factoryTask';
     import { FactoryMilestone } from './factoryMilestone';
     import Online from './Online.svelte';
+import MilestonesLite from './Milestones_lite.svelte';
+import SwimAndTasksLite from './SwimAndTasks_lite.svelte';
 
     let uploadComponent, liveComponent, onlineComponent   
 
@@ -53,17 +55,20 @@
 
 <div class="rightButtons">
     {#key $store}
-    <div class="rightButton" class:hidden={$store.currentTimeline.isOnline} on:click={onlineComponent.openComponent()} title="Share & save your chart online"><i class='online'></i></div>
-    <div class="rightButton" class:hidden={!$store.currentTimeline.isOnline} on:click={onlineComponent.openComponent()} title="Save your chart on your computer only"><i class='offline'></i></div>
+    <div class="rightButtonDisabled" class:hidden={!$store.currentTimeline.isOnline || ($store.currentTimeline.isOnline && !$store.currentTimeline.ownerKey && !$store.currentTimeline.writeKey) || ($store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000)} title="There is nothing to save"><i class='saveCloud'></i></div>
+    <div class="rightButton" class:hidden={!$store.currentTimeline.isOnline || ($store.currentTimeline.isOnline && !$store.currentTimeline.ownerKey && !$store.currentTimeline.writeKey) || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 2 * 1000)} on:click={onlineComponent.commit()} title="Save your modifications remotly"><i class='saveCloud'></i></div>
+
+    <div class="rightButton" class:hidden={$store.currentTimeline.isOnline || ($store.currentTimeline.isOnline && !$store.currentTimeline.ownerKey)} on:click={onlineComponent.openComponent()} title="Share & save your chart online"><i class='online'></i></div>
+    <div class="rightButton" class:hidden={!$store.currentTimeline.isOnline || ($store.currentTimeline.isOnline && !$store.currentTimeline.ownerKey)} on:click={onlineComponent.openComponent()} title="Save your chart on your computer only"><i class='offline'></i></div>
 
     
     <div class="rightButton" class:hidden={!$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show regular tasks"><i class='hide'></i></div>
     <div class="rightButton" class:hidden={$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show all tasks even if they're hidden"><i class='show'></i></div>
     {/key}
     <div class="rightButton" on:click={downloadCsv} title="Downloading the .csv file"><i class='download'></i></div>
-    <div class="rightButton" on:click={uploadComponent.openUpload()} title='Uploading the .csv file'><i class='upload'></i></div>
+    <div class="rightButton" class:hidden={$store.currentTimeline.isOnline && !$store.currentTimeline.ownerKey && !$store.currentTimeline.writeKey} on:click={uploadComponent.openUpload()} title='Uploading the .csv file'><i class='upload'></i></div>
     <div class="rightButton" on:click={takeshot} title='Take a screenshot'><i class='photo'></i></div>
-    <div class="rightButton" on:click={liveComponent.openLive()} title='Edit your milestones'><i class='edit'></i></div>
+    <div class="rightButton" class:hidden={$store.currentTimeline.isOnline && !$store.currentTimeline.ownerKey && !$store.currentTimeline.writeKey} on:click={liveComponent.openLive()} title='Edit your milestones'><i class='edit'></i></div>
 </div>
 
 <div class="bottomButtons">
@@ -100,10 +105,18 @@
             <path id="drag_progress"    d="M10,1.75c-4.557,0-8.25,3.693-8.25,8.25c0,4.557,3.693,8.25,8.25,8.25c4.557,0,8.25-3.693,8.25-8.25C18.25,5.443,14.557,1.75,10,1.75 M10,17.382c-4.071,0-7.381-3.312-7.381-7.382c0-4.071,3.311-7.381,7.381-7.381c4.07,0,7.381,3.311,7.381,7.381C17.381,14.07,14.07,17.382,10,17.382 M7.612,10.869c-0.838,0-1.52,0.681-1.52,1.519s0.682,1.521,1.52,1.521c0.838,0,1.52-0.683,1.52-1.521S8.45,10.869,7.612,10.869 M7.612,13.039c-0.359,0-0.651-0.293-0.651-0.651c0-0.357,0.292-0.65,0.651-0.65c0.358,0,0.651,0.293,0.651,0.65C8.263,12.746,7.97,13.039,7.612,13.039 M7.629,6.11c-0.838,0-1.52,0.682-1.52,1.52c0,0.838,0.682,1.521,1.52,1.521c0.838,0,1.521-0.682,1.521-1.521C9.15,6.792,8.468,6.11,7.629,6.11M7.629,8.281c-0.358,0-0.651-0.292-0.651-0.651c0-0.358,0.292-0.651,0.651-0.651c0.359,0,0.651,0.292,0.651,0.651C8.281,7.988,7.988,8.281,7.629,8.281 M12.375,10.855c-0.838,0-1.521,0.682-1.521,1.52s0.683,1.52,1.521,1.52s1.52-0.682,1.52-1.52S13.213,10.855,12.375,10.855 M12.375,13.026c-0.358,0-0.652-0.294-0.652-0.651c0-0.358,0.294-0.652,0.652-0.652c0.357,0,0.65,0.294,0.65,0.652C13.025,12.732,12.732,13.026,12.375,13.026 M12.389,6.092c-0.839,0-1.52,0.682-1.52,1.52c0,0.838,0.681,1.52,1.52,1.52c0.838,0,1.52-0.681,1.52-1.52C13.908,6.774,13.227,6.092,12.389,6.092 M12.389,8.263c-0.36,0-0.652-0.293-0.652-0.651c0-0.359,0.292-0.651,0.652-0.651c0.357,0,0.65,0.292,0.65,0.651C13.039,7.97,12.746,8.263,12.389,8.263"></path>
             <pattern id="pattern_A" patternUnits="userSpaceOnUse" width="9.5" height="9.5" patternTransform="rotate(45)"><line x1="0" y="0" x2="5" y2="9.5" stroke="#194d33" stroke-width="1" /></pattern>
         </defs>
-        <Milestones/>
-        <Banner/>
-        <SwimAndTasks/>
-        <Today/>   
+        {#if $store.currentTimeline && !($store.currentTimeline.ownerKey || $store.currentTimeline.writeKey) && $store.currentTimeline.readKey}
+            <MilestonesLite/>
+            <Banner/>
+            <SwimAndTasksLite/>
+            <Today/>   
+        {:else}
+            <Milestones/>
+            <Banner/>
+            <SwimAndTasks/>
+            <Today/>   
+        {/if}
+        
     </svg>
 </div>
 {/key}
@@ -121,7 +134,7 @@
     right: 0;
 }
 
-.rightButton, .bottomButton{
+.rightButton, .rightButtonDisabled, .bottomButton{
     border-radius: 50%;
     margin: 16px;
     height: 32px;
@@ -133,11 +146,16 @@
 }
 
 .rightButton {
-    border: 1px solid #117A65;
-    background-color: #16A085;
+    border: 1px solid rgb(17, 122, 101);
+    background-color: rgb(22, 160, 133);
 }
 .rightButton:hover{
     background-color: rgb(22, 160, 133, 0.5);
+}
+.rightButtonDisabled, .rightButtonDisabled:hover {
+    border: 1px solid rgb(17, 122, 101, 0.5);
+    background-color: rgb(22, 160, 133, 0.5);
+    cursor:not-allowed;
 }
 
 .bottomButtons{
@@ -183,4 +201,9 @@ i{
 .hide{background-position: -96px 0;}
 .online{background-position: -64px -32px;}
 .offline{background-position: -64px -64px;}
+.saveCloud{background-position: -96px -64px;}
+
+.rightButtonDisabled > i{
+    opacity: 0.5;
+}
 </style> 
