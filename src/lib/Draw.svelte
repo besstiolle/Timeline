@@ -1,22 +1,23 @@
 <script lang="ts">
-    import html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas';
 
-    import { store } from './stores';
-    
-    import Banner from './Banner.svelte';
-    import Milestones from './Milestones.svelte';
-    import Today from './Today.svelte';
-    import Upload from './Upload.svelte';
-    import Live from './Live.svelte';
-    import SwimAndTasks from './SwimAndTasks.svelte';
-    import { Helpers } from './helpers';
-    import { FactoryTask } from './factoryTask';
-    import { FactoryMilestone } from './factoryMilestone';
-    import Online from './Online.svelte';
+import { store } from './stores';
+
+import Banner from './Banner.svelte';
+import Milestones from './Milestones.svelte';
+import Today from './Today.svelte';
+import Upload from './Upload.svelte';
+import Live from './Live.svelte';
+import SwimAndTasks from './SwimAndTasks.svelte';
+import { Helpers } from './helpers';
+import { FactoryTask } from './factoryTask';
+import { FactoryMilestone } from './factoryMilestone';
+import Online from './Online.svelte';
 import MilestonesLite from './Milestones_lite.svelte';
 import SwimAndTasksLite from './SwimAndTasks_lite.svelte';
+import Toast from './Toast.svelte';
 
-    let uploadComponent, liveComponent, onlineComponent   
+    let uploadComponent, liveComponent, onlineComponent, toastComponent
 
 
     function downloadCsv () {
@@ -54,6 +55,7 @@ import SwimAndTasksLite from './SwimAndTasks_lite.svelte';
 </script>
 
 <div class="rightButtons">
+    
     {#key $store}
     <div class="rightButtonDisabled" class:hidden={!$store.currentTimeline.isOnline || ($store.currentTimeline.isOnline && !$store.currentTimeline.ownerKey && !$store.currentTimeline.writeKey) || ($store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000)} title="There is nothing to save"><i class='saveCloud'></i></div>
     <div class="rightButton" class:hidden={!$store.currentTimeline.isOnline || ($store.currentTimeline.isOnline && !$store.currentTimeline.ownerKey && !$store.currentTimeline.writeKey) || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 2 * 1000)} on:click={onlineComponent.commit()} title="Save your modifications remotly"><i class='saveCloud'></i></div>
@@ -80,6 +82,7 @@ import SwimAndTasksLite from './SwimAndTasks_lite.svelte';
 <Upload bind:this={uploadComponent} />
 <Live bind:this={liveComponent}/>
 <Online bind:this={onlineComponent}/>
+<Toast bind:this={toastComponent}/>
 
 
 {#key $store}

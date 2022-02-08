@@ -81,7 +81,7 @@ async function remove2(q, client, timelineKey: string, ownerKey: string, writeKe
         }
     })
     .catch((err) => {
-        throw err
+        return (new FaunaError(err)).return()
     })
 
     

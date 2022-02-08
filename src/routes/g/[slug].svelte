@@ -11,9 +11,11 @@ import { FactoryTimeline } from '$lib/factoryTimeline';
 import { Constantes } from '$lib/constantes';
 import { get } from '$lib/timelineRepository';
 import { JsonParser } from '$lib/jsonParser';
+import Toast from '$lib/Toast.svelte';
 
 
 let access = 'g';
+let toastComponent
 
 
 //TODO : disabling SSR or not on this page ?
@@ -31,16 +33,21 @@ if(slug.endsWith(".png")){
 }
 let currentTimeline: Struct.Timeline = CustomLocalStorage.getTimeline(slug)
 
+let protocol = 'https://'
+if (browser) {
+    protocol = window.location.protocol + '//'
+}
+
 let o = $page.query.get('o')
 let w = $page.query.get('w')
 let r = $page.query.get('r')
 
 if(!o && currentTimeline && currentTimeline.ownerKey){
-    window.location.href = window.location.href + '?o=' + currentTimeline.ownerKey
+    window.location.href = protocol + $page.host + "/g/" + currentTimeline.key + "?o=" + currentTimeline.ownerKey
 } else if(!o && !w && currentTimeline && currentTimeline.writeKey){
-    window.location.href = window.location.href + '?w=' + currentTimeline.writeKey
+    window.location.href = protocol + $page.host + "/g/" + currentTimeline.key + "?w=" + currentTimeline.writeKey
 } else if(!o && !w && !r && currentTimeline && currentTimeline.readKey){
-    window.location.href = window.location.href + '?r=' + currentTimeline.readKey
+    window.location.href = protocol + $page.host + "/g/" + currentTimeline.key + "?w=" + currentTimeline.readKey
 }
 
 if(o){
@@ -52,6 +59,7 @@ if(o){
 } else {
     access = Constantes.ACCESS.LOCAL
 }
+
 
 if(access === Constantes.ACCESS.LOCAL){
     if(!currentTimeline && browser){
@@ -68,14 +76,18 @@ if(access === Constantes.ACCESS.LOCAL){
         }
 
         currentTimeline = JSON.parse(JSON.stringify(json["message"]["data"]), JsonParser.timelineReviver) 
-        $store.currentTimeline = currentTimeline   
+          
 
         //Update date of lastUpdated
         $store.lastUpdatedLocally = json["message"]["ts"]
         $store.lastCommitedRemotely = json["message"]["ts"]
     }).catch((err) => {
         console.error("Error where calling get() in [slug].svelte : %o", err)
+        if(toastComponent){
+            toastComponent.show("Oups, we couldn't reach the remote endpoint so we'll use your local data instead.<br/> Please check your browser console for more informations. Click me to dismiss the notif", false, 0)
+        }
     }).finally(()=>{
+        $store.currentTimeline = currentTimeline 
     })
 }
             
@@ -84,6 +96,10 @@ if(access === Constantes.ACCESS.LOCAL){
 <svelte:head>
     <title>[T-C] {$store.currentTimeline?$store.currentTimeline.title:'Please wait a second'}</title>
 </svelte:head>
+
 {#if $store.currentTimeline}
 <Draw/>
 {/if}
+
+
+<Toast bind:this={toastComponent}/>

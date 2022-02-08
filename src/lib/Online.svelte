@@ -4,6 +4,9 @@
     import { store } from './stores';
     import { Helpers } from './helpers';
     import { remove, create } from "./timelineRepository";
+import Toast from "./Toast.svelte";
+
+    let toastComponent
 
     export function commit(){
         if($store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000){
@@ -11,9 +14,14 @@
 
             create($store.currentTimeline).then((json) => {
                 $store.lastCommitedRemotely = json['message']['ts']
-
+                if(toastComponent){
+                    toastComponent.show("Saved remotely with success")
+                }
             }).catch((err) => {
                 console.error("Error where calling create() in Online.commit() : %o", err)
+                if(toastComponent){
+                    toastComponent.show("Oups, we couldn't reach the remote endpoint. Please try later.<br/> Please check your browser console for more informations. Click me to dismiss the notif", false, 0)
+                }
             }).finally(()=>{
             })
         } else {
@@ -43,6 +51,9 @@
 
         }).catch((err) => {
             console.error("Error where calling remove() in Online.doOffline() : %o", err)
+            if(toastComponent){
+                toastComponent.show("Oups, we couldn't reach the remote endpoint. Please try later.<br/> Please check your browser console for more informations. Click me to dismiss the notif", false, 0)
+            }
         }).finally(()=>{
         })
 
@@ -56,8 +67,14 @@
 
         create($store.currentTimeline).then((json) => {
             $store.lastCommitedRemotely = json['message']['ts']
+            if(toastComponent){
+                toastComponent.show("Saved remotely with success")
+            }
         }).catch((err) => {
             console.error("Error where calling create() in Online.doOnline() : %o", err)
+            if(toastComponent){
+                toastComponent.show("Oups, we couldn't reach the remote endpoint. Please try later.<br/> Please check your browser console for more informations. Click me to dismiss the notif", false, 0)
+            }
         }).finally(()=>{
         })
     }
@@ -92,6 +109,7 @@
         
     <div>Click <span class='pointer' on:click={closeComponent}>here</span> or tape <span>Escape key</span> to close this windows</div>
 </form>
+<Toast bind:this={toastComponent}/>
 
 <style>
 
