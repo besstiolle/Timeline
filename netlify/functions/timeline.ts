@@ -33,7 +33,10 @@ exports.handler = async function (event, context) {
     
     if (typeof secret === 'undefined' || secret === '') {
       console.error('The FAUNADB_SECRET environment variable is not set, exiting.')
-      process.exit(1)
+      return {
+        statusCode: 500,
+        body: JSON.stringify({message:'The FAUNADB_SECRET environment variable is not set, exiting.'}, null, 2),
+      }
     }
     
     const client = new faunadb.Client({
