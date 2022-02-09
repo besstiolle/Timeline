@@ -30,6 +30,7 @@ let toastComponent
 const slug = $page.params.slug
 if(slug.endsWith(".png")){
     console.error("An image was misconfigurated, eg bad = 'foo.png', good = '/foo.png'")
+    toastComponent.show("An image was misconfigurated, eg bad = 'foo.png', good = '/foo.png'", false, 0)
 }
 let currentTimeline: Struct.Timeline = CustomLocalStorage.getTimeline(slug)
 
