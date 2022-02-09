@@ -7,6 +7,7 @@ export module Struct {
 		currentTimeline : Timeline = null
 		lastUpdatedLocally : number = null
 		lastCommitedRemotely : number = null
+		_cancelRefreshLastUpdatedLocally: boolean = false // Tricks : Set to true if we don't want to refresh lastUpdatedLocally property
 	}
 
 	export class Card {

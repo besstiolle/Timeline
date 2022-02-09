@@ -72,22 +72,30 @@ if(access === Constantes.ACCESS.LOCAL){
     get(slug, o, w, r).then((json)=>{        
         if(!json["message"]["data"]) {
             console.error('node data not found in json["message"] : %o', json["message"])    
-            throw 'node data not found in json["message"]'
+            throw 'node data not found in json["message"]'            
         }
 
         currentTimeline = JSON.parse(JSON.stringify(json["message"]["data"]), JsonParser.timelineReviver) 
           
 
-        //Update date of lastUpdated
-        $store.lastUpdatedLocally = json["message"]["ts"]
-        $store.lastCommitedRemotely = json["message"]["ts"]
+        //We're using the tricks of cloning to avoid multiple refresh of store
+        let cloneStore = {...$store}
+        //Update date of lastUpdated in the clone
+        cloneStore.lastUpdatedLocally = null
+        cloneStore.lastCommitedRemotely = json["message"]["ts"]
+        cloneStore.currentTimeline = currentTimeline
+        // Tricks : Set to true if we don't want to refresh lastUpdatedLocally property
+        cloneStore._cancelRefreshLastUpdatedLocally = true
+        store.set(cloneStore)
+
     }).catch((err) => {
         console.error("Error where calling get() in [slug].svelte : %o", err)
         if(toastComponent){
             toastComponent.show("Oups, we couldn't reach the remote endpoint so we'll use your local data instead.<br/> Please check your browser console for more informations. Click me to dismiss the notif", false, 0)
         }
-    }).finally(()=>{
         $store.currentTimeline = currentTimeline 
+    }).finally(()=>{
+        
     })
 }
             
