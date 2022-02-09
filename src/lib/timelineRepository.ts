@@ -4,6 +4,8 @@ const endpoint = import.meta.env.VITE_API_ENDPOINT_BASE_URL + '.netlify/function
 
 export async function create(timeline : Struct.Timeline): Promise<string>{
     
+    console.info("POST on endpoint : " + endpoint)
+
     if(!timeline.ownerKey && !timeline.writeKey){
         throw "at least you must provide one of theses : ownerKey or writeKey in timeline object"
     }
@@ -18,6 +20,7 @@ export async function create(timeline : Struct.Timeline): Promise<string>{
 
 export async function get(key: string, ownerKey?: string, writeKey?: string, readKey?: string): Promise<string>{
     
+    
     let params: URLSearchParams = null
     if(ownerKey){
         params =  new URLSearchParams({key: key, ownerKey: ownerKey})
@@ -28,6 +31,8 @@ export async function get(key: string, ownerKey?: string, writeKey?: string, rea
     } else {
         throw "at least you must provide one of theses : ownerKey, writeKey or readKey"
     }
+
+    console.info("GET on endpoint : " + endpoint + params)
 
     const res = await fetch(endpoint + params, {
         method: 'GET',
@@ -45,6 +50,8 @@ export async function remove(key: string, ownerKey?: string): Promise<string>{
     } else {
         throw "you must provide ownerKey"
     }
+
+    console.info("DELETE on endpoint : " + endpoint + params)
 
     const res = await fetch(endpoint + params, {
         method: 'DELETE',
