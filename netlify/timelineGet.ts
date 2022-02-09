@@ -23,7 +23,7 @@ import { INDEXES, REGEX } from "./faunaConstantes"
  */
 export async function get(q, client, event, context) {
     
-    if(!event.queryStringParameters["key"] || !event.queryStringParameters["key"].match(REGEX.ALPHANUM10)){
+    if(!event.queryStringParameters["key"] || !event.queryStringParameters["key"].match(REGEX.ALPHANUM64)){
       return (new FaunaError(["Malformed Request Body", "key `" + "key" + "` wasn't well formated"]).return())
     }
 

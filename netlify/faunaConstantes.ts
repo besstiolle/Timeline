@@ -19,6 +19,5 @@ export const INDEXES = {
 }
 
 export const REGEX = {
-    ALPHANUM64:/^[0-9a-zA-Z]{64}$/g,
-    ALPHANUM10:/^[0-9a-zA-Z]{10}$/g
+    ALPHANUM64:/^[0-9a-zA-Z]{64}$/g
 }

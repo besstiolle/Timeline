@@ -26,12 +26,11 @@ import { INDEXES, REGEX } from "./faunaConstantes"
 export async function remove(q, client, event, context) {
     
 
-    if(!event.queryStringParameters["key"] || !event.queryStringParameters["key"].match(REGEX.ALPHANUM10)){
+    if(!event.queryStringParameters["key"] || !event.queryStringParameters["key"].match(REGEX.ALPHANUM64)){
       return (new FaunaError(["Malformed Request Body", "key `" + "key" + "` wasn't well formated"]).return())
     }
 
     let timelineKey:string = event.queryStringParameters["key"]
-    let owner:boolean, write:boolean, read:boolean = false
     let indexeToUse: string = null
     let keyToUse: string = null
 
@@ -39,7 +38,6 @@ export async function remove(q, client, event, context) {
       if(!event.queryStringParameters["ownerKey"].match(REGEX.ALPHANUM64)){
         return (new FaunaError(["Malformed Request parameter", "key `" + "ownerKey" + "` wasn't well formated"]).return())
       }
-      owner = true
       keyToUse = event.queryStringParameters["ownerKey"]
       indexeToUse = INDEXES.INDEXE_OWNER_ASC
     } else {
