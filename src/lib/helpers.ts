@@ -77,4 +77,19 @@ export module Helpers {
         //Ceil value of x to avoid miscalculation
         return Math.ceil(x)
     }
+
+    /**
+     * Generate a pseudo-random string
+     * @param length the length of the id to generate
+     * @returns the id
+     */
+    export function randomeString(length: number) {
+        let result: string = '';
+        const characters : string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        for ( let i = 0; i < length; i++ ) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+       }
+       return result;
+    }
 }

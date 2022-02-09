@@ -5,6 +5,9 @@ export module Struct {
 	export class TimelineStore {
 		cards : Array<Card> = new Array<Card>()
 		currentTimeline : Timeline = null
+		lastUpdatedLocally : number = null
+		lastCommitedRemotely : number = null
+		_cancelRefreshLastUpdatedLocally: boolean = false // Tricks : Set to true if we don't want to refresh lastUpdatedLocally property
 	}
 
 	export class Card {
@@ -33,6 +36,10 @@ export module Struct {
 		maxId: number = 0
 		viewbox: string = "0 0 0 0"
 		showAll: boolean = false
+		isOnline: boolean = false
+		ownerKey: string = null
+		writeKey: string = null
+		readKey: string = null
 		//Check jsonParser.ts > timelineReviver() function if you add something here.
 		
 		constructor(key:string, title:string){

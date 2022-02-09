@@ -151,29 +151,31 @@
 <style>
 
     #shadow{
-        height: 100%;
-        width: 100%;
+        height: 100vh;
+        width: 100vw;
         background-color: rgba(200, 218, 223, 0.5);
         position: fixed;
         top:0;
         left:0;
     }
     #box{
-        height: 80%;
-        max-height: 80%;
-        width: 90%;
+        height: 80vh;
+        max-height: 80vh;
+        width: 90vw;
         font-size: 1.5rem;
         background-color: #c8dadf;
         position: absolute;
         text-align: center;
-        top: 10%;
-        left: 5%;
-        line-height: 3em;
+        top: 10vh;
+        left: 5vw;
         outline: 2px dashed #92b0b3 !important;
         outline-offset: -10px !important;
+        position: fixed;
+        line-height: 3em;
     }
+        
     #box > div:first-child{
-        margin-top: 10%;
+        margin-top: 10vh;
     }
   
     :global(#box.has-advanced-upload) {

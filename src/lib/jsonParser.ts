@@ -15,6 +15,7 @@ export module JsonParser {
                                  'position','isShow','label', 'id', 'swimline', 'progress',
                                  'swimlineId', 'countVisibleTasks', 'countAllTasks',
                                  'key', 'title',
+                                 'isOnline', 'ownerKey', 'writeKey', 'readKey', 
                                  'tasks', 'milestones', 'swimlines', //Nothing to do, it's an array
                                  'date', 'dateStart', 'dateEnd', // date inside object, will be cast by new Date when reviver the object
                                 ]
@@ -66,9 +67,9 @@ export module JsonParser {
             return value
         }
         
-        console.warn("key : `%o` with value `%o` was not caught in JsonReviver.timelineReviver() function" , key, value)
-
-		return value;
+        //console.warn("key : `%o` with value `%o` was not caught in JsonReviver.timelineReviver() function" , key, value)
+        //return value
+        throw "key : `"+key+"` with value `"+value+"` was not caught in JsonReviver.timelineReviver() function"
 	}
 
     /**
