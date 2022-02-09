@@ -24,7 +24,7 @@ import { COLLECTION, INDEXES } from "./faunaConstantes"
  *  @see : https://docs.netlify.com/functions/build-with-javascript/
  */
 export async function create(q, client, event, context) {
-    
+
     let timeline: Struct.Timeline = null
 
     //Sanitize object
@@ -33,32 +33,53 @@ export async function create(q, client, event, context) {
     } catch (error){
         return (new FaunaError(["Malformed Request Body", error]).return())
     }
-    
+        
+    //Default seting : ownerKey on getTimelineByKeyAndOwnerKeyAsc index
+    let owKey = timeline.ownerKey
+    let index = INDEXES.INDEXE_OWNER_ASC
+
     //Case where "writer" user commit a work without "owner" key
-    if(timeline.writeKey && !timeline.ownerKey) {
-      
-      return await client.query(
-          //Get first
-          q.Get(q.Match(q.Index(INDEXES.INDEXE_WRITE_ASC) , timeline.writeKey, timeline.key))
-      ).then((ret) => {
-          timeline.ownerKey = ret.data.ownerKey
-          return create2(q, client, timeline)    
-      })
-      .catch((err) => {
-          return (new FaunaError(err)).return()
-      })
-    
-    //Case where "owner" user commit a work with all keys
-    } else {
-      return create2(q, client, timeline)
+    //  using writeKey on getTimelineByKeyAndWriteKeyAsc index
+    let backport = timeline.writeKey && !timeline.ownerKey
+    if(backport) {
+      owKey = timeline.writeKey
+      index = INDEXES.INDEXE_WRITE_ASC
     }
+
+    return await client.query(
+        //Get first of the result set (the older)
+        // Or throw an exception if the object wasn't found
+        q.Get(q.Match(q.Index(index) , owKey, timeline.key))
+    ).then((ret) => {
+        // A security if we are a writer user
+        // No consequence if we are owner user
+        timeline.ownerKey = ret.data.ownerKey
+        return update(q, client, ret.ref, timeline)    
+    })
+    .catch((err) => {
+
+        //If we are in a backport situation
+        if(backport) {
+          return (new FaunaError(err)).return()
+        } else {
+          return insert(q, client, timeline)
+        }
+    })
   }
 
-  async function create2(q, client, timeline: Struct.Timeline){
+  /**
+   * Subfunction to updating a existing FaunaDB Document
+   * @param q a FaunaDb Query
+   * @param client a Faunadb Client
+   * @param ref a FaunaDb Ref object https://docs.fauna.com/fauna/current/api/fql/functions/ref?lang=javascript
+   * @param timeline a <Struct.Timeline> object
+   * @returns a exception if necessary or an js object with { statusCode: 201, body: <string> }
+   */
+  async function update(q, client, ref, timeline: Struct.Timeline){
     return await client.query(
-        q.Create(
-            q.Collection(COLLECTION.CURRENT_COLLECTION),
-            {data: timeline}
+        q.Replace(
+          ref, 
+          {data: timeline}
         )
 
       ).then((ret) => {
@@ -70,5 +91,31 @@ export async function create(q, client, event, context) {
       .catch((err) => {
         return (new FaunaError(err)).return()
       })
+
+}
+
+  /**
+   * Subfunction to create a new FaunaDB Document
+   * @param q a FaunaDb Query
+   * @param client a Faunadb Client
+   * @param timeline a <Struct.Timeline> object
+   * @returns a exception if necessary or an js object with { statusCode: 201, body: <string> }
+   */
+async function insert(q, client, timeline: Struct.Timeline){
+  return await client.query(
+      q.Create(
+          q.Collection(COLLECTION.CURRENT_COLLECTION),
+          {data: timeline}
+      )
+
+    ).then((ret) => {
+      return {
+        statusCode: 201,
+        body: JSON.stringify({ message: ret }, null, 2),
+      }
+    })
+    .catch((err) => {
+      return (new FaunaError(err)).return()
+    })
 
 }
