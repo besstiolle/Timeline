@@ -18,7 +18,7 @@ store.subscribe(val => updateLocalStorage(val))
 
 
 function updateLocalStorage(timelineStore: Struct.TimelineStore){
-    console.info("updateLocalStorage(val) with key %o", (timelineStore&&timelineStore.currentTimeline&&timelineStore.currentTimeline.key)?timelineStore.currentTimeline.key:"N/A")
+    //console.info("updateLocalStorage(val) with key %o", (timelineStore&&timelineStore.currentTimeline&&timelineStore.currentTimeline.key)?timelineStore.currentTimeline.key:"N/A")
     let currentTimeline = timelineStore.currentTimeline
     let cards = timelineStore.cards
     if(!timelineStore._cancelRefreshLastUpdatedLocally){
