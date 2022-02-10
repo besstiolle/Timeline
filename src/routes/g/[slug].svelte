@@ -39,9 +39,9 @@ if (browser) {
     protocol = window.location.protocol + '//'
 }
 
-let o = $page.url.searchParams.get('o')
-let w = $page.url.searchParams.get('w')
-let r = $page.url.searchParams.get('r')
+let o = $page.url?$page.url.searchParams.get('o'):null
+let w = $page.url?$page.url.searchParams.get('w'):null
+let r = $page.url?$page.url.searchParams.get('r'):null
 
 if(!o && currentTimeline && currentTimeline.ownerKey){
     window.location.href = protocol + $page.host + "/g/" + currentTimeline.key + "?o=" + currentTimeline.ownerKey
