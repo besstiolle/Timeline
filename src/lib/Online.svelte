@@ -75,6 +75,11 @@ import Toast from "./Toast.svelte";
             if(toastComponent){
                 toastComponent.show("Oups, we couldn't reach the remote endpoint. Please try later.<br/> Please check your browser console for more informations. Click me to dismiss the notif", false, 0)
             }
+            
+            $store.currentTimeline.isOnline = false
+            $store.currentTimeline.ownerKey = null
+            $store.currentTimeline.writeKey = null
+            $store.currentTimeline.readKey = null
         }).finally(()=>{
         })
     }
