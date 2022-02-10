@@ -42,7 +42,10 @@ import Toast from './Toast.svelte';
         var url = URL.createObjectURL(blob)
         var downloadLink = document.createElement("a")
         downloadLink.href = url
-        downloadLink.download = $store.currentTimeline.title + Helpers.toYYYYMMDDhhmm(new Date()) +  extensionName
+        downloadLink.download = $store.currentTimeline.title 
+                                + '_' 
+                                + Helpers.toYYYYMMDD_hhmm(new Date()) 
+                                + extensionName
         document.body.appendChild(downloadLink)
         downloadLink.click()
         document.body.removeChild(downloadLink) 

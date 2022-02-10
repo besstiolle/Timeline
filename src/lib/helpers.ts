@@ -4,14 +4,15 @@ import type { Struct } from "./struct.class";
 export module Helpers {
 
     /**
-     * Return the date to a string validating the format YYYYMMDDHHmm
-     * @param date the date to parse into a ISO date format YYYYMMDDHHmm
-     * @returns string the format YYYYMMDDHHmm
+     * Return the date to a string validating the format YYYYMMDD_HHmm
+     * @param date the date to parse into a ISO date format YYYYMMDD_HHmm
+     * @returns string the format YYYYMMDD_HHmm
      */
-    export function toYYYYMMDDhhmm(date:Date):string{
+    export function toYYYYMMDD_hhmm(date:Date):string{
         return date.getFullYear().toString().padStart(4, '0')
             + (date.getMonth()+1).toString().padStart(2, '0')
             + date.getDate().toString().padStart(2, '0')
+            + '_'
             + date.getHours().toString().padStart(2, '0')
             + date.getMinutes().toString().padStart(2, '0')
     }
