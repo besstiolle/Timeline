@@ -10,8 +10,8 @@ function testToYYYYMMDDhhmm(){
     let date1 = new Date("2020-01-01T03:24:00")
     let date2 = new Date("2020-01-01T13:00:01")
     test("Helpers.toYYYY_MM_DD with nominal values", ()=> {
-        expect(Helpers.toYYYYMMDD_hhmm(date1)).toBe("2020010_10324")
-        expect(Helpers.toYYYYMMDD_hhmm(date2)).toBe("2020010_11300")
+        expect(Helpers.toYYYYMMDD_hhmm(date1)).toBe("20200101_0324")
+        expect(Helpers.toYYYYMMDD_hhmm(date2)).toBe("20200101_1300")
     })
 }
 testToYYYYMMDDhhmm()
