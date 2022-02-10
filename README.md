@@ -65,6 +65,12 @@ SET FAUNADB_SECRET='someFaunaDbSecret'
 SET FAUNADB_ENDPOINT='someFaunaDbEndpoint'
 ```
 
+set your endoint url into the .env file
+
+```.env
+VITE_API_ENDPOINT_BASE_URL= https://localhost:8080/yourNetlifyEndPoint
+```
+
 install the netlify bundle
 
 ```bash
