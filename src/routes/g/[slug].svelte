@@ -38,13 +38,17 @@ let o = $page.url?$page.url.searchParams.get('o'):null
 let w = $page.url?$page.url.searchParams.get('w'):null
 let r = $page.url?$page.url.searchParams.get('r'):null
 
+let base_url = ''
+if (browser) {
+    base_url = $page.url.protocol + '//' + $page.url.host
+}
 
 if(!o && currentTimeline && currentTimeline.ownerKey){
-    window.location.href = $page.url.protocol + '//' + $page.url.host + "/g/" + currentTimeline.key + "?o=" + currentTimeline.ownerKey
+    window.location.href = base_url + "/g/" + currentTimeline.key + "?o=" + currentTimeline.ownerKey
 } else if(!o && !w && currentTimeline && currentTimeline.writeKey){
-    window.location.href = $page.url.protocol + '//' + $page.url.host + "/g/" + currentTimeline.key + "?w=" + currentTimeline.writeKey
+    window.location.href = base_url + "/g/" + currentTimeline.key + "?w=" + currentTimeline.writeKey
 } else if(!o && !w && !r && currentTimeline && currentTimeline.readKey){
-    window.location.href = $page.url.protocol + '//' + $page.url.host + "/g/" + currentTimeline.key + "?w=" + currentTimeline.readKey
+    window.location.href = base_url + "/g/" + currentTimeline.key + "?w=" + currentTimeline.readKey
 }
 
 if(o){
