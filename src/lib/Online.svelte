@@ -61,7 +61,7 @@ import Toast from "./Toast.svelte";
         console.info("using new protocol of $page : %o", $page)
         base_url = $page.url.protocol + '//' + $page.url.host
 
-    } else if($page.hasOwnProperty('query')) {
+    } else if($page.hasOwnProperty('query') && $page.hasOwnProperty('host')) {
     /**
      *  Old version, still used on deployement of Netlify (?)
      * host: "localhost:3000"
@@ -70,7 +70,7 @@ import Toast from "./Toast.svelte";
      * query: URLSearchParams {  }
     */
         console.info("using old protocol of $page : %o", $page)
-        base_url = browser? window.location.protocol + '//' : 'https://'
+        base_url = browser? window.location.protocol + '//' : 'https://' + $page['host']
     } else {
         if(toastComponent){
             toastComponent.show("Oups, we've got a problem with the sveltekit $page var.", false, 0)

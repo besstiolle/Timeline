@@ -67,7 +67,7 @@ if($page.hasOwnProperty('url')) {
     w = $page.url.searchParams.get('w')
     r = $page.url.searchParams.get('r')
 
-} else if($page.hasOwnProperty('query')) {
+} else if($page.hasOwnProperty('query') && $page.hasOwnProperty('host')) {
 /**
  *  Old version, still used on deployement of Netlify (?)
  * host: "localhost:3000"
@@ -76,7 +76,7 @@ if($page.hasOwnProperty('url')) {
  * query: URLSearchParams {  }
 */
     console.info("using old protocol of $page : %o", $page)
-    base_url = browser? window.location.protocol + '//' : 'https://'
+    base_url = browser? window.location.protocol + '//' : 'https://' + $page['host']
     o = $page['query'].get('o')
     w = $page['query'].get('w')
     r = $page['query'].get('r')
