@@ -34,7 +34,7 @@ import Toast from "./Toast.svelte";
     let hidden = true
     
     let base_url = ''
-    if (browser) {
+    if (browser && $page.url) {
         base_url = $page.url.protocol + '//' + $page.url.host
     }
 

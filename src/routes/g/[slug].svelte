@@ -39,7 +39,7 @@ let w = $page.url?$page.url.searchParams.get('w'):null
 let r = $page.url?$page.url.searchParams.get('r'):null
 
 let base_url = ''
-if (browser) {
+if (browser && $page.url) {
     base_url = $page.url.protocol + '//' + $page.url.host
 }
 
