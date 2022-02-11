@@ -76,7 +76,7 @@ if($page.hasOwnProperty('url')) {
  * query: URLSearchParams {  }
 */
     console.info("using old protocol of $page : %o", $page)
-    base_url = browser? window.location.protocol + '//' : 'https://' + $page['host']
+    base_url = browser? window.location.protocol + '//'  + $page['host'] : 'https://' + $page['host']
     o = $page['query'].get('o')
     w = $page['query'].get('w')
     r = $page['query'].get('r')

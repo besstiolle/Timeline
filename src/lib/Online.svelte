@@ -70,10 +70,7 @@ import Toast from "./Toast.svelte";
      * query: URLSearchParams {  }
     */
         console.info("using old protocol of $page : %o", $page)
-        base_url = browser? window.location.protocol + '//' : 'https://' + $page['host']
-        console.debug($page['host'])
-        console.debug($page.host)
-        console.debug(base_url)
+        base_url = browser? window.location.protocol + '//'  + $page['host'] : 'https://' + $page['host']
     } else {
         if(toastComponent){
             toastComponent.show("Oups, we've got a problem with the sveltekit $page var.", false, 0)
