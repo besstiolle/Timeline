@@ -91,7 +91,7 @@ if(!o && currentTimeline && currentTimeline.ownerKey){
 } else if(!o && !w && currentTimeline && currentTimeline.writeKey){
     window.location.href = base_url + "/g/" + currentTimeline.key + "?w=" + currentTimeline.writeKey
 } else if(!o && !w && !r && currentTimeline && currentTimeline.readKey){
-    window.location.href = base_url + "/g/" + currentTimeline.key + "?w=" + currentTimeline.readKey
+    window.location.href = base_url + "/g/" + currentTimeline.key + "?r=" + currentTimeline.readKey
 }
 
 if(o){
