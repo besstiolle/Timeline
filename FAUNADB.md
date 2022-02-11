@@ -14,6 +14,11 @@ CreateCollection({
   ttl_days: null
 })
 
+```
+
+And after that : 
+
+```shell
 CreateIndex({
     name: "getTimelineByKeyAndReadKeyDesc",
     unique: false,
