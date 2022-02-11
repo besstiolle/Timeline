@@ -9,7 +9,7 @@ You can copy/past this code bellow to create the Collections & the Indexes
 
 ```shell
 CreateCollection({
-  name: "myCollection",
+  name: "TimelineChart",
   history_days: 30,
   ttl_days: null
 })
@@ -18,7 +18,7 @@ CreateIndex({
     name: "getTimelineByKeyAndReadKeyDesc",
     unique: false,
     serialized: true,
-    source: Collection("myCollection"),
+    source: Collection("TimelineChart"),
     terms: [{field: ["data", "readKey"]},{field: ["data", "key"]}],
     values: [{ field: ["ref"], reverse: true } ]
   })
@@ -27,7 +27,7 @@ CreateIndex({
     name: "getTimelineByKeyAndWriteKeyDesc",
     unique: false,
     serialized: true,
-    source: Collection("myCollection"),
+    source: Collection("TimelineChart"),
     terms: [{field: ["data", "writeKey"]},{field: ["data", "key"]}],
     values: [{ field: ["ref"], reverse: true }]
   })
@@ -36,7 +36,7 @@ CreateIndex({
     name: "getTimelineByKeyAndWriteKeyAsc",
     unique: false,
     serialized: true,
-    source: Collection("myCollection"),
+    source: Collection("TimelineChart"),
     terms: [{field: ["data", "writeKey"]},{field: ["data", "key"]}],
     values: [{ field: ["ref"] }]
   })
@@ -45,7 +45,7 @@ CreateIndex({
     name: "getTimelineByKeyAndOwnerKeyDesc",
     unique: false,
     serialized: true,
-    source: Collection("myCollection"),
+    source: Collection("TimelineChart"),
     terms: [{field: ["data", "ownerKey"]},{field: ["data", "key"]}],
     values: [{ field: ["ref"], reverse: true }]
   })
@@ -53,7 +53,7 @@ CreateIndex({
     name: "getTimelineByKeyAndOwnerKeyAsc",
     unique: false,
     serialized: true,
-    source: Collection("myCollection"),
+    source: Collection("TimelineChart"),
     terms: [{field: ["data", "ownerKey"]},{field: ["data", "key"]}]
   })
 ```

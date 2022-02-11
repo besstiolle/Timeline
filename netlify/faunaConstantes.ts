@@ -7,7 +7,7 @@ export const HTTP_WORDS = {
 }
 
 export const COLLECTION = {
-    CURRENT_COLLECTION:'myCollection'
+    CURRENT_COLLECTION:'TimelineChart'
 }
 
 export const INDEXES = {
