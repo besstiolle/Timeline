@@ -39,12 +39,13 @@ let w = $page.url?$page.url.searchParams.get('w'):null
 let r = $page.url?$page.url.searchParams.get('r'):null
 
 let base_url = ''
-if (browser && $page.url) {
+if ($page.url) {
     base_url = $page.url.protocol + '//' + $page.url.host
 }
 
 if(!o && currentTimeline && currentTimeline.ownerKey){
-    window.location.href = base_url + "/g/" + currentTimeline.key + "?o=" + currentTimeline.ownerKey
+    console.info("o : %o, currentTimeline.ownerKey : %o, ", o, currentTimeline.ownerKey)
+    //window.location.href = base_url + "/g/" + currentTimeline.key + "?o=" + currentTimeline.ownerKey
 } else if(!o && !w && currentTimeline && currentTimeline.writeKey){
     window.location.href = base_url + "/g/" + currentTimeline.key + "?w=" + currentTimeline.writeKey
 } else if(!o && !w && !r && currentTimeline && currentTimeline.readKey){
