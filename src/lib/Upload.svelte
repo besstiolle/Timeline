@@ -99,7 +99,7 @@
                     elmts = line.split(";")
                     if("task" == elmts[0] || "milestone" == elmts[0]) {
                         label = elmts[1]
-                        isShow = (elmts[2] === "TRUE" || elmts[2] === "true") //FIXME prévoir regex
+                        isShow = (elmts[2] === "TRUE" || elmts[2] === "true") 
                         start = elmts[3]
                         if("task" == elmts[0] ){
                             end = elmts[4]

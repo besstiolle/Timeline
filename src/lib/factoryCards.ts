@@ -8,12 +8,7 @@ export module FactoryCards {
 	 * @param timeline the Struct.Timeline to use to updating cards
 	 */
 	export function updateCardsWithTimeline(cards:Array<Struct.Card>, timeline:Struct.Timeline):void{
-		//TODO : remove it.
-		if(timeline == null){
-			console.error("Struct.Timeline was null in function FactoryCards.updateCardsWithTimeline()")
-			return
-		}
-
+		
 		//Retrive the index of the good card or -1 if it doesn't exist
 		let positionInCards:number = -1
 		for(let i:number=0; i< cards.length; i++){

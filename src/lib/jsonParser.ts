@@ -17,7 +17,8 @@ export module JsonParser {
                                  'key', 'title',
                                  'isOnline', 'ownerKey', 'writeKey', 'readKey', 
                                  'tasks', 'milestones', 'swimlines', //Nothing to do, it's an array
-                                 'date', 'dateStart', 'dateEnd', // date inside object, will be cast by new Date when reviver the object
+                                 'date', 'dateStart', 'dateEnd', // date inside object in string format
+                                 'start', 'end', // date outside object in string format
                                 ]
         if(COMMONS.includes(key)){
             return value
@@ -29,25 +30,10 @@ export module JsonParser {
             return structTimeline
         }
 
-        //Case of Date (min, max, ...)
-        //TODO rewrite code
-        if(['start', 'end'].includes(key)) {
-            if(value == null) {
-                return null
-            }
-            return value
-		}
-
         if(typeof value === 'object' && value !== null && value.label) { //Un object contenant un label => nos objects Task & Milestone
             if(value.date){
-                // Because of Date we can't do 
-                //  > Object.assign(new Struct.Task, value) 
-                //TODO rewrite code
                 return new Struct.Milestone(value.id, value.label,value.date, value.isShow)
             } else if (value.dateStart) {
-                // Because of Date we can't do 
-                //  > Object.assign(new Struct.Task, value) 
-                //TODO rewrite code
                 return new Struct.Task(value.id, value.label,value.dateStart, value.dateEnd, 
                                 value.progress, value.isShow, value.swimline, value.swimlineId)
             } else {
