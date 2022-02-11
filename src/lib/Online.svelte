@@ -71,6 +71,9 @@ import Toast from "./Toast.svelte";
     */
         console.info("using old protocol of $page : %o", $page)
         base_url = browser? window.location.protocol + '//' : 'https://' + $page['host']
+        console.debug($page['host'])
+        console.debug($page.host)
+        console.debug(base_url)
     } else {
         if(toastComponent){
             toastComponent.show("Oups, we've got a problem with the sveltekit $page var.", false, 0)
