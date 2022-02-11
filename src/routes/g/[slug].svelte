@@ -42,7 +42,10 @@ let base_url = ''
 if ($page.url) {
     base_url = $page.url.protocol + '//' + $page.url.host
 }
-
+if($page.url){
+    console.info($page.url)
+    console.info($page.url.searchParams)
+}
 if(!o && currentTimeline && currentTimeline.ownerKey){
     console.info("o : %o, currentTimeline.ownerKey : %o, ", o, currentTimeline.ownerKey)
     //window.location.href = base_url + "/g/" + currentTimeline.key + "?o=" + currentTimeline.ownerKey
