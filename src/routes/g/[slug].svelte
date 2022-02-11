@@ -34,21 +34,17 @@ if(slug.endsWith(".png")){
 }
 let currentTimeline: Struct.Timeline = CustomLocalStorage.getTimeline(slug)
 
-let protocol = 'https://'
-if (browser) {
-    protocol = window.location.protocol + '//'
-}
 
 let o = $page.url?$page.url.searchParams.get('o'):null
 let w = $page.url?$page.url.searchParams.get('w'):null
 let r = $page.url?$page.url.searchParams.get('r'):null
 
 if(!o && currentTimeline && currentTimeline.ownerKey){
-    window.location.href = protocol + $page.host + "/g/" + currentTimeline.key + "?o=" + currentTimeline.ownerKey
+    window.location.href = $page.url.origin + "/g/" + currentTimeline.key + "?o=" + currentTimeline.ownerKey
 } else if(!o && !w && currentTimeline && currentTimeline.writeKey){
-    window.location.href = protocol + $page.host + "/g/" + currentTimeline.key + "?w=" + currentTimeline.writeKey
+    window.location.href = $page.url.origin + "/g/" + currentTimeline.key + "?w=" + currentTimeline.writeKey
 } else if(!o && !w && !r && currentTimeline && currentTimeline.readKey){
-    window.location.href = protocol + $page.host + "/g/" + currentTimeline.key + "?w=" + currentTimeline.readKey
+    window.location.href = $page.url.origin + "/g/" + currentTimeline.key + "?w=" + currentTimeline.readKey
 }
 
 if(o){
