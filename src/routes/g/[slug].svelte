@@ -42,6 +42,9 @@ let base_url = ''
 if ($page.url) {
     base_url = $page.url.protocol + '//' + $page.url.host
 }
+
+console.info($page)
+
 if($page.url){
     console.info($page.url)
     console.info($page.url.searchParams)
