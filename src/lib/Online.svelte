@@ -34,8 +34,47 @@ import Toast from "./Toast.svelte";
     let hidden = true
     
     let base_url = ''
-    if (browser && $page.url) {
+    /**
+     *  New version with SvelteKit, used on local
+     * error: null
+    ​ * origin: 
+    ​ * params: Object { slug: "xxxxxxx" }
+    ​ * path: 
+    ​ * query: 
+    ​ * status: 200
+    ​ * stuff: Object {  } 
+    * url: URL {
+    *    hash: ""
+    *    host: "localhost:3000"
+    *    hostname: "localhost"
+    *    href: "http://localhost:3000/g/xxxxxxx?x=xxxxxxx"
+    *    origin: "http://localhost:3000"
+    *    password: ""
+    *    pathname: "/g/xxxxxxx"
+    *    port: "3000"
+    *    protocol: "http:"
+    *    search: "?o=xxxxxxx"
+    *    searchParams: URLSearchParams {  }
+    *   }
+    */
+    if($page.hasOwnProperty('url')) {
+        console.info("using new protocol of $page : %o", $page)
         base_url = $page.url.protocol + '//' + $page.url.host
+
+    } else if($page.hasOwnProperty('query')) {
+    /**
+     *  Old version, still used on deployement of Netlify (?)
+     * host: "localhost:3000"
+     * params: Object { slug: "xxxxxxx" }
+     * path: "/g/xxxxxxx"
+     * query: URLSearchParams {  }
+    */
+        console.info("using old protocol of $page : %o", $page)
+        base_url = browser? window.location.protocol + '//' : 'https://'
+    } else {
+        if(toastComponent){
+            toastComponent.show("Oups, we've got a problem with the sveltekit $page var.", false, 0)
+        }
     }
 
     export function openComponent(){hidden = false}   

@@ -34,24 +34,60 @@ if(slug.endsWith(".png")){
 }
 let currentTimeline: Struct.Timeline = CustomLocalStorage.getTimeline(slug)
 
-let o = $page.url?$page.url.searchParams.get('o'):null
-let w = $page.url?$page.url.searchParams.get('w'):null
-let r = $page.url?$page.url.searchParams.get('r'):null
 
+let o,w,r = null
 let base_url = ''
-if ($page.url) {
+/**
+ *  New version with SvelteKit, used on local
+ * error: null
+​ * origin: 
+​ * params: Object { slug: "xxxxxxx" }
+​ * path: 
+​ * query: 
+​ * status: 200
+​ * stuff: Object {  } 
+ * url: URL {
+ *    hash: ""
+ *    host: "localhost:3000"
+ *    hostname: "localhost"
+ *    href: "http://localhost:3000/g/xxxxxxx?x=xxxxxxx"
+ *    origin: "http://localhost:3000"
+ *    password: ""
+ *    pathname: "/g/xxxxxxx"
+ *    port: "3000"
+ *    protocol: "http:"
+ *    search: "?o=xxxxxxx"
+ *    searchParams: URLSearchParams {  }
+ *   }
+ */
+if($page.hasOwnProperty('url')) {
+    console.info("using new protocol of $page : %o", $page)
     base_url = $page.url.protocol + '//' + $page.url.host
+    o = $page.url.searchParams.get('o')
+    w = $page.url.searchParams.get('w')
+    r = $page.url.searchParams.get('r')
+
+} else if($page.hasOwnProperty('query')) {
+/**
+ *  Old version, still used on deployement of Netlify (?)
+ * host: "localhost:3000"
+ * params: Object { slug: "xxxxxxx" }
+ * path: "/g/xxxxxxx"
+ * query: URLSearchParams {  }
+*/
+    console.info("using old protocol of $page : %o", $page)
+    base_url = browser? window.location.protocol + '//' : 'https://'
+    o = $page['query'].get('o')
+    w = $page['query'].get('w')
+    r = $page['query'].get('r')
+} else {
+    if(toastComponent){
+        toastComponent.show("Oups, we've got a problem with the sveltekit $page var.", false, 0)
+    }
 }
 
-console.info($page)
-
-if($page.url){
-    console.info($page.url)
-    console.info($page.url.searchParams)
-}
 if(!o && currentTimeline && currentTimeline.ownerKey){
-    console.info("o : %o, currentTimeline.ownerKey : %o, ", o, currentTimeline.ownerKey)
-    //window.location.href = base_url + "/g/" + currentTimeline.key + "?o=" + currentTimeline.ownerKey
+    window.location.href = base_url + "/g/" + currentTimeline.key + "?o=" + currentTimeline.ownerKey
 } else if(!o && !w && currentTimeline && currentTimeline.writeKey){
     window.location.href = base_url + "/g/" + currentTimeline.key + "?w=" + currentTimeline.writeKey
 } else if(!o && !w && !r && currentTimeline && currentTimeline.readKey){
