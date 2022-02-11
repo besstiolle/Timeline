@@ -13,7 +13,8 @@ import { COLLECTION, INDEXES } from "./faunaConstantes"
  *    "body": "A JSON string of the request payload",
  *    "isBase64Encoded": "A boolean flag to indicate if the applicable request payload is Base64-encoded"
  * }
- *  @context : <todo>
+ *  @context : The context parameter includes information about the context in 
+ *      which the function was called, like certain Identity user information, for example.
  *  @return : {
  *    "isBase64Encoded": true|false,
  *    "statusCode": httpStatusCode,
