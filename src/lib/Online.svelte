@@ -1,9 +1,10 @@
 <script lang="ts">
-    import { browser } from "$app/env"
-    import { page } from '$app/stores';
-    import { store } from './stores';
-    import { Helpers } from './helpers';
-    import { remove, create } from "./timelineRepository";
+    
+import { page } from '$app/stores';
+import { store } from './stores';
+
+import { Helpers } from './helpers';
+import { remove, create } from "./timelineRepository";
 import Toast from "./Toast.svelte";
 
     let toastComponent
@@ -32,50 +33,7 @@ import Toast from "./Toast.svelte";
     }
 
     let hidden = true
-    
-    let base_url = ''
-    /**
-     *  New version with SvelteKit, used on local
-     * error: null
-    ​ * origin: 
-    ​ * params: Object { slug: "xxxxxxx" }
-    ​ * path: 
-    ​ * query: 
-    ​ * status: 200
-    ​ * stuff: Object {  } 
-    * url: URL {
-    *    hash: ""
-    *    host: "localhost:3000"
-    *    hostname: "localhost"
-    *    href: "http://localhost:3000/g/xxxxxxx?x=xxxxxxx"
-    *    origin: "http://localhost:3000"
-    *    password: ""
-    *    pathname: "/g/xxxxxxx"
-    *    port: "3000"
-    *    protocol: "http:"
-    *    search: "?o=xxxxxxx"
-    *    searchParams: URLSearchParams {  }
-    *   }
-    */
-    if($page.hasOwnProperty('url')) {
-        console.info("using new protocol of $page : %o", $page)
-        base_url = $page.url.protocol + '//' + $page.url.host
-
-    } else if($page.hasOwnProperty('query') && $page.hasOwnProperty('host')) {
-    /**
-     *  Old version, still used on deployement of Netlify (?)
-     * host: "localhost:3000"
-     * params: Object { slug: "xxxxxxx" }
-     * path: "/g/xxxxxxx"
-     * query: URLSearchParams {  }
-    */
-        console.info("using old protocol of $page : %o", $page)
-        base_url = browser? window.location.protocol + '//'  + $page['host'] : 'https://' + $page['host']
-    } else {
-        if(toastComponent){
-            toastComponent.show("Oups, we've got a problem with the sveltekit $page var.", false, 0)
-        }
-    }
+    let base_url = $page.url.protocol + '//' + $page.url.host
 
     export function openComponent(){hidden = false}   
     function handleKeydown(event) {if (!hidden && event.key === 'Escape') {closeComponent()}}
@@ -83,7 +41,8 @@ import Toast from "./Toast.svelte";
   
     function doOffline(){
 
-        remove($store.currentTimeline.key, $store.currentTimeline.ownerKey).then((json) => {
+        let seachParams = new URLSearchParams([['key', $store.currentTimeline.key], ['ownerKey', $store.currentTimeline.ownerKey]])
+        remove(seachParams).then((json) => {
 
             $store.currentTimeline.isOnline = false
             $store.currentTimeline.ownerKey = null

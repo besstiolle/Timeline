@@ -12,10 +12,10 @@ import { Constantes } from '$lib/constantes';
 import { get } from '$lib/timelineRepository';
 import { JsonParser } from '$lib/jsonParser';
 import Toast from '$lib/Toast.svelte';
+import { Rights } from '$lib/rights.class';
 
-
-let access = 'g';
 let toastComponent
+$store.rights = new Rights($page.url.searchParams)
 
 
 //TODO : disabling SSR or not on this page ?
@@ -34,86 +34,30 @@ if(slug.endsWith(".png")){
 }
 let currentTimeline: Struct.Timeline = CustomLocalStorage.getTimeline(slug)
 
-
-let o,w,r = null
-let base_url = ''
-/**
- *  New version with SvelteKit, used on local
- * error: null
-​ * origin: 
-​ * params: Object { slug: "xxxxxxx" }
-​ * path: 
-​ * query: 
-​ * status: 200
-​ * stuff: Object {  } 
- * url: URL {
- *    hash: ""
- *    host: "localhost:3000"
- *    hostname: "localhost"
- *    href: "http://localhost:3000/g/xxxxxxx?x=xxxxxxx"
- *    origin: "http://localhost:3000"
- *    password: ""
- *    pathname: "/g/xxxxxxx"
- *    port: "3000"
- *    protocol: "http:"
- *    search: "?o=xxxxxxx"
- *    searchParams: URLSearchParams {  }
- *   }
- */
-if($page.hasOwnProperty('url')) {
-    console.info("using new protocol of $page : %o", $page)
-    base_url = $page.url.protocol + '//' + $page.url.host
-    o = $page.url.searchParams.get('o')
-    w = $page.url.searchParams.get('w')
-    r = $page.url.searchParams.get('r')
-
-} else if($page.hasOwnProperty('query') && $page.hasOwnProperty('host')) {
-/**
- *  Old version, still used on deployement of Netlify (?)
- * host: "localhost:3000"
- * params: Object { slug: "xxxxxxx" }
- * path: "/g/xxxxxxx"
- * query: URLSearchParams {  }
-*/
-    console.info("using old protocol of $page : %o", $page)
-    base_url = browser? window.location.protocol + '//'  + $page['host'] : 'https://' + $page['host']
-    o = $page['query'].get('o')
-    w = $page['query'].get('w')
-    r = $page['query'].get('r')
-} else {
-    if(toastComponent){
-        toastComponent.show("Oups, we've got a problem with the sveltekit $page var.", false, 0)
-    }
+//If the local copie of Timeline has bigger rights than current url query parameter 
+//  We refresh the window.location with the higher rights
+let queryString = null
+if(!$store.rights.hasOwner() && currentTimeline?.ownerKey){
+    queryString = "?o=" + currentTimeline.ownerKey
+} else if(!$store.rights.hasWriter() && currentTimeline?.writeKey){
+    queryString = "?w=" + currentTimeline.writeKey
+} else if(!$store.rights.hasReader() && currentTimeline?.readKey){
+    queryString = "?r=" + currentTimeline.readKey
+}
+if(queryString){
+    window.location.href = $page.url.protocol + '//' + $page.url.host + "/g/" + currentTimeline.key + queryString
 }
 
-if(!o && currentTimeline && currentTimeline.ownerKey){
-    window.location.href = base_url + "/g/" + currentTimeline.key + "?o=" + currentTimeline.ownerKey
-} else if(!o && !w && currentTimeline && currentTimeline.writeKey){
-    window.location.href = base_url + "/g/" + currentTimeline.key + "?w=" + currentTimeline.writeKey
-} else if(!o && !w && !r && currentTimeline && currentTimeline.readKey){
-    window.location.href = base_url + "/g/" + currentTimeline.key + "?r=" + currentTimeline.readKey
-}
-
-if(o){
-    access = Constantes.ACCESS.OWNER
-} else if(w) {
-    access = Constantes.ACCESS.WRITE
-}else if(r) {
-    access = Constantes.ACCESS.READ
-} else {
-    access = Constantes.ACCESS.LOCAL
-}
-
-
-if(access === Constantes.ACCESS.LOCAL){
+if($store.rights.isNone()){
     if(!currentTimeline && browser){
         currentTimeline = new Struct.Timeline(slug, "My new Project")
         currentTimeline = FactoryTimeline.initiate(currentTimeline)
     }
-
     $store.currentTimeline = currentTimeline
 } else {
-    get(slug, o, w, r).then((json)=>{        
+    let seachParams = new URLSearchParams([['key', slug], [$store.rights.getTimelineField(), $store.rights.getSlugParamKeyValue()]])
+    get(seachParams).then((json)=>{    
+
         if(!json["message"]["data"]) {
             console.error('node data not found in json["message"] : %o', json["message"])    
             throw 'node data not found in json["message"]'            
@@ -122,7 +66,7 @@ if(access === Constantes.ACCESS.LOCAL){
         currentTimeline = JSON.parse(JSON.stringify(json["message"]["data"]), JsonParser.timelineReviver) 
           
 
-        //We're using the tricks of cloning to avoid multiple refresh of store
+        //We're using the tricks of cloning the content of the Svelte store to avoid multiple refresh of store
         let cloneStore = {...$store}
         //Update date of lastUpdated in the clone
         cloneStore.lastUpdatedLocally = null

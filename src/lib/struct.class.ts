@@ -1,4 +1,5 @@
 import { Helpers } from "./helpers"
+import type { Rights } from "./rights.class"
 
 export module Struct {
 
@@ -8,6 +9,7 @@ export module Struct {
 		lastUpdatedLocally : number = null
 		lastCommitedRemotely : number = null
 		_cancelRefreshLastUpdatedLocally: boolean = false // Tricks : Set to true if we don't want to refresh lastUpdatedLocally property
+		rights: Rights = null
 	}
 
 	export class Card {
