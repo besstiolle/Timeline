@@ -22,26 +22,28 @@ let colors = [
 ]
 
 
-let tasksShown: Struct.Task[] = []
-let swimlinesShown: Map<number, Struct.Swimline> = new Map<number, Struct.Swimline>()
-let swimlinesHeight: Map<number, number> = new Map<number, number>()
-let swimlinesPosition: Map<number, number> = new Map<number, number>()
+let tasksToShow: Struct.Task[] = []
+let swimlinesToShow: Map<number, Object> = new Map<number, Object>()
 let previousSwimlineId:number = null
 let height: number
 let position: number = 0
 $store.currentTimeline.tasks.forEach(task => {
     if(task.isShow || $store.currentTimeline.showAll){
-        tasksShown.push(task)
+        tasksToShow.push(task)
 
         if(task.swimlineId != null && previousSwimlineId != task.swimlineId){
-            swimlinesShown.set(task.id, $store.currentTimeline.swimlines[task.swimlineId])
             if(task.isShow && !$store.currentTimeline.showAll){
                 height = $store.currentTimeline.swimlines[task.swimlineId].countVisibleTasks * Constantes.GRID.ONE_TASK_H - 0.5
             } else {
                 height = $store.currentTimeline.swimlines[task.swimlineId].countAllTasks * Constantes.GRID.ONE_TASK_H - 0.5
             }   
-            swimlinesHeight.set(task.id,height)
-            swimlinesPosition.set(task.id,position)
+
+            swimlinesToShow.set(task.id, {
+                'timeline':$store.currentTimeline.swimlines[task.swimlineId],
+                'position':position,
+                'height':height
+                })
+
             position++
         }
 
@@ -334,21 +336,21 @@ function showToggle(event){
     x="0" y="{Constantes.GRID.MILESTONE_H + Constantes.GRID.ANNUAL_H - 5}"
     id='svgSwimlineAndTasks'>
     
-{#each tasksShown as task, i}
-{#if swimlinesShown.has(task.id)}
+{#each tasksToShow as task, i}
+{#if swimlinesToShow.has(task.id)}
 
     <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
-        width="{Constantes.GRID.ALL_WIDTH}" height="{swimlinesHeight.get(task.id)}"  fill="{colors[swimlinesPosition.get(task.id) % colors.length][0]}" id="c{task.swimlineId}" 
+        width="{Constantes.GRID.ALL_WIDTH}" height="{swimlinesToShow.get(task.id)['height']}"  fill="{colors[swimlinesToShow.get(task.id)['position'] % colors.length][0]}" id="c{task.swimlineId}" 
         on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
 
     <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
-        width="{Constantes.GRID.LEFT_WIDTH}" height="{swimlinesHeight.get(task.id)}" fill="{colors[swimlinesPosition.get(task.id) % colors.length][1]}" id="d{task.swimlineId}" 
+        width="{Constantes.GRID.LEFT_WIDTH}" height="{swimlinesToShow.get(task.id)['height']}" fill="{colors[swimlinesToShow.get(task.id)['position'] % colors.length][1]}" id="d{task.swimlineId}" 
         on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
     
-    <text text-anchor="middle" x="{Constantes.GRID.LEFT_WIDTH / 2}" y="{i * Constantes.GRID.ONE_TASK_H + 5 + swimlinesHeight.get(task.id) / 2}" 
-        font-size="10" fill="{swimlinesShown.get(task.id).isShow?"#ffffff":"#888888"}">{swimlinesShown.get(task.id).label}</text>
+    <text text-anchor="middle" x="{Constantes.GRID.LEFT_WIDTH / 2}" y="{i * Constantes.GRID.ONE_TASK_H + 5 + swimlinesToShow.get(task.id)['height'] / 2}" 
+        font-size="10" fill="{swimlinesToShow.get(task.id)['timeline'].isShow?"#ffffff":"#888888"}">{swimlinesToShow.get(task.id)['timeline'].label}</text>
 
-    <image xlink:href="{swimlinesShown.get(task.id).isShow?"/hide.png":"/see.png"}" x="0" y="{i * Constantes.GRID.ONE_TASK_H}" height="24" width="24" 
+    <image xlink:href="{swimlinesToShow.get(task.id)['timeline'].isShow?"/hide.png":"/see.png"}" x="0" y="{i * Constantes.GRID.ONE_TASK_H}" height="24" width="24" 
         data-html2canvas-ignore="true" 
         on:click={toggleSwimlineVisibility} id="s{task.swimlineId}" class='toggleVisibility hidden'
         on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle} />
@@ -357,7 +359,7 @@ function showToggle(event){
 {/each}
 </svg>
 
-{#each tasksShown as task, i}
+{#each tasksToShow as task, i}
     <Task currentTask={task} i={i} showActionBar={showActionBar} hideActionBar={hideActionBar} downRight={downRight} downLeft={downLeft} downProgress={downProgress}/>
 {/each}
 
