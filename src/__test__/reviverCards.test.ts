@@ -2,6 +2,7 @@
 
 import { JsonParser } from "$lib/jsonParser"
 import { Struct } from "$lib/struct.class"
+import { JsonParserException } from "$lib/timelineException.class"
 
 
 
@@ -53,3 +54,22 @@ function withCards(){
     })
 }
 withCards()
+
+
+function withUnknowKey(){
+    let timelineStore = new Struct.TimelineStore()
+    timelineStore['unknowKey'] = 'bar'
+
+    let jsonResult = JSON.stringify(timelineStore)
+
+    //Mock console.error() to avoid jest panic
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    test("JsonParser.cardsReviver with unknow values", ()=> {
+        expect(() => {
+            JSON.parse(jsonResult, JsonParser.cardsReviver)
+        }).toThrow(JsonParserException);
+    })
+
+}
+withUnknowKey()

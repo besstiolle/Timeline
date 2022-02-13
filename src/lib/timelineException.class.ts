@@ -8,4 +8,12 @@ export class NotFoundException extends Error {
     console.error(super.message)
   }
 }
+export class JsonParserException extends Error {
+  args: any[]
+  constructor (...args:any) {
+    super(Helpers.printf("key : `{0}` with value `{1}` was not expected in {2} function", args))
+    this.args = args
+    console.error(super.message)
+  }
+}
   

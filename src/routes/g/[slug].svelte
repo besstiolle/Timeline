@@ -59,7 +59,7 @@ if($store.rights.isNone()){
 
         if(!json["message"]["data"]) {
             console.error('node data not found in json["message"] : %o', json["message"])    
-            throw 'node data not found in json["message"]'            
+            throw new Error('node data not found in json["message"]')
         }
 
         currentTimeline = JSON.parse(JSON.stringify(json["message"]["data"]), JsonParser.timelineReviver) 

@@ -1,4 +1,5 @@
 import { Struct } from "./struct.class";
+import { JsonParserException } from "./timelineException.class";
 
 export module JsonParser {
 
@@ -53,9 +54,8 @@ export module JsonParser {
             return value
         }
         
-        //console.warn("key : `%o` with value `%o` was not caught in JsonReviver.timelineReviver() function" , key, value)
-        //return value
-        throw "key : `"+key+"` with value `"+value+"` was not caught in JsonReviver.timelineReviver() function"
+        //For security we throw exception if a unexpected duple key/value is detected
+        throw  new JsonParserException(key, value, 'jsonPaser.timelineReviver')
 	}
 
     /**
@@ -106,9 +106,8 @@ export module JsonParser {
             return value
         }
         
-        console.warn("key : `%o` with value `%o` was not caught in JsonReviver.cardsReviver() function" , key, value)
-
-		return value;
+        //For security we throw exception if a unexpected duple key/value is detected
+        throw  new JsonParserException(key, value, 'jsonPaser.cardsReviver')
 	}
 
 }

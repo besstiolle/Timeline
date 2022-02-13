@@ -5,7 +5,7 @@ const endpoint = import.meta.env.VITE_API_ENDPOINT_BASE_URL + '.netlify/function
 export async function create(timeline : Struct.Timeline): Promise<string>{
     //console.info("POST on endpoint : " + endpoint)
     if(!timeline.ownerKey && !timeline.writeKey){
-        throw "at least you must provide one of theses : ownerKey or writeKey in timeline object"
+        throw new Error("at least you must provide one of theses : ownerKey or writeKey in timeline object")
     }
 
     const res = await fetch(endpoint, {
