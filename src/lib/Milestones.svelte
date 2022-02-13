@@ -63,10 +63,14 @@ import { FactoryMilestone } from './factoryMilestone';
             let newX = event.clientX / window.innerWidth * Constantes.GRID.ALL_WIDTH
             let date = processNewDate(newX - Constantes.GRID.MIDDLE_X)
             let idMilestone = currentTarget.getAttribute("id").substring(1) // M999 => 999
-
-            let milestones = FactoryMilestone.getById($store.currentTimeline, parseInt(idMilestone))
-            milestones.setDate(date)
-            $store.currentTimeline.milestones = $store.currentTimeline.milestones 
+            let milestones = null
+            try{
+                milestones = FactoryMilestone.getById($store.currentTimeline, parseInt(idMilestone))    
+                milestones.setDate(date)
+                $store.currentTimeline.milestones = $store.currentTimeline.milestones 
+            } catch (NotFoundException){
+                //Nothing to do, the rest of the function will clean everything
+            }
         }
 
         //Reset vars

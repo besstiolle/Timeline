@@ -113,8 +113,13 @@ function down(event){
 }
 function up(event){
     if(isDragging && hoverGroup){
+        let task: Struct.Task = null
+        try{
+            task = FactoryTask.getById($store.currentTimeline, parseInt(taskId.substring(1))) //html id = T999 => 999
+        } catch (NotFoundException){
+            //Nothing to do, the rest of the function will clean everything
+        }
 
-        let task: Struct.Task = FactoryTask.getById($store.currentTimeline, parseInt(taskId.substring(1))) //html id = T999 => 999
         if( task ){
             if(realAction == ACTION.LEFT || realAction == ACTION.RIGHT) {
                 let dateStart = Helpers.getDateFromViewportX(TActionBarCoord.REC_X, $store.currentTimeline.getStart(), $store.currentTimeline.getEnd())

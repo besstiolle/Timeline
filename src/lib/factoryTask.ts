@@ -1,6 +1,7 @@
 
 import { Helpers } from "./helpers"
 import type { Struct } from "./struct.class";
+import { NotFoundException } from "./timelineException.class";
 
 export module FactoryTask {
 
@@ -41,8 +42,7 @@ export module FactoryTask {
         if(result) {
             return result
         }
-        
-        //TODO : better thtow a real exception
-        throw "Struct.Task with id "+id+" was not found"
+
+        throw new NotFoundException('Struct.Task', id)
     }
 }

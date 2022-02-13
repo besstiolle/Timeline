@@ -1,6 +1,8 @@
 
 import { FactoryMilestone } from "$lib/factoryMilestone";
 import { Struct } from "$lib/struct.class";
+import { NotFoundException } from "$lib/timelineException.class";
+
 
 function testJoin(){
     let milestone: Struct.Milestone = new Struct.Milestone(1,"label","2020-01-01", true)
@@ -26,12 +28,13 @@ function testGetById(){
         expect(FactoryMilestone.getById(timeline, 2)).toBe(milestone2)
     })
 
+    //Mock console.error() to avoid jest panic
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+
     test("FactoryMilestone.getById with unknow values", ()=> {
-        try {
+        expect(() => {
             FactoryMilestone.getById(timeline, 10)
-        } catch (e) {
-            expect(e).toBe("Struct.Milestone with id 10 was not found")
-        }
+        }).toThrow(NotFoundException);
     })
 }
 testGetById()

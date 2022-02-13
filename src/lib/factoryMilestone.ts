@@ -1,6 +1,6 @@
 
-import { Helpers } from "./helpers"
 import type { Struct } from "./struct.class";
+import { NotFoundException } from "./timelineException.class";
 
 export module FactoryMilestone {
 
@@ -37,7 +37,6 @@ export module FactoryMilestone {
             return result
         }
         
-        //TODO : better thtow a real exception
-        throw "Struct.Milestone with id "+id+" was not found"       
+        throw new NotFoundException('Struct.Milestone', id)
     }
 }

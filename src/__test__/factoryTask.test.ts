@@ -1,6 +1,7 @@
 
 import { FactoryTask } from "$lib/factoryTask";
 import { Struct } from "$lib/struct.class";
+import { NotFoundException } from "$lib/timelineException.class";
 
 
 function testJoin(){
@@ -28,12 +29,13 @@ function testGetById(){
         expect(FactoryTask.getById(timeline, 2)).toBe(task2)
     })
 
+    //Mock console.error() to avoid jest panic
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+
     test("FactoryTask.getById with unknow values", ()=> {
-        try {
+        expect(() => {
             FactoryTask.getById(timeline, 10)
-        } catch (e) {
-            expect(e).toBe("Struct.Task with id 10 was not found")
-        }
+        }).toThrow(NotFoundException);
     })
 }
 testGetById()
