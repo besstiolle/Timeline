@@ -3,15 +3,16 @@ import html2canvas from 'html2canvas';
 
 import { store } from './stores';
 
+import { Helpers } from './helpers';
+import { FactoryTask } from './factoryTask';
+import { FactoryMilestone } from './factoryMilestone';
+
 import Banner from './Banner.svelte';
 import Milestones from './Milestones.svelte';
 import Today from './Today.svelte';
 import Upload from './Upload.svelte';
 import Live from './Live.svelte';
 import SwimAndTasks from './SwimAndTasks.svelte';
-import { Helpers } from './helpers';
-import { FactoryTask } from './factoryTask';
-import { FactoryMilestone } from './factoryMilestone';
 import Online from './Online.svelte';
 import MilestonesLite from './Milestones_lite.svelte';
 import SwimAndTasksLite from './SwimAndTasks_lite.svelte';
@@ -60,20 +61,20 @@ import Toast from './Toast.svelte';
 <div class="rightButtons">
     
     {#key $store}
-    <div class="rightButtonDisabled" class:hidden={!$store.currentTimeline.isOnline || ($store.currentTimeline.isOnline && !$store.currentTimeline.ownerKey && !$store.currentTimeline.writeKey) || ($store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000)} title="There is nothing to save"><i class='saveCloud'></i></div>
-    <div class="rightButton" class:hidden={!$store.currentTimeline.isOnline || ($store.currentTimeline.isOnline && !$store.currentTimeline.ownerKey && !$store.currentTimeline.writeKey) || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 2 * 1000)} on:click={onlineComponent.commit()} title="Save your modifications remotly"><i class='saveCloud'></i></div>
+    <div class="rightButtonDisabled" class:hidden={!$store.rights.hasWriter() || ($store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000)} title="There is nothing to save"><i class='saveCloud'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.hasWriter() || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 2 * 1000)} on:click={onlineComponent.commit()} title="Save your modifications remotly"><i class='saveCloud'></i></div>
 
-    <div class="rightButton" class:hidden={$store.currentTimeline.isOnline || ($store.currentTimeline.isOnline && !$store.currentTimeline.ownerKey)} on:click={onlineComponent.openComponent()} title="Share & save your chart online"><i class='online'></i></div>
-    <div class="rightButton" class:hidden={!$store.currentTimeline.isOnline || ($store.currentTimeline.isOnline && !$store.currentTimeline.ownerKey)} on:click={onlineComponent.openComponent()} title="Save your chart on your computer only"><i class='offline'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone()} on:click={onlineComponent.openComponent()} title="Share & save your chart online"><i class='online'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isOwner()} on:click={onlineComponent.openComponent()} title="Save your chart on your computer only"><i class='offline'></i></div>
 
     
     <div class="rightButton" class:hidden={!$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show regular tasks"><i class='hide'></i></div>
     <div class="rightButton" class:hidden={$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show all tasks even if they're hidden"><i class='show'></i></div>
     {/key}
     <div class="rightButton" on:click={downloadCsv} title="Downloading the .csv file"><i class='download'></i></div>
-    <div class="rightButton" class:hidden={$store.currentTimeline.isOnline && !$store.currentTimeline.ownerKey && !$store.currentTimeline.writeKey} on:click={uploadComponent.openUpload()} title='Uploading the .csv file'><i class='upload'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={uploadComponent.openUpload()} title='Uploading the .csv file'><i class='upload'></i></div>
     <div class="rightButton" on:click={takeshot} title='Take a screenshot'><i class='photo'></i></div>
-    <div class="rightButton" class:hidden={$store.currentTimeline.isOnline && !$store.currentTimeline.ownerKey && !$store.currentTimeline.writeKey} on:click={liveComponent.openLive()} title='Edit your milestones'><i class='edit'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={liveComponent.openLive()} title='Edit your milestones'><i class='edit'></i></div>
 </div>
 
 <div class="bottomButtons">

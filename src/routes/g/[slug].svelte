@@ -5,14 +5,13 @@ import { store } from '$lib/stores';
 
 import { CustomLocalStorage } from '$lib/customLocalStorage';
 import { Struct } from '$lib/struct.class';
+import { Rights } from '$lib/rights.class';
+import { JsonParser } from '$lib/jsonParser';
+import { FactoryTimeline } from '$lib/factoryTimeline';
+import { get } from '$lib/timelineRepository';
 
 import Draw from '$lib/Draw.svelte';
-import { FactoryTimeline } from '$lib/factoryTimeline';
-import { Constantes } from '$lib/constantes';
-import { get } from '$lib/timelineRepository';
-import { JsonParser } from '$lib/jsonParser';
 import Toast from '$lib/Toast.svelte';
-import { Rights } from '$lib/rights.class';
 
 let toastComponent
 $store.rights = new Rights($page.url.searchParams)
