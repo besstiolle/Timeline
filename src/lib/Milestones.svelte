@@ -1,125 +1,122 @@
 <script lang="ts">
 import { browser } from '$app/env';
-    import { store } from './stores';
+import { store } from './stores';
 
-    
-    import { Constantes } from './constantes';
-    import type { Struct } from './struct.class';
+
+import { Constantes } from './constantes';
+import type { Struct } from './struct.class';
 import { FactoryMilestone } from './factoryMilestone';
 
-    function compareMilestone(a : Struct.Milestone, b : Struct.Milestone){
-        if(a.date > b.date){return 1}
-        if(a.date < b.date){return -1}
-        return 0
+function compareMilestone(a : Struct.Milestone, b : Struct.Milestone){
+    if(a.date > b.date){return 1}
+    if(a.date < b.date){return -1}
+    return 0
+}
+
+let milestones: Struct.Milestone[] = []
+$store.currentTimeline.milestones.forEach(milestone => { 
+    if(milestone.isShow || $store.currentTimeline.showAll){
+        milestones.push(milestone)
     }
-
-    //TODO : fix color assignation for timelines
-
-    let milestones: Struct.Milestone[] = []
-    $store.currentTimeline.milestones.forEach(milestone => { 
-        if(milestone.isShow || $store.currentTimeline.showAll){
-            milestones.push(milestone)
-        }
-    });
-    //Sort by date ASC
-    milestones = milestones.sort(compareMilestone)
+});
+//Sort by date ASC
+milestones = milestones.sort(compareMilestone)
 
 
-    let ghostSVGNode: HTMLElement  = null
-    let currentTarget: HTMLElement = null
-    let hoverGroup: boolean = false
-    let recBox: DOMRect = null
+let ghostSVGNode: HTMLElement  = null
+let currentTarget: HTMLElement = null
+let hoverGroup: boolean = false
+let recBox: DOMRect = null
 
-    const GHOST_SVG_NODE_ID: string = "ghostSVGNode"
-    /**
-     * Triggered every time user try to "grab" an svg group of Milestone
-     * @param event the event mousedown
-     */
-    function down(event){
-        //Avoid selecting text. source : https://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/
-        event.preventDefault();
-        currentTarget = event.currentTarget //currentTarget => svg, target => sub element of svg
-        ghostSVGNode = <HTMLElement> currentTarget.cloneNode(true)
-        ghostSVGNode.setAttribute("id", GHOST_SVG_NODE_ID)
+const GHOST_SVG_NODE_ID: string = "ghostSVGNode"
+/**
+ * Triggered every time user try to "grab" an svg group of Milestone
+ * @param event the event mousedown
+ */
+function down(event){
+    //Avoid selecting text. source : https://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/
+    event.preventDefault();
+    currentTarget = event.currentTarget //currentTarget => svg, target => sub element of svg
+    ghostSVGNode = <HTMLElement> currentTarget.cloneNode(true)
+    ghostSVGNode.setAttribute("id", GHOST_SVG_NODE_ID)
+
+    //Find the last node of our SVG group
+    let endMilestoneNode = document.getElementById("endMilestoneNode")
+
+    //create ghost node <svg> after the last node of our SVG group
+    endMilestoneNode.parentNode.insertBefore(ghostSVGNode, endMilestoneNode)
     
-        //Find the last node of our SVG group
-        let endMilestoneNode = document.getElementById("endMilestoneNode")
+    //Refresh our ghost Node reference
+    ghostSVGNode = document.getElementById(GHOST_SVG_NODE_ID)
 
-        //create ghost node <svg> after the last node of our SVG group
-        endMilestoneNode.parentNode.insertBefore(ghostSVGNode, endMilestoneNode)
-        
-        //Refresh our ghost Node reference
-        ghostSVGNode = document.getElementById(GHOST_SVG_NODE_ID)
+    ghostSVGNode.classList.add("grabbing")
+}
 
-        ghostSVGNode.classList.add("grabbing")
-    }
-
-    /**
-     * Triggered every time user release the left clic of the mouse
-     * @param event the event mouseup
-     */
-    function up(event){
-        if(ghostSVGNode && hoverGroup){
-            let newX = event.clientX / window.innerWidth * Constantes.GRID.ALL_WIDTH
-            let date = processNewDate(newX - Constantes.GRID.MIDDLE_X)
-            let idMilestone = currentTarget.getAttribute("id").substring(1) // M999 => 999
-            let milestones = null
-            try{
-                milestones = FactoryMilestone.getById($store.currentTimeline, parseInt(idMilestone))    
-                milestones.setDate(date)
-                $store.currentTimeline.milestones = $store.currentTimeline.milestones 
-            } catch (NotFoundException){
-                //Nothing to do, the rest of the function will clean everything
-            }
-        }
-
-        //Reset vars
-        if(ghostSVGNode){
-            ghostSVGNode.remove()
-            ghostSVGNode = null
-        }
-        currentTarget = null
-    }
-    
-
-    /**
-     * Triggered every time user move the mouse
-     * @param event the event mousemove
-     */
-     function move(event){
-
-        if(!recBox && browser){
-            recBox = document.getElementById("milestonesSection").getBoundingClientRect()
-        }
-
-        if(hoverGroup && (event.clientX <= recBox.left || event.clientX >= recBox.right
-                || event.clientY <= recBox.top || event.clientY >= recBox.bottom)){
-                    hoverGroup = false
-        }
-
-        if(!hoverGroup && event.clientX > recBox.left && event.clientX < recBox.right && event.clientY > recBox.top && event.clientY < recBox.bottom){
-            hoverGroup = true
-        }
-
-        //Moving ghostUseNode on the axe <===> 
-        if(ghostSVGNode && hoverGroup){
-            let newX = event.clientX / window.innerWidth * Constantes.GRID.ALL_WIDTH
-            ghostSVGNode.setAttribute('x', `${newX - 10}`)
-
-            //Get new Date
-            let newDate: Date = processNewDate(newX - Constantes.GRID.MIDDLE_X)
-            let newDateLabel = newDate.getDate() + "-" + Constantes.MONTHS[newDate.getMonth()]
-            let svgGDateLabelNode : HTMLElement = <HTMLElement> ghostSVGNode.lastChild
-            if(svgGDateLabelNode){
-                svgGDateLabelNode.innerHTML = newDateLabel
-            }
+/**
+ * Triggered every time user release the left clic of the mouse
+ * @param event the event mouseup
+ */
+function up(event){
+    if(ghostSVGNode && hoverGroup){
+        let newX = event.clientX / window.innerWidth * Constantes.GRID.ALL_WIDTH
+        let date = processNewDate(newX - Constantes.GRID.MIDDLE_X)
+        let idMilestone = currentTarget.getAttribute("id").substring(1) // M999 => 999
+        let milestones = null
+        try{
+            milestones = FactoryMilestone.getById($store.currentTimeline, parseInt(idMilestone))    
+            milestones.setDate(date)
+            $store.currentTimeline.milestones = $store.currentTimeline.milestones 
+        } catch (NotFoundException){
+            //Nothing to do, the rest of the function will clean everything
         }
     }
 
-    function processNewDate(newX: number){
-        let ratio = $store.currentTimeline.getStart().getTime() + (newX / Constantes.GRID.MIDDLE_WIDTH * ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()))
-        return new Date(ratio)
+    //Reset vars
+    if(ghostSVGNode){
+        ghostSVGNode.remove()
+        ghostSVGNode = null
     }
+    currentTarget = null
+}
+
+/**
+ * Triggered every time user move the mouse
+ * @param event the event mousemove
+ */
+function move(event){
+
+    if(!recBox && browser){
+        recBox = document.getElementById("milestonesSection").getBoundingClientRect()
+    }
+
+    if(hoverGroup && (event.clientX <= recBox.left || event.clientX >= recBox.right
+            || event.clientY <= recBox.top || event.clientY >= recBox.bottom)){
+                hoverGroup = false
+    }
+
+    if(!hoverGroup && event.clientX > recBox.left && event.clientX < recBox.right && event.clientY > recBox.top && event.clientY < recBox.bottom){
+        hoverGroup = true
+    }
+
+    //Moving ghostUseNode on the axe <===> 
+    if(ghostSVGNode && hoverGroup){
+        let newX = event.clientX / window.innerWidth * Constantes.GRID.ALL_WIDTH
+        ghostSVGNode.setAttribute('x', `${newX - 10}`)
+
+        //Get new Date
+        let newDate: Date = processNewDate(newX - Constantes.GRID.MIDDLE_X)
+        let newDateLabel = newDate.getDate() + "-" + Constantes.MONTHS[newDate.getMonth()]
+        let svgGDateLabelNode : HTMLElement = <HTMLElement> ghostSVGNode.lastChild
+        if(svgGDateLabelNode){
+            svgGDateLabelNode.innerHTML = newDateLabel
+        }
+    }
+}
+
+function processNewDate(newX: number){
+    let ratio = $store.currentTimeline.getStart().getTime() + (newX / Constantes.GRID.MIDDLE_WIDTH * ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()))
+    return new Date(ratio)
+}
 
 
 </script>

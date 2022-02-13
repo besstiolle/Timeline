@@ -3,11 +3,7 @@ import { store } from './stores';
 import { Constantes } from './constantes';
 import type { Struct } from './struct.class';
 
-
-    //TODO : fix color assignation for timelines
-
-    let milestones: Struct.Milestone[] = $store.currentTimeline.milestones
-
+let milestones: Struct.Milestone[] = $store.currentTimeline.milestones
 
 </script>
 
