@@ -21,6 +21,9 @@ $store.rights = new Rights($page.url.searchParams)
 // OR
 //TODO : using SSR to display loading gif
 // https://kit.svelte.dev/docs#hooks-handle
+// OR
+//TODO : using SSR to retrive information from fauna
+
 
 //TODO : displaying link & qrcode ?
 // https://medium.com/geekculture/few-ways-to-generate-qr-code-using-javascript-54b6b5220c4f
