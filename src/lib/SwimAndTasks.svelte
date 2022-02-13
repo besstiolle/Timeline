@@ -4,7 +4,7 @@
 import { store } from "./stores";
 
 import type { Struct } from "./struct.class";
-import { COLORS, Constantes } from "./constantes";
+import { COLORS, GRID, MONTHS } from "./constantes";
 import { Helpers } from "./helpers";
 
 import Task from "./Task.svelte";
@@ -21,9 +21,9 @@ $store.currentTimeline.tasks.forEach(task => {
 
         if(task.swimlineId != null && previousSwimlineId != task.swimlineId){
             if(task.isShow && !$store.currentTimeline.showAll){
-                height = $store.currentTimeline.swimlines[task.swimlineId].countVisibleTasks * Constantes.GRID.ONE_TASK_H - 0.5
+                height = $store.currentTimeline.swimlines[task.swimlineId].countVisibleTasks * GRID.ONE_TASK_H - 0.5
             } else {
-                height = $store.currentTimeline.swimlines[task.swimlineId].countAllTasks * Constantes.GRID.ONE_TASK_H - 0.5
+                height = $store.currentTimeline.swimlines[task.swimlineId].countAllTasks * GRID.ONE_TASK_H - 0.5
             }   
 
             swimlinesToShow.set(task.id, {
@@ -126,7 +126,7 @@ function up(event){
                 task.setStart(dateStart)
                 task.setEnd(dateEnd)
             } else if(realAction == ACTION.PROGRESS) {
-                let viewportX:number = event.clientX / window.innerWidth * Constantes.GRID.ALL_WIDTH
+                let viewportX:number = event.clientX / window.innerWidth * GRID.ALL_WIDTH
 
                 //We allow an "hover" zone all left/right but we don't want really "dragging" things too left or too right
                 if(viewportX > TActionBarCoord.REC_X2){
@@ -194,7 +194,7 @@ function move(event){
     }
 
     //Conversion event.clientX => svg viewport mouse x value
-    let viewportX:number = event.clientX / window.innerWidth * Constantes.GRID.ALL_WIDTH
+    let viewportX:number = event.clientX / window.innerWidth * GRID.ALL_WIDTH
     if(realAction == ACTION.LEFT || realAction == ACTION.RIGHT) {
         moveResizing(event, viewportX)
     } else if(realAction == ACTION.PROGRESS) {
@@ -244,7 +244,7 @@ function moveResizing(event, viewportX:number){
         if(realAction == ACTION.LEFT){
             //max x = right.x
             //min x = 150
-            if(viewportX > TActionBarCoord.REC_X2 || viewportX < Constantes.GRID.MIDDLE_X) {
+            if(viewportX > TActionBarCoord.REC_X2 || viewportX < GRID.MIDDLE_X) {
                 return
             }
             //Update left HTMLElement position
@@ -258,7 +258,7 @@ function moveResizing(event, viewportX:number){
         } else if(realAction == ACTION.RIGHT) {
             //min x = left.x
             //max x = full size
-            if(viewportX < TActionBarCoord.REC_X || viewportX > Constantes.GRID.ALL_WIDTH) {
+            if(viewportX < TActionBarCoord.REC_X || viewportX > GRID.ALL_WIDTH) {
                 return
             }
             //Update right HTMLElement position
@@ -275,8 +275,8 @@ function moveResizing(event, viewportX:number){
         let dateStart = Helpers.getDateFromViewportX(TActionBarCoord.REC_X, $store.currentTimeline.getStart(), $store.currentTimeline.getEnd())
         let dateEnd = Helpers.getDateFromViewportX(TActionBarCoord.REC_X2, $store.currentTimeline.getStart(), $store.currentTimeline.getEnd())
         
-        rightLabel.innerHTML = (dateStart).getDate() + " " + Constantes.MONTHS[(dateStart).getMonth()] 
-                   + " - " + (dateEnd).getDate() + " " + Constantes.MONTHS[(dateEnd).getMonth()]
+        rightLabel.innerHTML = (dateStart).getDate() + " " + MONTHS[(dateStart).getMonth()] 
+                   + " - " + (dateEnd).getDate() + " " + MONTHS[(dateEnd).getMonth()]
 
     }
 }
@@ -321,25 +321,25 @@ function showToggle(event){
 
 <svelte:window on:mouseup={up} on:mousemove="{move}"/>
 <svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
-    x="0" y="{Constantes.GRID.MILESTONE_H + Constantes.GRID.ANNUAL_H - 5}"
+    x="0" y="{GRID.MILESTONE_H + GRID.ANNUAL_H - 5}"
     id='svgSwimlineAndTasks'>
     
 {#each tasksToShow as task, i}
 {#if swimlinesToShow.has(task.id)}
 
-    <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
-        width="{Constantes.GRID.ALL_WIDTH}" height="{swimlinesToShow.get(task.id)['height']}"  
+    <rect x="0" y="{i * GRID.ONE_TASK_H}" 
+        width="{GRID.ALL_WIDTH}" height="{swimlinesToShow.get(task.id)['height']}"  
         fill="{COLORS[swimlinesToShow.get(task.id)['position'] % COLORS.length][0]}" id="c{task.swimlineId}" 
         on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
 
-    <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
-        width="{Constantes.GRID.LEFT_WIDTH}" height="{swimlinesToShow.get(task.id)['height']}" fill="{COLORS[swimlinesToShow.get(task.id)['position'] % COLORS.length][1]}" id="d{task.swimlineId}" 
+    <rect x="0" y="{i * GRID.ONE_TASK_H}" 
+        width="{GRID.LEFT_WIDTH}" height="{swimlinesToShow.get(task.id)['height']}" fill="{COLORS[swimlinesToShow.get(task.id)['position'] % COLORS.length][1]}" id="d{task.swimlineId}" 
         on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
     
-    <text text-anchor="middle" x="{Constantes.GRID.LEFT_WIDTH / 2}" y="{i * Constantes.GRID.ONE_TASK_H + 5 + swimlinesToShow.get(task.id)['height'] / 2}" 
+    <text text-anchor="middle" x="{GRID.LEFT_WIDTH / 2}" y="{i * GRID.ONE_TASK_H + 5 + swimlinesToShow.get(task.id)['height'] / 2}" 
         font-size="10" fill="{swimlinesToShow.get(task.id)['timeline'].isShow?"#ffffff":"#888888"}">{swimlinesToShow.get(task.id)['timeline'].label}</text>
 
-    <image xlink:href="{swimlinesToShow.get(task.id)['timeline'].isShow?"/hide.png":"/see.png"}" x="0" y="{i * Constantes.GRID.ONE_TASK_H}" height="24" width="24" 
+    <image xlink:href="{swimlinesToShow.get(task.id)['timeline'].isShow?"/hide.png":"/see.png"}" x="0" y="{i * GRID.ONE_TASK_H}" height="24" width="24" 
         data-html2canvas-ignore="true" 
         on:click={toggleSwimlineVisibility} id="s{task.swimlineId}" class='toggleVisibility hidden'
         on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle} />

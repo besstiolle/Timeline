@@ -2,9 +2,9 @@ import { writable } from 'svelte/store'
 import { Struct } from './struct.class';
 
 import { CustomLocalStorage } from './customLocalStorage';
-import { Constantes } from './constantes';
 import { FactoryCards } from './factoryCards';
 import { FactoryTimeline } from './factoryTimeline';
+import { LOCAL_STORAGE } from './constantes';
 
 
 let timelineStore = new Struct.TimelineStore()
@@ -37,6 +37,6 @@ function updateLocalStorage(timelineStore: Struct.TimelineStore){
 
         //Persist both current timeline & cards in localstorage
         CustomLocalStorage.save(currentTimeline.key, currentTimeline)
-        CustomLocalStorage.save(Constantes.LOCAL_STORAGE.KEY_CARDS, cards)
+        CustomLocalStorage.save(LOCAL_STORAGE.KEY_CARDS, cards)
     }
 }

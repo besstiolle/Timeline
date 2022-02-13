@@ -1,66 +1,67 @@
 <script lang="ts">
 
-    import { store } from './stores';
-    import { Helpers } from './helpers';
-    import { Struct } from './struct.class';
-    import { Constantes } from './constantes';
+import { store } from './stores';
+import { Helpers } from './helpers';
+import { Struct } from './struct.class';
 import { FactoryTimeline } from './factoryTimeline';
+import { LIVE_PREFIX } from './constantes';
 
-    export let getIndex = (event) => {return 0}
-    export let updateStore =  (event) => {}
+export let getIndex = (event) => {return 0}
+export let updateStore =  (event) => {}
 
-    function b_delete(event){
-        $store.currentTimeline.tasks.splice(getIndex(event), 1)
-        $store.currentTimeline.tasks = $store.currentTimeline.tasks
+function b_delete(event){
+    $store.currentTimeline.tasks.splice(getIndex(event), 1)
+    $store.currentTimeline.tasks = $store.currentTimeline.tasks
+}
+function b_up(event){
+    let index = getIndex(event)
+    if(index == 0){
+        return;
     }
-    function b_up(event){
-        let index = getIndex(event)
-        if(index == 0){
-            return;
-        }
-        let tmpTask: Struct.Task = $store.currentTimeline.tasks[index]
-        $store.currentTimeline.tasks[index] = $store.currentTimeline.tasks[index - 1]
-        $store.currentTimeline.tasks[index - 1] = tmpTask
-        $store.currentTimeline.tasks = $store.currentTimeline.tasks
+    let tmpTask: Struct.Task = $store.currentTimeline.tasks[index]
+    $store.currentTimeline.tasks[index] = $store.currentTimeline.tasks[index - 1]
+    $store.currentTimeline.tasks[index - 1] = tmpTask
+    $store.currentTimeline.tasks = $store.currentTimeline.tasks
+}
+function b_down(event){
+    let index = getIndex(event)
+    if(index == ($store.currentTimeline.tasks.length-1)){
+        return;
     }
-    function b_down(event){
-        let index = getIndex(event)
-        if(index == ($store.currentTimeline.tasks.length-1)){
-            return;
-        }
-        let tmpTask: Struct.Task = $store.currentTimeline.tasks[index]
-        $store.currentTimeline.tasks[index] = $store.currentTimeline.tasks[index + 1]
-        $store.currentTimeline.tasks[index + 1] = tmpTask
-        $store.currentTimeline.tasks = $store.currentTimeline.tasks
-    }
-    function b_show(event){
-        let index = getIndex(event)
-        $store.currentTimeline.tasks[index].isShow = !$store.currentTimeline.tasks[index].isShow 
-    }
-    function b_duplicate(event){
-        let index = getIndex(event)
-        let tmpTasks : Array<Struct.Task> = $store.currentTimeline.tasks.splice(index+1, $store.currentTimeline.tasks.length)
-        let clone = <Struct.Task> {... $store.currentTimeline.tasks[index]}
-        clone.id = $store.currentTimeline.getNextId()
-        FactoryTimeline.addTask($store.currentTimeline, clone)
-        tmpTasks.forEach(tmpTask => {
-            FactoryTimeline.addTask($store.currentTimeline, tmpTask)
-        });
-        $store.currentTimeline.tasks = $store.currentTimeline.tasks
-    }
-    function b_add(){
-        let diffSec : number = $store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()
-        FactoryTimeline.addTask($store.currentTimeline, new Struct.Task(
-                $store.currentTimeline.getNextId(),
-                "Some task", 
-                Helpers.toYYYY_MM_DD(new Date($store.currentTimeline.getStart().getTime() + (0.1 * diffSec))), 
-                Helpers.toYYYY_MM_DD(new Date($store.currentTimeline.getEnd().getTime() - (0.1 * diffSec))),
-                0,
-                true,
-                "",
-                null))
-        $store.currentTimeline.tasks = $store.currentTimeline.tasks
-    }
+    let tmpTask: Struct.Task = $store.currentTimeline.tasks[index]
+    $store.currentTimeline.tasks[index] = $store.currentTimeline.tasks[index + 1]
+    $store.currentTimeline.tasks[index + 1] = tmpTask
+    $store.currentTimeline.tasks = $store.currentTimeline.tasks
+}
+function b_show(event){
+    let index = getIndex(event)
+    $store.currentTimeline.tasks[index].isShow = !$store.currentTimeline.tasks[index].isShow 
+}
+//TODO fix duplicate
+function b_duplicate(event){
+    let index = getIndex(event)
+    let tmpTasks : Array<Struct.Task> = $store.currentTimeline.tasks.splice(index+1, $store.currentTimeline.tasks.length)
+    let clone = <Struct.Task> {... $store.currentTimeline.tasks[index]}
+    clone.id = $store.currentTimeline.getNextId()
+    FactoryTimeline.addTask($store.currentTimeline, clone)
+    tmpTasks.forEach(tmpTask => {
+        FactoryTimeline.addTask($store.currentTimeline, tmpTask)
+    });
+    $store.currentTimeline.tasks = $store.currentTimeline.tasks
+}
+function b_add(){
+    let diffSec : number = $store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()
+    FactoryTimeline.addTask($store.currentTimeline, new Struct.Task(
+            $store.currentTimeline.getNextId(),
+            "Some task", 
+            Helpers.toYYYY_MM_DD(new Date($store.currentTimeline.getStart().getTime() + (0.1 * diffSec))), 
+            Helpers.toYYYY_MM_DD(new Date($store.currentTimeline.getEnd().getTime() - (0.1 * diffSec))),
+            0,
+            true,
+            "",
+            null))
+    $store.currentTimeline.tasks = $store.currentTimeline.tasks
+}
 
 </script>
 
@@ -94,8 +95,8 @@ import { FactoryTimeline } from './factoryTimeline';
         </svg>
     </div>
     <input type="text" bind:value="{task.label}" class="label"/>
-    <input type="date" name="{Constantes.LIVE_PREFIX.TS}{i}" value="{task.dateStart}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
-    <input type="date" name="{Constantes.LIVE_PREFIX.TE}{i}" value="{task.dateEnd}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
+    <input type="date" name="{LIVE_PREFIX.TS}{i}" value="{task.dateStart}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
+    <input type="date" name="{LIVE_PREFIX.TE}{i}" value="{task.dateEnd}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
     <input type="number" bind:value="{task.progress}" min="0" max="100" class="progress" />
     <progress max="100" value="{task.progress}"> {task.progress}% </progress>
     <input type="text" bind:value="{task.swimline}" class="label"/>

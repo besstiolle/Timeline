@@ -3,61 +3,62 @@
 import { store } from './stores';
 import { Helpers } from './helpers';
 import { Struct } from './struct.class';
-import { Constantes } from './constantes';
 import { FactoryTimeline } from './factoryTimeline';
+import { LIVE_PREFIX } from './constantes';
 
-    export let getIndex = (event) => {return 0}
-    export let updateStore =  (event) => {}
+export let getIndex = (event) => {return 0}
+export let updateStore =  (event) => {}
 
-    function m_delete(event){
-        $store.currentTimeline.milestones.splice(getIndex(event), 1)
-        $store.currentTimeline.milestones = $store.currentTimeline.milestones
+function m_delete(event){
+    $store.currentTimeline.milestones.splice(getIndex(event), 1)
+    $store.currentTimeline.milestones = $store.currentTimeline.milestones
+}
+function m_up(event){
+    let index = getIndex(event)
+    if(index == 0){
+        return;
     }
-    function m_up(event){
-        let index = getIndex(event)
-        if(index == 0){
-            return;
-        }
-        let tmpMilestone: Struct.Milestone = $store.currentTimeline.milestones[index]
-        $store.currentTimeline.milestones[index] = $store.currentTimeline.milestones[index - 1]
-        $store.currentTimeline.milestones[index - 1] = tmpMilestone
-        $store.currentTimeline.milestones = $store.currentTimeline.milestones
+    let tmpMilestone: Struct.Milestone = $store.currentTimeline.milestones[index]
+    $store.currentTimeline.milestones[index] = $store.currentTimeline.milestones[index - 1]
+    $store.currentTimeline.milestones[index - 1] = tmpMilestone
+    $store.currentTimeline.milestones = $store.currentTimeline.milestones
+}
+function m_down(event){
+    let index = getIndex(event)
+    if(index == ($store.currentTimeline.milestones.length-1)){
+        return;
     }
-    function m_down(event){
-        let index = getIndex(event)
-        if(index == ($store.currentTimeline.milestones.length-1)){
-            return;
-        }
-        let tmpMilestone: Struct.Milestone = $store.currentTimeline.milestones[index]
-        $store.currentTimeline.milestones[index] = $store.currentTimeline.milestones[index + 1]
-        $store.currentTimeline.milestones[index + 1] = tmpMilestone
-        $store.currentTimeline.milestones = $store.currentTimeline.milestones
-    }
-    function m_show(event){
-        let index = getIndex(event)
-        $store.currentTimeline.milestones[index].isShow = !$store.currentTimeline.milestones[index].isShow 
-    }
-    function m_duplicate(event){
-        let index = getIndex(event)
-        let tmpMilestones : Array<Struct.Milestone> = $store.currentTimeline.milestones.splice(index+1, $store.currentTimeline.milestones.length)
-        let clone = <Struct.Milestone> {... $store.currentTimeline.milestones[index]}
-        clone.id = $store.currentTimeline.getNextId()
-        FactoryTimeline.addMilestone($store.currentTimeline, clone )
-        tmpMilestones.forEach(tmpMilestone => {
-            FactoryTimeline.addMilestone($store.currentTimeline, tmpMilestone)
-        });
-        $store.currentTimeline.milestones = $store.currentTimeline.milestones
-    }
-    function m_add(){
-        let diffSec : number = $store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()
-        FactoryTimeline.addMilestone($store.currentTimeline, new Struct.Milestone(
-                $store.currentTimeline.getNextId(),
-                "My Milestone", 
-                Helpers.toYYYY_MM_DD(new Date($store.currentTimeline.getStart().getTime() + (0.5 * diffSec))),
-                true
-                ))
-                $store.currentTimeline.milestones = $store.currentTimeline.milestones
-    }
+    let tmpMilestone: Struct.Milestone = $store.currentTimeline.milestones[index]
+    $store.currentTimeline.milestones[index] = $store.currentTimeline.milestones[index + 1]
+    $store.currentTimeline.milestones[index + 1] = tmpMilestone
+    $store.currentTimeline.milestones = $store.currentTimeline.milestones
+}
+function m_show(event){
+    let index = getIndex(event)
+    $store.currentTimeline.milestones[index].isShow = !$store.currentTimeline.milestones[index].isShow 
+}
+//TODO fix duplicate
+function m_duplicate(event){
+    let index = getIndex(event)
+    let tmpMilestones : Array<Struct.Milestone> = $store.currentTimeline.milestones.splice(index+1, $store.currentTimeline.milestones.length)
+    let clone = <Struct.Milestone> {... $store.currentTimeline.milestones[index]}
+    clone.id = $store.currentTimeline.getNextId()
+    FactoryTimeline.addMilestone($store.currentTimeline, clone )
+    tmpMilestones.forEach(tmpMilestone => {
+        FactoryTimeline.addMilestone($store.currentTimeline, tmpMilestone)
+    });
+    $store.currentTimeline.milestones = $store.currentTimeline.milestones
+}
+function m_add(){
+    let diffSec : number = $store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()
+    FactoryTimeline.addMilestone($store.currentTimeline, new Struct.Milestone(
+            $store.currentTimeline.getNextId(),
+            "My Milestone", 
+            Helpers.toYYYY_MM_DD(new Date($store.currentTimeline.getStart().getTime() + (0.5 * diffSec))),
+            true
+            ))
+            $store.currentTimeline.milestones = $store.currentTimeline.milestones
+}
 
 </script>
 
@@ -92,7 +93,7 @@ import { FactoryTimeline } from './factoryTimeline';
         </svg>
     </div>
     <input type="text" bind:value="{milestone.label}" class="label"/>
-    <input type="date" name="{Constantes.LIVE_PREFIX.MD}{i}" value="{milestone.date}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
+    <input type="date" name="{LIVE_PREFIX.MD}{i}" value="{milestone.date}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
 </div>
 {/each}
 

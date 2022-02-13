@@ -1,6 +1,5 @@
 <script lang="ts">
-
-    import { Constantes } from './constantes';
+import { GRID } from './constantes';
     import { store } from './stores';
 
     let toDisplay: boolean = ($store.currentTimeline.getStart() <= new Date() && $store.currentTimeline.getEnd() >= new Date())
@@ -8,13 +7,13 @@
     const todayColor = "#D41E24"
     const todayLabelColor = "#000000"
     
-    let widthToday: number = (new Date().getTime() - $store.currentTimeline.getStart().getTime()) / ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()) * Constantes.GRID.MIDDLE_WIDTH
+    let widthToday: number = (new Date().getTime() - $store.currentTimeline.getStart().getTime()) / ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()) * GRID.MIDDLE_WIDTH
  
 </script>
 
 {#if toDisplay}
 <svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
-    x="{Constantes.GRID.MIDDLE_X}" y="{Constantes.GRID.MILESTONE_H}"  >
+    x="{GRID.MIDDLE_X}" y="{GRID.MILESTONE_H}"  >
 
             <rect x="0" y="20" width="{widthToday}" height="5" fill={todayColor}/>
             <polygon points='{widthToday},25 {widthToday + 5},40 {widthToday - 5},40' fill={todayColor} />

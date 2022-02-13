@@ -1,5 +1,5 @@
 import { browser } from "$app/env"
-import { Constantes } from "./constantes"
+import { LOCAL_STORAGE } from "./constantes"
 import { JsonParser } from "./jsonParser"
 import type { Struct } from "./struct.class"
 
@@ -20,7 +20,7 @@ export module CustomLocalStorage{
     }
 
     export function getCards() : Array<Struct.Card>{
-        return get(Constantes.LOCAL_STORAGE.KEY_CARDS, JsonParser.cardsReviver)
+        return get(LOCAL_STORAGE.KEY_CARDS, JsonParser.cardsReviver)
     }
 
     export function getTimeline(key:string):Struct.Timeline{

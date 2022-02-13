@@ -3,9 +3,9 @@ import { browser } from '$app/env';
 import { store } from './stores';
 
 
-import { Constantes } from './constantes';
 import type { Struct } from './struct.class';
 import { FactoryMilestone } from './factoryMilestone';
+import { GRID, MONTHS } from './constantes';
 
 function compareMilestone(a : Struct.Milestone, b : Struct.Milestone){
     if(a.date > b.date){return 1}
@@ -58,8 +58,8 @@ function down(event){
  */
 function up(event){
     if(ghostSVGNode && hoverGroup){
-        let newX = event.clientX / window.innerWidth * Constantes.GRID.ALL_WIDTH
-        let date = processNewDate(newX - Constantes.GRID.MIDDLE_X)
+        let newX = event.clientX / window.innerWidth * GRID.ALL_WIDTH
+        let date = processNewDate(newX - GRID.MIDDLE_X)
         let idMilestone = currentTarget.getAttribute("id").substring(1) // M999 => 999
         let milestones = null
         try{
@@ -100,12 +100,12 @@ function move(event){
 
     //Moving ghostUseNode on the axe <===> 
     if(ghostSVGNode && hoverGroup){
-        let newX = event.clientX / window.innerWidth * Constantes.GRID.ALL_WIDTH
+        let newX = event.clientX / window.innerWidth * GRID.ALL_WIDTH
         ghostSVGNode.setAttribute('x', `${newX - 10}`)
 
         //Get new Date
-        let newDate: Date = processNewDate(newX - Constantes.GRID.MIDDLE_X)
-        let newDateLabel = newDate.getDate() + "-" + Constantes.MONTHS[newDate.getMonth()]
+        let newDate: Date = processNewDate(newX - GRID.MIDDLE_X)
+        let newDateLabel = newDate.getDate() + "-" + MONTHS[newDate.getMonth()]
         let svgGDateLabelNode : HTMLElement = <HTMLElement> ghostSVGNode.lastChild
         if(svgGDateLabelNode){
             svgGDateLabelNode.innerHTML = newDateLabel
@@ -114,7 +114,7 @@ function move(event){
 }
 
 function processNewDate(newX: number){
-    let ratio = $store.currentTimeline.getStart().getTime() + (newX / Constantes.GRID.MIDDLE_WIDTH * ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()))
+    let ratio = $store.currentTimeline.getStart().getTime() + (newX / GRID.MIDDLE_WIDTH * ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()))
     return new Date(ratio)
 }
 
@@ -122,11 +122,11 @@ function processNewDate(newX: number){
 </script>
 
 <svelte:window on:mouseup={up} on:mousemove="{move}"/>
-<rect id="milestonesSection" x="{Constantes.GRID.MIDDLE_X}" y="0" width="{Constantes.GRID.MIDDLE_WIDTH}" height="{Constantes.GRID.MILESTONE_H}" 
+<rect id="milestonesSection" x="{GRID.MIDDLE_X}" y="0" width="{GRID.MIDDLE_WIDTH}" height="{GRID.MILESTONE_H}" 
     stroke-dasharray="0.5 2" fill="transparent" class:onhover={ghostSVGNode && hoverGroup} />
 {#each milestones as milestone, i}
     <svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
-        x="{Constantes.GRID.MIDDLE_X + (milestone.getDate().getTime() - $store.currentTimeline.getStart().getTime()) / ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()) * Constantes.GRID.MIDDLE_WIDTH - 10}" y="{i%2 * 25}" 
+        x="{GRID.MIDDLE_X + (milestone.getDate().getTime() - $store.currentTimeline.getStart().getTime()) / ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()) * GRID.MIDDLE_WIDTH - 10}" y="{i%2 * 25}" 
         class="milestoneSVGSection" class:shouldBeHidden={!milestone.isShow} on:mousedown={down} id="M{milestone.id}" >
         
         <use x="0" y="0" href="#mapfiller" fill="transparent" stroke="transparent" class="toExcludeFromSnapshot"/>
@@ -137,7 +137,7 @@ function processNewDate(newX: number){
         <line stroke-dasharray="1" x1="10" y1="20" x2="10" y2="25" stroke="#000" />
         {/if}
         <text x="17" y="9" font-size="10" fill="#000">{milestone.label}</text>
-        <text x="17" y="18" fill="#44546A">{milestone.getDate().getDate()}-{Constantes.MONTHS[milestone.getDate().getMonth()]}</text>
+        <text x="17" y="18" fill="#44546A">{milestone.getDate().getDate()}-{MONTHS[milestone.getDate().getMonth()]}</text>
     </svg>
     <line id='endMilestoneNode' x1="0" y1="0" x2="0" y2="0" stroke="transparent" />
 {/each}

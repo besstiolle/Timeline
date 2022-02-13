@@ -1,9 +1,9 @@
 
 import { browser } from "$app/env";
-import { Constantes } from "./constantes";
 import { Helpers } from "./helpers"
 import { FactorySwimline } from "./factorySwimline";
 import { Struct } from "./struct.class";
+import { GRID } from "./constantes";
 
 export module FactoryTimeline {
 
@@ -167,7 +167,7 @@ export module FactoryTimeline {
         if(!timeline.showAll){
            len = Helpers.countVisibleTasksInList(timeline.tasks)
         }  
-        timeline.viewbox = `0 0 ${Constantes.GRID.ALL_WIDTH} ${Constantes.GRID.MILESTONE_H + Constantes.GRID.ANNUAL_H + Constantes.GRID.ONE_TASK_H * len + Constantes.GRID.TODAY_H}`
+        timeline.viewbox = `0 0 ${GRID.ALL_WIDTH} ${GRID.MILESTONE_H + GRID.ANNUAL_H + GRID.ONE_TASK_H * len + GRID.TODAY_H}`
         
     }
 

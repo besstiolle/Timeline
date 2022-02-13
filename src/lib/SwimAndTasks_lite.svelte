@@ -4,7 +4,7 @@
 import { store } from "./stores";
 
 import type { Struct } from "./struct.class";
-import { COLORS, Constantes } from "./constantes";
+import { COLORS, GRID } from "./constantes";
 import TaskLite from "./Task_lite.svelte";
 
 let tasksShown: Struct.Task[] = []
@@ -19,9 +19,9 @@ $store.currentTimeline.tasks.forEach(task => {
         if(task.swimlineId != null && previousSwimlineId != task.swimlineId){
             swimlinesShown.set(task.id, $store.currentTimeline.swimlines[task.swimlineId])
             if(task.isShow && !$store.currentTimeline.showAll){
-                height = $store.currentTimeline.swimlines[task.swimlineId].countVisibleTasks * Constantes.GRID.ONE_TASK_H - 0.5
+                height = $store.currentTimeline.swimlines[task.swimlineId].countVisibleTasks * GRID.ONE_TASK_H - 0.5
             } else {
-                height = $store.currentTimeline.swimlines[task.swimlineId].countAllTasks * Constantes.GRID.ONE_TASK_H - 0.5
+                height = $store.currentTimeline.swimlines[task.swimlineId].countAllTasks * GRID.ONE_TASK_H - 0.5
             }   
             swimlinesHeight.set(task.id,height)
         }
@@ -48,24 +48,24 @@ function showToggle(event){
 </script>         
 
 <svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
-    x="0" y="{Constantes.GRID.MILESTONE_H + Constantes.GRID.ANNUAL_H - 5}"
+    x="0" y="{GRID.MILESTONE_H + GRID.ANNUAL_H - 5}"
     id='svgSwimlineAndTasks'>
     
 {#each tasksShown as task, i}
 {#if swimlinesShown.has(task.id)}
 
-    <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
-        width="{Constantes.GRID.ALL_WIDTH}" height="{swimlinesHeight.get(task.id)}"  fill="{COLORS[i % COLORS.length][0]}" id="c{task.swimlineId}" 
+    <rect x="0" y="{i * GRID.ONE_TASK_H}" 
+        width="{GRID.ALL_WIDTH}" height="{swimlinesHeight.get(task.id)}"  fill="{COLORS[i % COLORS.length][0]}" id="c{task.swimlineId}" 
         on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
 
-    <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
-        width="{Constantes.GRID.LEFT_WIDTH}" height="{swimlinesHeight.get(task.id)}" fill="{COLORS[i % COLORS.length][1]}" id="d{task.swimlineId}" 
+    <rect x="0" y="{i * GRID.ONE_TASK_H}" 
+        width="{GRID.LEFT_WIDTH}" height="{swimlinesHeight.get(task.id)}" fill="{COLORS[i % COLORS.length][1]}" id="d{task.swimlineId}" 
         on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
     
-    <text text-anchor="middle" x="{Constantes.GRID.LEFT_WIDTH / 2}" y="{i * Constantes.GRID.ONE_TASK_H + 5 + swimlinesHeight.get(task.id) / 2}" 
+    <text text-anchor="middle" x="{GRID.LEFT_WIDTH / 2}" y="{i * GRID.ONE_TASK_H + 5 + swimlinesHeight.get(task.id) / 2}" 
         font-size="10" fill="{swimlinesShown.get(task.id).isShow?"#ffffff":"#888888"}">{swimlinesShown.get(task.id).label}</text>
 
-    <image xlink:href="{swimlinesShown.get(task.id).isShow?"/hide.png":"/see.png"}" x="0" y="{i * Constantes.GRID.ONE_TASK_H}" height="24" width="24" 
+    <image xlink:href="{swimlinesShown.get(task.id).isShow?"/hide.png":"/see.png"}" x="0" y="{i * GRID.ONE_TASK_H}" height="24" width="24" 
         data-html2canvas-ignore="true" 
         on:click={toggleSwimlineVisibility} id="s{task.swimlineId}" class='toggleVisibility hidden'
         on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle} />

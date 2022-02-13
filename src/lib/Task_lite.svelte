@@ -1,6 +1,7 @@
 <script lang="ts">
+import { GRID, MONTHS } from './constantes';
 
-    import { Constantes } from './constantes';
+
     import { Helpers } from './helpers';
     import { store } from './stores';
     import type { Struct } from './struct.class';
@@ -25,8 +26,8 @@
         styleColor = {fill : blue, stroke: blueStroke}
     }
 
-    let labelRight:string = currentTask.getStart().getDate() + " " + Constantes.MONTHS[currentTask.getStart().getMonth()] 
-                    + " - " + currentTask.getEnd().getDate() + " " + Constantes.MONTHS[currentTask.getEnd().getMonth()]
+    let labelRight:string = currentTask.getStart().getDate() + " " + MONTHS[currentTask.getStart().getMonth()] 
+                    + " - " + currentTask.getEnd().getDate() + " " + MONTHS[currentTask.getEnd().getMonth()]
     
     
     let xGrayPosition =  Helpers.getViewportXFromDate(currentTask.getStart(), $store.currentTimeline.getStart(), $store.currentTimeline.getEnd())
@@ -47,14 +48,14 @@
 
 </script>
 <svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
-    x="0" y="{i * Constantes.GRID.ONE_TASK_H + Constantes.GRID.MILESTONE_H + Constantes.GRID.ANNUAL_H}"
+    x="0" y="{i * GRID.ONE_TASK_H + GRID.MILESTONE_H + GRID.ANNUAL_H}"
     class="taskSVGSection" id="T{currentTask.id}" class:shouldBeHidden={!currentTask.isShow} >
     
         {#if hasSwimline}
         <text text-anchor="end" x="{xGrayPosition - 5}" y="10.5" font-size="9" fill="{leftLabel}" >{currentTask.label}</text>
         {:else}
-        <text text-anchor="end" x="{Constantes.GRID.MIDDLE_X - 5}" y="10.5" font-size="9" fill="{leftLabel}">{currentTask.label}</text>
-        <line stroke-dasharray="0.5 2" x1="{Constantes.GRID.MIDDLE_X}" y1="8" x2="{xGrayPosition - 5}" y2="8" stroke="{dottedLine}" />
+        <text text-anchor="end" x="{GRID.MIDDLE_X - 5}" y="10.5" font-size="9" fill="{leftLabel}">{currentTask.label}</text>
+        <line stroke-dasharray="0.5 2" x1="{GRID.MIDDLE_X}" y1="8" x2="{xGrayPosition - 5}" y2="8" stroke="{dottedLine}" />
         {/if}
         {#if currentTask.progress < 100}
         <rect x="{xGrayPosition}" y="0" width="{widthGray}" height="15" rx="5" ry="5" fill="{grey}" stroke="{greyStroke}" stroke-width="0.05em"/>    

@@ -1,4 +1,4 @@
-import { Constantes } from "./constantes";
+import { GRID } from "./constantes";
 import type { Struct } from "./struct.class";
 
 export module Helpers {
@@ -44,21 +44,21 @@ export module Helpers {
 
     /**
      * Give the date equivalent to the x value inside the viewport
-     * @param x the value of the x position inside the full viewport ratio (Constantes.GRID.ALL_WIDTH)
+     * @param x the value of the x position inside the full viewport ratio (GRID.ALL_WIDTH)
      * @param dmin the minimal date of the viewport 
      * @param dmax the maximal date of the viewport
      * @returns the Date equivalent
      */
     export function getDateFromViewportX(x: number, dmin: Date, dmax: Date) : Date{
-        if(x < Constantes.GRID.MIDDLE_X){
-            x = Constantes.GRID.MIDDLE_X
+        if(x < GRID.MIDDLE_X){
+            x = GRID.MIDDLE_X
         }
-        if(x > Constantes.GRID.MIDDLE_X + Constantes.GRID.MIDDLE_WIDTH){
-            x = Constantes.GRID.MIDDLE_X + Constantes.GRID.MIDDLE_WIDTH
+        if(x > GRID.MIDDLE_X + GRID.MIDDLE_WIDTH){
+            x = GRID.MIDDLE_X + GRID.MIDDLE_WIDTH
         }
 
         //Ceil value of x to avoid miscalculation
-        let date = new Date(((Math.ceil(x)  - Constantes.GRID.MIDDLE_X) * (dmax.getTime() - dmin.getTime()) / Constantes.GRID.MIDDLE_WIDTH) + dmin.getTime())
+        let date = new Date(((Math.ceil(x)  - GRID.MIDDLE_X) * (dmax.getTime() - dmin.getTime()) / GRID.MIDDLE_WIDTH) + dmin.getTime())
         //Remove hours & co for the same reason
         //date.setHours(0, 0, 0, 0)
         return date
@@ -66,14 +66,14 @@ export module Helpers {
 
     /** 
      * Give the x value equivalent to the date value inside the viewport
-     * @param date the value of the date inside the full viewport ratio (Constantes.GRID.ALL_WIDTH)
+     * @param date the value of the date inside the full viewport ratio (GRID.ALL_WIDTH)
      * @param dmin the minimal date of the viewport 
      * @param dmax the maximal date of the viewport
      * @returns the x value equivalent
      **/
     export function getViewportXFromDate(date: Date, dmin: Date, dmax: Date) : number{
-        let x = ((date.getTime() - dmin.getTime())  * Constantes.GRID.MIDDLE_WIDTH / (dmax.getTime() - dmin.getTime()))
-                + Constantes.GRID.MIDDLE_X
+        let x = ((date.getTime() - dmin.getTime())  * GRID.MIDDLE_WIDTH / (dmax.getTime() - dmin.getTime()))
+                + GRID.MIDDLE_X
         
         //Ceil value of x to avoid miscalculation
         return Math.ceil(x)

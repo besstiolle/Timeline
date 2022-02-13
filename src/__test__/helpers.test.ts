@@ -1,7 +1,7 @@
 
 import { Struct } from "$lib/struct.class";
 import { Helpers } from "$lib/helpers";
-import { Constantes } from "$lib/constantes";
+import { GRID } from "$lib/constantes";
 
 
 
@@ -69,17 +69,17 @@ testCountVisibleTasksInList()
 function testGetDateFromViewportX(){
     let dateMin: Date = new Date("2021-01-01")
     let dateMax: Date = new Date("2021-01-30")
-    let viewportX = (Constantes.GRID.MIDDLE_WIDTH - Constantes.GRID.MIDDLE_X) / 30
+    let viewportX = (GRID.MIDDLE_WIDTH - GRID.MIDDLE_X) / 30
     let expectedDate = new Date("2021-01-2")
     test("Helpers.getDateFromViewportX with out-of bound value", ()=> {
         expect(Helpers.getDateFromViewportX(0, dateMin, dateMax)).toEqual(dateMin)
         expect(Helpers.getDateFromViewportX(99999, dateMin, dateMax)).toEqual(dateMax)
     })
     test("Helpers.getDateFromViewportX with min value", ()=> {
-        expect(Helpers.getDateFromViewportX(Constantes.GRID.MIDDLE_X, dateMin, dateMax)).toEqual(dateMin)
+        expect(Helpers.getDateFromViewportX(GRID.MIDDLE_X, dateMin, dateMax)).toEqual(dateMin)
     })
     test("Helpers.getDateFromViewportX with max value", ()=> {
-        expect(Helpers.getDateFromViewportX(Constantes.GRID.MIDDLE_X + Constantes.GRID.MIDDLE_WIDTH, dateMin, dateMax)).toEqual(dateMax)
+        expect(Helpers.getDateFromViewportX(GRID.MIDDLE_X + GRID.MIDDLE_WIDTH, dateMin, dateMax)).toEqual(dateMax)
     })
     /*
     test("Helpers.getDateFromViewportX with fixed value", ()=> {
@@ -108,14 +108,14 @@ function testGetViewportXFromDate(){
     let dateToTest2: Date = new Date("2021-01-10")
 
     test("Helpers.getViewportXFromDate with min value", ()=> {
-        expect(Helpers.getViewportXFromDate(dateMin2, dateMin2, dateMax2)).toBe(Constantes.GRID.MIDDLE_X)
+        expect(Helpers.getViewportXFromDate(dateMin2, dateMin2, dateMax2)).toBe(GRID.MIDDLE_X)
     })
     test("Helpers.getViewportXFromDate with max value", ()=> {
-        expect(Helpers.getViewportXFromDate(dateMax2, dateMin2, dateMax2)).toBe(Constantes.GRID.MIDDLE_X + Constantes.GRID.MIDDLE_WIDTH)
+        expect(Helpers.getViewportXFromDate(dateMax2, dateMin2, dateMax2)).toBe(GRID.MIDDLE_X + GRID.MIDDLE_WIDTH)
     })/*
     test("Helpers.getViewportXFromDate with fixed value", ()=> {
-        expect(Helpers.getViewportXFromDate(dateToTest1, dateMin2, dateMax2)).toBe((Constantes.GRID.MIDDLE_X + (Constantes.GRID.MIDDLE_WIDTH / 2)))
-        expect(Helpers.getViewportXFromDate(dateToTest2, dateMin2, dateMax2)).toBe((Constantes.GRID.MIDDLE_X + (Constantes.GRID.MIDDLE_WIDTH / 3)))
+        expect(Helpers.getViewportXFromDate(dateToTest1, dateMin2, dateMax2)).toBe((GRID.MIDDLE_X + (GRID.MIDDLE_WIDTH / 2)))
+        expect(Helpers.getViewportXFromDate(dateToTest2, dateMin2, dateMax2)).toBe((GRID.MIDDLE_X + (GRID.MIDDLE_WIDTH / 3)))
     })*/
 }
 testGetViewportXFromDate()
@@ -131,7 +131,7 @@ function testBothViewportFunctions(){
         expect(dateResult).toBe(dateInput)
     })*/
 
-    let viewportXInput = (Constantes.GRID.MIDDLE_WIDTH / 5) +  Constantes.GRID.MIDDLE_X
+    let viewportXInput = (GRID.MIDDLE_WIDTH / 5) +  GRID.MIDDLE_X
     let viewportXResult = Helpers.getViewportXFromDate(Helpers.getDateFromViewportX(viewportXInput, dateMin3, dateMax3), dateMin3, dateMax3)
     test("Helpers.getDateFromViewportX & getViewportXFromDate", ()=> {
         expect(viewportXInput).toBe(viewportXResult)
