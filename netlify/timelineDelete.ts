@@ -61,14 +61,11 @@ export async function remove(q, client, event, context) {
 
 async function remove2(q, client, timelineKey: string, ownerKey: string, writeKey: string, readKey: string){
 
-    //TODO : remove match with write/read to avoid unexpected colision ?
     return await client.query(
        q.Foreach(
-            q.Paginate(q.Union(
-                q.Match(q.Index(INDEXES.INDEXE_OWNER_DESC), ownerKey, timelineKey),
-                q.Match(q.Index(INDEXES.INDEXE_WRITE_DESC), writeKey, timelineKey),
-                q.Match(q.Index(INDEXES.INDEXE_READ_DESC),  readKey, timelineKey),
-            )),q.Lambda('myRef',
+            q.Paginate(
+                q.Match(q.Index(INDEXES.INDEXE_OWNER_DESC), ownerKey, timelineKey)
+            ),q.Lambda('myRef',
             q.Delete(
                 q.Var('myRef')
             ))
