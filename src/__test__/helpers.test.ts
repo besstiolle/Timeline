@@ -151,3 +151,16 @@ function testRandomeString(){
 testRandomeString()
 /************************************* */
 
+function testPrintf(){
+    test("Helpers.printf with normal values", ()=> {
+        expect(Helpers.printf("{0} somme text {1}.", ['foo', 'bar'])).toBe("foo somme text bar.")
+        expect(Helpers.printf("{0} somme text {1}.", ["f'oo", 3])).toBe("f'oo somme text 3.")
+    })
+    test("Helpers.printf with limits values", ()=> {
+        expect(Helpers.printf("{0} somme text {1}.", ["f'oo", 3, 'none'])).toBe("f'oo somme text 3.")
+        expect(Helpers.printf("{0} somme text {1}.", ["f'oo"])).toBe("f'oo somme text {1}.")
+        expect(Helpers.printf("{0} somme text {1}.",[])).toBe("{0} somme text {1}.")
+        expect(Helpers.printf("somme text.",['foo', 'bar'])).toBe("somme text.")
+    })
+}
+testPrintf()

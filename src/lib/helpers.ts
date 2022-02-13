@@ -93,4 +93,18 @@ export module Helpers {
        }
        return result;
     }
+
+    /**
+     * Simulate the unix function printf()
+     * @param str the string with inner parameters formated like this : {number}
+     * @param args a simple list of parameters
+     * @returns a string formated like the unix printf
+     */
+    export function printf(str:string, args:any[]) {
+        return str.replace(/{(\d+)}/g, function(match, number) { 
+            return typeof args[number] != 'undefined'
+                ? args[number]
+                : match
+        })
+    }
 }
