@@ -10,6 +10,7 @@ import { Helpers } from "./helpers";
 import Task from "./Task.svelte";
 import { FactoryTask } from "./factoryTask";
 
+
 let colors = [
     ["#90BBD8", "#2980B9"],
     ["#86CBBE", "#16A085"],
@@ -24,8 +25,10 @@ let colors = [
 let tasksShown: Struct.Task[] = []
 let swimlinesShown: Map<number, Struct.Swimline> = new Map<number, Struct.Swimline>()
 let swimlinesHeight: Map<number, number> = new Map<number, number>()
+let swimlinesPosition: Map<number, number> = new Map<number, number>()
 let previousSwimlineId:number = null
 let height: number
+let position: number = 0
 $store.currentTimeline.tasks.forEach(task => {
     if(task.isShow || $store.currentTimeline.showAll){
         tasksShown.push(task)
@@ -38,6 +41,8 @@ $store.currentTimeline.tasks.forEach(task => {
                 height = $store.currentTimeline.swimlines[task.swimlineId].countAllTasks * Constantes.GRID.ONE_TASK_H - 0.5
             }   
             swimlinesHeight.set(task.id,height)
+            swimlinesPosition.set(task.id,position)
+            position++
         }
 
         previousSwimlineId = task.swimlineId
@@ -333,11 +338,11 @@ function showToggle(event){
 {#if swimlinesShown.has(task.id)}
 
     <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
-        width="{Constantes.GRID.ALL_WIDTH}" height="{swimlinesHeight.get(task.id)}"  fill="{colors[i % colors.length][0]}" id="c{task.swimlineId}" 
+        width="{Constantes.GRID.ALL_WIDTH}" height="{swimlinesHeight.get(task.id)}"  fill="{colors[swimlinesPosition.get(task.id) % colors.length][0]}" id="c{task.swimlineId}" 
         on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
 
     <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
-        width="{Constantes.GRID.LEFT_WIDTH}" height="{swimlinesHeight.get(task.id)}" fill="{colors[i % colors.length][1]}" id="d{task.swimlineId}" 
+        width="{Constantes.GRID.LEFT_WIDTH}" height="{swimlinesHeight.get(task.id)}" fill="{colors[swimlinesPosition.get(task.id) % colors.length][1]}" id="d{task.swimlineId}" 
         on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
     
     <text text-anchor="middle" x="{Constantes.GRID.LEFT_WIDTH / 2}" y="{i * Constantes.GRID.ONE_TASK_H + 5 + swimlinesHeight.get(task.id) / 2}" 
