@@ -4,19 +4,8 @@
 import { store } from "./stores";
 
 import type { Struct } from "./struct.class";
-import { Constantes } from "./constantes";
+import { COLORS, Constantes } from "./constantes";
 import TaskLite from "./Task_lite.svelte";
-
-let colors = [
-    ["#90BBD8", "#2980B9"],
-    ["#86CBBE", "#16A085"],
-    ["#C9D9A8", "#9BBB59"],
-    ["#F5C984", "#F39C12"],
-    ["#DB9891", "#C0392B"],
-    ["#C6CECE", "#95A5A6"],
-    ["#A191A3", "#4B2C50"]
-]
-
 
 let tasksShown: Struct.Task[] = []
 let swimlinesShown: Map<number, Struct.Swimline> = new Map<number, Struct.Swimline>()
@@ -66,11 +55,11 @@ function showToggle(event){
 {#if swimlinesShown.has(task.id)}
 
     <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
-        width="{Constantes.GRID.ALL_WIDTH}" height="{swimlinesHeight.get(task.id)}"  fill="{colors[i % colors.length][0]}" id="c{task.swimlineId}" 
+        width="{Constantes.GRID.ALL_WIDTH}" height="{swimlinesHeight.get(task.id)}"  fill="{COLORS[i % COLORS.length][0]}" id="c{task.swimlineId}" 
         on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
 
     <rect x="0" y="{i * Constantes.GRID.ONE_TASK_H}" 
-        width="{Constantes.GRID.LEFT_WIDTH}" height="{swimlinesHeight.get(task.id)}" fill="{colors[i % colors.length][1]}" id="d{task.swimlineId}" 
+        width="{Constantes.GRID.LEFT_WIDTH}" height="{swimlinesHeight.get(task.id)}" fill="{COLORS[i % COLORS.length][1]}" id="d{task.swimlineId}" 
         on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
     
     <text text-anchor="middle" x="{Constantes.GRID.LEFT_WIDTH / 2}" y="{i * Constantes.GRID.ONE_TASK_H + 5 + swimlinesHeight.get(task.id) / 2}" 
