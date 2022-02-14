@@ -71,8 +71,8 @@
     <div id='live__shadow' class:live__weak_opacity>
         <div id='live'>
             <div class='title'><label for='titleOfTimeline'>Title : </label><input id='titleOfTimeline' type='text' bind:value={$store.currentTimeline.title}/></div>
-            <LiveTableTask getIndex={(event) => getIndex(event)} updateStore={(event) => updateStore(event)} />
-            <LiveTableMilestone getIndex={(event) => getIndex(event)} updateStore={(event) => updateStore(event)} />
+            <LiveTableTask getIndex={getIndex} updateStore={updateStore} />
+            <LiveTableMilestone getIndex={getIndex} updateStore={updateStore} />
         </div>
     </div>
 </div>

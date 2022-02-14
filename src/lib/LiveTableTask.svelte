@@ -96,6 +96,7 @@ function b_add(){
         </svg>
     </div>
     <input type="text" bind:value="{task.label}" class="label"/>
+    <!-- TODO change behavior of date field -->
     <input type="date" name="{LIVE_PREFIX.TS}{i}" value="{task.dateStart}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
     <input type="date" name="{LIVE_PREFIX.TE}{i}" value="{task.dateEnd}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
     <input type="number" bind:value="{task.progress}" min="0" max="100" class="progress" />

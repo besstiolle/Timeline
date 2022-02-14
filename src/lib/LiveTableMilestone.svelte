@@ -5,7 +5,6 @@ import { Helpers } from './helpers';
 import { Struct } from './struct.class';
 import { FactoryTimeline } from './factoryTimeline';
 import { LIVE_PREFIX } from './constantes';
-import Milestones from './Milestones.svelte';
 import { FactoryMilestone } from './factoryMilestone';
 
 export let getIndex = (event) => {return 0}
