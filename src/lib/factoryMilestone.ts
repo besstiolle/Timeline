@@ -1,5 +1,5 @@
 
-import type { Struct } from "./struct.class";
+import { Struct } from "./struct.class";
 import { NotFoundException } from "./timelineException.class";
 
 export module FactoryMilestone {
@@ -39,4 +39,18 @@ export module FactoryMilestone {
         
         throw new NotFoundException('Struct.Milestone', id)
     }
+
+    /**
+     * Clone properly a <Struct.Milestone> with all its function.
+     * @param task the milestone to clone
+     * @param nextId the id to apply of the current milestone.id will be used
+     * @returns the new milestone cloned
+     */
+        export function clone(milestone: Struct.Milestone, nextId?: number): Struct.Milestone{
+            return new Struct.Milestone(nextId?nextId:milestone.id, 
+                                    milestone.label, 
+                                    milestone.date, 
+                                    milestone.isShow
+                                    )
+        }
 }

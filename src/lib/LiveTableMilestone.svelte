@@ -5,6 +5,8 @@ import { Helpers } from './helpers';
 import { Struct } from './struct.class';
 import { FactoryTimeline } from './factoryTimeline';
 import { LIVE_PREFIX } from './constantes';
+import Milestones from './Milestones.svelte';
+import { FactoryMilestone } from './factoryMilestone';
 
 export let getIndex = (event) => {return 0}
 export let updateStore =  (event) => {}
@@ -37,13 +39,13 @@ function m_show(event){
     let index = getIndex(event)
     $store.currentTimeline.milestones[index].isShow = !$store.currentTimeline.milestones[index].isShow 
 }
-//TODO fix duplicate
 function m_duplicate(event){
     let index = getIndex(event)
     let tmpMilestones : Array<Struct.Milestone> = $store.currentTimeline.milestones.splice(index+1, $store.currentTimeline.milestones.length)
-    let clone = <Struct.Milestone> {... $store.currentTimeline.milestones[index]}
-    clone.id = $store.currentTimeline.getNextId()
-    FactoryTimeline.addMilestone($store.currentTimeline, clone )
+
+    FactoryTimeline.addMilestone($store.currentTimeline, 
+                                FactoryMilestone.clone($store.currentTimeline.milestones[index],
+                                                       $store.currentTimeline.getNextId()) )
     tmpMilestones.forEach(tmpMilestone => {
         FactoryTimeline.addMilestone($store.currentTimeline, tmpMilestone)
     });

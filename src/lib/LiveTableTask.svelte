@@ -5,6 +5,7 @@ import { Helpers } from './helpers';
 import { Struct } from './struct.class';
 import { FactoryTimeline } from './factoryTimeline';
 import { LIVE_PREFIX } from './constantes';
+import { FactoryTask } from './factoryTask';
 
 export let getIndex = (event) => {return 0}
 export let updateStore =  (event) => {}
@@ -37,13 +38,13 @@ function b_show(event){
     let index = getIndex(event)
     $store.currentTimeline.tasks[index].isShow = !$store.currentTimeline.tasks[index].isShow 
 }
-//TODO fix duplicate
 function b_duplicate(event){
     let index = getIndex(event)
     let tmpTasks : Array<Struct.Task> = $store.currentTimeline.tasks.splice(index+1, $store.currentTimeline.tasks.length)
-    let clone = <Struct.Task> {... $store.currentTimeline.tasks[index]}
-    clone.id = $store.currentTimeline.getNextId()
-    FactoryTimeline.addTask($store.currentTimeline, clone)
+
+    FactoryTimeline.addTask($store.currentTimeline, 
+                            FactoryTask.clone($store.currentTimeline.tasks[index],
+                                              $store.currentTimeline.getNextId()))
     tmpTasks.forEach(tmpTask => {
         FactoryTimeline.addTask($store.currentTimeline, tmpTask)
     });

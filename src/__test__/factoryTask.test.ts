@@ -39,3 +39,5 @@ function testGetById(){
     })
 }
 testGetById()
+
+//TODO : test clone

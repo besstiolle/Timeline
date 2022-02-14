@@ -1,6 +1,4 @@
-
-import { Helpers } from "./helpers"
-import type { Struct } from "./struct.class";
+import { Struct } from "./struct.class";
 import { NotFoundException } from "./timelineException.class";
 
 export module FactoryTask {
@@ -44,5 +42,23 @@ export module FactoryTask {
         }
 
         throw new NotFoundException('Struct.Task', id)
+    }
+
+    /**
+     * Clone properly a <Struct.Task> with all its function.
+     * @param task the task to clone
+     * @param nextId the id to apply of the current task.id will be used
+     * @returns the new task cloned
+     */
+    export function clone(task: Struct.Task, nextId?: number): Struct.Task{
+        return new Struct.Task(nextId?nextId:task.id, 
+                                task.label,
+                                task.dateStart,
+                                task.dateEnd,
+                                task.progress,
+                                task.isShow,
+                                task.swimline,
+                                task.swimlineId
+                                )
     }
 }
