@@ -66,14 +66,14 @@ import { GRID, MONTHS } from './constantes';
     </linearGradient>
 </defs>
 
-<svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
+<svg data-testid='Banner.svelte' viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
     x="{GRID.LEFT_WIDTH}" y="{GRID.MILESTONE_H}">
     
     <rect x="-10" y="0" width="{GRID.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient1)"/>
     <rect x="-10" y="30" width="{GRID.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient2)"/>
     {#each jalons as { left, label, classCss}, i}
         <path d="M{parseInt(left) } 6 v 14" fill="transparent" stroke="#818C9C"/>
-        <text x="{parseInt(left) + 5}" y="17" font-size="12" fill="#818C9C" class="{classCss}">{label}</text>
+        <text data-testid='jalonText_{i}' x="{parseInt(left) + 5}" y="17" font-size="12" fill="#818C9C" class="{classCss}">{label}</text>
     {/each}
 </svg>
 
