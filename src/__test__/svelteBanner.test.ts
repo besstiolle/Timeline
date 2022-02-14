@@ -15,7 +15,7 @@ jest.mock('$app/env', () => ({
     },
 }))
 
-jest.mock('$lib/stores', () => {return jest.requireActual('./mockedstores')})
+jest.mock('$lib/stores', () => {return jest.requireActual('./mockedStores')})
 
 let timelineStore = new Struct.TimelineStore()
 timelineStore.currentTimeline = new Struct.Timeline("key", "title")
