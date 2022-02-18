@@ -39,4 +39,13 @@ function testGetById(){
 }
 testGetById()
 
-//TODO : test clone
+function testClone(){
+    let milestone1: Struct.Milestone = new Struct.Milestone(1,"label 1","2020-01-01", true)
+    let milestone2 = FactoryMilestone.clone(milestone1)
+
+    test("FactoryTask.clone and check memory pointer", ()=> {
+        expect(milestone1).not.toBe(milestone2)
+        expect(milestone1).toStrictEqual(milestone2)
+    })
+}
+testClone()

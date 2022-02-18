@@ -40,4 +40,13 @@ function testGetById(){
 }
 testGetById()
 
-//TODO : test clone
+function testClone(){
+    let task1 = new Struct.Task(1,"label 1", "2022-01-01", "2022-02-01", 100, true, "Swimline 1", 5)
+    let task2 = FactoryTask.clone(task1)
+
+    test("FactoryTask.clone and check memory pointer", ()=> {
+        expect(task1).not.toBe(task2)
+        expect(task1).toStrictEqual(task2)
+    })
+}
+testClone()
