@@ -16,4 +16,12 @@ export class JsonParserException extends Error {
     console.error(super.message)
   }
 }
+export class DuplicateEntityException extends Error {
+  args: any[]
+  constructor (...args:any) {
+    super(Helpers.printf("The entity {0} with the id {1} already exist", args))
+    this.args = args
+    console.error(super.message)
+  }
+}
   

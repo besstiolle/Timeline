@@ -1,6 +1,7 @@
 
 import { FactoryTimeline } from "$lib/factoryTimeline"
 import { Struct } from "$lib/struct.class";
+import { DuplicateEntityException } from "$lib/timelineException.class";
 
 jest.mock('$app/env', () => ({
     default: {
@@ -114,6 +115,15 @@ function testAddTask(){
         expect(timeline.tasks.length).toBe(3)
         expect(timeline.isInitiate).toBe(true)
     })
+
+    //Mock console.error() to avoid jest panic
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    test("FactoryTimeline.addTask with duplicate id", ()=> {
+        expect(() => {
+            FactoryTimeline.addTask(timeline, new Struct.Task(3,"label 3", date1, date2, 100, true, "Swimline 1", 5))
+        }).toThrow(DuplicateEntityException);
+    })
 }
 testAddTask()
 
@@ -130,6 +140,14 @@ function testAddMilestone(){
         expect(timeline.isInitiate).toBe(true)
     })
 
+    //Mock console.error() to avoid jest panic
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    test("FactoryTimeline.addMilestone with duplicate id", ()=> {
+        expect(() => {
+            FactoryTimeline.addMilestone(timeline, new Struct.Milestone(1,"label 1",date1, true))
+        }).toThrow(DuplicateEntityException);
+    })
 }
 testAddMilestone()
 
@@ -159,39 +177,6 @@ function testPurge(){
     })
 }
 testPurge()
-
-
-  //TODO retest mock avec jest
-//jest.mock('$lib/helperStructTimeline.class')
-
-
-/*
-function testProcessLimites(){
-    let timeline = new Struct.Timeline("key", "title")
-    
-    const mock = {
-        getMin : jest.fn(),
-        getMax : jest.fn(),
-    }
-
-    mock.getMin.mockReturnValue(new Date("2020-01-01"))
-    mock.getMax.mockReturnValue(new Date("2020-12-31"))
-
-    jest.mock('$lib/helperStructTimeline.class', () => ( mock))
-
-    test("test mock result with dates", ()=> {
-        expect(FactoryTimeline.getMin(timeline)).toEqual(new Date("2020-01-01"))
-        expect(FactoryTimeline.getMax(timeline)).toEqual(new Date("2020-12-31"))
-    })
-
-    FactoryTimeline._processLimites(timeline)
-
-    test("FactoryTimeline._processLimites with dates", ()=> {
-        expect(timeline.start).toEqual(new Date("2020-01-01"))
-        expect(timeline.end).toEqual(new Date("2021-01-01"))
-    })
-}
-testProcessLimites()*/
 
 
 function testProcessLimites(){

@@ -4,6 +4,7 @@ import { Helpers } from "./helpers"
 import { FactorySwimline } from "./factorySwimline";
 import { Struct } from "./struct.class";
 import { DIFF, GRID } from "./constantes";
+import { DuplicateEntityException } from "./timelineException.class";
 
 export module FactoryTimeline {
 
@@ -66,8 +67,13 @@ export module FactoryTimeline {
      * @param task the Struct.Task to add
      */
 	export function addTask(timeline : Struct.Timeline, task: Struct.Task) : void{
+        timeline.tasks.forEach(element => {
+            if(element.id === task.id){
+                throw new DuplicateEntityException('Struct.Task', task.id)
+            }
+        });
+        
         timeline.tasks.push(task)
-        //TODO : vérification for dupplicate id
         timeline.isInitiate = true
     }
 
@@ -77,8 +83,13 @@ export module FactoryTimeline {
      * @param milestone the Struct.Milestone to add
      */
     export function addMilestone(timeline : Struct.Timeline,milestone: Struct.Milestone) : void{
+        timeline.milestones.forEach(element => {
+            if(element.id === milestone.id){
+                throw new DuplicateEntityException('Struct.Milestone', milestone.id)
+            }
+        });
+        
         timeline.milestones.push(milestone)
-        //TODO : vérification for dupplicate id
         timeline.isInitiate = true
     }
 
