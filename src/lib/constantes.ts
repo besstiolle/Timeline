@@ -16,6 +16,8 @@ export const GRID = {
 
 export const MONTHS = ['Jan.','Fev.','Mar.','Avr.','Mai','Juin','Juil.','Aout','Sept.','Oct.','Nov.','Dec.']
 
+export const DAYS = ['Di.', 'Lu.','Ma.','Me.','Je.','Ve.','Sa.']
+
 export const LIVE_PREFIX = {
     TS:"taskStart_",
     TE:"taskEnd_",
@@ -37,3 +39,24 @@ export const COLORS = [
     ["rgba(149, 165, 166, 0.5)", "rgba(149, 165, 166, 1)"],
     ["rgba(75, 44, 80, 0.5)", "rgba(75, 44, 80, 1)"],    
 ]
+
+export const TIMERS = {
+    DAYS31 : 86400000 * 31, // < 31 days
+    MONTHS5 : 86400000 * 30 * 5, // < 5 months (+/-)
+    MONTHS20 : 86400000 * 30 * 20, // < 20 months (+/-)
+    YEARS3 : 86400000 * 30 * 12 * 3, // < 3 years (+/-)
+    YEARS6 : 86400000 * 30 * 12 * 6, // < 6 years (+/-)
+    YEARS10 : 86400000 * 30 * 12 * 10, // < 10 years (+/-)
+    YEARS20 : 86400000 * 30 * 12 * 20, // < 20 years (+/-)
+}
+
+export const DIFF = {
+    isMoreThan20Years : "isMoreThan20Years",
+    isBetween10YearsAnd20Years : "isBetween10YearsAnd20Years",
+    isBetween6YearsAnd10Years : "isBetween6YearsAnd10Years",
+    isBetween3YearsAnd6Years : "isBetween3YearsAnd6Years",
+    isBetween20MonthsAnd3Years : "isBetween20MonthsAnd3Years",
+    isBetween5MonthsAnd20Months : "isBetween5MonthsAnd20Months",
+    isBetween1MonthAnd5Months : "isBetween1MonthAnd5Months",
+    isBelow1Month : "isBelow1Month"
+}

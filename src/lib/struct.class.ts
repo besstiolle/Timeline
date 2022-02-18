@@ -35,6 +35,7 @@ export module Struct {
 		isInitiate : boolean = false
 		start: string = null
 		end: string = null
+		differencial: string = null
 		maxId: number = 0
 		viewbox: string = "0 0 0 0"
 		showAll: boolean = false

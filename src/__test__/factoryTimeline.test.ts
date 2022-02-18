@@ -196,26 +196,51 @@ testProcessLimites()*/
 
 function testProcessLimites(){
     let timeline1 = new Struct.Timeline("key", "title")
-    timeline1.tasks.push(new Struct.Task(1,"label 1", "2020-01-01", "2020-12-31", 100, true, "Swimline 1", 5))
+    timeline1.tasks.push(new Struct.Task(1,"label 1", "2020-01-01", "2020-01-31", 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline1)
-    test("FactoryTimeline._processLimites with dates", ()=> {
-        expect(timeline1.start).toEqual("2020-01-01")
-        expect(timeline1.getStart()).toEqual(new Date("2020-01-01"))
-        expect(timeline1.end).toEqual("2021-01-01")
-        expect(timeline1.getEnd()).toEqual(new Date("2021-01-01"))
+    test("FactoryTimeline._processLimites with dates < 1 month", ()=> {
+        expect(timeline1.start).toEqual("2019-12-30")
+        expect(timeline1.end).toEqual("2020-02-02")
     })
 
     let timeline2 = new Struct.Timeline("key", "title")
-    timeline2.tasks.push(new Struct.Task(1,"label 1", "2020-01-15", "2020-02-01", 100, true, "Swimline 1", 5))
+    timeline2.tasks.push(new Struct.Task(1,"label 1", "2020-01-15", "2020-03-01", 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline2)
-    test("FactoryTimeline._processLimites with dates", ()=> {
-        expect(timeline2.start).toEqual("2020-01-01")
-        expect(timeline2.getStart()).toEqual(new Date("2020-01-01"))
-        expect(timeline2.end).toEqual("2020-03-01")
-        expect(timeline2.getEnd()).toEqual(new Date("2020-03-01"))
+    test("FactoryTimeline._processLimites with dates 1 month => 5 months ", ()=> {
+        expect(timeline2.start).toEqual("2020-01-10")
+        expect(timeline2.end).toEqual("2020-03-06")
     })
+
+    let timeline3a = new Struct.Timeline("key", "title")
+    timeline3a.tasks.push(new Struct.Task(1,"label 1", "2020-02-07", "2022-02-07", 100, true, "Swimline 1", 5))
+
+    FactoryTimeline.refresh(timeline3a)
+    test("FactoryTimeline._processLimites with dates 5 months => 10 years + day of month < 15", ()=> {
+        expect(timeline3a.start).toEqual("2020-01-01")
+        expect(timeline3a.end).toEqual("2022-03-01")
+    })
+    
+    let timeline3b = new Struct.Timeline("key", "title")
+    timeline3b.tasks.push(new Struct.Task(1,"label 1", "2020-02-17", "2022-02-17", 100, true, "Swimline 1", 5))
+
+    FactoryTimeline.refresh(timeline3b)
+    test("FactoryTimeline._processLimites with dates 5 months => 10 years + day of month > 15", ()=> {
+        expect(timeline3b.start).toEqual("2020-02-01")
+        expect(timeline3b.end).toEqual("2022-04-01")
+    })
+
+    let timeline4 = new Struct.Timeline("key", "title")
+    timeline4.tasks.push(new Struct.Task(1,"label 1", "2020-01-15", "2040-02-01", 100, true, "Swimline 1", 5))
+
+    FactoryTimeline.refresh(timeline4)
+    test("FactoryTimeline._processLimites with dates 10 years => +", ()=> {
+        expect(timeline4.start).toEqual("2019-01-01")
+        expect(timeline4.end).toEqual("2041-02-01")
+    })
+    
+
 }
 testProcessLimites()
 

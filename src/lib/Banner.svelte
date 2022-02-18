@@ -1,55 +1,61 @@
 <script lang="ts">
-import { GRID, MONTHS } from './constantes';
-
+import { DAYS, DIFF, GRID, MONTHS } from './constantes';
 
     import { store } from './stores';
-
-   /* function monthDiff(d1: Date, d2: Date) {
-        let months: number;
-        months = (d2.getFullYear() - d1.getFullYear()) * 12;
-        months -= d1.getMonth();
-        months += d2.getMonth();
-        return months <= 0 ? 0 : months;
-    }*/
-
- //   let oneDay = 86400 * 1000
- //   let days = oneDay * 15 // < 15 days
- //   let weeks = oneDay * 7 * 15 // < 15 weeks
- //   let months = oneDay * 30 * 15 // < 15 months (+/-)
- //   let decade = oneDay * 30 * 12 * 15 // < 15 years (+/-)
-
-
-/*
-    if(end-start > decade){
-        console.info("trops");
-    } else if(end-start > months){
-        console.info("decade");
-    } else if(end-start > weeks){
-        console.info("months");
-    } else if(end-start > days){
-        console.info("weeks");
-    } else if(end-start > days){
-        console.info("days");
-    } else {
-        console.info("oneDay");   
-    }*/
-
 
     let dateInc = new Date($store.currentTimeline.start);
 
     let i=0
     let jalons=[]
-    while ($store.currentTimeline.getEnd().getFullYear() > dateInc.getFullYear() || 
-            ($store.currentTimeline.getEnd().getFullYear() == dateInc.getFullYear() && $store.currentTimeline.getEnd().getMonth() >= dateInc.getMonth()) && i < 100){
-        i++;
-        jalons.push({
-            left:(dateInc.getTime() - $store.currentTimeline.getStart().getTime()) / ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()) * GRID.MIDDLE_WIDTH,
-            label:(dateInc.getMonth()==0?dateInc.getUTCFullYear():MONTHS[dateInc.getMonth()]),
-            classCss:(dateInc.getMonth()==0?"newYear":"")
-            //label:MONTHS[dateInc.getMonth()]
-        })
+    let innerClassCss: string, innerLabel: any, left: number = null
+    while (i < 100 && $store.currentTimeline.getEnd() >= dateInc) {
+        i++
+        left = (dateInc.getTime() - $store.currentTimeline.getStart().getTime()) / ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()) * GRID.MIDDLE_WIDTH
+        innerClassCss = ''
 
-        dateInc = new Date(dateInc.setMonth(dateInc.getMonth()+1));
+        if ($store.currentTimeline.differencial === DIFF.isMoreThan20Years){
+            innerLabel = dateInc.getUTCFullYear()
+            dateInc = new Date(dateInc.setFullYear(dateInc.getFullYear()+2))
+        }
+        if ($store.currentTimeline.differencial === DIFF.isBetween10YearsAnd20Years){
+            innerLabel = dateInc.getUTCFullYear()
+            dateInc = new Date(dateInc.setFullYear(dateInc.getFullYear()+1))
+        }
+        if ($store.currentTimeline.differencial === DIFF.isBetween6YearsAnd10Years){
+            innerLabel = (dateInc.getMonth()==0?dateInc.getUTCFullYear():MONTHS[dateInc.getMonth()])
+            dateInc = new Date(dateInc.setMonth(dateInc.getMonth()+6))
+        }
+        if ($store.currentTimeline.differencial === DIFF.isBetween3YearsAnd6Years){
+            innerLabel = (dateInc.getMonth()==0?dateInc.getUTCFullYear():MONTHS[dateInc.getMonth()])
+            innerClassCss = (dateInc.getMonth()==0?"newYear":"")
+            dateInc = new Date(dateInc.setMonth(dateInc.getMonth()+3))
+        }
+        if ($store.currentTimeline.differencial === DIFF.isBetween20MonthsAnd3Years){
+            innerLabel = (dateInc.getMonth()==0?dateInc.getUTCFullYear():MONTHS[dateInc.getMonth()])
+            innerClassCss = (dateInc.getMonth()==0?"newYear":"")
+            dateInc = new Date(dateInc.setMonth(dateInc.getMonth()+2))
+        }
+        if ($store.currentTimeline.differencial === DIFF.isBetween5MonthsAnd20Months){
+            innerLabel = (dateInc.getMonth()==0?dateInc.getUTCFullYear():MONTHS[dateInc.getMonth()])
+            innerClassCss = (dateInc.getMonth()==0?"newYear":"")
+            dateInc = new Date(dateInc.setMonth(dateInc.getMonth()+1))
+        }
+        if ($store.currentTimeline.differencial === DIFF.isBetween1MonthAnd5Months){
+            innerLabel = dateInc.getDate()+'/'+(dateInc.getMonth()+1)
+            innerClassCss = dateInc.getDate() < 8?"newYear":""
+            dateInc = new Date(dateInc.setDate(dateInc.getDate()+7))
+        }
+        if ($store.currentTimeline.differencial === DIFF.isBelow1Month){
+            innerLabel = (dateInc.getDay()==0?DAYS[0]:dateInc.getDate())
+            innerClassCss = (dateInc.getDay()==0?"newYear":"")
+            dateInc = new Date(dateInc.setDate(dateInc.getDate()+1))
+        }
+
+        jalons.push({
+            left: left,
+            label: innerLabel,
+            classCss: innerClassCss
+        })
     }
 </script>
 
@@ -65,6 +71,7 @@ import { GRID, MONTHS } from './constantes';
         <stop offset="100%" stop-opacity="0"/>
     </linearGradient>
 </defs>
+
 
 <svg data-testid='Banner.svelte' viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
     x="{GRID.LEFT_WIDTH}" y="{GRID.MILESTONE_H}">

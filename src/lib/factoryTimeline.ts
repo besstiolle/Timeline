@@ -3,7 +3,7 @@ import { browser } from "$app/env";
 import { Helpers } from "./helpers"
 import { FactorySwimline } from "./factorySwimline";
 import { Struct } from "./struct.class";
-import { GRID } from "./constantes";
+import { DIFF, GRID } from "./constantes";
 
 export module FactoryTimeline {
 
@@ -93,6 +93,7 @@ export module FactoryTimeline {
         timeline.isInitiate = false
 		timeline.start = null
 		timeline.end = null
+        timeline.differencial = null
 		timeline.maxId = 0
 		timeline.viewbox = "0 0 0 0"
 		//timeline.showAll = false //Don't reset this parameter
@@ -152,10 +153,40 @@ export module FactoryTimeline {
         let start = FactoryTimeline.getMin(timeline)
         let end = FactoryTimeline.getMax(timeline)
 
-        //TODO prévoir le cas des années / périodes très longues / très courtes
-        start.setDate(1)
-        end.setDate(1)
-        end.setMonth(end.getMonth() + 1)
+        timeline.differencial = Helpers.getEstimationOfDiff(start, end)
+
+        switch (timeline.differencial){
+            case DIFF.isMoreThan20Years: 
+            case DIFF.isBetween10YearsAnd20Years: 
+                start.setFullYear(start.getFullYear() - 1)
+                end.setFullYear(end.getFullYear() + 1)
+                start.setDate(1)
+                end.setDate(1)
+                break
+            case DIFF.isBetween6YearsAnd10Years:
+            case DIFF.isBetween3YearsAnd6Years:
+            case DIFF.isBetween20MonthsAnd3Years:
+            case DIFF.isBetween5MonthsAnd20Months:
+                if(start.getDate()<15){
+                    start.setMonth(start.getMonth() - 1)
+                }
+                if(end.getDate()>15){
+                    end.setMonth(end.getMonth() + 2)
+                } else {
+                    end.setMonth(end.getMonth() + 1)
+                }
+                start.setDate(1)
+                end.setDate(1)
+                break
+            case DIFF.isBetween1MonthAnd5Months:
+                start.setDate(start.getDate() - 5)
+                end.setDate(end.getDate() + 5)
+                break
+            case DIFF.isBelow1Month:
+                start.setDate(start.getDate() - 2)
+                end.setDate(end.getDate() + 2)
+                break
+        }
 
         timeline.setStart(start)
         timeline.setEnd(end)

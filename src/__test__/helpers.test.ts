@@ -1,7 +1,7 @@
 
 import { Struct } from "$lib/struct.class";
 import { Helpers } from "$lib/helpers";
-import { GRID } from "$lib/constantes";
+import { DIFF, GRID } from "$lib/constantes";
 
 
 
@@ -164,3 +164,62 @@ function testPrintf(){
     })
 }
 testPrintf()
+/************************************* */
+
+function testGetEstimationOfDiff(){
+
+    let start: Date = new Date("2000-01-01")
+    let end: Date = null
+
+    test("Helpers.getEstimationOfDiff with nominal value at date J", ()=> {
+        end = new Date(start)
+        expect(Helpers.getEstimationOfDiff(start, end)).toBe(DIFF.isBelow1Month)
+    })
+    test("Helpers.getEstimationOfDiff with nominal value at date J+1", ()=> {
+        end = new Date(start)
+        end.setDate(end.getDate()+1)
+        expect(Helpers.getEstimationOfDiff(start,end)).toBe(DIFF.isBelow1Month)
+    })
+    test("Helpers.getEstimationOfDiff with nominal value at date J+31", ()=> {
+        end = new Date(start)
+        end.setDate(end.getDate()+31)
+        expect(Helpers.getEstimationOfDiff(start, end)).toBe(DIFF.isBelow1Month)
+    })
+    test("Helpers.getEstimationOfDiff with nominal value at date M+3", ()=> {
+        end = new Date(start)
+        end.setMonth(end.getMonth()+3)
+        expect(Helpers.getEstimationOfDiff(start, end)).toBe(DIFF.isBetween1MonthAnd5Months)
+    })
+    
+    test("Helpers.getEstimationOfDiff with nominal value at date M+6", ()=> {
+        end = new Date(start)
+        end.setMonth(end.getMonth()+6)
+        expect(Helpers.getEstimationOfDiff(start, end)).toBe(DIFF.isBetween5MonthsAnd20Months)
+    })
+    test("Helpers.getEstimationOfDiff with nominal value at date Y+2", ()=> {
+        end = new Date(start)
+        end.setFullYear(end.getFullYear()+2)
+        expect(Helpers.getEstimationOfDiff(start, end)).toBe(DIFF.isBetween20MonthsAnd3Years)
+    })
+    test("Helpers.getEstimationOfDiff with nominal value at date Y+4", ()=> {
+        end = new Date(start)
+        end.setFullYear(end.getFullYear()+4)
+        expect(Helpers.getEstimationOfDiff(start, end)).toBe(DIFF.isBetween3YearsAnd6Years)
+    })
+    test("Helpers.getEstimationOfDiff with nominal value at date Y+7", ()=> {
+        end = new Date(start)
+        end.setFullYear(end.getFullYear()+7)
+        expect(Helpers.getEstimationOfDiff(start, end)).toBe(DIFF.isBetween6YearsAnd10Years)
+    })
+    test("Helpers.getEstimationOfDiff with nominal value at date Y+15", ()=> {
+        end = new Date(start)
+        end.setFullYear(end.getFullYear()+15)
+        expect(Helpers.getEstimationOfDiff(start, end)).toBe(DIFF.isBetween10YearsAnd20Years)
+    })
+    test("Helpers.getEstimationOfDiff with nominal value at date Y+100", ()=> {
+        end = new Date(start)
+        end.setFullYear(end.getFullYear()+100)
+        expect(Helpers.getEstimationOfDiff(start, end)).toBe(DIFF.isMoreThan20Years)
+    })
+}
+testGetEstimationOfDiff()

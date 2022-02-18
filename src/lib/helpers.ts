@@ -1,4 +1,4 @@
-import { GRID } from "./constantes";
+import { DIFF, GRID, TIMERS } from "./constantes";
 import type { Struct } from "./struct.class";
 
 export module Helpers {
@@ -106,5 +106,23 @@ export module Helpers {
                 ? args[number]
                 : match
         })
+    }
+
+    /**
+     * return the enum value of DIFF wich represent the relative difference between 2 dates
+     * @param dateMin the minimum date to compare
+     * @param dateMax the max date to compare
+     * @returns the value of the constante DIFF
+     */
+    export function getEstimationOfDiff(dateMin: Date, dateMax:Date){
+        const diff = dateMax.getTime() - dateMin.getTime()
+        if(diff > TIMERS.YEARS20){return DIFF.isMoreThan20Years}
+        if(diff <= TIMERS.YEARS20 && diff > TIMERS.YEARS10){return DIFF.isBetween10YearsAnd20Years}
+        if(diff <= TIMERS.YEARS10 && diff > TIMERS.YEARS6){return DIFF.isBetween6YearsAnd10Years}
+        if(diff <= TIMERS.YEARS6 && diff > TIMERS.YEARS3){return DIFF.isBetween3YearsAnd6Years}
+        if(diff <= TIMERS.YEARS3 && diff > TIMERS.MONTHS20){return DIFF.isBetween20MonthsAnd3Years}
+        if(diff <= TIMERS.MONTHS20 && diff > TIMERS.MONTHS5){return DIFF.isBetween5MonthsAnd20Months}
+        if(diff <= TIMERS.MONTHS5 && diff > TIMERS.DAYS31){return DIFF.isBetween1MonthAnd5Months}
+        if(diff <= TIMERS.DAYS31){return DIFF.isBelow1Month}
     }
 }

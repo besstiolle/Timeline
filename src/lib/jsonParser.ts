@@ -15,7 +15,7 @@ export module JsonParser {
         const COMMONS: string[] = ['isInitiate', 'maxId', 'viewbox', 'showAll', // Primitive type field of Timeline
                                  'position','isShow','label', 'id', 'swimline', 'progress',
                                  'swimlineId', 'countVisibleTasks', 'countAllTasks',
-                                 'key', 'title',
+                                 'key', 'title', 'differencial', 
                                  'isOnline', 'ownerKey', 'writeKey', 'readKey', 
                                  'tasks', 'milestones', 'swimlines', //Nothing to do, it's an array
                                  'date', 'dateStart', 'dateEnd', // date inside object in string format
