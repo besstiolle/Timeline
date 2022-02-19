@@ -8,7 +8,21 @@ import { LIVE_PREFIX } from './constantes';
 import { FactoryTask } from './factoryTask';
 
 export let getIndex = (event) => {return 0}
-export let updateStore =  (event) => {}
+export let updateStore =  (prefix, position) => {}
+
+function updateProgression(position){
+    let elm:HTMLElement = document.getElementById(LIVE_PREFIX.PR + position)
+    if(!elm['value'].match(/^([0-9]+)$/g)) {
+        elm['value'] = '0'
+    }
+    if(elm['value'] > 100) {
+        elm['value'] = 100
+    }
+    
+    $store.currentTimeline.tasks[position].progress = elm['value']
+    //$store.currentTimeline.tasks = $store.currentTimeline.tasks
+        
+}
 
 function b_delete(event){
     $store.currentTimeline.tasks.splice(getIndex(event), 1)
@@ -97,9 +111,9 @@ function b_add(){
     </div>
     <input type="text" bind:value="{task.label}" class="label"/>
     <!-- TODO change behavior of date field -->
-    <input type="date" name="{LIVE_PREFIX.TS}{i}" value="{task.dateStart}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
-    <input type="date" name="{LIVE_PREFIX.TE}{i}" value="{task.dateEnd}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
-    <input type="number" bind:value="{task.progress}" min="0" max="100" class="progress" />
+    <input type="date" id="{LIVE_PREFIX.TS}{i}" value="{task.dateStart}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore(LIVE_PREFIX.TS, i)} on:blur={() => updateStore(LIVE_PREFIX.TS, i)}>
+    <input type="date" id="{LIVE_PREFIX.TE}{i}" value="{task.dateEnd}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore(LIVE_PREFIX.TE, i)} on:blur={() => updateStore(LIVE_PREFIX.TE, i)}>
+    <input type="number" id={LIVE_PREFIX.PR}{i} min="0" max="100" class="progress" on:change={() => updateProgression(i)} on:blur={() => updateProgression(i)}/>
     <progress max="100" value="{task.progress}"> {task.progress}% </progress>
     <input type="text" bind:value="{task.swimline}" class="label"/>
 </div>

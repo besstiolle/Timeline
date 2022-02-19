@@ -2,30 +2,69 @@
     import { store } from './stores';
     import LiveTableTask from './LiveTableTask.svelte';
     import LiveTableMilestone from './LiveTableMilestone.svelte';
-
-    const TS : string = "taskStart_"
-    const TE : string = "taskEnd_"
-    const MD : string = "milestoneDate_"
+    import { LIVE_PREFIX } from './constantes';
 
     let live__open: boolean = false // Define a non-visibility (display: hidden) for the live__wrapper html node
     let live__weak_opacity: boolean = false // Define a full opacity by default for the live__shadow html node
 
-    function updateStore(event): void{
-        
-        let position : number = null;
-        if(event.target.name.startsWith(TS)){
-            position = parseInt(event.target.name.substring(TS.length, event.target.name.length))
-            $store.currentTimeline.tasks[position].dateStart = event.target.value
+    function updateStore(prefix, position): void{
+
+        let elm:HTMLElement = document.getElementById(prefix + position)
+        let val:string = elm['value']
+
+        if(val === undefined || val === ''){
+            elm.classList.add("date_warn")
+            return
+        }
+
+        let date:Date = new Date(val)
+        if(!(date instanceof Date) || isNaN(date.getTime())){
+            elm.classList.add("date_warn")
+            return
+        }
+
+        let diff:number = Math.abs(new Date(val).getFullYear() - new Date().getFullYear())
+        if(diff > 40){
+            elm.classList.add("date_warn")
+            return
+        }
+
+        if(prefix === LIVE_PREFIX.TS){
+            let other:HTMLElement = document.getElementById(LIVE_PREFIX.TE + position)
+            if (other['value'] < val) {
+                elm.classList.add("date_warn_order")
+                other.classList.add("date_warn_order")
+                return
+            } else {
+                elm.classList.remove("date_warn_order")
+                other.classList.remove("date_warn_order")
+            }
+        }
+        if(prefix === LIVE_PREFIX.TE){
+            let other:HTMLElement = document.getElementById(LIVE_PREFIX.TS + position)
+            if (other['value'] > val) {
+                elm.classList.add("date_warn_order")
+                other.classList.add("date_warn_order")
+                return
+            } else {
+                elm.classList.remove("date_warn_order")
+                other.classList.remove("date_warn_order")
+            }
+        }
+
+
+        elm.classList.remove("date_warn")
+
+        if(prefix === LIVE_PREFIX.TS){
+            $store.currentTimeline.tasks[position].dateStart = val
         }
         
-        if(event.target.name.startsWith(TE)){
-            position = parseInt(event.target.name.substring(TE.length, event.target.name.length))
-            $store.currentTimeline.tasks[position].dateEnd = event.target.value
+        if(prefix === LIVE_PREFIX.TE){
+            $store.currentTimeline.tasks[position].dateEnd = val
         }
         
-        if(event.target.name.startsWith(MD)){
-            position = parseInt(event.target.name.substring(MD.length, event.target.name.length))            
-            $store.currentTimeline.milestones[position].date = event.target.value
+        if(prefix === LIVE_PREFIX.MD){
+            $store.currentTimeline.milestones[position].date = val
         }
         $store.currentTimeline.tasks = $store.currentTimeline.tasks
     }
@@ -188,5 +227,8 @@
         height: 20px;
         display: inline-block;
         /*background-color: red;*/
+    }
+    :global(.date_warn, .date_warn_order){
+        background-color: #ff9800;
     }
 </style>

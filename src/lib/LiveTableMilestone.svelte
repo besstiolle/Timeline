@@ -8,7 +8,7 @@ import { LIVE_PREFIX } from './constantes';
 import { FactoryMilestone } from './factoryMilestone';
 
 export let getIndex = (event) => {return 0}
-export let updateStore =  (event) => {}
+export let updateStore =  (prefix, position) => {}
 
 function m_delete(event){
     $store.currentTimeline.milestones.splice(getIndex(event), 1)
@@ -94,7 +94,7 @@ function m_add(){
         </svg>
     </div>
     <input type="text" bind:value="{milestone.label}" class="label"/>
-    <input type="date" name="{LIVE_PREFIX.MD}{i}" value="{milestone.date}" min="1900-01-01" max="2999-12-31" on:blur="{updateStore}">
+    <input type="date" id="{LIVE_PREFIX.MD}{i}" value="{milestone.date}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore(LIVE_PREFIX.MD, i)} on:blur="{() => updateStore(LIVE_PREFIX.MD, i)}">
 </div>
 {/each}
 

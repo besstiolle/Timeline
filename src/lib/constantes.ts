@@ -21,7 +21,8 @@ export const DAYS = ['Di.', 'Lu.','Ma.','Me.','Je.','Ve.','Sa.']
 export const LIVE_PREFIX = {
     TS:"taskStart_",
     TE:"taskEnd_",
-    MD:"milestoneDate_"
+    MD:"milestoneDate_",
+    PR:"progress_",
 }
 
 export const LOCAL_STORAGE = {
