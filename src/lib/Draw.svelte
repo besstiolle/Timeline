@@ -191,24 +191,7 @@ import Toast from './Toast.svelte';
     stroke:#888;
 }
 
-i{
-    width: 32px;
-    height: 32px;
-    background-image: url('/pics.png');
-    display: inline-block;
-}
-.github{background-position: 0 0;}
-.home{background-position: 0 -64px;}
-.questions{background-position: -32px -64px;}
-.edit{background-position: -32px -32px;}
-.photo{background-position: 0 -32px;}
-.upload{background-position: -32px 0;}
-.download{background-position: -64px 0;}
-.show{background-position: -96px -32px;}
-.hide{background-position: -96px 0;}
-.online{background-position: -64px -32px;}
-.offline{background-position: -64px -64px;}
-.saveCloud{background-position: -96px -64px;}
+
 
 .rightButtonDisabled > i{
     opacity: 0.5;
