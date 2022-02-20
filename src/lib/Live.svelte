@@ -7,53 +7,56 @@
     let live__open: boolean = false // Define a non-visibility (display: hidden) for the live__wrapper html node
     let live__weak_opacity: boolean = false // Define a full opacity by default for the live__shadow html node
 
+    const css_class_warn = "date_warn"
+    const css_class_warn_order = "date_warn_order"
+
     function updateStore(prefix, position): void{
 
         let elm:HTMLElement = document.getElementById(prefix + position)
         let val:string = elm['value']
 
         if(val === undefined || val === ''){
-            elm.classList.add("date_warn")
+            elm.classList.add(css_class_warn)
             return
         }
 
         let date:Date = new Date(val)
         if(!(date instanceof Date) || isNaN(date.getTime())){
-            elm.classList.add("date_warn")
+            elm.classList.add(css_class_warn)
             return
         }
 
         let diff:number = Math.abs(new Date(val).getFullYear() - new Date().getFullYear())
         if(diff > 40){
-            elm.classList.add("date_warn")
+            elm.classList.add(css_class_warn)
             return
         }
 
         if(prefix === LIVE_PREFIX.TS){
             let other:HTMLElement = document.getElementById(LIVE_PREFIX.TE + position)
             if (other['value'] < val) {
-                elm.classList.add("date_warn_order")
-                other.classList.add("date_warn_order")
+                elm.classList.add(css_class_warn_order)
+                other.classList.add(css_class_warn_order)
                 return
             } else {
-                elm.classList.remove("date_warn_order")
-                other.classList.remove("date_warn_order")
+                elm.classList.remove(css_class_warn_order)
+                other.classList.remove(css_class_warn_order)
             }
         }
         if(prefix === LIVE_PREFIX.TE){
             let other:HTMLElement = document.getElementById(LIVE_PREFIX.TS + position)
             if (other['value'] > val) {
-                elm.classList.add("date_warn_order")
-                other.classList.add("date_warn_order")
+                elm.classList.add(css_class_warn_order)
+                other.classList.add(css_class_warn_order)
                 return
             } else {
-                elm.classList.remove("date_warn_order")
-                other.classList.remove("date_warn_order")
+                elm.classList.remove(css_class_warn_order)
+                other.classList.remove(css_class_warn_order)
             }
         }
 
 
-        elm.classList.remove("date_warn")
+        elm.classList.remove(css_class_warn)
 
         if(prefix === LIVE_PREFIX.TS){
             $store.currentTimeline.tasks[position].dateStart = val

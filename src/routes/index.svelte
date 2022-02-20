@@ -30,7 +30,7 @@ function getCards(): Array<Struct.Card>{
 let cards = getCards()
 
 //TODO : add miniature ?
-//TODO : add functions to dupplicate/delete with confirmations
+//TODO : add functions to duplicate/delete with confirmations
 //TODO : improve goto with owr keys
 //TODO : show "online/offline" status
 </script>
