@@ -72,9 +72,9 @@ import Toast from './Toast.svelte';
     <div class="rightButton" class:hidden={$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show all tasks even if they're hidden"><i class='show'></i></div>
     {/key}
     <div class="rightButton" on:click={downloadCsv} title="Downloading the .csv file"><i class='download'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={uploadComponent.openUpload()} title='Uploading the .csv file'><i class='upload'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={uploadComponent.openComponent()} title='Uploading the .csv file'><i class='upload'></i></div>
     <div class="rightButton" on:click={takeshot} title='Take a screenshot'><i class='photo'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={liveComponent.openLive()} title='Edit your milestones'><i class='edit'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={liveComponent.openComponent()} title='Edit your milestones'><i class='edit'></i></div>
 </div>
 
 <div class="bottomButtons">

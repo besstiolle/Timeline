@@ -6,18 +6,9 @@
     import { FactorySwimline } from './factorySwimline';
 
     let hidden = true
-
-    function handleKeydown(event) {
-        if (!hidden && event.key === 'Escape') {closeUpload()}
-    }
-
-    function closeUpload(){
-        hidden = true
-    }
-
-    export function openUpload(){
-        hidden = false
-    }
+    export function openComponent(){hidden = false}   
+    function handleKeydown(event) {if (!hidden && event.key === 'Escape') {closeComponent()}}
+    function closeComponent(){hidden = true} 
     
     onMount(async () => {
         let isAdvancedUpload = function() {
@@ -125,7 +116,7 @@
                 });
                 $store.currentTimeline.tasks = $store.currentTimeline.tasks
                 //remove form upload part
-                closeUpload()
+                closeComponent()
             }
 
             document.getElementById('file').addEventListener('change', onChange);
@@ -138,14 +129,14 @@
 
 <svelte:window on:keydown={handleKeydown}/>
 
-<div id="shadow" class:hidden on:click={closeUpload}></div>
+<div id="shadow" class:hidden on:click={closeComponent}></div>
 <form id="box" class:hidden method="post" action="" enctype="multipart/form-data">
     <div>
         <input type="file" name="files[]" accept=".csv" id="file"/>
         <label for="file"><span class='pointer'>Choose a CSV file (.csv) </span> or drag it here.</label>
     </div>
     <button type="submit">Upload</button>
-    <div>Click <span class='pointer' on:click={closeUpload}>here</span> or tape <span>Escape key</span> to close this windows</div>
+    <div>Click <span class='pointer' on:click={closeComponent}>here</span> or tape <span>Escape key</span> to close this windows</div>
 </form>
 
 <style>

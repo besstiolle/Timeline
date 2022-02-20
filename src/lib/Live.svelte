@@ -4,9 +4,6 @@
     import LiveTableMilestone from './LiveTableMilestone.svelte';
     import { LIVE_PREFIX } from './constantes';
 
-    let live__open: boolean = false // Define a non-visibility (display: hidden) for the live__wrapper html node
-    let live__weak_opacity: boolean = false // Define a full opacity by default for the live__shadow html node
-
     const css_class_warn = "date_warn"
     const css_class_warn_order = "date_warn_order"
 
@@ -76,79 +73,79 @@
         return  parseInt(event.currentTarget.attributes["name"].nodeValue.substring(1,event.currentTarget.attributes["name"].nodeValue.length))
     }
 
-    function hideLive(){live__weak_opacity = true}
-    function showLive(){live__weak_opacity = false}
-    export function openLive(){live__open = true} //export => allow calling function by parent https://www.akashmittal.com/svelte-calling-function-child-parent/
-    function closeLive(){live__open = false}
+    let hidden: boolean = true
+    export function openComponent(){hidden = false} //export => allow calling function by parent https://www.akashmittal.com/svelte-calling-function-child-parent/
+    function handleKeydown(event) {if (!hidden && event.key === 'Escape') {closeComponent()}}
+    function closeComponent(){hidden = true} 
+
+    let low_opacity: boolean = false
+    function hideLive(){low_opacity = true}
+    function showLive(){low_opacity = false}
 </script>
 
 
+<svelte:window on:keydown={handleKeydown}/>
 
-
-
-
-
-
-
-<div id="live__wrapper" class:live__open>
-
-    <div id="live__eye">
-        <div  class="live__action__button" on:mouseover="{hideLive}" on:focus="{hideLive}" on:mouseout="{showLive}" on:blur="{showLive}">
-            <div class="svg-icon">
-                <svg viewBox="0 0 20 20">
-                    <use x="0" y="0" href="#b_watch"/>
-                </svg>
-            </div> 
-            <div class="live__eye_label">See updates</div>
-        </div>
-        <div  class="live__action__button"  on:click="{closeLive}">
-            <div class="svg-icon">
-                <svg viewBox="0 0 20 20">
-                    <use x="0" y="0" href="#b_delete"/>
-                </svg>
-            </div> 
-            <div class="live__eye_label">Close</div>
-        </div>
+<div id="shadow" class:hidden class:low_opacity on:click={closeComponent}></div>
+<div id="box" class:hidden class:low_opacity >
+    <div>
+        <div class='title'><label for='titleOfTimeline'>Title : </label><input id='titleOfTimeline' type='text' bind:value={$store.currentTimeline.title}/></div>
+        <LiveTableTask getIndex={getIndex} updateStore={updateStore} />
+        <LiveTableMilestone getIndex={getIndex} updateStore={updateStore} />
     </div>
-    <div id='live__shadow' class:live__weak_opacity>
-        <div id='live'>
-            <div class='title'><label for='titleOfTimeline'>Title : </label><input id='titleOfTimeline' type='text' bind:value={$store.currentTimeline.title}/></div>
-            <LiveTableTask getIndex={getIndex} updateStore={updateStore} />
-            <LiveTableMilestone getIndex={getIndex} updateStore={updateStore} />
-        </div>
-    </div>
+    <div>Click <span class='pointer' on:click={closeComponent}>here</span> or tape <span>Escape key</span> to close this windows</div>
 </div>
+<div class='boxShow pointer'  class:low_opacity class:hidden on:mouseover="{hideLive}" on:focus="{hideLive}" on:mouseout="{showLive}" on:blur="{showLive}">move your mouse cursor over me to see the changes</div>
 
 <style>
 
-    #live__wrapper{
-        display: none;
-    }
-    #live__wrapper.live__open{
-        display: block;
-    }
-
-    #live__shadow{  
-        height: 100%;
-        width: 100%;
+    #shadow{
+        height: 100vh;
+        width: 100vw;
         background-color: rgba(200, 218, 223, 0.5);
         position: fixed;
         top:0;
         left:0;
     }
-    :global(#live__shadow.live__weak_opacity){
-        opacity:0.2;   
+    #box{
+        height: 80vh;
+        max-height: 80vh;
+        width: 90vw;
+        font-size: 1.5rem;
+        background-color: #c8dadf;
+        position: absolute;
+        text-align: center;
+        top: 10vh;
+        left: 5vw;
+        outline: 2px dashed #92b0b3 !important;
+        outline-offset: -10px !important;
+        position: fixed;
     }
-    #live{
-        height: 60%;
-        width: 80%;
-        margin: 10%;
-        padding:1em;
+    #box > div, #box > div > div{
+        margin-top: 5vh;
+    }
+  
+    span{
+        font-weight: bold;
+    }
+    .pointer{
+        cursor: pointer;    
+    }
+    .boxShow{
+        width: 40vw;
+        font-size: 1.5rem;
         background-color: #c8dadf;
         position: relative;
-        text-align:left;
-        overflow: auto;
-
+        left: 30vw;
+        outline: 2px dashed #92b0b3 !important;
+        outline-offset: -10px !important;
+        height: 8vh;
+        max-height: 8vh;
+        text-align: center;
+        padding-top: 2vh;
+    }
+    :global(.low_opacity){
+        opacity:0.2;   
     }
     :global(div.live__line){
         margin:0.1em auto;
@@ -216,7 +213,6 @@
         width:20px;
         height: 20px;
         display: inline-block;
-        /*background-color: yellowgreen;*/
     }
     :global(#live__eye){
         height: 20px;
@@ -229,7 +225,6 @@
     :global(.live__eye_label){
         height: 20px;
         display: inline-block;
-        /*background-color: red;*/
     }
     :global(.date_warn, .date_warn_order){
         background-color: #ff9800;

@@ -32,9 +32,9 @@ import Toast from "./Toast.svelte";
         
     }
 
+    const base_url = $page.url.protocol + '//' + $page.url.host
+    
     let hidden = true
-    let base_url = $page.url.protocol + '//' + $page.url.host
-
     export function openComponent(){hidden = false}   
     function handleKeydown(event) {if (!hidden && event.key === 'Escape') {closeComponent()}}
     function closeComponent(){hidden = true} 
@@ -93,7 +93,7 @@ import Toast from "./Toast.svelte";
 <svelte:window on:keydown={handleKeydown}/>
 
 <div id="shadow" class:hidden on:click={closeComponent}></div>
-<form id="box" class:hidden method="post" action="" enctype="multipart/form-data">
+<div id="box" class:hidden>
     <div>
         {#if $store.currentTimeline.isOnline}
             <div class='warn'>Please be advice that going "<span>offline</span>" will remove every data from our server but it also cancel every previous shared link of your work</div>
@@ -107,12 +107,9 @@ import Toast from "./Toast.svelte";
             <div>You're currently : <span>OFFLINE</span></div>
             <div><i class='pointer' on:click={doOnline}>Put me online</i></div>
         {/if}
-        
-        
-        
-        
+    </div>            
     <div>Click <span class='pointer' on:click={closeComponent}>here</span> or tape <span>Escape key</span> to close this windows</div>
-</form>
+</div>
 <Toast bind:this={toastComponent}/>
 
 <style>
@@ -140,7 +137,7 @@ import Toast from "./Toast.svelte";
         position: fixed;
     }
     #box > div, #box > div > div{
-        margin-top: 2vh;
+        margin-top: 5vh;
     }
   
     span{
