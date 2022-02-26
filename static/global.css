@@ -30,8 +30,7 @@ i{
 .questions{background-position: -32px -64px;}
 .edit{background-position: -32px -32px;}
 .photo{background-position: 0 -32px;}
-.upload{background-position: -32px 0;}
-.download{background-position: -64px 0;}
+.io{background-position: 0px -96px;}
 .show{background-position: -96px -32px;}
 .hide{background-position: -96px 0;}
 .online{background-position: -64px -32px;}

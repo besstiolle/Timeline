@@ -4,8 +4,6 @@ import html2canvas from 'html2canvas';
 import { store } from './stores';
 
 import { Helpers } from './helpers';
-import { FactoryTask } from './factoryTask';
-import { FactoryMilestone } from './factoryMilestone';
 
 import Banner from './Banner.svelte';
 import Milestones from './Milestones.svelte';
@@ -19,16 +17,7 @@ import SwimAndTasksLite from './SwimAndTasks_lite.svelte';
 import Toast from './Toast.svelte';
 
     let uploadComponent, liveComponent, onlineComponent, toastComponent
-
-
-    function downloadCsv () {
-        var csvTimeline = $store.currentTimeline.tasks.map(e => FactoryTask.join(e, ";")).join("\n")
-                    + "\n"
-                    + $store.currentTimeline.milestones.map(e => FactoryMilestone.join(e, ";")).join("\n")
-		var blob = new Blob([csvTimeline], {type:"data:text/csv;charset=utf-8,"});
-		download(blob, ".csv") 
-    }
-
+ 
     function takeshot() {  
         html2canvas(document.getElementById('wrapper'), {
             ignoreElements: function (el) {return el.classList.contains('toExcludeFromSnapshot')}
@@ -71,8 +60,7 @@ import Toast from './Toast.svelte';
     <div class="rightButton" class:hidden={!$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show regular tasks"><i class='hide'></i></div>
     <div class="rightButton" class:hidden={$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show all tasks even if they're hidden"><i class='show'></i></div>
     {/key}
-    <div class="rightButton" on:click={downloadCsv} title="Downloading the .csv file"><i class='download'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={uploadComponent.openComponent()} title='Uploading the .csv file'><i class='upload'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={uploadComponent.openComponent()} title='Import/Export your data'><i class='io'></i></div>
     <div class="rightButton" on:click={takeshot} title='Take a screenshot'><i class='photo'></i></div>
     <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={liveComponent.openComponent()} title='Edit your milestones'><i class='edit'></i></div>
 </div>
@@ -83,7 +71,7 @@ import Toast from './Toast.svelte';
     <div class="bottomButton" title='Ask me a new feature. Send me your bug description'><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline/issues/new'><i class='questions'></i></a></div>
 </div>
 
-<Upload bind:this={uploadComponent} />
+<Upload bind:this={uploadComponent} download={download}/>
 <Live bind:this={liveComponent}/>
 <Online bind:this={onlineComponent}/>
 <Toast bind:this={toastComponent}/>
