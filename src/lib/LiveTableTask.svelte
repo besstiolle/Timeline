@@ -112,7 +112,7 @@ function b_add(){
     <input type="text" bind:value="{task.label}" class="label"/>
     <input type="date" id="{LIVE_PREFIX.TS}{i}" value="{task.dateStart}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore(LIVE_PREFIX.TS, i)} on:blur={() => updateStore(LIVE_PREFIX.TS, i)}>
     <input type="date" id="{LIVE_PREFIX.TE}{i}" value="{task.dateEnd}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore(LIVE_PREFIX.TE, i)} on:blur={() => updateStore(LIVE_PREFIX.TE, i)}>
-    <input type="number" id={LIVE_PREFIX.PR}{i} min="0" max="100" class="progress" on:change={() => updateProgression(i)} on:blur={() => updateProgression(i)}/>
+    <input type="number" id={LIVE_PREFIX.PR}{i} value="{task.progress}" min="0" max="100" class="progress" on:change={() => updateProgression(i)} on:blur={() => updateProgression(i)}/>
     <progress max="100" value="{task.progress}"> {task.progress}% </progress>
     <input type="text" bind:value="{task.swimline}" class="label"/>
 </div>
