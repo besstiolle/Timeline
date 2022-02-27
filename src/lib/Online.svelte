@@ -5,9 +5,11 @@ import { store } from './stores';
 
 import { Helpers } from './helpers';
 import { remove, create } from "./timelineRepository";
-import Toast from "./Toast.svelte";
+import ShadowBox from './ShadowBox.svelte';
+import Toast from './Toast.svelte';
 
     let toastComponent
+    export let openComponent
 
     export function commit(){
         if($store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000){
@@ -33,12 +35,7 @@ import Toast from "./Toast.svelte";
     }
 
     const base_url = $page.url.protocol + '//' + $page.url.host
-    
-    let hidden = true
-    export function openComponent(){hidden = false}   
-    function handleKeydown(event) {if (!hidden && event.key === 'Escape') {closeComponent()}}
-    function closeComponent(){hidden = true} 
-  
+ 
     function doOffline(){
 
         let seachParams = new URLSearchParams([['key', $store.currentTimeline.key], ['ownerKey', $store.currentTimeline.ownerKey]])
@@ -90,61 +87,30 @@ import Toast from "./Toast.svelte";
     
 </script>
 
-<svelte:window on:keydown={handleKeydown}/>
 
-<div id="shadow" class:hidden on:click={closeComponent}></div>
-<div id="box" class:hidden>
-    <div>
-        {#if $store.currentTimeline.isOnline}
-            <div class='warn'>Please be advice that going "<span>offline</span>" will remove every data from our server but it also cancel every previous shared link of your work</div>
-            <div>You're currently : <span>ONLINE</span></div>
-            <div class='pointer' on:click={doOffline}>Put me offline</div>
-            <div><label for='readOnly'>Read-only URL : </label><input id='readOnly' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?r=" + $store.currentTimeline.readKey}'></div>
-            <div><label for='writer'>Writer URL : </label><input id='writer' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?w=" + $store.currentTimeline.writeKey}'></div>
-            <div><label for='owner'>Owner URL : </label><input id='owner' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?o=" + $store.currentTimeline.ownerKey}'></div>
-        {:else}
-            <div class='warn'>Please be advice that bringing your charts "<span>online</span>" may allow you to save your data on our server but it also may expose your datas to everyone</div>
-            <div>You're currently : <span>OFFLINE</span></div>
-            <div class='pointer' on:click={doOnline}>Put me online</div>
-        {/if}
-    </div>            
-    <div>Click <span class='pointer' on:click={closeComponent}>here</span> or tape <span>Escape key</span> to close this windows</div>
-</div>
+<ShadowBox bind:openComponent>
+    {#if $store.currentTimeline.isOnline}
+        <div class='warn'>Please be advice that going "<span>offline</span>" will remove every data from our server but it also cancel every previous shared link of your work</div>
+        <div>You're currently : <span>ONLINE</span></div>
+        <div class='action' on:click={doOffline}>Put me offline</div>
+        <div><label for='readOnly'>Read-only URL : </label><input id='readOnly' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?r=" + $store.currentTimeline.readKey}'></div>
+        <div><label for='writer'>Writer URL : </label><input id='writer' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?w=" + $store.currentTimeline.writeKey}'></div>
+        <div><label for='owner'>Owner URL : </label><input id='owner' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?o=" + $store.currentTimeline.ownerKey}'></div>
+    {:else}
+        <div class='warn'>Please be advice that bringing your charts "<span>online</span>" may allow you to save your data on our server but it also may expose your datas to everyone</div>
+        <div>You're currently : <span>OFFLINE</span></div>
+        <div class='action' on:click={doOnline}>Put me online</div>
+    {/if}
+</ShadowBox>
 <Toast bind:this={toastComponent}/>
 
 <style>
-
-    #shadow{
-        height: 100vh;
-        width: 100vw;
-        background-color: rgba(200, 218, 223, 0.5);
-        position: fixed;
-        top:0;
-        left:0;
-    }
-    #box{
-        height: 80vh;
-        max-height: 80vh;
-        width: 90vw;
-        font-size: 1.5rem;
-        background-color: #c8dadf;
-        position: absolute;
-        text-align: center;
-        top: 10vh;
-        left: 5vw;
-        outline: 2px dashed #92b0b3 !important;
-        outline-offset: -10px !important;
-        position: fixed;
-    }
-    #box > div, #box > div > div{
-        margin-top: 5vh;
-    }
-  
-    span{
-        font-weight: bold;
-    }
-    .pointer{
-        cursor: pointer;    
+    .action{
+        background-color: rgb(22, 160, 133, 1);
+        display: inline-block;
+        padding: 1vh 2vw;
+        margin: 2vh;
+        cursor: pointer;
     }
     input{
         width: 50vw;

@@ -1,8 +1,12 @@
 <script lang="ts">
-    import { store } from './stores';
-    import LiveTableTask from './LiveTableTask.svelte';
-    import LiveTableMilestone from './LiveTableMilestone.svelte';
-    import { LIVE_PREFIX } from './constantes';
+import { store } from './stores';
+import { LIVE_PREFIX } from './constantes';
+
+import LiveTableTask from './LiveTableTask.svelte';
+import LiveTableMilestone from './LiveTableMilestone.svelte';
+import ShadowBox from './ShadowBox.svelte';
+    
+    export let openComponent
 
     const css_class_warn = "date_warn"
     const css_class_warn_order = "date_warn_order"
@@ -73,80 +77,19 @@
         return  parseInt(event.currentTarget.attributes["name"].nodeValue.substring(1,event.currentTarget.attributes["name"].nodeValue.length))
     }
 
-    let hidden: boolean = true
-    export function openComponent(){hidden = false} //export => allow calling function by parent https://www.akashmittal.com/svelte-calling-function-child-parent/
-    function handleKeydown(event) {if (!hidden && event.key === 'Escape') {closeComponent()}}
-    function closeComponent(){hidden = true} 
-
-    let low_opacity: boolean = false
-    function hideLive(){low_opacity = true}
-    function showLive(){low_opacity = false}
 </script>
 
 
-<svelte:window on:keydown={handleKeydown}/>
 
-<div id="shadow" class:hidden class:low_opacity on:click={closeComponent}></div>
-<div id="box" class:hidden class:low_opacity >
-    <div>
-        <div class='title'><label for='titleOfTimeline'>Title : </label><input id='titleOfTimeline' type='text' bind:value={$store.currentTimeline.title}/></div>
-        <LiveTableTask getIndex={getIndex} updateStore={updateStore} />
-        <LiveTableMilestone getIndex={getIndex} updateStore={updateStore} />
-    </div>
-    <div>Click <span class='pointer' on:click={closeComponent}>here</span> or tape <span>Escape key</span> to close this windows</div>
-</div>
-<div class='boxShow pointer'  class:low_opacity class:hidden on:mouseover="{hideLive}" on:focus="{hideLive}" on:mouseout="{showLive}" on:blur="{showLive}">move your mouse cursor over me to see the changes</div>
+<ShadowBox bind:openComponent>
+    <div class='title'><label for='titleOfTimeline'>Title : </label><input id='titleOfTimeline' type='text' bind:value={$store.currentTimeline.title}/></div>
+    <LiveTableTask getIndex={getIndex} updateStore={updateStore} />
+    <LiveTableMilestone getIndex={getIndex} updateStore={updateStore} />
+
+</ShadowBox>
 
 <style>
 
-    #shadow{
-        height: 100vh;
-        width: 100vw;
-        background-color: rgba(200, 218, 223, 0.5);
-        position: fixed;
-        top:0;
-        left:0;
-    }
-    #box{
-        height: 80vh;
-        max-height: 80vh;
-        width: 90vw;
-        font-size: 1.5rem;
-        background-color: #c8dadf;
-        position: absolute;
-        text-align: center;
-        top: 10vh;
-        left: 5vw;
-        outline: 2px dashed #92b0b3 !important;
-        outline-offset: -10px !important;
-        position: fixed;
-    }
-    #box > div, #box > div > div{
-        margin-top: 5vh;
-    }
-  
-    span{
-        font-weight: bold;
-    }
-    .pointer{
-        cursor: pointer;    
-    }
-    .boxShow{
-        width: 40vw;
-        font-size: 1.5rem;
-        background-color: #c8dadf;
-        position: relative;
-        left: 30vw;
-        outline: 2px dashed #92b0b3 !important;
-        outline-offset: -10px !important;
-        height: 8vh;
-        max-height: 8vh;
-        text-align: center;
-        padding-top: 2vh;
-    }
-    :global(.low_opacity){
-        opacity:0.2;   
-    }
     :global(div.live__line){
         margin:0.1em auto;
         width: 90%;
@@ -211,18 +154,6 @@
     }
     :global(.svg-icon){
         width:20px;
-        height: 20px;
-        display: inline-block;
-    }
-    :global(#live__eye){
-        height: 20px;
-        position:fixed;
-        top: 10%;
-        right: 10%;
-        z-index: 1000;
-        cursor: pointer;
-    }
-    :global(.live__eye_label){
         height: 20px;
         display: inline-block;
     }

@@ -6,6 +6,7 @@ html, body {
       font-family: Roboto, sans-serif;
       color: #0f3c4b;
       background-color: #e5edf1;
+      overflow-y: auto;
 }
   
 a{
@@ -17,6 +18,9 @@ a{
 
 .hidden{
   display:none !important;
+}
+.pointer{
+  cursor: pointer;    
 }
 
 i{

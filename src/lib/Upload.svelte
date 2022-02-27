@@ -9,15 +9,15 @@ import { FactoryTimeline } from './factoryTimeline';
 import { FactorySwimline } from './factorySwimline';
 import { goToml, timelineToObject } from './toml';
 import { goCsv } from './csv';
+import ShadowBox from './ShadowBox.svelte';
+import Toast from './Toast.svelte';
 
 
+export let openComponent
 export let download
-let hidden = true
-export function openComponent(){hidden = false}   
-function handleKeydown(event) {if (!hidden && event.key === 'Escape') {closeComponent()}}
-function closeComponent(){hidden = true} 
-
 const BOM = new Uint8Array([0xEF,0xBB,0xBF])
+let closeComponent
+let toastComponent
 
 function downloadCsv () {
     const blob = new Blob([BOM, goCsv($store.currentTimeline)], {type:"data:text/csv;charset=utf-8"});
@@ -37,7 +37,7 @@ onMount(async () => {
     }();
 
 
-    let formElement = document.getElementById('box');
+    let formElement = document.getElementById('droppable');
     if (isAdvancedUpload) {
         formElement.classList.add('has-advanced-upload');
 
@@ -98,6 +98,8 @@ onMount(async () => {
             FactoryTimeline.purge($store.currentTimeline)
             let abstractTimeline = toml.parse(event.target.result)
             parseAbstractTimeline(abstractTimeline)
+            //Show resume
+            toastComponent.show(`imported  ${abstractTimeline.tasks.length} tasks and ${abstractTimeline.milestones.length} milestones with success`,true, 5)
             //close windows
             closeComponent()
         }
@@ -138,6 +140,8 @@ onMount(async () => {
             })
             
             parseAbstractTimeline(abstractTimeline)
+            //Show resume
+            toastComponent.show(`imported  ${abstractTimeline.tasks.length} tasks and ${abstractTimeline.milestones.length} milestones with success`)
             //close windows
             closeComponent()
         }
@@ -201,57 +205,28 @@ onMount(async () => {
 
   
 </script>
+<ShadowBox bind:openComponent bind:closeComponent id='droppable'>
 
-<svelte:window on:keydown={handleKeydown}/>
-
-<div id="shadow" class:hidden on:click={closeComponent}></div>
-<form id="box" class:hidden method="post" action="" enctype="multipart/form-data">
-    <div>
-        <input type="file" name="files[]" accept=".csv,.toml" id="file"/>
-        <label for="file"><span class='pointer'>Choose a Csv/Toml file (.csv or .toml extension) </span> or drag it here.</label>
-    </div>
-    <button type="submit">Upload</button>
-    <div><span class='pointer' on:click={closeComponent}>Click here</span> or tape <span>Escape key</span> to close this windows</div>
-    <div><span class='pointer' on:click={downloadCsv}>Click here</span> to download your datas in a CSV format</div>
-    <div><span class='pointer' on:click={downloadToml}>Click here</span> to download your datas in a Toml format</div>
-</form>
+    <form method="post" action="" enctype="multipart/form-data">
+        <div>
+            <input type="file" name="files[]" accept=".csv,.toml" id="file"/>
+            <label for="file"><span class='action'>upload file</span> Must be a .csv or .toml file. You can also drag it over this windows.</label>
+        </div>
+        <button type="submit">Upload</button>
+        <div><span class='action' on:click={downloadCsv}>download .csv</span> The CSV format is very simple and can be edited in Excel or Notepad++ & co</div>
+        <div><span class='action' on:click={downloadToml}>download .toml</span> The Toml format can be extended in the futur and can be edited with Notepad++ & co</div>
+    </form>
+</ShadowBox>
+<Toast bind:this={toastComponent}/>
 
 <style>
-
-    #shadow{
-        height: 100vh;
-        width: 100vw;
-        background-color: rgba(200, 218, 223, 0.5);
-        position: fixed;
-        top:0;
-        left:0;
-    }
-    #box{
-        height: 80vh;
-        max-height: 80vh;
-        width: 90vw;
-        font-size: 1.5rem;
-        background-color: #c8dadf;
-        position: absolute;
-        text-align: center;
-        top: 10vh;
-        left: 5vw;
-        outline: 2px dashed #92b0b3 !important;
-        outline-offset: -10px !important;
-        position: fixed;
-        line-height: 3em;
-    }
-        
-    #box > div:first-child{
-        margin-top: 10vh;
-    }
   
-    :global(#box.has-advanced-upload) {
+    :global(#droppable.has-advanced-upload) {
         -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear !important;
         transition: outline-offset .15s ease-in-out, background-color .15s linear !important;
     }
 
-    :global(#box.is-dragover) {
+    :global(#droppable.is-dragover) {
         background-color: grey !important;
     }
 
@@ -274,7 +249,12 @@ onMount(async () => {
     span{
         font-weight: bold;
     }
-    .pointer{
-        cursor: pointer;    
+    
+    .action{
+        background-color: rgb(22, 160, 133, 1);
+        display: inline-block;
+        padding: 1vh 2vw;
+        margin: 2vh;
+        cursor: pointer;
     }
 </style>

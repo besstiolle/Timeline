@@ -16,8 +16,9 @@ import MilestonesLite from './Milestones_lite.svelte';
 import SwimAndTasksLite from './SwimAndTasks_lite.svelte';
 import Toast from './Toast.svelte';
 
-    let uploadComponent, liveComponent, onlineComponent, toastComponent
- 
+    let toastComponent
+    let openOnlineComponent, commitOnlineComponent, openUploadComponent, openLiveComponent
+
     function takeshot() {  
         html2canvas(document.getElementById('wrapper'), {
             ignoreElements: function (el) {return el.classList.contains('toExcludeFromSnapshot')}
@@ -46,23 +47,22 @@ import Toast from './Toast.svelte';
     }
 
 </script>
-
 <div class="rightButtons">
     
     {#key $store}
     <div class="rightButtonDisabled" class:hidden={!$store.rights.hasWriter() || ($store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000)} title="There is nothing to save"><i class='saveCloud'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.hasWriter() || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 2 * 1000)} on:click={onlineComponent.commit()} title="Save your modifications remotly"><i class='saveCloud'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.hasWriter() || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 2 * 1000)} on:click={commitOnlineComponent} title="Save your modifications remotly"><i class='saveCloud'></i></div>
 
-    <div class="rightButton" class:hidden={!$store.rights.isNone()} on:click={onlineComponent.openComponent()} title="Share & save your chart online"><i class='online'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.isOwner()} on:click={onlineComponent.openComponent()} title="Save your chart on your computer only"><i class='offline'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone()} on:click={openOnlineComponent} title="Share & save your chart online"><i class='online'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isOwner()} on:click={openOnlineComponent} title="Save your chart on your computer only"><i class='offline'></i></div>
 
     
     <div class="rightButton" class:hidden={!$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show regular tasks"><i class='hide'></i></div>
     <div class="rightButton" class:hidden={$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show all tasks even if they're hidden"><i class='show'></i></div>
     {/key}
-    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={uploadComponent.openComponent()} title='Import/Export your data'><i class='io'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={openUploadComponent} title='Import/Export your data'><i class='io'></i></div>
     <div class="rightButton" on:click={takeshot} title='Take a screenshot'><i class='photo'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={liveComponent.openComponent()} title='Edit your milestones'><i class='edit'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={openLiveComponent} title='Edit your milestones'><i class='edit'></i></div>
 </div>
 
 <div class="bottomButtons">
@@ -71,9 +71,9 @@ import Toast from './Toast.svelte';
     <div class="bottomButton" title='Ask me a new feature. Send me your bug description'><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline/issues/new'><i class='questions'></i></a></div>
 </div>
 
-<Upload bind:this={uploadComponent} download={download}/>
-<Live bind:this={liveComponent}/>
-<Online bind:this={onlineComponent}/>
+<Upload bind:openComponent={openUploadComponent} download={download}/>
+<Live bind:openComponent={openLiveComponent}/>
+<Online bind:openComponent={openOnlineComponent} bind:commit={commitOnlineComponent}/>
 <Toast bind:this={toastComponent}/>
 
 
