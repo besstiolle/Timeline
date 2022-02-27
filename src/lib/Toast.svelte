@@ -38,9 +38,8 @@
 
 div {
   visibility: hidden; 
-  min-width: 250px; 
-  max-width: 250px; 
-  margin-left: -125px; 
+  min-width: 20vw; 
+  max-width: 20vw; 
   background-color: rgb(22, 160, 133); 
   border: 1px solid rgb(17, 122, 101);
   color: #333; 
@@ -49,9 +48,9 @@ div {
   border-radius: 10px;
   padding: 16px; 
   position: fixed; 
-  z-index: 1; 
-  left: 50%; 
-  bottom: 30px; 
+  z-index: 1;
+  left: 40vw;
+  bottom: 2vh;
   cursor: pointer;
   word-wrap: break-word;
 }
