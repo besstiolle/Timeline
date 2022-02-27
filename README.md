@@ -9,10 +9,10 @@ Currently there is no clear roadmap but we have a lot of ideas !
 
  * ✔️ Allowing multiple charts for a same session
  * ✔️ Allowing switching between your chart
- * 📅 Improving rendering when the graph is spread over very long periods (> 15 months)
+ * ✔️ Improving rendering when the graph is spread over very long periods (> 15 months)
  * 🔥 Improving tests coverage
- * 📅 Allowing [.toml](https://github.com/toml-lang/toml) files's usage
- * 📅 Guessing encoding of your files
+ * ✔️ Allowing [.toml](https://github.com/toml-lang/toml) files's usage
+ * ✔️ Guessing encoding of your files
  * 📅 Adding more control on data (lenght of string / validation of date / ...)
 
 After that. we'll not be done
