@@ -91,8 +91,14 @@ import ShadowBox from './ShadowBox.svelte';
 <style>
 
     :global(div.live__line){
-        margin:0.1em auto;
+        margin:0.2em auto;
         width: 90%;
+    }
+    :global(.live__input_top, live__input_bottom){
+        margin:0.2em auto;
+    }
+    :global(.live__input_bottom){
+        margin-left:7vw;
     }
 
     :global(input){
@@ -100,7 +106,7 @@ import ShadowBox from './ShadowBox.svelte';
         background-color: #bdd2da;
         border: 0px none;
         border-radius: 5px;
-        font-size:1.5rem
+        font-size:1.2rem
     }
 
     div.title{
@@ -159,5 +165,18 @@ import ShadowBox from './ShadowBox.svelte';
     }
     :global(.date_warn, .date_warn_order){
         background-color: #ff9800;
+    }
+
+    :global(progress){
+        width: 100px;
+    }
+
+    :global(label){
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        font-size:1.2rem
+    }
+    
+    :global(label:hover, input[type="checkbox"]:hover){
+        cursor: pointer;
     }
 </style>

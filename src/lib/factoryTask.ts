@@ -17,6 +17,7 @@ export module FactoryTask {
             + car + task.isShow
             + car + task.dateStart
             + car + task.dateEnd
+            + car + task.hasProgress
             + car + task.progress
             + car + task.swimline
     }
@@ -55,6 +56,7 @@ export module FactoryTask {
                                 task.label,
                                 task.dateStart,
                                 task.dateEnd,
+                                task.hasProgress,
                                 task.progress,
                                 task.isShow,
                                 task.swimline,

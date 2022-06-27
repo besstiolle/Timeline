@@ -121,14 +121,29 @@ onMount(async () => {
                     abstractTimeline['title'] = elmts[1]
                 }
                 if ("task" == elmts[0]) {
-                    abstractTimeline.tasks.push({
-                        label:elmts[1],
-                        show:(elmts[2] === "TRUE" || elmts[2] === "true"),
-                        start:elmts[3],
-                        end:elmts[4],
-                        progress:Number(elmts[5]),
-                        swimline:elmts[6],
-                    })
+                    if(abstractTimeline['version'] === "1.0") {
+                        abstractTimeline.tasks.push({
+                            label:elmts[1],
+                            show:(elmts[2] === "TRUE" || elmts[2] === "true"),
+                            start:elmts[3],
+                            end:elmts[4],     
+                            hasProgress:true,                 
+                            progress:Number(elmts[5]),
+                            swimline:elmts[6],
+                        })
+                    } else if(abstractTimeline['version'] === "1.1") {
+                        abstractTimeline.tasks.push({
+                            label:elmts[1],
+                            show:(elmts[2] === "TRUE" || elmts[2] === "true"),
+                            start:elmts[3],
+                            end:elmts[4],     
+                            hasProgress:elmts[5],                 
+                            progress:Number(elmts[6]),
+                            swimline:elmts[7],
+                        })
+                    } else {
+                        console.error("incorrect version of the CSV detected")
+                    }
                 }
                 if ("milestone" == elmts[0]) {
                     abstractTimeline.milestones.push({
@@ -175,6 +190,7 @@ onMount(async () => {
                                         abstractTask.label, 
                                         abstractTask.start, 
                                         abstractTask.end, 
+                                        abstractTask.hasProgress === false?abstractTask.hasProgress:true,
                                         abstractTask.progress, 
                                         abstractTask.isShow === false?abstractTask.isShow:true, 
                                         abstractTask.swimline, 

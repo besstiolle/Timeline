@@ -16,6 +16,7 @@ function purgeTasksToToml(tasks:Array<Struct.Task>){
             label: task.label,
             start: task.dateStart,
             end: task.dateEnd,
+            hasProgress: task.hasProgress,
             progress: task.progress,
             swimline: task.swimline,
             isShow: task.isShow

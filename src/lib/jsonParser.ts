@@ -13,7 +13,7 @@ export module JsonParser {
 	export function timelineReviver(key : string, value : any) {
         
         const COMMONS: string[] = ['isInitiate', 'maxId', 'viewbox', 'showAll', // Primitive type field of Timeline
-                                 'position','isShow','label', 'id', 'swimline', 'progress',
+                                 'position','isShow','label', 'id', 'swimline', 'hasProgress', 'progress',
                                  'swimlineId', 'countVisibleTasks', 'countAllTasks',
                                  'key', 'title', 'differencial', 
                                  'isOnline', 'ownerKey', 'writeKey', 'readKey', 
@@ -36,7 +36,7 @@ export module JsonParser {
                 return new Struct.Milestone(value.id, value.label,value.date, value.isShow)
             } else if (value.dateStart) {
                 return new Struct.Task(value.id, value.label,value.dateStart, value.dateEnd, 
-                                value.progress, value.isShow, value.swimline, value.swimlineId)
+                                value.hasProgress, value.progress, value.isShow, value.swimline, value.swimlineId)
             } else {
                 //This is a re-processed value, we don't need to reprocessing it right now
                 return value

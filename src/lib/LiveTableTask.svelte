@@ -71,6 +71,7 @@ function b_add(){
             "Some task", 
             Helpers.toYYYY_MM_DD(new Date($store.currentTimeline.getStart().getTime() + (0.1 * diffSec))), 
             Helpers.toYYYY_MM_DD(new Date($store.currentTimeline.getEnd().getTime() - (0.1 * diffSec))),
+            true,
             0,
             true,
             "",
@@ -83,38 +84,42 @@ function b_add(){
 
 {#each $store.currentTimeline.tasks as task, i}
 <div class="live__line show_{task.isShow}">
-    
-    <div name="M{i}"  class="live_cmd" on:click="{b_show}" title="hide/show this line">
-        <svg viewBox="0 0 20 20">
-            <use x="0" y="0" href="#b_show"/>
-        </svg>
+    <div class='live__input_top'>
+        <div name="M{i}"  class="live_cmd" on:click="{b_show}" title="hide/show this line">
+            <svg viewBox="0 0 20 20">
+                <use x="0" y="0" href="#b_show"/>
+            </svg>
+        </div>
+        <div name="T{i}"  class="live_cmd" on:click="{b_up}" title="go down this line">
+            <svg viewBox="0 0 20 20">
+                <use x="0" y="0" href="#b_up"/>
+            </svg>
+        </div>
+        <div name="T{i}"  class="live_cmd" on:click="{b_down}" title="go up this line">
+            <svg viewBox="0 0 20 20">
+                <use x="0" y="0" href="#b_down"/>
+            </svg>
+        </div>
+        <div name="T{i}"  class="live_cmd" on:click="{b_duplicate}" title="duplicate this line">
+            <svg viewBox="0 0 20 20">
+                <use x="0" y="0" href="#b_duplicate"/>
+            </svg>
+        </div>
+        <div name="T{i}"  class="live_cmd live_cmd_red" on:click="{b_delete}" title="delete this line">
+            <svg viewBox="0 0 20 20">
+                <use x="0" y="0" href="#b_delete"/>
+            </svg>
+        </div>
+        <input type="text" bind:value="{task.label}" class="label"/>
+        <input type="date" id="{LIVE_PREFIX.TS}{i}" value="{task.dateStart}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore(LIVE_PREFIX.TS, i)} on:blur={() => updateStore(LIVE_PREFIX.TS, i)}>
+        <input type="date" id="{LIVE_PREFIX.TE}{i}" value="{task.dateEnd}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore(LIVE_PREFIX.TE, i)} on:blur={() => updateStore(LIVE_PREFIX.TE, i)}>
+        <input type="text" bind:value="{task.swimline}" class="label"/>
+        <input type="number" id={LIVE_PREFIX.PR}{i} value="{task.progress}" min="0" max="100" class="progress" on:change={() => updateProgression(i)} on:blur={() => updateProgression(i)}/>
+        <progress max="100" value="{task.progress}"> {task.progress}% </progress>
     </div>
-    <div name="T{i}"  class="live_cmd" on:click="{b_up}" title="go down this line">
-        <svg viewBox="0 0 20 20">
-            <use x="0" y="0" href="#b_up"/>
-        </svg>
+    <div class='live__input_bottom'>
+        <label for="hasProgress{i}">Show Progression : </label><input type="checkbox" bind:checked="{task.hasProgress}"  name="hasProgress{i}" id="hasProgress{i}" />
     </div>
-    <div name="T{i}"  class="live_cmd" on:click="{b_down}" title="go up this line">
-        <svg viewBox="0 0 20 20">
-            <use x="0" y="0" href="#b_down"/>
-        </svg>
-    </div>
-    <div name="T{i}"  class="live_cmd" on:click="{b_duplicate}" title="duplicate this line">
-        <svg viewBox="0 0 20 20">
-            <use x="0" y="0" href="#b_duplicate"/>
-        </svg>
-    </div>
-    <div name="T{i}"  class="live_cmd live_cmd_red" on:click="{b_delete}" title="delete this line">
-        <svg viewBox="0 0 20 20">
-            <use x="0" y="0" href="#b_delete"/>
-        </svg>
-    </div>
-    <input type="text" bind:value="{task.label}" class="label"/>
-    <input type="date" id="{LIVE_PREFIX.TS}{i}" value="{task.dateStart}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore(LIVE_PREFIX.TS, i)} on:blur={() => updateStore(LIVE_PREFIX.TS, i)}>
-    <input type="date" id="{LIVE_PREFIX.TE}{i}" value="{task.dateEnd}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore(LIVE_PREFIX.TE, i)} on:blur={() => updateStore(LIVE_PREFIX.TE, i)}>
-    <input type="number" id={LIVE_PREFIX.PR}{i} value="{task.progress}" min="0" max="100" class="progress" on:change={() => updateProgression(i)} on:blur={() => updateProgression(i)}/>
-    <progress max="100" value="{task.progress}"> {task.progress}% </progress>
-    <input type="text" bind:value="{task.swimline}" class="label"/>
 </div>
 {/each}
 <div class="live__action">

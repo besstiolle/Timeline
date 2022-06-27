@@ -85,7 +85,7 @@ function down(event){
     defaultRightLabelText = rightLabel.innerHTML
     defaultRightLabelX = rightLabel.getAttribute("x")
 
-    defaultProgressBarLabelText = progressBarLabel.innerHTML
+    defaultProgressBarLabelText = progressBarLabel?progressBarLabel.innerHTML:null //will be null if hasProgress = false
     defaultProgressBarWidth = parseInt(progressBar.getAttribute("width"))
 
     TActionBarCoord.REC_X = parseInt(rec.getAttribute("x"))
@@ -162,7 +162,9 @@ function up(event){
         right.classList.remove("grabbing")
         progress.classList.remove("grabbing")
 
-        progressBarLabel.innerHTML=defaultProgressBarLabelText
+        if(progressBarLabel){
+            progressBarLabel.innerHTML=defaultProgressBarLabelText
+        }
         progressBar.setAttribute("width", defaultProgressBarWidth.toString())
     }
 

@@ -77,16 +77,18 @@ export module Struct {
 		label: string
 		dateStart: string
 		dateEnd: string
+		hasProgress:boolean
 		progress: number
 		isShow: boolean
 		swimline: string
 		swimlineId: number
 	
-		constructor(id : number, label : string, dateStart : string, dateEnd : string, progress : number, isShow : boolean, swimline:string, swimlineId: number) {
+		constructor(id : number, label : string, dateStart : string, dateEnd : string, hasProgress:boolean, progress : number, isShow : boolean, swimline:string, swimlineId: number) {
 			this.id = id
 			this.label = label
 			this.dateStart = dateStart
 			this.dateEnd = dateEnd
+			this.hasProgress = hasProgress
 			this.progress = progress
 			this.isShow = isShow
 			this.swimline = swimline
