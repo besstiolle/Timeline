@@ -36,7 +36,13 @@ import { GRID, MONTHS } from './constantes';
     
     
     let xGrayPosition =  Helpers.getViewportXFromDate(currentTask.getStart(), $store.currentTimeline.getStart(), $store.currentTimeline.getEnd())
-    let x2GrayPosition = Helpers.getViewportXFromDate(currentTask.getEnd(), $store.currentTimeline.getStart(), $store.currentTimeline.getEnd())
+
+    //A quick fix to alterate visualy the end date
+    // It will 'fill' the day event if date start = date end
+    let fakeEndDate = currentTask.getEnd()
+    fakeEndDate.setDate(fakeEndDate.getDate() + 1)
+
+    let x2GrayPosition = Helpers.getViewportXFromDate(fakeEndDate, $store.currentTimeline.getStart(), $store.currentTimeline.getEnd())
     
     let widthGray = x2GrayPosition - xGrayPosition 
     let widthProgress = currentTask.progress * widthGray / 100
