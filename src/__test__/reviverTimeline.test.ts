@@ -9,10 +9,10 @@ import { JsonParserException } from "$lib/timelineException.class"
 function withTask(){
     let timeline = new Struct.Timeline("key", "title")
     timeline.tasks = new Array<Struct.Task>()
-    timeline.tasks.push(new Struct.Task(1,"label 1", "2022-01-01", "2022-02-01", 100, true, "Swimline 1", 5))
+    timeline.tasks.push(new Struct.Task(1,"label 1", "2022-01-01", "2022-02-01", false, 100, true, "Swimline 1", 5))
     
     let jsonResult = JSON.stringify(timeline)
-    let jsonExpected = '{"key":"key","title":"title","tasks":[{"id":1,"label":"label 1","dateStart":"2022-01-01","dateEnd":"2022-02-01","progress":100,"isShow":true,"swimline":"Swimline 1","swimlineId":5}],"milestones":[],"swimlines":[],"isInitiate":false,"start":null,"end":null,"differencial":null,"maxId":0,"viewbox":"0 0 0 0","showAll":false,"isOnline":false,"ownerKey":null,"writeKey":null,"readKey":null}'
+    let jsonExpected = '{"key":"key","title":"title","tasks":[{"id":1,"label":"label 1","dateStart":"2022-01-01","dateEnd":"2022-02-01","hasProgress":false,"progress":100,"isShow":true,"swimline":"Swimline 1","swimlineId":5}],"milestones":[],"swimlines":[],"isInitiate":false,"start":null,"end":null,"differencial":null,"maxId":0,"viewbox":"0 0 0 0","showAll":false,"isOnline":false,"ownerKey":null,"writeKey":null,"readKey":null}'
     test("JsonParser.timelineReplacer with tasks values", ()=> {
         expect(jsonResult).toBe(jsonExpected)  
     })
@@ -70,7 +70,7 @@ withMetaTimelines()
 function withAllvalues(){
     let timeline = new Struct.Timeline("key", "title")
     timeline.tasks = new Array<Struct.Task>()
-    timeline.tasks.push(new Struct.Task(1,"label 1", "2022-01-01", "2022-02-01", 100, true, "Swimline 1", 5))
+    timeline.tasks.push(new Struct.Task(1,"label 1", "2022-01-01", "2022-02-01", true, 100, true, "Swimline 1", 5))
     timeline.milestones = new Array<Struct.Milestone>()
     timeline.milestones.push(new Struct.Milestone(1,"label 1","2022-01-01",true))
     timeline.start = "2022-01-01"
@@ -81,7 +81,7 @@ function withAllvalues(){
     timeline.viewbox = "viewbox"
 
     let jsonResult = JSON.stringify(timeline)
-    let jsonExpected = '{"key":"key","title":"title","tasks":[{"id":1,"label":"label 1","dateStart":"2022-01-01","dateEnd":"2022-02-01","progress":100,"isShow":true,"swimline":"Swimline 1","swimlineId":5}],"milestones":[{"id":1,"label":"label 1","date":"2022-01-01","isShow":true}],"swimlines":[],"isInitiate":true,"start":"2022-01-01","end":"2022-12-31","differencial":null,"maxId":99,"viewbox":"viewbox","showAll":true,"isOnline":false,"ownerKey":null,"writeKey":null,"readKey":null}'
+    let jsonExpected = '{"key":"key","title":"title","tasks":[{"id":1,"label":"label 1","dateStart":"2022-01-01","dateEnd":"2022-02-01","hasProgress":true,"progress":100,"isShow":true,"swimline":"Swimline 1","swimlineId":5}],"milestones":[{"id":1,"label":"label 1","date":"2022-01-01","isShow":true}],"swimlines":[],"isInitiate":true,"start":"2022-01-01","end":"2022-12-31","differencial":null,"maxId":99,"viewbox":"viewbox","showAll":true,"isOnline":false,"ownerKey":null,"writeKey":null,"readKey":null}'
     test("JsonParser.timelineReplacer with all values", ()=> {
         expect(jsonResult).toBe(jsonExpected)  
     })

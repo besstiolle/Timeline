@@ -22,10 +22,10 @@ function testGetMin(){
     let date5: string = "2000-01-00"
     let date6: string = "2018-02-15"
     
-    timeline1.tasks.push(new Struct.Task(1,"label 1", date1, date4, 100, true, "Swimline 1", 5))
-    timeline1.tasks.push(new Struct.Task(2,"label 2", date2, date1, 100, true, "Swimline 1", 5))
-    timeline1.tasks.push(new Struct.Task(3,"label 3", date3, date2, 100, true, "Swimline 1", 5))
-    timeline1.tasks.push(new Struct.Task(4,"label 4", date4, date5, 100, true, "Swimline 1", 5))
+    timeline1.tasks.push(new Struct.Task(1,"label 1", date1, date4, true, 100, true, "Swimline 1", 5))
+    timeline1.tasks.push(new Struct.Task(2,"label 2", date2, date1, true, 100, true, "Swimline 1", 5))
+    timeline1.tasks.push(new Struct.Task(3,"label 3", date3, date2, true, 100, true, "Swimline 1", 5))
+    timeline1.tasks.push(new Struct.Task(4,"label 4", date4, date5, true, 100, true, "Swimline 1", 5))
 
     
     timeline1.milestones.push(new Struct.Milestone(1,"label 1",date2, true))
@@ -38,10 +38,10 @@ function testGetMin(){
     })
     
     
-    timeline2.tasks.push(new Struct.Task(1,"label 1", date1, date4, 100, true, "Swimline 1", 5))
-    timeline2.tasks.push(new Struct.Task(2,"label 2", date2, date1, 100, true, "Swimline 1", 5))
-    timeline2.tasks.push(new Struct.Task(3,"label 3", date3, date2, 100, true, "Swimline 1", 5))
-    timeline2.tasks.push(new Struct.Task(4,"label 4", date4, date5, 100, true, "Swimline 1", 5))
+    timeline2.tasks.push(new Struct.Task(1,"label 1", date1, date4, true, 100, true, "Swimline 1", 5))
+    timeline2.tasks.push(new Struct.Task(2,"label 2", date2, date1, true, 100, true, "Swimline 1", 5))
+    timeline2.tasks.push(new Struct.Task(3,"label 3", date3, date2, true, 100, true, "Swimline 1", 5))
+    timeline2.tasks.push(new Struct.Task(4,"label 4", date4, date5, true, 100, true, "Swimline 1", 5))
 
     
     timeline2.milestones.push(new Struct.Milestone(1,"label 1",date2, true))
@@ -68,10 +68,10 @@ function testGetMax(){
     let date5: string = "2000-01-00"
     let date6: string = "2030-02-15"
     
-    timeline1.tasks.push(new Struct.Task(1,"label 1", date1, date4, 100, true, "Swimline 1", 5))
-    timeline1.tasks.push(new Struct.Task(2,"label 2", date6, date1, 100, true, "Swimline 1", 5))
-    timeline1.tasks.push(new Struct.Task(3,"label 3", date3, date2, 100, true, "Swimline 1", 5))
-    timeline1.tasks.push(new Struct.Task(4,"label 4", date4, date5, 100, true, "Swimline 1", 5))
+    timeline1.tasks.push(new Struct.Task(1,"label 1", date1, date4, true, 100, true, "Swimline 1", 5))
+    timeline1.tasks.push(new Struct.Task(2,"label 2", date6, date1, true, 100, true, "Swimline 1", 5))
+    timeline1.tasks.push(new Struct.Task(3,"label 3", date3, date2, true, 100, true, "Swimline 1", 5))
+    timeline1.tasks.push(new Struct.Task(4,"label 4", date4, date5, true, 100, true, "Swimline 1", 5))
 
     
     timeline1.milestones.push(new Struct.Milestone(1,"label 1",date4, true))
@@ -84,10 +84,10 @@ function testGetMax(){
     })
     
     
-    timeline2.tasks.push(new Struct.Task(1,"label 1", date1, date4, 100, true, "Swimline 1", 5))
-    timeline2.tasks.push(new Struct.Task(2,"label 2", date6, date1, 100, true, "Swimline 1", 5))
-    timeline2.tasks.push(new Struct.Task(3,"label 3", date3, date4, 100, true, "Swimline 1", 5))
-    timeline2.tasks.push(new Struct.Task(4,"label 4", date4, date5, 100, true, "Swimline 1", 5))
+    timeline2.tasks.push(new Struct.Task(1,"label 1", date1, date4, true, 100, true, "Swimline 1", 5))
+    timeline2.tasks.push(new Struct.Task(2,"label 2", date6, date1, true, 100, true, "Swimline 1", 5))
+    timeline2.tasks.push(new Struct.Task(3,"label 3", date3, date4, true, 100, true, "Swimline 1", 5))
+    timeline2.tasks.push(new Struct.Task(4,"label 4", date4, date5, true, 100, true, "Swimline 1", 5))
 
     
     timeline2.milestones.push(new Struct.Milestone(1,"label 1",date4, true))
@@ -107,9 +107,9 @@ function testAddTask(){
     let date1: string = "2020-01-01"
     let date2: string = "2021-12-31"
 
-    FactoryTimeline.addTask(timeline, new Struct.Task(1,"label 1", date1, date2, 100, true, "Swimline 1", 5))
-    FactoryTimeline.addTask(timeline, new Struct.Task(2,"label 2", date1, date2, 100, true, "Swimline 1", 5))
-    FactoryTimeline.addTask(timeline, new Struct.Task(3,"label 3", date1, date2, 100, true, "Swimline 1", 5))
+    FactoryTimeline.addTask(timeline, new Struct.Task(1,"label 1", date1, date2, true, 100, true, "Swimline 1", 5))
+    FactoryTimeline.addTask(timeline, new Struct.Task(2,"label 2", date1, date2, true, 100, true, "Swimline 1", 5))
+    FactoryTimeline.addTask(timeline, new Struct.Task(3,"label 3", date1, date2, true, 100, true, "Swimline 1", 5))
 
     test("FactoryTimeline.addTask with nominal value", ()=> {
         expect(timeline.tasks.length).toBe(3)
@@ -121,7 +121,7 @@ function testAddTask(){
 
     test("FactoryTimeline.addTask with duplicate id", ()=> {
         expect(() => {
-            FactoryTimeline.addTask(timeline, new Struct.Task(3,"label 3", date1, date2, 100, true, "Swimline 1", 5))
+            FactoryTimeline.addTask(timeline, new Struct.Task(3,"label 3", date1, date2, true, 100, true, "Swimline 1", 5))
         }).toThrow(DuplicateEntityException);
     })
 }
@@ -160,7 +160,7 @@ function testPurge(){
 
     let date: string = "2020-01-01"
 
-    timeline.tasks.push(new Struct.Task(1,"label 1", date, date, 100, true, "Swimline 1", 5))
+    timeline.tasks.push(new Struct.Task(1,"label 1", date, date, true, 100, true, "Swimline 1", 5))
     timeline.milestones.push(new Struct.Milestone(1,"label 1", date, true))
     timeline.swimlines.push(new Struct.Swimline("label"))
     timeline.isInitiate = true
@@ -181,7 +181,7 @@ testPurge()
 
 function testProcessLimites(){
     let timeline1 = new Struct.Timeline("key", "title")
-    timeline1.tasks.push(new Struct.Task(1,"label 1", "2020-01-01", "2020-01-31", 100, true, "Swimline 1", 5))
+    timeline1.tasks.push(new Struct.Task(1,"label 1", "2020-01-01", "2020-01-31", true, 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline1)
     test("FactoryTimeline._processLimites with dates < 1 month", ()=> {
@@ -190,7 +190,7 @@ function testProcessLimites(){
     })
 
     let timeline2 = new Struct.Timeline("key", "title")
-    timeline2.tasks.push(new Struct.Task(1,"label 1", "2020-01-15", "2020-03-01", 100, true, "Swimline 1", 5))
+    timeline2.tasks.push(new Struct.Task(1,"label 1", "2020-01-15", "2020-03-01", true, 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline2)
     test("FactoryTimeline._processLimites with dates 1 month => 5 months ", ()=> {
@@ -199,7 +199,7 @@ function testProcessLimites(){
     })
 
     let timeline3a = new Struct.Timeline("key", "title")
-    timeline3a.tasks.push(new Struct.Task(1,"label 1", "2020-02-07", "2022-02-07", 100, true, "Swimline 1", 5))
+    timeline3a.tasks.push(new Struct.Task(1,"label 1", "2020-02-07", "2022-02-07", true, 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline3a)
     test("FactoryTimeline._processLimites with dates 5 months => 10 years + day of month < 15", ()=> {
@@ -208,7 +208,7 @@ function testProcessLimites(){
     })
     
     let timeline3b = new Struct.Timeline("key", "title")
-    timeline3b.tasks.push(new Struct.Task(1,"label 1", "2020-02-17", "2022-02-17", 100, true, "Swimline 1", 5))
+    timeline3b.tasks.push(new Struct.Task(1,"label 1", "2020-02-17", "2022-02-17", true, 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline3b)
     test("FactoryTimeline._processLimites with dates 5 months => 10 years + day of month > 15", ()=> {
@@ -217,7 +217,7 @@ function testProcessLimites(){
     })
 
     let timeline4 = new Struct.Timeline("key", "title")
-    timeline4.tasks.push(new Struct.Task(1,"label 1", "2020-01-15", "2040-02-01", 100, true, "Swimline 1", 5))
+    timeline4.tasks.push(new Struct.Task(1,"label 1", "2020-01-15", "2040-02-01", true, 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline4)
     test("FactoryTimeline._processLimites with dates 10 years => +", ()=> {
@@ -232,8 +232,8 @@ testProcessLimites()
 function testProcessViewboxResizing(){
 
     let date1: string = "2020-01-01"
-    let taskVisible = new Struct.Task(1,"label 1", date1, date1, 100, true, "Swimline 1", 5)
-    let taskHidden = new Struct.Task(1,"label 1", date1, date1, 100, false, "Swimline 1", 5)
+    let taskVisible = new Struct.Task(1,"label 1", date1, date1, true, 100, true, "Swimline 1", 5)
+    let taskHidden = new Struct.Task(1,"label 1", date1, date1, true, 100, false, "Swimline 1", 5)
     let timeline1 = new Struct.Timeline("key", "title")
     timeline1.showAll = false
     timeline1.tasks.push(taskVisible)
@@ -278,16 +278,16 @@ testProcessViewboxResizing()
 function testRefreshSwimlines(){
     let timeline1 = new Struct.Timeline("key", "title")
     let date1: string = "2020-01-01"
-    timeline1.tasks.push(new Struct.Task(1,"label 1", date1, date1, 100, true, "Swimline 1", 0))
-    timeline1.tasks.push(new Struct.Task(2,"label 2", date1, date1, 100, false, "Swimline 2", 0))
-    timeline1.tasks.push(new Struct.Task(3,"label 3", date1, date1, 100, false, "Swimline 2", 0))
-    timeline1.tasks.push(new Struct.Task(4,"label 4", date1, date1, 100, false, "Swimline 1", 0))
+    timeline1.tasks.push(new Struct.Task(1,"label 1", date1, date1, true, 100, true, "Swimline 1", 0))
+    timeline1.tasks.push(new Struct.Task(2,"label 2", date1, date1, true, 100, false, "Swimline 2", 0))
+    timeline1.tasks.push(new Struct.Task(3,"label 3", date1, date1, true, 100, false, "Swimline 2", 0))
+    timeline1.tasks.push(new Struct.Task(4,"label 4", date1, date1, true, 100, false, "Swimline 1", 0))
 
     let timeline2 = new Struct.Timeline("key", "title")
-    timeline2.tasks.push(new Struct.Task(1,"label 1", date1, date1, 100, true, "", 0))
-    timeline2.tasks.push(new Struct.Task(2,"label 2", date1, date1, 100, true, "", 0))
-    timeline2.tasks.push(new Struct.Task(3,"label 3", date1, date1, 100, false, "", 0))
-    timeline2.tasks.push(new Struct.Task(4,"label 4", date1, date1, 100, false, "", 0))
+    timeline2.tasks.push(new Struct.Task(1,"label 1", date1, date1, true, 100, true, "", 0))
+    timeline2.tasks.push(new Struct.Task(2,"label 2", date1, date1, true, 100, true, "", 0))
+    timeline2.tasks.push(new Struct.Task(3,"label 3", date1, date1, true, 100, false, "", 0))
+    timeline2.tasks.push(new Struct.Task(4,"label 4", date1, date1, true, 100, false, "", 0))
 
     FactoryTimeline.refresh(timeline1)
     FactoryTimeline.refresh(timeline2)

@@ -29,11 +29,11 @@ testToYYYY_MM_DD()
 /************************************* */
 
 function testCountVisibleTasksInList(){
-    const task1 = new Struct.Task(1,"label 1", "2020-01-01", "2020-01-01", 100, true, "Swimline 1", 5)
-    const task2 = new Struct.Task(2,"label 2", "2020-01-01", "2020-01-01", 100, true, "Swimline 1", 4)
-    const task3 = new Struct.Task(3,"label 3", "2020-01-01", "2020-01-01", 100, true, null, 3)
-    const task4 = new Struct.Task(4,"label 4", "2020-01-01", "2020-01-01", 100, false, "Swimline 2", 2)
-    const task5 = new Struct.Task(5,"label 5", "2020-01-01", "2020-01-01", 100, false, null, 1)
+    const task1 = new Struct.Task(1,"label 1", "2020-01-01", "2020-01-01", true, 100, true, "Swimline 1", 5)
+    const task2 = new Struct.Task(2,"label 2", "2020-01-01", "2020-01-01", true, 100, true, "Swimline 1", 4)
+    const task3 = new Struct.Task(3,"label 3", "2020-01-01", "2020-01-01", true, 100, true, null, 3)
+    const task4 = new Struct.Task(4,"label 4", "2020-01-01", "2020-01-01", true, 100, false, "Swimline 2", 2)
+    const task5 = new Struct.Task(5,"label 5", "2020-01-01", "2020-01-01", true, 100, false, null, 1)
 
     let mapAllVisible = new Array<Struct.Task>()
     let mapAllHidden = new Array<Struct.Task>()
