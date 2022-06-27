@@ -31,7 +31,7 @@ export module JsonParser {
             return structTimeline
         }
 
-        if(typeof value === 'object' && value !== null && value.label) { //Un object contenant un label => nos objects Task & Milestone
+        if(typeof value === 'object' && value !== null && (value.label || value.label === '')) { //Un object contenant un label => nos objects Task & Milestone
             if(value.date){
                 return new Struct.Milestone(value.id, value.label,value.date, value.isShow)
             } else if (value.dateStart) {
