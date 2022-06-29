@@ -14,6 +14,7 @@ export module JsonParser {
         
         const COMMONS: string[] = ['isInitiate', 'maxId', 'viewbox', 'showAll', // Primitive type field of Timeline
                                  'position','isShow','label', 'id', 'swimline', 'hasProgress', 'progress',
+                                 'showToday','showOutOfBounds','dateStartFocus','dateEndFocus',
                                  'swimlineId', 'countVisibleTasks', 'countAllTasks',
                                  'key', 'title', 'differencial', 
                                  'isOnline', 'ownerKey', 'writeKey', 'readKey', 

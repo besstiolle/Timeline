@@ -23,6 +23,8 @@ export const LIVE_PREFIX = {
     TE:"taskEnd_",
     MD:"milestoneDate_",
     PR:"progress_",
+    TSF:"timelineStartFocus",
+    TEF:"timelineEndFocus",
 }
 
 export const LOCAL_STORAGE = {

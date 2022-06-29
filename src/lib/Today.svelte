@@ -3,6 +3,7 @@ import { GRID } from './constantes';
     import { store } from './stores';
 
     let toDisplay: boolean = ($store.currentTimeline.getStart() <= new Date() && $store.currentTimeline.getEnd() >= new Date())
+                                && $store.currentTimeline.showToday
 
     const todayColor = "#D41E24"
     const todayLabelColor = "#000000"
@@ -19,5 +20,6 @@ import { GRID } from './constantes';
             <polygon points='{widthToday},25 {widthToday + 5},40 {widthToday - 5},40' fill={todayColor} />
             <text x="{widthToday - 10}" y="50" font-size="7" fill="{todayLabelColor}">Today</text>
             <line stroke-dasharray="0.5 2" x1="{widthToday}" y1="40" x2="{widthToday}" y2="100%" stroke="{todayColor}" />
+        
 </svg>
 {/if}

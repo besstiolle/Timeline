@@ -43,6 +43,10 @@ export module Struct {
 		ownerKey: string = null
 		writeKey: string = null
 		readKey: string = null
+		showToday: boolean = true
+		showOutOfBounds: boolean = true
+		dateStartFocus: string = null
+		dateEndFocus: string = null
 		//Check jsonParser.ts > timelineReviver() function if you add something here.
 		
 		constructor(key:string, title:string){
@@ -69,6 +73,22 @@ export module Struct {
 
 		setEnd(end: Date) : void{
 			this.end = Helpers.toYYYY_MM_DD(end)
+		}
+
+		getStartFocus() : Date{
+			return new Date(this.dateStartFocus)
+		}
+
+		getEndFocus() : Date{
+			return new Date(this.dateEndFocus)
+		}
+
+		setStartFocus(startFocus: Date) : void{
+			this.dateStartFocus = Helpers.toYYYY_MM_DD(startFocus)
+		}
+
+		setEndFocus(endFocus: Date) : void{
+			this.dateEndFocus = Helpers.toYYYY_MM_DD(endFocus)
 		}
 	}
 
