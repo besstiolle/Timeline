@@ -27,7 +27,7 @@ import { GRID, MONTHS } from './constantes';
     const dottedLine = "#44546A";
 
     let styleColor = {fill : green, stroke: greenStroke} //default : full
-    if(currentTask.progress < 100){
+    if(currentTask.hasProgress && currentTask.progress < 100){
         styleColor = {fill : blue, stroke: blueStroke}
     }
 
@@ -92,10 +92,12 @@ import { GRID, MONTHS } from './constantes';
             <use href="#filler" on:mousedown={downRight} />
             <use href="#drag_right" fill="{rightLabel}" class="  "  on:mousedown={downRight}/>    
         </svg>
+        {#if currentTask.hasProgress}
         <svg  id="T{currentTask.id}_p" x="{xGrayPosition + ((x2GrayPosition - xGrayPosition) / 2) - 10}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class="grabbable showable hidden">
             <use href="#filler"  on:mousedown={downProgress} />
             <use href="#drag_progress" fill="{rightLabel}" class="  "  on:mousedown={downProgress}/>    
         </svg>
+        {/if}
         <!-- END overlay-->
 </svg>
 

@@ -77,15 +77,22 @@ function down(event){
     left = document.getElementById(`${taskId}_l`)
     right = document.getElementById(`${taskId}_r`)
     rightLabel = document.getElementById(`${taskId}_rlabel`)
+    let ghostElement = document.getElementById(`ghost`)
     progress = document.getElementById(`${taskId}_p`)
+    if(progress === null){
+        progress = ghostElement
+    }
     progressBar = document.getElementById(`${taskId}_progressBar`)
     progressBarLabel = document.getElementById(`${taskId}_plabel`)
+    if(progressBarLabel === null ){
+        progressBarLabel = ghostElement
+    }
     recBox = document.getElementById('svgSwimlineAndTasks').getBoundingClientRect()
     
     defaultRightLabelText = rightLabel.innerHTML
     defaultRightLabelX = rightLabel.getAttribute("x")
 
-    defaultProgressBarLabelText = progressBarLabel?progressBarLabel.innerHTML:null //will be null if hasProgress = false
+    defaultProgressBarLabelText = progressBarLabel.innerHTML
     defaultProgressBarWidth = parseInt(progressBar.getAttribute("width"))
 
     TActionBarCoord.REC_X = parseInt(rec.getAttribute("x"))
@@ -352,6 +359,7 @@ function showToggle(event){
 
 {#each tasksToShow as task, i}
     <Task currentTask={task} i={i} showActionBar={showActionBar} hideActionBar={hideActionBar} downRight={downRight} downLeft={downLeft} downProgress={downProgress}/>
+    <tspan id='ghost' x='-1000'/>
 {/each}
 
 <style>
