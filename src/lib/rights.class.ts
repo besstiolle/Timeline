@@ -5,7 +5,17 @@ export class Rights {
     w: string
     r: string
 
-    constructor(searchParams: URLSearchParams){
+    constructor(args:any){
+        if(args instanceof(URLSearchParams)){
+            this.__constructorURLSearchParams(args)
+        } else {
+            this.r = null
+            this.w = null
+            this.o = args
+        }
+    }
+
+    __constructorURLSearchParams(searchParams: URLSearchParams){
         this.o = searchParams.get('o')
         this.w = searchParams.get('w')
         this.r = searchParams.get('r')

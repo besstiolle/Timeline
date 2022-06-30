@@ -7,6 +7,7 @@ import { Helpers } from './helpers';
 import { remove, create } from "./timelineRepository";
 import ShadowBox from './ShadowBox.svelte';
 import Toast from './Toast.svelte';
+import { Rights } from './rights.class';
 
     let toastComponent
     export let openComponent
@@ -71,6 +72,9 @@ import Toast from './Toast.svelte';
             if(toastComponent){
                 toastComponent.show("Saved remotely with success")
             }
+            //Refresh internal Rights value
+            $store.rights = new Rights($store.currentTimeline.ownerKey)
+             
         }).catch((err) => {
             console.error("Error where calling create() in Online.doOnline() : %o", err)
             if(toastComponent){
