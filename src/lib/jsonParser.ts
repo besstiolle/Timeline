@@ -16,7 +16,7 @@ export module JsonParser {
                                  'position','isShow','label', 'id', 'swimline', 'hasProgress', 'progress',
                                  'showToday','showOutOfBounds','dateStartFocus','dateEndFocus',
                                  'swimlineId', 'countVisibleTasks', 'countAllTasks',
-                                 'key', 'title', 'differencial', 
+                                 'key', 'title', 'differencial', 'commitInProgress',
                                  'isOnline', 'ownerKey', 'writeKey', 'readKey', 
                                  'tasks', 'milestones', 'swimlines', //Nothing to do, it's an array
                                  'date', 'dateStart', 'dateEnd', // date inside object in string format

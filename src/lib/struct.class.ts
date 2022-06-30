@@ -47,6 +47,7 @@ export module Struct {
 		showOutOfBounds: boolean = true
 		dateStartFocus: string = null
 		dateEndFocus: string = null
+		commitInProgress: boolean = false
 		//Check jsonParser.ts > timelineReviver() function if you add something here.
 		
 		constructor(key:string, title:string){

@@ -13,9 +13,10 @@ import { Rights } from './rights.class';
     export let openComponent
 
     export function commit(){
+        
         if($store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000){
-            //console.info("gap > 2000 ms : %o", ($store.lastUpdatedLocally - $store.lastCommitedRemotely) / 1000)
-
+            $store.currentTimeline.commitInProgress = true
+            console.info("gap > 2000 ms : %o", ($store.lastUpdatedLocally - $store.lastCommitedRemotely) / 1000)
             create($store.currentTimeline).then((json) => {
                 $store.lastCommitedRemotely = json['message']['ts']
                 if(toastComponent){
@@ -27,6 +28,8 @@ import { Rights } from './rights.class';
                     toastComponent.show("Oups, we couldn't reach the remote endpoint. Please try later.<br/> Please check your browser console for more informations. Click me to dismiss the notif", false, 0)
                 }
             }).finally(()=>{
+                
+                $store.currentTimeline.commitInProgress = false
             })
         } else {
             //console.info("gap < 2000 ms : %o", ($store.lastUpdatedLocally - $store.lastCommitedRemotely) / 1000)
@@ -61,7 +64,7 @@ import { Rights } from './rights.class';
 
 
     }
-    function doOnline(){
+    function doOnline(){        
         $store.currentTimeline.isOnline = true
         $store.currentTimeline.ownerKey = Helpers.randomeString(64)
         $store.currentTimeline.writeKey = Helpers.randomeString(64)
