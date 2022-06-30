@@ -1,4 +1,5 @@
 import type { Struct } from "./struct.class";
+import { NotFoundOnlineException } from "./timelineException.class";
 
 const endpoint = import.meta.env.VITE_API_ENDPOINT_BASE_URL + '.netlify/functions/timeline?'
 
@@ -20,6 +21,11 @@ export async function get(params: URLSearchParams): Promise<string>{
     //console.info("GET on endpoint : " + endpoint + params)
     const res = await fetch(endpoint + params, {
         method: 'GET',
+    }).then(res => {
+        if(res.status == 404){
+            throw new NotFoundOnlineException()
+        }
+        return res
     })
 
     return await res.json()

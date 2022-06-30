@@ -12,6 +12,7 @@ import { get } from '$lib/timelineRepository';
 
 import Draw from '$lib/Draw.svelte';
 import Toast from '$lib/Toast.svelte';
+import { NotFoundOnlineException } from '$lib/timelineException.class';
 
 let toastComponent
 $store.rights = new Rights($page.url.searchParams)
@@ -81,7 +82,17 @@ if($store.rights.isNone()){
     }).catch((err) => {
         console.error("Error where calling get() in [slug].svelte : %o", err)
         if(toastComponent){
-            toastComponent.show("Oups, we couldn't reach the remote endpoint so we'll use your local data instead.<br/> Please check your browser console for more informations. Click me to dismiss the notif", false, 0)
+            if (err instanceof NotFoundOnlineException) {
+                toastComponent.show("Oups, your timeline doesn't seems to exist anymore on the remote endpoint.<br/> Please remove it from your local browser in the homepage", false, 10)
+                //Refresh page after 10s
+                setTimeout(function(){
+                    window.location.href = $page.url.protocol + '//' + $page.url.host + "/g/" + slug
+                }, 10000);
+                
+            } else {
+                toastComponent.show("Oups, we couldn't reach the remote endpoint so we'll use your local data instead.<br/> Please check your browser console for more informations. Click me to dismiss the notif", false, 0)
+
+            }
         }
         $store.currentTimeline = currentTimeline 
     }).finally(()=>{

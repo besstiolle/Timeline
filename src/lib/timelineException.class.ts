@@ -1,5 +1,14 @@
 import { Helpers } from "./helpers"
 
+export class NotFoundOnlineException extends Error {
+  args: any[]
+  constructor (...args:any) {
+    super(Helpers.printf("The current Timeline doesn't exist on remote endpoint anymore. You should delete it from the homepage", args))
+    this.args = args
+    console.error(super.message)
+  }
+}
+
 export class NotFoundException extends Error {
   args: any[]
   constructor (...args:any) {
