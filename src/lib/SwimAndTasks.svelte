@@ -352,15 +352,18 @@ function showToggle(event){
         data-html2canvas-ignore="true" 
         on:click={toggleSwimlineVisibility} id="s{task.swimlineId}" class='toggleVisibility hidden'
         on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle} />
-
+{:else}
+    <rect x="0" y="{i * GRID.ONE_TASK_H}" 
+        width="{GRID.ALL_WIDTH}" height="{GRID.ONE_TASK_H - 0.5}" fill="transparent"/>
 {/if}
 {/each}
+
 </svg>
 
 {#each tasksToShow as task, i}
     <Task currentTask={task} i={i} showActionBar={showActionBar} hideActionBar={hideActionBar} downRight={downRight} downLeft={downLeft} downProgress={downProgress}/>
-    <tspan id='ghost' x='-1000'/>
 {/each}
+<tspan id='ghost' x='-1000'/>
 
 <style>
     .toggleVisibility{
