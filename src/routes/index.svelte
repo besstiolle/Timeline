@@ -116,9 +116,7 @@ let cards = getCards()
 	.card:hover, .emptyCard:hover{
 		background-color: rgb(215, 233, 206);	
 		cursor: pointer;
-		width:10.5vw;
-		height:10.5vw;
-		margin: 0.25vw;
+		transform: scale(1.05);
 	}
 
 	.title{
