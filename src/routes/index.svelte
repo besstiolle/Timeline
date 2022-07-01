@@ -35,23 +35,21 @@ function goto(event, key:string){
 
 function duplicate(event, key:string):void {
 	event.stopPropagation();
-	let clone:Struct.Timeline = CustomLocalStorage.getTimeline(key)
-	clone.ownerKey=null
-	clone.writeKey=null
-	clone.readKey=null
-	clone.isOnline=false
-	clone.title=clone.title + "[1]"
-	clone.key = Helpers.randomeString(64)
+	let clone:object = {...CustomLocalStorage.getTimeline(key)}
+	clone['ownerKey']=null
+	clone['writeKey']=null
+	clone['readKey']=null
+	clone['isOnline']=false
+	clone['title']+= "[1]"
+	clone['key'] = Helpers.randomeString(64)
 
 	let cards = CustomLocalStorage.getCards()
-	let newCard = new Struct.Card(key, clone.title)
+	let newCard = new Struct.Card(clone['key'], clone['title'])
+	console.info('newCard : %o', newCard)
 	cards.push(newCard)
-console.info("save clone : %o", clone)
-console.info("saving cards : %o", cards)
-	CustomLocalStorage.save(key, clone)
+	CustomLocalStorage.save(clone['key'], clone)
 	CustomLocalStorage.save(LOCAL_STORAGE.KEY_CARDS, cards)
-console.info("update store")
-	$store.cards = cards
+	$store.cards = CustomLocalStorage.getCards()
 }
 
 function askDelete(event, key:string):void{
@@ -77,7 +75,7 @@ function doDelete(event, key:string):void{
 	let cards = CustomLocalStorage.getCards()
 	for(let i=0; i < cards.length; i++){
 		if (cards[i].key === key){
-			cards.splice(i)
+			cards.splice(i,1)
 			break
 		}
 	}
@@ -122,12 +120,8 @@ let cards = getCards()
 			<img src={getThumbnail(card.key)} id='foo' alt='miniature ' height="150px" width="250px"/>
 			<div class='title'>{card.title}</div>
 			<div class='lastUpdate'>Updated : {toStringDate(card.lastUpdated)}</div>
-			<div class='information'>
-				<div name="T{card.key}"  class="live_cmd" title="This Timeline is saved remotely and can't be deleted">
-					<svg viewBox="0 0 20 20">
-						<use x="0" y="0" href="#b_down"/>
-					</svg>
-				</div>
+			<div class:hidden={false} class='information' title="This Timeline is saved remotely and can't be deleted">
+				<i class="online"></i>
 			</div>
 			<div class='action'>
 				<div name="T{card.key}"  class="live_cmd" on:click={(event) => duplicate(event, card.key)} title="duplicate this Timeline">
@@ -135,7 +129,7 @@ let cards = getCards()
 						<use x="0" y="0" href="#b_duplicate"/>
 					</svg>
 				</div>
-				<div name="T{card.key}"  class="live_cmd live_cmd_red" on:click={(event) => doDelete(event, card.key)} title="delete this Timeline">
+				<div class:hidden={false} name="T{card.key}"  class="live_cmd live_cmd_red" on:click={(event) => doDelete(event, card.key)} title="delete this Timeline">
 					<svg viewBox="0 0 20 20">
 						<use x="0" y="0" href="#b_delete"/>
 					</svg>
@@ -216,6 +210,7 @@ let cards = getCards()
 		font-size: 1rem;
 		padding: 0.51vw;
 		left: 0;
+		cursor: default;
 	}
 	.action{
 		position: absolute;
