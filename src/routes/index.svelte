@@ -1,11 +1,7 @@
 
 <script lang="ts">
 import { LOCAL_STORAGE } from "$lib/constantes";
-
 import { CustomLocalStorage } from "$lib/customLocalStorage";
-
-import { FactoryTimeline } from "$lib/factoryTimeline";
-
 import { FactoryPicto } from "$lib/factoryPicto";
 
 import { Helpers } from "$lib/helpers";
@@ -40,18 +36,17 @@ function duplicate(event, key:string):void {
 	clone['writeKey']=null
 	clone['readKey']=null
 	clone['isOnline']=false
-	clone['title']+= "[1]"
+	clone['title']+= "[1]" //TODO : implement better function
 	clone['key'] = Helpers.randomeString(64)
 
-	let cards = CustomLocalStorage.getCards()
 	let newCard = new Struct.Card(clone['key'], clone['title'])
-	console.info('newCard : %o', newCard)
-	cards.push(newCard)
+	$store.cards.push(newCard)
 	CustomLocalStorage.save(clone['key'], clone)
-	CustomLocalStorage.save(LOCAL_STORAGE.KEY_CARDS, cards)
+	CustomLocalStorage.save(LOCAL_STORAGE.KEY_CARDS, $store.cards)
 	$store.cards = CustomLocalStorage.getCards()
 }
 
+//TODO : implement
 function askDelete(event, key:string):void{
 	event.stopPropagation();
 	let timelineToDelete: Struct.Timeline = CustomLocalStorage.getTimeline(key)
@@ -61,6 +56,7 @@ function askDelete(event, key:string):void{
 	showAskPopup=true
 	
 }
+//TODO : implement
 function doNotDelete(){
 	showAskPopup=false
 }
@@ -71,8 +67,8 @@ function doDelete(event, key:string):void{
 	if(timelineToDelete.isOnline){
 		return
 	}
+	let cards = $store.cards
 	CustomLocalStorage.remove(key)
-	let cards = CustomLocalStorage.getCards()
 	for(let i=0; i < cards.length; i++){
 		if (cards[i].key === key){
 			cards.splice(i,1)
@@ -80,22 +76,24 @@ function doDelete(event, key:string):void{
 		}
 	}
 	CustomLocalStorage.save(LOCAL_STORAGE.KEY_CARDS, cards)
+	CustomLocalStorage.remove(LOCAL_STORAGE.KEY_PICTO + key)
 
 	$store.cards = cards
 }
 
-//TODO : simplify theses 4 lines below
-function getCards(): Array<Struct.Card>{
-	return $store.cards
-}
 
-let cards = getCards()
+/**
+ * Retrive the picto from localStorage with the timeline's key 
+ * @param key
+ */
+ function getThumbnail(key:string):string{
+	let thumbnail = FactoryPicto.getPicto(key)	
+	if(thumbnail == null){
+		thumbnail = '/static/notFound.webp'
+	}
+	return thumbnail
+ }
 
-
-
-//TODO : add miniature ?
-//TODO : add functions to duplicate/delete with confirmations
-//TODO : show "online/offline" status
 </script>
 
 <svelte:head>
@@ -113,11 +111,11 @@ let cards = getCards()
 	<div id='label'>Would you like to come back to your creations ?</div>
 	<div id='create'>Or <button on:click={gotoNew}>create</button> a new one !</div>
 </div>
-{#key $store}
+{#key $store.cards}
 <div id='current'>
-	{#each cards as card}
+	{#each $store.cards as card}
 		<div class='card' on:click={() => goto(null, card.key)}>
-			<img src={getThumbnail(card.key)} id='foo' alt='miniature ' height="150px" width="250px"/>
+			<img src={getThumbnail(card.key)} alt='miniature ' height="150px" width="250px" class='thumbnail'/>
 			<div class='title'>{card.title}</div>
 			<div class='lastUpdate'>Updated : {toStringDate(card.lastUpdated)}</div>
 			<div class:hidden={false} class='information' title="This Timeline is saved remotely and can't be deleted">
@@ -171,46 +169,40 @@ let cards = getCards()
 		transform: rotate(-9deg);
 	}
 	#current{
-		width: 56vw;
+		width: 40vw;
 		margin: 2vw auto 0 auto;
 	}
 	.card, .emptyCard{
-		width:10vw;
-		background-color: rgb(238, 238, 238);
-		height:12vw;
-		display: inline-block;
-		text-align: center;
 		position: relative;
-		margin: 0.5vw;
+		margin-bottom: 20px;
 	}
 	.card:hover, .emptyCard:hover{
 		background-color: rgb(215, 233, 206);	
 		cursor: pointer;
 		transform: scale(1.05);
 	}
-
+	.thumbnail{
+		border:1px solid #888;
+		border-radius: 5px;
+		padding: 5px;
+	}
 	.title{
 		font-size: 2em;
 		position: absolute;
-		max-width: 100%;
-		overflow: hidden;
-		max-height: 75%;
+		top:0;
+		left:275px;
 	}
 	.lastUpdate{
-		position: absolute;
-		bottom: 2vw;
 		font-size: 1rem;
-		padding: 0.51vw;
-		right: 0;
+		position: absolute;
+		top:50px;
+		left:275px;
 	}
 	
 	.information{
 		position: absolute;
-		bottom: 0vw;
-		font-size: 1rem;
-		padding: 0.51vw;
-		left: 0;
-		cursor: default;
+		bottom:0px;
+		left:225px;
 	}
 	.action{
 		position: absolute;
@@ -219,13 +211,11 @@ let cards = getCards()
 		padding: 0.51vw;
 		right: 0;
 	}
-	.emptyCard{
-	}
 	.addMore{
 		font-size: 6em;
 		position: absolute;
 		top: 7px;
-		left: 9px;
+		left: 48%;
 	}
 	:global(div.live_cmd){
         width:20px;
