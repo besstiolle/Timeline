@@ -15,13 +15,49 @@ import Online from './Online.svelte';
 import MilestonesLite from './Milestones_lite.svelte';
 import SwimAndTasksLite from './SwimAndTasks_lite.svelte';
 import Toast from './Toast.svelte';
+import { FactoryPicto } from './factoryPicto';
 
     let toastComponent
     let openOnlineComponent, commitOnlineComponent, openUploadComponent, openLiveComponent
 
-    function takeshot() {  
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+
+    let processRunning = false
+    /**
+     * Generate a thumbbnail every 30s and save it into the localstorage
+     */
+    let makeThumbnail = async () => {
+        await delay(30000) // 30s
+        if(!processRunning) {
+            processRunning=true
+            var image = new Image();
+            html2canvas(document.getElementById('wrapper'), {
+                ignoreElements: function (el) {return el.classList.contains('toExcludeFromSnapshot')},
+                logging:false
+            }).then(function (canvas) {
+                var ctx = canvas.getContext("2d");
+                ctx.drawImage(image, 0, 0, 128, 128)
+                var dataurl = canvas.toDataURL('image/jpeg', 0.1)
+                FactoryPicto.createPicto($store.currentTimeline, dataurl)
+                processRunning=false
+                makeThumbnail()
+            }).finally(() => {
+                processRunning=false
+            })
+        } else {
+            console.info("process was busy, we'll waiting 30s more")
+            makeThumbnail()
+        }
+    }
+    makeThumbnail()
+
+    /**
+     * Generate a screenshot from the chart and save it on computer as a png image
+     */
+    function takeshot():void {  
         html2canvas(document.getElementById('wrapper'), {
-            ignoreElements: function (el) {return el.classList.contains('toExcludeFromSnapshot')}
+            ignoreElements: function (el) {return el.classList.contains('toExcludeFromSnapshot')},
+            logging:false
         }).then(function (canvas) {
             canvas.toBlob(function(blob) {
                 download(blob, ".png")      
@@ -29,7 +65,12 @@ import Toast from './Toast.svelte';
         });
     }
 
-    function download(blob: Blob, extensionName:string){
+    /**
+     * Implement a custom download file
+     * @param blob the binaries to download
+     * @param extensionName the name of the file
+     */
+    function download(blob: Blob, extensionName:string):void{
         var url = URL.createObjectURL(blob)
         var downloadLink = document.createElement("a")
         downloadLink.href = url
@@ -48,7 +89,6 @@ import Toast from './Toast.svelte';
 
 </script>
 <div class="rightButtons">
-    
     {#key $store}
     <div class="rightButtonDisabled" class:hidden={!$store.rights.hasWriter() || ($store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000)} title="There is nothing to save"><i class='saveCloud'></i></div>
     <div class="rightButton" class:hidden={!$store.rights.hasWriter() || $store.currentTimeline.commitInProgress || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 2 * 1000)} on:click={commitOnlineComponent} title="Save your modifications remotly"><i class='saveCloud'></i></div>

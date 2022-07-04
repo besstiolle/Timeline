@@ -28,7 +28,8 @@ export const LIVE_PREFIX = {
 }
 
 export const LOCAL_STORAGE = {
-    KEY_CARDS : "cards"
+    KEY_CARDS : "cards",
+    KEY_PICTO : "picto_"
 }
 
 export const COLORS = [

@@ -27,6 +27,10 @@ export module CustomLocalStorage{
         return get(key, JsonParser.timelineReviver)
     }
 
+    export function getPicto(key:string):string{
+        return get(LOCAL_STORAGE.KEY_PICTO + key)
+    }
+
     
 
     /**

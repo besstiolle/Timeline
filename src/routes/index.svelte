@@ -1,5 +1,7 @@
 
 <script lang="ts">
+import { FactoryPicto } from "$lib/factoryPicto";
+
 import { Helpers } from "$lib/helpers";
 import { store } from "$lib/stores";
 
@@ -27,7 +29,21 @@ function getCards(): Array<Struct.Card>{
 	return $store.cards
 }
 
+/**
+ * Retrive the picto from localStorage with the timeline's key 
+ * @param key
+ */
+function getThumbnail(key:string):string{
+	let thumbnail = FactoryPicto.getPicto(key)	
+	if(thumbnail == null){
+		thumbnail = '/static/notFound.webp'
+	}
+	return thumbnail
+}
+
 let cards = getCards()
+
+
 
 //TODO : add miniature ?
 //TODO : add functions to duplicate/delete with confirmations
@@ -47,6 +63,7 @@ let cards = getCards()
 <div id='current'>
 	{#each cards as card}
 		<div class='card' on:click={() => goto(null, card.key)}>
+			<img src={getThumbnail(card.key)} id='foo' alt='miniature ' height="150px" width="250px"/>
 			<div class='title'>{card.title}</div>
 			<div class='lastUpdate'>Updated : {toStringDate(card.lastUpdated)}</div>
 		</div>
