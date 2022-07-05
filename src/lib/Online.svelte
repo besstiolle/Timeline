@@ -8,8 +8,11 @@ import { remove, create } from "./timelineRepository";
 import ShadowBox from './ShadowBox.svelte';
 import Toast from './Toast.svelte';
 import { Rights } from './rights.class';
+import { FactoryCards } from './factoryCards';
+import { CustomLocalStorage } from './customLocalStorage';
 
     let toastComponent
+    //TODO : try fixing warn in console : "<Online> was created without expected prop 'openComponent'"
     export let openComponent
 
     export function commit(){
@@ -33,9 +36,7 @@ import { Rights } from './rights.class';
             })
         } else {
             //console.info("gap < 2000 ms : %o", ($store.lastUpdatedLocally - $store.lastCommitedRemotely) / 1000)
-        }
-        
-        
+        }        
     }
 
     const base_url = $page.url.protocol + '//' + $page.url.host
@@ -62,7 +63,8 @@ import { Rights } from './rights.class';
         }).finally(()=>{
         })
 
-
+        //update cards with the online/offline information
+        FactoryCards.updateCardsWithTimeline(CustomLocalStorage.getCards(), $store.currentTimeline)
     }
     function doOnline(){        
         $store.currentTimeline.isOnline = true
@@ -90,6 +92,9 @@ import { Rights } from './rights.class';
             $store.currentTimeline.readKey = null
         }).finally(()=>{
         })
+
+        //update cards with the online/offline information
+        FactoryCards.updateCardsWithTimeline(CustomLocalStorage.getCards(), $store.currentTimeline)
     }
     
 </script>

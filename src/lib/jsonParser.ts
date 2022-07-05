@@ -67,11 +67,8 @@ export module JsonParser {
      */
 	export function cardsReviver(key : string, value : any) {
         
-        const COMMONS: string[] = ['key', 'title', // Primitive type field of Timeline
-        
-                                   //'xxx' , //Nothing to do, it's an array
-                                 //'', // date inside object, will be cast by new Date when reviver the object
-                                ]
+        const COMMONS: string[] = ['key', 'title', 'isOnline'// Primitive type field of Timeline
+                                  ]
         if(COMMONS.includes(key)){
             return value
         }

@@ -16,12 +16,14 @@ export module Struct {
 		key : string = null 
 		title : string = null
 		lastUpdated : Date = null
+		isOnline: boolean = null
 		//Check jsonParser.ts > cardsReviver() function if you add something here.
 
 		constructor(key : string, title : string){
 			this.key = key
 			this.title = title
 			this.lastUpdated = new Date()
+			this.isOnline = false
 		}
 	}
 
