@@ -2,6 +2,7 @@
 import html2canvas from 'html2canvas';
 
 import { store } from './stores';
+import { browser } from "$app/env";
 
 import { Helpers } from './helpers';
 
@@ -28,7 +29,7 @@ import { FactoryPicto } from './factoryPicto';
      */
     let makeThumbnail = async () => {
         await delay(30000) // 30s
-        if(!processRunning) {
+        if(!processRunning && browser) { //avoid ReferenceError: Image is not defined
             processRunning=true
             var image = new Image();
             html2canvas(document.getElementById('wrapper'), {
@@ -44,6 +45,8 @@ import { FactoryPicto } from './factoryPicto';
             }).finally(() => {
                 processRunning=false
             })
+        } else if(!browser) {
+            return
         } else {
             console.info("process was busy, we'll waiting 30s more")
             makeThumbnail()
