@@ -82,7 +82,7 @@ testRightsWithOwnerValues()
 function testRightsWithMultiplesValues(){
 
     let rights_R = new Rights(new URLSearchParams([['w','bar'],['o','foo'],['r','zoo']]))
-    let rights_W = new Rights(new URLSearchParams([['w','bar'],['o','foo']]))
+    let rights = new Rights(new URLSearchParams([['w','bar'],['o','foo']]))
 
     test("Test Rights() with multiples / reader values", ()=> {
         expect(rights_R.hasOwner()).toBe(false)
@@ -98,16 +98,32 @@ function testRightsWithMultiplesValues(){
     })
 
     test("Test Rights() with multiples / writer values", ()=> {
-        expect(rights_W.hasOwner()).toBe(false)
-        expect(rights_W.hasWriter()).toBe(true)
-        expect(rights_W.hasReader()).toBe(true)
-        expect(rights_W.isOwner()).toBe(false)
-        expect(rights_W.isWriter()).toBe(true)
-        expect(rights_W.isReader()).toBe(false)
-        expect(rights_W.isNone()).toBe(false)
-        expect(rights_W.getTimelineField()).toBe("writeKey")
-        expect(rights_W.getSlugParamKeyName()).toBe("w")
-        expect(rights_W.getSlugParamKeyValue()).toBe('bar')
+        expect(rights.hasOwner()).toBe(false)
+        expect(rights.hasWriter()).toBe(true)
+        expect(rights.hasReader()).toBe(true)
+        expect(rights.isOwner()).toBe(false)
+        expect(rights.isWriter()).toBe(true)
+        expect(rights.isReader()).toBe(false)
+        expect(rights.isNone()).toBe(false)
+        expect(rights.getTimelineField()).toBe("writeKey")
+        expect(rights.getSlugParamKeyName()).toBe("w")
+        expect(rights.getSlugParamKeyValue()).toBe('bar')
     })
 }
 testRightsWithMultiplesValues()
+
+function testConstructorWithString(){
+    let rights = new Rights("foo")
+    
+    expect(rights.hasOwner()).toBe(true)
+    expect(rights.hasWriter()).toBe(true)
+    expect(rights.hasReader()).toBe(true)
+    expect(rights.isOwner()).toBe(true)
+    expect(rights.isWriter()).toBe(false)
+    expect(rights.isReader()).toBe(false)
+    expect(rights.isNone()).toBe(false)
+    expect(rights.getTimelineField()).toBe("ownerKey")
+    expect(rights.getSlugParamKeyName()).toBe("o")
+    expect(rights.getSlugParamKeyValue()).toBe('foo')
+}
+testConstructorWithString()

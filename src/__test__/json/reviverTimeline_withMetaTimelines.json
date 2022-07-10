@@ -1,0 +1,29 @@
+{
+    "key":"key",
+    "title":"title",
+    "tasks":[
+       
+    ],
+    "milestones":[
+       
+    ],
+    "swimlines":[
+       
+    ],
+    "isInitiate":true,
+    "start":"2022-01-01",
+    "end":"2022-12-31",
+    "differencial":null,
+    "maxId":99,
+    "viewbox":"viewbox",
+    "showAll":true,
+    "isOnline":false,
+    "ownerKey":null,
+    "writeKey":null,
+    "readKey":null,
+    "showToday":true,
+    "showOutOfBounds":true,
+    "dateStartFocus":null,
+    "dateEndFocus":null,
+    "commitInProgress":false
+ }

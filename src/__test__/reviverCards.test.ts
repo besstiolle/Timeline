@@ -39,7 +39,8 @@ function withCards(){
    
     
     let jsonResult = JSON.stringify(timelineStore.cards)
-    let jsonExpected = '[{"key":"key1","title":"title1","lastUpdated":"2020-12-31T00:00:00.000Z","isOnline":false},{"key":"key2","title":"title2","lastUpdated":"2022-01-01T00:00:00.000Z","isOnline":false},{"key":"key3","title":"title3","lastUpdated":"2021-02-01T00:00:00.000Z","isOnline":false}]'
+    let jsonExpected = JSON.stringify(require('./json/reviverCards_withCards.json'))
+
     test("JsonParser.cardsReplacer with cards values", ()=> {
         expect(jsonResult).toBe(jsonExpected)  
     })
