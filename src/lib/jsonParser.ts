@@ -16,11 +16,14 @@ export module JsonParser {
                                  'position','isShow','label', 'id', 'swimline', 'hasProgress', 'progress',
                                  'showToday','showOutOfBounds','dateStartFocus','dateEndFocus',
                                  'swimlineId', 'countVisibleTasks', 'countAllTasks',
-                                 'key', 'title', 'differencial', 'commitInProgress',
+                                 'key', 'title', 'differencial',
                                  'isOnline', 'ownerKey', 'writeKey', 'readKey', 
                                  'tasks', 'milestones', 'swimlines', //Nothing to do, it's an array
                                  'date', 'dateStart', 'dateEnd', // date inside object in string format
                                  'start', 'end', // date outside object in string format
+
+                                 //Old key, not used anymore
+                                'commitInProgress',
                                 ]
         if(COMMONS.includes(key)){
             return value

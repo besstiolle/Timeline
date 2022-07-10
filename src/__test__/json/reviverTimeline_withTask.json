@@ -34,6 +34,5 @@
     "showToday":true,
     "showOutOfBounds":true,
     "dateStartFocus":null,
-    "dateEndFocus":null,
-    "commitInProgress":false
+    "dateEndFocus":null
  }

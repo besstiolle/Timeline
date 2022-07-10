@@ -9,6 +9,7 @@ export module Struct {
 		lastUpdatedLocally : number = null
 		lastCommitedRemotely : number = null
 		_cancelRefreshLastUpdatedLocally: boolean = false // Tricks : Set to true if we don't want to refresh lastUpdatedLocally property
+		commitInProgress: boolean = false
 		rights: Rights = null
 	}
 
@@ -49,7 +50,6 @@ export module Struct {
 		showOutOfBounds: boolean = true
 		dateStartFocus: string = null
 		dateEndFocus: string = null
-		commitInProgress: boolean = false
 		//Check jsonParser.ts > timelineReviver() function if you add something here.
 		
 		constructor(key:string, title:string){

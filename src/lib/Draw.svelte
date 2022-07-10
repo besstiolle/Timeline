@@ -91,7 +91,7 @@ import { FactoryPicto } from './factoryPicto';
 <div class="rightButtons">
     {#key $store}
     <div class="rightButtonDisabled" class:hidden={!$store.rights.hasWriter() || ($store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000)} title="There is nothing to save"><i class='saveCloud'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.hasWriter() || $store.currentTimeline.commitInProgress || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 2 * 1000)} on:click={commitOnlineComponent} title="Save your modifications remotly"><i class='saveCloud'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.hasWriter() || $store.commitInProgress || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 2 * 1000)} on:click={commitOnlineComponent} title="Save your modifications remotly"><i class='saveCloud'></i></div>
 
     <div class="rightButton" class:hidden={!$store.rights.isNone()} on:click={openOnlineComponent} title="Share & save your chart online"><i class='online'></i></div>
     <div class="rightButton" class:hidden={!$store.rights.isOwner()} on:click={openOnlineComponent} title="Save your chart on your computer only"><i class='offline'></i></div>

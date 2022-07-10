@@ -9,7 +9,6 @@ import ShadowBox from './ShadowBox.svelte';
 import Toast from './Toast.svelte';
 import { Rights } from './rights.class';
 import { FactoryCards } from './factoryCards';
-import { CustomLocalStorage } from './customLocalStorage';
 
     let toastComponent
     //TODO : try fixing warn in console : "<Online> was created without expected prop 'openComponent'"
@@ -18,8 +17,8 @@ import { CustomLocalStorage } from './customLocalStorage';
     export function commit(){
         
         if($store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000){
-            $store.currentTimeline.commitInProgress = true
-            console.info("gap > 2000 ms : %o", ($store.lastUpdatedLocally - $store.lastCommitedRemotely) / 1000)
+            $store.commitInProgress = true
+            //console.info("gap > 2000 ms : %o", ($store.lastUpdatedLocally - $store.lastCommitedRemotely) / 1000)
             create($store.currentTimeline).then((json) => {
                 $store.lastCommitedRemotely = json['message']['ts']
                 if(toastComponent){
@@ -32,7 +31,7 @@ import { CustomLocalStorage } from './customLocalStorage';
                 }
             }).finally(()=>{
                 
-                $store.currentTimeline.commitInProgress = false
+                $store.commitInProgress = false
             })
         } else {
             //console.info("gap < 2000 ms : %o", ($store.lastUpdatedLocally - $store.lastCommitedRemotely) / 1000)
@@ -64,7 +63,7 @@ import { CustomLocalStorage } from './customLocalStorage';
         })
 
         //update cards with the online/offline information
-        FactoryCards.updateCardsWithTimeline(CustomLocalStorage.getCards(), $store.currentTimeline)
+        FactoryCards.updateCardsWithTimeline($store.cards, $store.currentTimeline)
     }
     function doOnline(){        
         $store.currentTimeline.isOnline = true
@@ -94,7 +93,7 @@ import { CustomLocalStorage } from './customLocalStorage';
         })
 
         //update cards with the online/offline information
-        FactoryCards.updateCardsWithTimeline(CustomLocalStorage.getCards(), $store.currentTimeline)
+        FactoryCards.updateCardsWithTimeline($store.cards, $store.currentTimeline)
     }
     
 </script>
