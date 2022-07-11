@@ -84,18 +84,18 @@ import { GRID, MONTHS } from './constantes';
         <!-- Draggable overlay -->
         <rect id="T{currentTask.id}_rec" x="{xGrayPosition}" y="0" width="{widthGray}" class="showable hidden" height="15" rx="5" ry="5" fill="url(#pattern_A)"/> 
 
-        <svg  id="T{currentTask.id}_l" x="{xGrayPosition - 5}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class="grabbable showable hidden">
+        <svg  id="T{currentTask.id}_l" x="{xGrayPosition - 5}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class:grabbable={!$store.rights.isReader()} class="showable hidden">
             <use href="#filler" on:mousedown={downLeft} />
-            <use href="#drag_left" fill="{rightLabel}" class="  " on:mousedown={downLeft}/>
+            <use href="#drag_left" fill="{rightLabel}" on:mousedown={downLeft}/>
         </svg>
-        <svg  id="T{currentTask.id}_r" x="{x2GrayPosition - 10}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class="grabbable showable hidden">
+        <svg  id="T{currentTask.id}_r" x="{x2GrayPosition - 10}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class:grabbable={!$store.rights.isReader()} class="showable hidden">
             <use href="#filler" on:mousedown={downRight} />
-            <use href="#drag_right" fill="{rightLabel}" class="  "  on:mousedown={downRight}/>    
+            <use href="#drag_right" fill="{rightLabel}" on:mousedown={downRight}/>    
         </svg>
         {#if currentTask.hasProgress}
-        <svg  id="T{currentTask.id}_p" x="{xGrayPosition + ((x2GrayPosition - xGrayPosition) / 2) - 10}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class="grabbable showable hidden">
+        <svg  id="T{currentTask.id}_p" x="{xGrayPosition + ((x2GrayPosition - xGrayPosition) / 2) - 10}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class:grabbable={!$store.rights.isReader()} class="showable hidden">
             <use href="#filler"  on:mousedown={downProgress} />
-            <use href="#drag_progress" fill="{rightLabel}" class="  "  on:mousedown={downProgress}/>    
+            <use href="#drag_progress" fill="{rightLabel}" on:mousedown={downProgress}/>    
         </svg>
         {/if}
         <!-- END overlay-->

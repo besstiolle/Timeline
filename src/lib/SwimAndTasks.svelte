@@ -57,20 +57,30 @@ let TActionBarCoordDefault = {REC_X:0, REC_X2:0, L_X:0, R_X:0, P_X:0}
 let isDragging:boolean = false
 
 function downLeft(event){
+    //Security : we can't manipulate data if we are a simple Reader
+    if($store.rights.isReader()){return}
+
     realAction = ACTION.LEFT
     down(event)
 }
 function downRight(event){
+    //Security : we can't manipulate data if we are a simple Reader
+    if($store.rights.isReader()){return}
+    
     realAction = ACTION.RIGHT
     down(event)
 }
 function downProgress(event){
+    //Security : we can't manipulate data if we are a simple Reader
+    if($store.rights.isReader()){return}
+    
     realAction = ACTION.PROGRESS
     down(event)
 }
 function down(event){
-
-
+    //Security : we can't manipulate data if we are a simple Reader
+    if($store.rights.isReader()){return}
+    
     //Find the initiale position of our buttons to reset it if necessary
     taskId = event.currentTarget.parentElement.parentElement.id
     rec = document.getElementById(`${taskId}_rec`)
@@ -114,6 +124,9 @@ function down(event){
     isDragging = true
 }
 function up(event){
+    //Security : we can't manipulate data if we are a simple Reader
+    if($store.rights.isReader()){return}
+    
     if(isDragging && hoverGroup){
         let task: Struct.Task = null
         try{
@@ -198,6 +211,9 @@ function up(event){
 
 }
 function move(event){
+    //Security : we can't manipulate data if we are a simple Reader
+    if($store.rights.isReader()){return}
+    
     if(!isDragging){
         return;
     }
@@ -211,6 +227,9 @@ function move(event){
     }
 }
 function moveProgress(event, viewportX:number){
+    //Security : we can't manipulate data if we are a simple Reader
+    if($store.rights.isReader()){return}
+    
     hoverGroup = viewportX > recBox.left && viewportX < recBox.right
                 && event.clientY > recBox.top && event.clientY < recBox.bottom
     
@@ -244,6 +263,9 @@ function moveProgress(event, viewportX:number){
     }
 }
 function moveResizing(event, viewportX:number){
+    //Security : we can't manipulate data if we are a simple Reader
+    if($store.rights.isReader()){return}
+    
     hoverGroup = viewportX > recBox.left && viewportX < recBox.right 
                 && event.clientY > recBox.top && event.clientY < recBox.bottom
 
@@ -291,6 +313,9 @@ function moveResizing(event, viewportX:number){
 }
 
 function showActionBar(event){
+    //Security : we can't manipulate data if we are a simple Reader
+    if($store.rights.isReader()){return}
+    
     //Avoid showing more overlay when we already grabbing something
     if(isDragging) {
         return
@@ -301,6 +326,9 @@ function showActionBar(event){
     });        
 }
 function hideActionBar(event){
+    //Security : we can't manipulate data if we are a simple Reader
+    if($store.rights.isReader()){return}
+    
     //Avoid hiding overlay when we already grabbing something
     if(isDragging) {
         return

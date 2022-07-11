@@ -34,6 +34,9 @@ const GHOST_SVG_NODE_ID: string = "ghostSVGNode"
  * @param event the event mousedown
  */
 function down(event){
+    //Security : we can't manipulate data if we are a simple Reader
+    if($store.rights.isReader()){return}
+    
     //Avoid selecting text. source : https://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/
     event.preventDefault();
     currentTarget = event.currentTarget //currentTarget => svg, target => sub element of svg
@@ -57,6 +60,9 @@ function down(event){
  * @param event the event mouseup
  */
 function up(event){
+    //Security : we can't manipulate data if we are a simple Reader
+    if($store.rights.isReader()){return}
+
     if(ghostSVGNode && hoverGroup){
         let newX = event.clientX / window.innerWidth * GRID.ALL_WIDTH
         let date = processNewDate(newX - GRID.MIDDLE_X)
@@ -84,6 +90,8 @@ function up(event){
  * @param event the event mousemove
  */
 function move(event){
+    //Security : we can't manipulate data if we are a simple Reader
+    if($store.rights.isReader()){return}
 
     if(!recBox && browser){
         recBox = document.getElementById("milestonesSection").getBoundingClientRect()
@@ -123,11 +131,11 @@ function processNewDate(newX: number){
 
 <svelte:window on:mouseup={up} on:mousemove="{move}"/>
 <rect id="milestonesSection" x="{GRID.MIDDLE_X}" y="0" width="{GRID.MIDDLE_WIDTH}" height="{GRID.MILESTONE_H}" 
-    stroke-dasharray="0.5 2" fill="transparent" class:onhover={ghostSVGNode && hoverGroup} />
+    stroke-dasharray="0.5 2" fill="transparent" class:onhover={ghostSVGNode && hoverGroup && !$store.rights.isReader()} />
 {#each milestones as milestone, i}
     <svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
         x="{GRID.MIDDLE_X + (milestone.getDate().getTime() - $store.currentTimeline.getStart().getTime()) / ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()) * GRID.MIDDLE_WIDTH - 10}" y="{i%2 * 25}" 
-        class="milestoneSVGSection" class:shouldBeHidden={!milestone.isShow} on:mousedown={down} id="M{milestone.id}" >
+        class:milestoneSVGSection={!$store.rights.isReader()} class:shouldBeHidden={!milestone.isShow} on:mousedown={down} id="M{milestone.id}" >
         
         <use x="0" y="0" href="#mapfiller" fill="transparent" stroke="transparent" class="toExcludeFromSnapshot"/>
         <use x="0" y="0" href="#map" />
