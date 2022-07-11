@@ -137,7 +137,7 @@ function doDelete(args:any[]):void{
  function getThumbnail(key:string):string{
 	let thumbnail = FactoryPicto.getPicto(key)	
 	if(thumbnail == null){
-		thumbnail = '/static/notFound.webp'
+		thumbnail = '/notFound.webp'
 	}
 	return thumbnail
  }
@@ -236,6 +236,7 @@ function doDelete(args:any[]):void{
 		border:1px solid #888;
 		border-radius: 5px;
 		padding: 5px;
+		display: inline-block;
 	}
 	.title{
 		font-size: 2em;
