@@ -84,7 +84,7 @@ function generateTitle(title:string):string{
 function askDelete(event, key:string):void{
 	event.stopPropagation();
 	let timelineToDelete: Struct.Timeline = CustomLocalStorage.getTimeline(key)
-	if(timelineToDelete.isOnline){
+	if(timelineToDelete && timelineToDelete.isOnline){
 		console.warn(`this chart "${timelineToDelete.title}" is online and can't be deleted`)
 		toastComponent.show(`this chart "${timelineToDelete.title}" is online and can't be deleted`,false, 5)
 		return
@@ -113,7 +113,7 @@ function doDelete(args:any[]):void{
 	let key=args[0]
 
 	let timelineToDelete: Struct.Timeline = CustomLocalStorage.getTimeline(key)
-	if(timelineToDelete.isOnline){
+	if(timelineToDelete && timelineToDelete.isOnline){
 		console.warn(`this chart "${timelineToDelete.title}" is online and can't be deleted`)
 		toastComponent.show(`this chart "${timelineToDelete.title}" is online and can't be deleted`,false, 5)
 		return

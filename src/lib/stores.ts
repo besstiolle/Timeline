@@ -28,7 +28,7 @@ function updateLocalStorage(timelineStore: Struct.TimelineStore){
     }
     
     if(currentTimeline){
-
+        
         //Inserting/Updating information of current Timline into the good card
         FactoryCards.updateCardsWithTimeline(cards, currentTimeline)
 
@@ -37,6 +37,6 @@ function updateLocalStorage(timelineStore: Struct.TimelineStore){
 
         //Persist both current timeline & cards in localstorage
         CustomLocalStorage.save(currentTimeline.key, currentTimeline)
-        CustomLocalStorage.save(LOCAL_STORAGE.KEY_CARDS, cards)
     }
+    CustomLocalStorage.save(LOCAL_STORAGE.KEY_CARDS, cards)
 }
