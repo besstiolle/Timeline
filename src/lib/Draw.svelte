@@ -13,8 +13,6 @@ import Upload from './Upload.svelte';
 import Live from './Live.svelte';
 import SwimAndTasks from './SwimAndTasks.svelte';
 import Online from './Online.svelte';
-import MilestonesLite from './Milestones_lite.svelte';
-import SwimAndTasksLite from './SwimAndTasks_lite.svelte';
 import Toast from './Toast.svelte';
 import { FactoryPicto } from './factoryPicto';
 
