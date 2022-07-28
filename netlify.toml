@@ -8,17 +8,3 @@
 [dev]
   # Force a static port to serve Netlify's Lambda Functions
 	functionsPort = 3001
-
-# START custom routing for Plausible Scripting
-[[redirects]]
-    from = "/js/script.js"
-    to = "https://plausible.io/js/script.js"
-    status = 200
-    force = true # COMMENT: ensure that we always redirect
-
-[[redirects]]
-    from = "/api/event"
-    to = "https://plausible.io/api/event"
-    status = 200
-    force = true # COMMENT: ensure that we always redirect
-# END custom routing for Plausible Scripting
