@@ -1,24 +1,24 @@
 # Timeline
-A free and public tool to organise your timeline charts entirely made with [Svelte](https://svelte.dev/), [Typescript](https://www.typescriptlang.org/) & 💖
+A free and public tool to organise your timeline charts entirely made with [Svelte](https://svelte.dev/), [Typescript](https://www.typescriptlang.org/) & 💖.
 
-take a look on [our website](https://timeline-chart.dev/) and give your feedback [here](https://github.com/besstiolle/Timeline/issues)
+Take a look on [our website](https://timeline-chart.dev/) and give your feedback [here](https://github.com/besstiolle/Timeline/issues).
 
 ## Roadmap
 
-Currently there is no clear roadmap but we have a lot of ideas !
+Currently there is no clear roadmap but we have a lot of ideas!
 
- * ✔️ Allowing multiple charts for a same session
- * ✔️ Allowing switching between your chart
- * ✔️ Improving rendering when the graph is spread over very long periods (> 15 months)
- * 🔥 Improving tests coverage
- * ✔️ Allowing [.toml](https://github.com/toml-lang/toml) files's usage
+ * ✔️ Allow multiple charts for the same session
+ * ✔️ Allow switching between your charts
+ * ✔️ Improve rendering when the graph is spread over very long periods (> 15 months)
+ * 🔥 Improve tests coverage
+ * ✔️ Allow [.toml](https://github.com/toml-lang/toml) files's usage
  * ✔️ Guessing encoding of your files
  * 📅 Adding more control on data (lenght of string / validation of date / ...)
 
-After that. we'll not be done
+After that, we'll not be done!
 
- * ✔️ Allowing users to save theirs charts remotely
- * ✔️ Sharing charts between user
+ * ✔️ Allow users to save theirs charts remotely
+ * ✔️ Share charts between user
  * Implementing other types of charts (like gantt)
 
 
