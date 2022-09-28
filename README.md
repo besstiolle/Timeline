@@ -5,22 +5,24 @@ Take a look on [our website](https://timeline-chart.dev/) and give your feedback
 
 ## Roadmap
 
-Currently there is no clear roadmap but we have a lot of ideas!
+Currently there is no clear roadmap but we have done a lot of great stuff!
 
  * ✔️ Allow multiple charts for the same session
  * ✔️ Allow switching between your charts
  * ✔️ Improve rendering when the graph is spread over very long periods (> 15 months)
- * 🔥 Improve tests coverage
  * ✔️ Allow [.toml](https://github.com/toml-lang/toml) files's usage
  * ✔️ Guessing encoding of your files
- * 📅 Adding more control on data (lenght of string / validation of date / ...)
-
-After that, we'll not be done!
-
  * ✔️ Allow users to save theirs charts remotely
  * ✔️ Share charts between user
- * Implementing other types of charts (like gantt)
 
+But we continue to have lots of exciting ideas
+ 
+ * 🔥 Improve tests coverage
+ * 📅 Adding more control on data (lenght of string / validation of date / ...)
+ * 📅 Implementing other types of charts (like gantt) [see #4](https://github.com/besstiolle/Timeline/issues/4)
+ * 📅 New options to customize color [see #2](https://github.com/besstiolle/Timeline/issues/2)
+ * 📅 Zooming in/out on your charts  [see #3](https://github.com/besstiolle/Timeline/issues/3)
+ * ... [see more](https://github.com/besstiolle/Timeline/issues)
 
 ## Developing
 
