@@ -14,7 +14,7 @@ export const GRID = {
     TODAY_H:0
 }
 
-export const MONTHS = ['Jan.','Fev.','Mar.','Avr.','Mai','Juin','Juil.','Aout','Sept.','Oct.','Nov.','Dec.']
+export const MONTHS = ['Jan.','Feb.','March','April','May','June','July','Aug.','Sept.','Oct.','Nov.','Dec.']
 
 export const DAYS = ['Di.', 'Lu.','Ma.','Me.','Je.','Ve.','Sa.']
 
