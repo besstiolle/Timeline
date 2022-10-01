@@ -24,8 +24,14 @@ But we continue to have lots of exciting ideas
  * 📅 Zooming in/out on your charts  [see #3](https://github.com/besstiolle/Timeline/issues/3)
  * ... [see more](https://github.com/besstiolle/Timeline/issues)
 
-## Developing
+## Contributions
 
+Thank you everybody for your help ! 
+
+* [Kevin Danezis](https://github.com/besstiolle)
+* [CMCmike](https://github.com/CMCmike)
+
+## Developing
 
 ```bash
 npm install
