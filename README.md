@@ -5,20 +5,20 @@ Take a look on [our website](https://timeline-chart.dev/) and give your feedback
 
 ## Roadmap
 
-Currently there is no clear roadmap but we have done a lot of great stuff!
+Currently, there is no clear roadmap but we have done a lot of great stuff!
 
  * ✔️ Allow multiple charts for the same session
  * ✔️ Allow switching between your charts
  * ✔️ Improve rendering when the graph is spread over very long periods (> 15 months)
  * ✔️ Allow [.toml](https://github.com/toml-lang/toml) files's usage
  * ✔️ Guessing encoding of your files
- * ✔️ Allow users to save theirs charts remotely
+ * ✔️ Allow users to save their charts remotely
  * ✔️ Share charts between user
 
 But we continue to have lots of exciting ideas
  
  * 🔥 Improve tests coverage
- * 📅 Adding more control on data (lenght of string / validation of date / ...)
+ * 📅 Adding more control on data (length of string / validation of date / ...)
  * 📅 Implementing other types of charts (like gantt) [see #4](https://github.com/besstiolle/Timeline/issues/4)
  * 📅 New options to customize color [see #2](https://github.com/besstiolle/Timeline/issues/2)
  * 📅 Zooming in/out on your charts  [see #3](https://github.com/besstiolle/Timeline/issues/3)
@@ -26,7 +26,7 @@ But we continue to have lots of exciting ideas
 
 ## Contributions
 
-Thank you everybody for your help ! 
+Thank you everybody for your help! 
 
 * [Kevin Danezis](https://github.com/besstiolle)
 * [CMCmike](https://github.com/CMCmike)
@@ -50,7 +50,7 @@ Tests are located in /src/\__test\__ directory. They are made with [jest](https:
 ```bash
 npm run test
 
-#or run the tests and refresh test each time you modify a file
+#or run the tests and refresh the test each time you modify a file
 npm run test:watch
 
 ```
@@ -65,14 +65,14 @@ npm run test --coverage
 
 [learn more about FaunaDb](./FAUNADB.md)
 
-set your secret in your own OS. Example bellow for Windows
+set your secret in your OS. Example below for Windows
 
 ```bash
 SET FAUNADB_SECRET='someFaunaDbSecret'
 SET FAUNADB_ENDPOINT='someFaunaDbEndpoint'
 ```
 
-set your endoint url into the .env file
+set your endpoint URL into the .env file
 
 ```.env
 VITE_API_ENDPOINT_BASE_URL= https://localhost:8080/yourNetlifyEndPoint
