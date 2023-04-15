@@ -1,4 +1,4 @@
-import { browser } from "$app/env"
+import { browser } from "$app/environment"
 import { LOCAL_STORAGE } from "./constantes"
 import { JsonParser } from "./jsonParser"
 import type { Struct } from "./struct.class"

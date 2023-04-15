@@ -3,7 +3,7 @@ import { FactoryTimeline } from "$lib/factoryTimeline"
 import { Struct } from "$lib/struct.class";
 import { DuplicateEntityException } from "$lib/timelineException.class";
 
-jest.mock('$app/env', () => ({
+jest.mock('$app/environment', () => ({
     default: {
         browser: true,
       },

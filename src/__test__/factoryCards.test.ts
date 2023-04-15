@@ -2,7 +2,7 @@
 import { FactoryCards } from "$lib/factoryCards"
 import { Struct } from "$lib/struct.class";
 
-jest.mock('$app/env', () => ({
+jest.mock('$app/environment', () => ({
     default: {
         browser: true,
       },

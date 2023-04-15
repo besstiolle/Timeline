@@ -6,7 +6,7 @@ import { store } from '$lib/stores';
 import { get } from 'svelte/store';
 
 
-jest.mock('$app/env', () => ({
+jest.mock('$app/environment', () => ({
   default: {
       browser: true,
     },

@@ -9,7 +9,7 @@ import { store } from '$lib/stores';
 import { DIFF, MONTHS } from '$lib/constantes';
 
 
-jest.mock('$app/env', () => ({
+jest.mock('$app/environment', () => ({
   default: {
       browser: true,
     },

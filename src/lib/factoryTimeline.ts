@@ -1,5 +1,5 @@
 
-import { browser } from "$app/env";
+import { browser } from "$app/environment"
 import { Helpers } from "./helpers"
 import { FactorySwimline } from "./factorySwimline";
 import { Struct } from "./struct.class";

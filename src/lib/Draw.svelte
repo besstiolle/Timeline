@@ -2,7 +2,7 @@
 import html2canvas from 'html2canvas';
 
 import { store } from './stores';
-import { browser } from "$app/env";
+import { browser } from "$app/environment"
 
 import { Helpers } from './helpers';
 
