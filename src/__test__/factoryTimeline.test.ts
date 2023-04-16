@@ -1,16 +1,17 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { FactoryTimeline } from "$lib/factoryTimeline"
 import { Struct } from "$lib/struct.class";
 import { DuplicateEntityException } from "$lib/timelineException.class";
 
-jest.mock('$app/environment', () => ({
+vi.mock('$app/environment', () => ({
     default: {
         browser: true,
       },
   }))
 
 
-function testGetMin(){
+describe('test factoryCards', () => {
 
     let timeline1 = new Struct.Timeline("key", "title")
     let timeline2 = new Struct.Timeline("key", "title")
@@ -33,7 +34,7 @@ function testGetMin(){
     timeline1.milestones.push(new Struct.Milestone(3,"label 3",date2, true))
     timeline1.milestones.push(new Struct.Milestone(4,"label 4",date2, true))
 
-    test("Helpers.getMin with minimal value in task.end and task.start", ()=> {
+    it("Helpers.getMin with minimal value in task.end and task.start", ()=> {
         expect(FactoryTimeline.getMin(timeline1)).toEqual(new Date(date3))
     })
     
@@ -50,13 +51,12 @@ function testGetMin(){
     timeline2.milestones.push(new Struct.Milestone(4,"label 4",date2, true))
     timeline2.milestones.push(new Struct.Milestone(5,"label 5",date6, true))
 
-    test("Helpers.getMin with minimal value in milestone", ()=> {
+    it("Helpers.getMin with minimal value in milestone", ()=> {
         expect(FactoryTimeline.getMin(timeline2)).toEqual(new Date(date6))
     })
-}
-testGetMin()
+})
 
-function testGetMax(){
+describe('test factoryCards', () => {
 
     let timeline1 = new Struct.Timeline("key", "title")
     let timeline2 = new Struct.Timeline("key", "title")
@@ -79,7 +79,7 @@ function testGetMax(){
     timeline1.milestones.push(new Struct.Milestone(3,"label 3",date4, true))
     timeline1.milestones.push(new Struct.Milestone(4,"label 4",date4, true))
 
-    test("Helpers.getMax with maximal value in task.end and task.start", ()=> {
+    it("Helpers.getMax with maximal value in task.end and task.start", ()=> {
         expect(FactoryTimeline.getMax(timeline1)).toEqual(new Date(date2))
     })
     
@@ -96,13 +96,12 @@ function testGetMax(){
     timeline2.milestones.push(new Struct.Milestone(4,"label 4",date4, true))
     timeline2.milestones.push(new Struct.Milestone(5,"label 5",date2, true))
 
-    test("FactoryTimeline.getMax with maximal value in milestone", ()=> {
+    it("FactoryTimeline.getMax with maximal value in milestone", ()=> {
         expect(FactoryTimeline.getMax(timeline2)).toEqual(new Date(date2))
     })
-}
-testGetMax()
+})
 
-function testAddTask(){
+describe('test factoryCards', () => {
     let timeline = new Struct.Timeline("key", "title")
     let date1: string = "2020-01-01"
     let date2: string = "2021-12-31"
@@ -111,23 +110,19 @@ function testAddTask(){
     FactoryTimeline.addTask(timeline, new Struct.Task(2,"label 2", date1, date2, true, 100, true, "Swimline 1", 5))
     FactoryTimeline.addTask(timeline, new Struct.Task(3,"label 3", date1, date2, true, 100, true, "Swimline 1", 5))
 
-    test("FactoryTimeline.addTask with nominal value", ()=> {
+    it("FactoryTimeline.addTask with nominal value", ()=> {
         expect(timeline.tasks.length).toBe(3)
         expect(timeline.isInitiate).toBe(true)
     })
 
-    //Mock console.error() to avoid jest panic
-    jest.spyOn(console, 'error').mockImplementation(() => {});
-
-    test("FactoryTimeline.addTask with duplicate id", ()=> {
+    it("FactoryTimeline.addTask with duplicate id", ()=> {
         expect(() => {
             FactoryTimeline.addTask(timeline, new Struct.Task(3,"label 3", date1, date2, true, 100, true, "Swimline 1", 5))
         }).toThrow(DuplicateEntityException);
     })
-}
-testAddTask()
+})
 
-function testAddMilestone(){
+describe('test factoryCards', () => {
     let timeline = new Struct.Timeline("key", "title")
     let date1: string = "2020-01-01"
 
@@ -135,24 +130,20 @@ function testAddMilestone(){
     FactoryTimeline.addMilestone(timeline, new Struct.Milestone(2,"label 2",date1, true))
     FactoryTimeline.addMilestone(timeline, new Struct.Milestone(3,"label 3",date1, true))
 
-    test("FactoryTimeline.addMilestone with nominal value", ()=> {
+    it("FactoryTimeline.addMilestone with nominal value", ()=> {
         expect(timeline.milestones.length).toBe(3)
         expect(timeline.isInitiate).toBe(true)
     })
 
-    //Mock console.error() to avoid jest panic
-    jest.spyOn(console, 'error').mockImplementation(() => {});
-
-    test("FactoryTimeline.addMilestone with duplicate id", ()=> {
+    it("FactoryTimeline.addMilestone with duplicate id", ()=> {
         expect(() => {
             FactoryTimeline.addMilestone(timeline, new Struct.Milestone(1,"label 1",date1, true))
         }).toThrow(DuplicateEntityException);
     })
-}
-testAddMilestone()
+})
 
 
-function testPurge(){
+describe('test factoryCards', () => {
     let timeline = new Struct.Timeline("key", "title")
     timeline.showAll = true
     let timelinePurged = new Struct.Timeline("key", "title")
@@ -171,20 +162,18 @@ function testPurge(){
 
     FactoryTimeline.purge(timeline)
 
-    test("FactoryTimeline.purge with complete timeline", ()=> {
+    it("FactoryTimeline.purge with complete timeline", ()=> {
         expect(timeline.showAll).toEqual(timelinePurged.showAll)
         expect(timeline).toEqual(timelinePurged)
     })
-}
-testPurge()
+})
 
-
-function testProcessLimites(){
+describe('test factoryCards', () => {
     let timeline1 = new Struct.Timeline("key", "title")
     timeline1.tasks.push(new Struct.Task(1,"label 1", "2020-01-01", "2020-01-31", true, 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline1)
-    test("FactoryTimeline._processLimites with dates < 1 month", ()=> {
+    it("FactoryTimeline._processLimites with dates < 1 month", ()=> {
         expect(timeline1.start).toEqual("2019-12-30")
         expect(timeline1.end).toEqual("2020-02-02")
     })
@@ -193,7 +182,7 @@ function testProcessLimites(){
     timeline2.tasks.push(new Struct.Task(1,"label 1", "2020-01-15", "2020-03-01", true, 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline2)
-    test("FactoryTimeline._processLimites with dates 1 month => 5 months ", ()=> {
+    it("FactoryTimeline._processLimites with dates 1 month => 5 months ", ()=> {
         expect(timeline2.start).toEqual("2020-01-10")
         expect(timeline2.end).toEqual("2020-03-06")
     })
@@ -202,7 +191,7 @@ function testProcessLimites(){
     timeline3a.tasks.push(new Struct.Task(1,"label 1", "2020-02-07", "2022-02-07", true, 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline3a)
-    test("FactoryTimeline._processLimites with dates 5 months => 10 years + day of month < 15", ()=> {
+    it("FactoryTimeline._processLimites with dates 5 months => 10 years + day of month < 15", ()=> {
         expect(timeline3a.start).toEqual("2020-01-01")
         expect(timeline3a.end).toEqual("2022-03-01")
     })
@@ -211,7 +200,7 @@ function testProcessLimites(){
     timeline3b.tasks.push(new Struct.Task(1,"label 1", "2020-02-17", "2022-02-17", true, 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline3b)
-    test("FactoryTimeline._processLimites with dates 5 months => 10 years + day of month > 15", ()=> {
+    it("FactoryTimeline._processLimites with dates 5 months => 10 years + day of month > 15", ()=> {
         expect(timeline3b.start).toEqual("2020-02-01")
         expect(timeline3b.end).toEqual("2022-04-01")
     })
@@ -220,16 +209,13 @@ function testProcessLimites(){
     timeline4.tasks.push(new Struct.Task(1,"label 1", "2020-01-15", "2040-02-01", true, 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline4)
-    test("FactoryTimeline._processLimites with dates 10 years => +", ()=> {
+    it("FactoryTimeline._processLimites with dates 10 years => +", ()=> {
         expect(timeline4.start).toEqual("2019-01-01")
         expect(timeline4.end).toEqual("2041-02-01")
     })
-    
+})
 
-}
-testProcessLimites()
-
-function testProcessViewboxResizing(){
+describe('test factoryCards', () => {
 
     let date1: string = "2020-01-01"
     let taskVisible = new Struct.Task(1,"label 1", date1, date1, true, 100, true, "Swimline 1", 5)
@@ -248,7 +234,7 @@ function testProcessViewboxResizing(){
     timeline1.tasks.push(taskHidden)
     FactoryTimeline.refresh(timeline1)
     
-    test("FactoryTimeline.testProcessViewboxResizing without showall", ()=> {
+    it("FactoryTimeline.testProcessViewboxResizing without showall", ()=> {
         expect(timeline1.viewbox).toBe("0 0 1000 265")
     })
 
@@ -256,7 +242,7 @@ function testProcessViewboxResizing(){
     timeline2.showAll = true
     FactoryTimeline.refresh(timeline2)
 
-    test("FactoryTimeline.testProcessViewboxResizing with showall & no task", ()=> {
+    it("FactoryTimeline.testProcessViewboxResizing with showall & no task", ()=> {
         expect(timeline2.viewbox).toBe("0 0 1000 115")
     })
 
@@ -269,13 +255,12 @@ function testProcessViewboxResizing(){
 
     FactoryTimeline.refresh(timeline3)
 
-    test("FactoryTimeline.testProcessViewboxResizing with showall & various task", ()=> {
+    it("FactoryTimeline.testProcessViewboxResizing with showall & various task", ()=> {
         expect(timeline3.viewbox).toBe("0 0 1000 235")
     })
-}
-testProcessViewboxResizing()
+})
 
-function testRefreshSwimlines(){
+describe('test factoryCards', () => {
     let timeline1 = new Struct.Timeline("key", "title")
     let date1: string = "2020-01-01"
     timeline1.tasks.push(new Struct.Task(1,"label 1", date1, date1, true, 100, true, "Swimline 1", 0))
@@ -292,7 +277,7 @@ function testRefreshSwimlines(){
     FactoryTimeline.refresh(timeline1)
     FactoryTimeline.refresh(timeline2)
     
-    test("FactoryTimeline._refreshSwimlines with various swimlines", ()=> {
+    it("FactoryTimeline._refreshSwimlines with various swimlines", ()=> {
         expect(timeline1.swimlines.length).toBe(3)
         expect(timeline1.swimlines[0].label).toBe("Swimline 1")
         expect(timeline1.swimlines[0].countAllTasks).toBe(1)
@@ -308,9 +293,8 @@ function testRefreshSwimlines(){
         expect(timeline1.swimlines[2].isShow).toBe(false)
     })
 
-    test("FactoryTimeline._refreshSwimlines with no swimline", ()=> {
+    it("FactoryTimeline._refreshSwimlines with no swimline", ()=> {
         expect(timeline2.swimlines.length).toBe(0)
     })
 
-}
-testRefreshSwimlines()
+})
