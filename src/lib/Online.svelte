@@ -10,17 +10,19 @@ import Toast from './Toast.svelte';
 import { Rights } from './rights.class';
 import { FactoryCards } from './factoryCards';
 
-    let toastComponent
+    let toastComponent:Toast
+
     //TODO : try fixing warn in console : "<Online> was created without expected prop 'openComponent'"
-    export let openComponent
+    export let openComponent:()=>{}
 
     export function commit(){
         
-        if($store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000){
+        if($store.lastUpdatedLocally !== null && $store.lastCommitedRemotely !== null 
+                && $store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000){
             $store.commitInProgress = true
             //console.info("gap > 2000 ms : %o", ($store.lastUpdatedLocally - $store.lastCommitedRemotely) / 1000)
-            create($store.currentTimeline).then((json) => {
-                $store.lastCommitedRemotely = json['message']['ts']
+            create($store.currentTimeline).then((createResponseJson) => {
+                $store.lastCommitedRemotely = createResponseJson.message.ts
                 if(toastComponent){
                     toastComponent.show("Saved remotely with success")
                 }
@@ -42,14 +44,16 @@ import { FactoryCards } from './factoryCards';
  
     function doOffline(){
 
-        let seachParams = new URLSearchParams([['key', $store.currentTimeline.key], ['ownerKey', $store.currentTimeline.ownerKey]])
+        let ownerKey = $store.currentTimeline.ownerKey
+        if(ownerKey == null) {ownerKey = ''}
+        let seachParams = new URLSearchParams([['key', $store.currentTimeline.key], ['ownerKey', ownerKey]])
         remove(seachParams).then((json) => {
 
             $store.currentTimeline.isOnline = false
             $store.currentTimeline.ownerKey = null
             $store.currentTimeline.writeKey = null
             $store.currentTimeline.readKey = null
-            $store.lastCommitedRemotely = null
+            $store.lastCommitedRemotely = -1
 
             //Rewrite URL
             window.location.href = base_url + "/g/" + $store.currentTimeline.key
@@ -99,18 +103,18 @@ import { FactoryCards } from './factoryCards';
 </script>
 
 
-<ShadowBox bind:openComponent>
+<ShadowBox bind:openComponent closeComponent={()=>{}} id=''>
     {#if $store.currentTimeline.isOnline}
         <div class='warn'>Please be advice that going "<span>offline</span>" will remove every data from our server but it also cancel every previous shared link of your work</div>
         <div>You're currently : <span>ONLINE</span></div>
-        <div class='action' on:click={doOffline}>Put me offline</div>
+        <div class='action' on:click={doOffline} on:keydown={doOffline}>Put me offline</div>
         <div><label for='readOnly'>Read-only URL : </label><input id='readOnly' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?r=" + $store.currentTimeline.readKey}'></div>
         <div><label for='writer'>Writer URL : </label><input id='writer' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?w=" + $store.currentTimeline.writeKey}'></div>
         <div><label for='owner'>Owner URL : </label><input id='owner' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?o=" + $store.currentTimeline.ownerKey}'></div>
     {:else}
         <div class='warn'>Please be advice that bringing your charts "<span>online</span>" may allow you to save your data on our server but it also may expose your datas to everyone</div>
         <div>You're currently : <span>OFFLINE</span></div>
-        <div class='action' on:click={doOnline}>Put me online</div>
+        <div class='action' on:click={doOnline} on:keydown={doOnline}>Put me online</div>
     {/if}
 </ShadowBox>
 <Toast bind:this={toastComponent}/>

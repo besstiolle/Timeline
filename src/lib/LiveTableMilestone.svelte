@@ -7,14 +7,14 @@ import { FactoryTimeline } from './factoryTimeline';
 import { LIVE_PREFIX } from './constantes';
 import { FactoryMilestone } from './factoryMilestone';
 
-export let getIndex = (event) => {return 0}
-export let updateStore =  (prefix, position) => {}
+export let getIndex = (event:Event) => {return 0}
+export let updateStore =  (prefix:string, position:number) => {}
 
-function m_delete(event){
+function m_delete(event:Event){
     $store.currentTimeline.milestones.splice(getIndex(event), 1)
     $store.currentTimeline.milestones = $store.currentTimeline.milestones
 }
-function m_up(event){
+function m_up(event:Event){
     let index = getIndex(event)
     if(index == 0){
         return;
@@ -24,7 +24,7 @@ function m_up(event){
     $store.currentTimeline.milestones[index - 1] = tmpMilestone
     $store.currentTimeline.milestones = $store.currentTimeline.milestones
 }
-function m_down(event){
+function m_down(event:Event){
     let index = getIndex(event)
     if(index == ($store.currentTimeline.milestones.length-1)){
         return;
@@ -34,11 +34,11 @@ function m_down(event){
     $store.currentTimeline.milestones[index + 1] = tmpMilestone
     $store.currentTimeline.milestones = $store.currentTimeline.milestones
 }
-function m_show(event){
+function m_show(event:Event){
     let index = getIndex(event)
     $store.currentTimeline.milestones[index].isShow = !$store.currentTimeline.milestones[index].isShow 
 }
-function m_duplicate(event){
+function m_duplicate(event:Event){
     let index = getIndex(event)
     let tmpMilestones : Array<Struct.Milestone> = $store.currentTimeline.milestones.splice(index+1, $store.currentTimeline.milestones.length)
 
@@ -68,27 +68,27 @@ function m_add(){
 {#each $store.currentTimeline.milestones as milestone, i}
 <div class="live__line show_{milestone.isShow}">
     
-    <div name="M{i}"  class="live_cmd" on:click="{m_show}" title="hide/show this line">
+    <div data-name="M{i}"  class="live_cmd" on:click="{m_show}" on:keydown="{m_show}" title="hide/show this line">
         <svg viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_show"/>
         </svg>
     </div>
-    <div name="M{i}"  class="live_cmd" on:click="{m_up}" title="go down this line">
+    <div data-name="M{i}"  class="live_cmd" on:click="{m_up}" on:keydown="{m_up}" title="go down this line">
         <svg viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_up"/>
         </svg>
     </div>
-    <div name="M{i}"  class="live_cmd" on:click="{m_down}" title="go up this line">
+    <div data-name="M{i}"  class="live_cmd" on:click="{m_down}" on:keydown="{m_down}" title="go up this line">
         <svg viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_down"/>
         </svg>
     </div>
-    <div name="M{i}"  class="live_cmd" on:click="{m_duplicate}" title="duplicate this line">
+    <div data-name="M{i}"  class="live_cmd" on:click="{m_duplicate}" on:keydown="{m_duplicate}" title="duplicate this line">
         <svg viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_duplicate"/>
         </svg>
     </div>
-    <div name="M{i}"  class="live_cmd live_cmd_red" on:click="{m_delete}" title="delete this line">
+    <div data-name="M{i}"  class="live_cmd live_cmd_red" on:click="{m_delete}" on:keydown="{m_delete}" title="delete this line">
         <svg viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_delete"/>
         </svg>
@@ -99,7 +99,7 @@ function m_add(){
 {/each}
 
 <div class="live__action">
-    <div class="live__action__button" on:click="{m_add}" >
+    <div class="live__action__button" on:click="{m_add}" on:keydown="{m_add}" >
         <svg class="svg-icon" viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_add"/>
         </svg>

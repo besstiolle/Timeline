@@ -1,9 +1,9 @@
 
 export class Rights {
 
-    o: string
-    w: string
-    r: string
+    o: string|null = null
+    w: string|null = null
+    r: string|null = null
 
     constructor(args:any){
         if(args instanceof(URLSearchParams)){

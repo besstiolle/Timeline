@@ -10,7 +10,7 @@ export module FactoryCards {
 	export function updateCardsWithTimeline(cards:Array<Struct.Card>, timeline:Struct.Timeline):void{
 		
 		//Retrive the index of the good card or -1 if it doesn't exist
-		let positionInCards:number = FactoryCards.getIndexByKey(cards, timeline.key)
+		let positionInCards:number|null = FactoryCards.getIndexByKey(cards, timeline.key)
 
 		//If it doesn't exist, we create it
 		if(positionInCards === null){
@@ -27,16 +27,14 @@ export module FactoryCards {
 	 * @param cards the Array<Struct.Card> to look for
 	 * @param key the Struct.Timeline.key to use to find card
 	 */
-	export function getIndexByKey(cards:Array<Struct.Card>, key:string):number{
+	export function getIndexByKey(cards:Array<Struct.Card>, key:string):number|null{
 		//Retrive the index of the good card or -1 if it doesn't exist
-		let positionInCards:number = null
 		for(let i:number=0; i< cards.length; i++){
 			if(cards[i].key === key){
-				positionInCards = i
-				break
+				return i
 			}
 		}
-		return positionInCards
+		return null
 	}
 
 	
@@ -45,16 +43,14 @@ export module FactoryCards {
 	 * @param cards the Array<Struct.Card> to look for
 	 * @param key the Struct.Timeline.title to use to find card
 	 */
-	 export function getFirstIndexByTitle(cards:Array<Struct.Card>, title:string):number{
+	 export function getFirstIndexByTitle(cards:Array<Struct.Card>, title:string):number|null{
 		//Retrive the index of the good card or -1 if it doesn't exist
-		let positionInCards:number = null
 		for(let i:number=0; i< cards.length; i++){
 			if(cards[i].title === title){
-				positionInCards = i
-				break
+				return i
 			}
 		}
-		return positionInCards
+		return null
 	}
 
 	

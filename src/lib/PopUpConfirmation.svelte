@@ -13,8 +13,8 @@
 
 
     export function show(message: string, validation:Function, validationText:string, validationArgs:any[], cancelation:Function, cancelationText:string, cancelationArgs:any[]) {
-      popup = document.getElementById("popup")
-      background = document.getElementById("background")
+      popup = document.getElementById("popup") as HTMLElement
+      background = document.getElementById("background") as HTMLElement
       popup.classList.add("show")
       background.classList.add("show")
 

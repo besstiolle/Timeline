@@ -4,7 +4,7 @@ import toml from 'toml'
 import { onMount } from 'svelte';
 
 import { store } from './stores';
-import { Struct } from './struct.class';
+import { Struct, type abstractMilestoneInterface, type abstratTaskInterface as abstractTaskInterface, type abstractTimelineInterface } from './struct.class';
 import { FactoryTimeline } from './factoryTimeline';
 import { FactorySwimline } from './factorySwimline';
 import { goToml, timelineToObject } from './toml';
@@ -13,11 +13,11 @@ import ShadowBox from './ShadowBox.svelte';
 import Toast from './Toast.svelte';
 
 
-export let openComponent
-export let download
+export let openComponent = () => {}
+export let download = (blob:Blob, extension:string) => {}
 const BOM = new Uint8Array([0xEF,0xBB,0xBF])
-let closeComponent
-let toastComponent
+let closeComponent = () => {}
+let toastComponent:Toast
 
 function downloadCsv () {
     const blob = new Blob([BOM, goCsv($store.currentTimeline)], {type:"data:text/csv;charset=utf-8"});
@@ -37,18 +37,18 @@ onMount(async () => {
     }();
 
 
-    let formElement = document.getElementById('droppable');
+    let formElement = document.getElementById('droppable') as HTMLElement
     if (isAdvancedUpload) {
         formElement.classList.add('has-advanced-upload');
 
-        let funcDrag = function(e) {
+        let funcDrag = function(e:Event) {
             e.preventDefault();
             e.stopPropagation();
         }
-        let funcDragOver = function(e) {
+        let funcDragOver = function(e:Event) {
             formElement.classList.add('is-dragover');
         }
-        let funcDragLeave = function(e) {
+        let funcDragLeave = function(e:Event) {
             formElement.classList.remove('is-dragover');
         }
 
@@ -68,35 +68,44 @@ onMount(async () => {
         formElement.addEventListener('drop', funcDragLeave)
 
         
-        function onChange(event) {
-            readFiles(event.target.files)
+        function onChange(event:Event) {
+            let htmlElement = event.target as HTMLInputElement
+            if(htmlElement.files){
+                readFiles(htmlElement.files)
+            }
         }
 
-        function onDrop(event) {
-            readFiles(event.dataTransfer.files)
+        function onDrop(event:DragEvent ) {
+            if(event.dataTransfer){
+                readFiles(event.dataTransfer.files)
+            }
         }
 
         function readFiles(droppedFiles : FileList) {
             for(let i = 0; i < droppedFiles.length; i++){
                 if(droppedFiles[i]['name'].endsWith('.csv')){
                     let reader = new FileReader()
-                    reader.onload = onReaderLoadCsv
+                    reader.onload = () =>{
+                        onReaderLoadCsv(reader)
+                    }
                     reader.readAsText(droppedFiles[i])
                     break
                 }
                 if(droppedFiles[i]['name'].endsWith('.toml')){
                     let reader = new FileReader()
-                    reader.onload = onReaderLoadToml
+                    reader.onload = () =>{
+                        onReaderLoadToml(reader)
+                    }
                     reader.readAsText(droppedFiles[i])
                     break
                 }
             }                
         }
 
-        function onReaderLoadToml(event){
+        function onReaderLoadToml(reader:FileReader){
             
             FactoryTimeline.purge($store.currentTimeline)
-            let abstractTimeline = toml.parse(event.target.result)
+            let abstractTimeline = toml.parse(reader.result as string)
             parseAbstractTimeline(abstractTimeline)
             //Show resume
             toastComponent.show(`imported  ${abstractTimeline.tasks.length} tasks and ${abstractTimeline.milestones.length} milestones with success`,true, 5)
@@ -104,15 +113,18 @@ onMount(async () => {
             closeComponent()
         }
 
-        function onReaderLoadCsv(event){
+        function onReaderLoadCsv(reader:FileReader){
             let elmts : string[]
 
             FactoryTimeline.purge($store.currentTimeline)
 
             //Process file
             //TODO add more controls
-            let abstractTimeline = {tasks:[], milestones:[]}
-            event.target.result.split(/\r?\n/).forEach((line: string) => {                    
+            let abstractTasks:abstractTaskInterface[] = []
+            let abstractMilestones:abstractMilestoneInterface[] = []
+            let abstractTimeline:abstractTimelineInterface = {tasks:abstractTasks, milestones:abstractMilestones,title:'', version:''};
+
+            (reader.result as string).split(/\r?\n/).forEach((line: string) => {                    
                 elmts = line.split(";")
                 if ("version" == elmts[0]) {
                     abstractTimeline['version'] = elmts[1]
@@ -124,7 +136,7 @@ onMount(async () => {
                     if(abstractTimeline['version'] === "1.0") {
                         abstractTimeline.tasks.push({
                             label:elmts[1],
-                            show:(elmts[2] === "TRUE" || elmts[2] === "true"),
+                            isShow:(elmts[2] === "TRUE" || elmts[2] === "true"),
                             start:elmts[3],
                             end:elmts[4],     
                             hasProgress:true,                 
@@ -134,10 +146,10 @@ onMount(async () => {
                     } else if(abstractTimeline['version'] === "1.1") {
                         abstractTimeline.tasks.push({
                             label:elmts[1],
-                            show:(elmts[2] === "TRUE" || elmts[2] === "true"),
+                            isShow:(elmts[2] === "TRUE" || elmts[2] === "true"),
                             start:elmts[3],
                             end:elmts[4],     
-                            hasProgress:elmts[5],                 
+                            hasProgress:(elmts[2] === "TRUE" || elmts[2] === "true"),                 
                             progress:Number(elmts[6]),
                             swimline:elmts[7],
                         })
@@ -146,11 +158,12 @@ onMount(async () => {
                     }
                 }
                 if ("milestone" == elmts[0]) {
-                    abstractTimeline.milestones.push({
+                    let abstractMilestone:abstractMilestoneInterface = {
                         label:elmts[1],
-                        show:(elmts[2] === "TRUE" || elmts[2] === "true"),
+                        isShow:(elmts[2] === "TRUE" || elmts[2] === "true"),
                         date:elmts[3],
-                    })
+                    }
+                    abstractTimeline.milestones.push(abstractMilestone)
                 }
             })
             
@@ -161,19 +174,19 @@ onMount(async () => {
             closeComponent()
         }
 
-        function parseAbstractTimeline(abstractTimeline:Object){
-            if(abstractTimeline['title']){
+        function parseAbstractTimeline(abstractTimeline:abstractTimelineInterface){
+            if(abstractTimeline.title){
                 $store.currentTimeline.title = abstractTimeline['title']
             }
-            if(abstractTimeline['version']){
+            if(abstractTimeline.version){
                 //Nothing right now
             }
-            if(abstractTimeline['tasks']){
+            if(abstractTimeline.tasks){
                 
                 let previousSwimline: string
                 let previousSwimlineId: number
 
-                abstractTimeline['tasks'].forEach(abstractTask => {
+                abstractTimeline.tasks.forEach(abstractTask => {
 
                     if(abstractTask.swimline !== "" && previousSwimline == abstractTask.swimline){
                         //reuse id of previous swimline
@@ -182,7 +195,7 @@ onMount(async () => {
                         previousSwimlineId = FactorySwimline.create($store.currentTimeline, abstractTask.swimline)
                     } else {
                         //reset previous Swimline id
-                        previousSwimlineId = null
+                        previousSwimlineId = -1
                     }
 
                     FactoryTimeline.addTask($store.currentTimeline, 
@@ -214,7 +227,7 @@ onMount(async () => {
             $store.currentTimeline = $store.currentTimeline
         }
 
-        document.getElementById('file').addEventListener('change', onChange);
+        (document.getElementById('file') as HTMLElement).addEventListener('change', onChange);
         formElement.addEventListener('drop', onDrop);
     }
 });
@@ -229,8 +242,8 @@ onMount(async () => {
             <label for="file"><span class='action'>upload file</span> Must be a .csv or .toml file. You can also drag it over this windows.</label>
         </div>
         <button type="submit">Upload</button>
-        <div><span class='action' on:click={downloadCsv}>download .csv</span> The CSV format is very simple and can be edited in Excel or Notepad++ & co</div>
-        <div><span class='action' on:click={downloadToml}>download .toml</span> The Toml format can be extended in the futur and can be edited with Notepad++ & co</div>
+        <div><span class='action' on:click={downloadCsv} on:keydown={downloadCsv}>download .csv</span> The CSV format is very simple and can be edited in Excel or Notepad++ & co</div>
+        <div><span class='action' on:click={downloadToml} on:keydown={downloadToml}>download .toml</span> The Toml format can be extended in the futur and can be edited with Notepad++ & co</div>
     </form>
 </ShadowBox>
 <Toast bind:this={toastComponent}/>

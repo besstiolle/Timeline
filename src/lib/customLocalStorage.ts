@@ -49,7 +49,7 @@ export module CustomLocalStorage{
         }
 
         //console.info("get for key '%o'", key)
-        return JSON.parse(localStorage.getItem(key), reviver)
+        return JSON.parse(localStorage.getItem(key) as string, reviver)
     }
 
     /**

@@ -27,17 +27,20 @@ export module FactoryMilestone {
         //A simple loop to reach for the good item because it's cheaper
         // than trying to maintain a map with id => index of array each time 
         // we change something into the $store
-        let result:Struct.Milestone = null
+
+        let found = null
         timeline.milestones.forEach(milestone => {
             if(milestone.id == id){
-                result = milestone
+                found = milestone
             } 
-        });
-        if(result) {
-            return result
-        }
-        
+        })
+
+        if( found ){
+            return found
+        } 
         throw new NotFoundException('Struct.Milestone', id)
+        
+        
     }
 
     /**

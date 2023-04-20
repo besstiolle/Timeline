@@ -8,11 +8,11 @@ import { GRID, MONTHS } from './constantes';
 
     export let i: number
     export let currentTask: Struct.Task
-    export let showActionBar
-    export let hideActionBar
-    export let downLeft
-    export let downRight
-    export let downProgress
+    export let showActionBar = (event:Event) => {}
+    export let hideActionBar = (event:Event) => {}
+    export let downLeft = (event:Event) => {}
+    export let downRight = (event:Event) => {}
+    export let downProgress = (event:Event) => {}
     
     
     const green = "#16A085";

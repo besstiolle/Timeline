@@ -10,16 +10,22 @@ import { Helpers } from "./helpers";
 import Task from "./Task.svelte";
 import { FactoryTask } from "./factoryTask";
 
+interface swimlinesToShowInterface{
+    swimline:Struct.Swimline
+    position:number
+    height:number
+}
+
 let tasksToShow: Struct.Task[] = []
-let swimlinesToShow: Map<number, Object> = new Map<number, Object>()
-let previousSwimlineId:number = null
+let swimlinesToShow: Map<number, swimlinesToShowInterface> = new Map<number, swimlinesToShowInterface>()
+let previousSwimlineId:number = -1
 let height: number
 let position: number = 0
 $store.currentTimeline.tasks.forEach(task => {
     if(task.isShow || $store.currentTimeline.showAll){
         tasksToShow.push(task)
 
-        if(task.swimlineId != null && previousSwimlineId != task.swimlineId){
+        if(task.swimlineId != -1 && previousSwimlineId != task.swimlineId){
             if(task.isShow && !$store.currentTimeline.showAll){
                 height = $store.currentTimeline.swimlines[task.swimlineId].countVisibleTasks * GRID.ONE_TASK_H - 0.5
             } else {
@@ -27,10 +33,10 @@ $store.currentTimeline.tasks.forEach(task => {
             }   
 
             swimlinesToShow.set(task.id, {
-                'timeline':$store.currentTimeline.swimlines[task.swimlineId],
-                'position':position,
-                'height':height
-                })
+                swimline:$store.currentTimeline.swimlines[task.swimlineId],
+                position:position,
+                height:height
+            })
 
             position++
         }
@@ -39,82 +45,82 @@ $store.currentTimeline.tasks.forEach(task => {
     }
 });
 
-let taskId: string = null
-let rightLabel: HTMLElement = null
-let defaultRightLabelText: string = null
-let defaultRightLabelX: string = null
-let progressBar: HTMLElement = null
-let progressBarLabel: HTMLElement = null
-let defaultProgressBarLabelText: string = null
-let defaultProgressBarWidth: number = null
+let taskId: string = ''
+let rightLabel: HTMLElement
+let defaultRightLabelText: string = ''
+let defaultRightLabelX: string = ''
+let progressBar: HTMLElement
+let progressBarLabel: HTMLElement
+let defaultProgressBarLabelText: string = ''
+let defaultProgressBarWidth: number = -1
 let hoverGroup: boolean = false
-let recBox: DOMRect = null
+let recBox: DOMRect
 const ACTION = {LEFT:"L", RIGHT:"R", PROGRESS:"P"}
-let realAction:String = null
-let rec:HTMLElement, left:HTMLElement, right:HTMLElement , progress:HTMLElement = null
+let realAction:String = ''
+let rec:HTMLElement, left:HTMLElement, right:HTMLElement , progress:HTMLElement
 let TActionBarCoord = {REC_X:0, REC_X2:0, L_X:0, R_X:0, P_X:0}
 let TActionBarCoordDefault = {REC_X:0, REC_X2:0, L_X:0, R_X:0, P_X:0}
 let isDragging:boolean = false
 
-function downLeft(event){
+function downLeft(event:Event){
     //Security : we can't manipulate data if we are a simple Reader
     if($store.rights.isReader()){return}
 
     realAction = ACTION.LEFT
     down(event)
 }
-function downRight(event){
+function downRight(event:Event){
     //Security : we can't manipulate data if we are a simple Reader
     if($store.rights.isReader()){return}
     
     realAction = ACTION.RIGHT
     down(event)
 }
-function downProgress(event){
+function downProgress(event:Event){
     //Security : we can't manipulate data if we are a simple Reader
     if($store.rights.isReader()){return}
     
     realAction = ACTION.PROGRESS
     down(event)
 }
-function down(event){
+function down(event:Event){
     //Security : we can't manipulate data if we are a simple Reader
     if($store.rights.isReader()){return}
     
     //Find the initiale position of our buttons to reset it if necessary
-    taskId = event.currentTarget.parentElement.parentElement.id
-    rec = document.getElementById(`${taskId}_rec`)
-    left = document.getElementById(`${taskId}_l`)
-    right = document.getElementById(`${taskId}_r`)
-    rightLabel = document.getElementById(`${taskId}_rlabel`)
-    let ghostElement = document.getElementById(`ghost`)
-    progress = document.getElementById(`${taskId}_p`)
+    taskId = (event.currentTarget as HTMLElement)?.parentElement?.parentElement?.id as string
+    rec = document.getElementById(`${taskId}_rec`) as HTMLElement
+    left = document.getElementById(`${taskId}_l`) as HTMLElement
+    right = document.getElementById(`${taskId}_r`) as HTMLElement
+    rightLabel = document.getElementById(`${taskId}_rlabel`) as HTMLElement
+    let ghostElement = document.getElementById(`ghost`) as HTMLElement
+    progress = document.getElementById(`${taskId}_p`) as HTMLElement
     if(progress === null){
         progress = ghostElement
     }
-    progressBar = document.getElementById(`${taskId}_progressBar`)
-    progressBarLabel = document.getElementById(`${taskId}_plabel`)
+    progressBar = document.getElementById(`${taskId}_progressBar`) as HTMLElement
+    progressBarLabel = document.getElementById(`${taskId}_plabel`) as HTMLElement
     if(progressBarLabel === null ){
         progressBarLabel = ghostElement
     }
-    recBox = document.getElementById('svgSwimlineAndTasks').getBoundingClientRect()
+    recBox = (document.getElementById('svgSwimlineAndTasks') as HTMLElement).getBoundingClientRect()
     
     defaultRightLabelText = rightLabel.innerHTML
-    defaultRightLabelX = rightLabel.getAttribute("x")
+    defaultRightLabelX = rightLabel.getAttribute("x") as string
 
     defaultProgressBarLabelText = progressBarLabel.innerHTML
-    defaultProgressBarWidth = parseInt(progressBar.getAttribute("width"))
+    defaultProgressBarWidth = parseInt(progressBar.getAttribute("width") as string)
 
-    TActionBarCoord.REC_X = parseInt(rec.getAttribute("x"))
-    TActionBarCoord.REC_X2 = parseInt(rec.getAttribute("x")) + parseInt(rec.getAttribute("width"))
-    TActionBarCoord.L_X = parseInt(left.getAttribute("x"))
-    TActionBarCoord.R_X = parseInt(right.getAttribute("x"))
-    TActionBarCoord.P_X = parseInt(progress.getAttribute("x"))
-    TActionBarCoordDefault.REC_X = parseInt(rec.getAttribute("x"))
-    TActionBarCoordDefault.REC_X2 = parseInt(rec.getAttribute("x")) + parseInt(rec.getAttribute("width"))
-    TActionBarCoordDefault.L_X = parseInt(left.getAttribute("x"))
-    TActionBarCoordDefault.R_X = parseInt(right.getAttribute("x"))
-    TActionBarCoordDefault.P_X = parseInt(progress.getAttribute("x"))
+    TActionBarCoord.REC_X = parseInt(rec.getAttribute("x") as string)
+    TActionBarCoord.REC_X2 = parseInt(rec.getAttribute("x") as string) + parseInt(rec.getAttribute("width") as string)
+    TActionBarCoord.L_X = parseInt(left.getAttribute("x") as string)
+    TActionBarCoord.R_X = parseInt(right.getAttribute("x") as string)
+    TActionBarCoord.P_X = parseInt(progress.getAttribute("x") as string)
+    TActionBarCoordDefault.REC_X = parseInt(rec.getAttribute("x") as string)
+    TActionBarCoordDefault.REC_X2 = parseInt(rec.getAttribute("x") as string) + parseInt(rec.getAttribute("width") as string)
+    TActionBarCoordDefault.L_X = parseInt(left.getAttribute("x") as string)
+    TActionBarCoordDefault.R_X = parseInt(right.getAttribute("x") as string)
+    TActionBarCoordDefault.P_X = parseInt(progress.getAttribute("x") as string)
 
     //Update CSS of buttons
     left.classList.add("grabbing")
@@ -123,19 +129,13 @@ function down(event){
 
     isDragging = true
 }
-function up(event){
+function up(event:MouseEvent){
     //Security : we can't manipulate data if we are a simple Reader
     if($store.rights.isReader()){return}
     
     if(isDragging && hoverGroup){
-        let task: Struct.Task = null
         try{
-            task = FactoryTask.getById($store.currentTimeline, parseInt(taskId.substring(1))) //html id = T999 => 999
-        } catch (NotFoundException){
-            //Nothing to do, the rest of the function will clean everything
-        }
-
-        if( task ){
+            let task = FactoryTask.getById($store.currentTimeline, parseInt(taskId.substring(1))) //html id = T999 => 999
             if(realAction == ACTION.LEFT || realAction == ACTION.RIGHT) {
                 let dateStart = Helpers.getDateFromViewportX(TActionBarCoord.REC_X, $store.currentTimeline.getStart(), $store.currentTimeline.getEnd())
                 let dateEnd = Helpers.getDateFromViewportX(TActionBarCoord.REC_X2, $store.currentTimeline.getStart(), $store.currentTimeline.getEnd())
@@ -161,6 +161,8 @@ function up(event){
             }
 
             $store.currentTimeline.tasks = $store.currentTimeline.tasks
+        } catch (NotFoundException){
+            //Nothing to do, the rest of the function will clean everything
         }
     }
     if(isDragging){
@@ -189,28 +191,28 @@ function up(event){
     }
 
     //in all cases  : Reset vars
-    taskId = null
-    realAction = null
+    taskId = ''
+    realAction = ''
     TActionBarCoord = {REC_X:0, REC_X2:0, L_X:0, R_X:0, P_X:0}
     TActionBarCoordDefault = {REC_X:0, REC_X2:0, L_X:0, R_X:0, P_X:0}
     isDragging = false
-    rec = null
-    left = null
-    right = null
+    //rec = null
+    //left = null
+    //right = null
     if(rightLabel){
         rightLabel.innerHTML = defaultRightLabelText
         rightLabel.setAttribute("x", defaultRightLabelX)
     }
-    rightLabel = null
-    defaultRightLabelText = null
+    //rightLabel = null
+    defaultRightLabelText = ''
     
-    progressBar = null
-    progressBarLabel = null
-    defaultProgressBarLabelText = null
-    defaultProgressBarWidth = null
+    //progressBar = null
+    //progressBarLabel = null
+    defaultProgressBarLabelText = ''
+    defaultProgressBarWidth = -1
 
 }
-function move(event){
+function move(event:MouseEvent){
     //Security : we can't manipulate data if we are a simple Reader
     if($store.rights.isReader()){return}
     
@@ -226,7 +228,7 @@ function move(event){
         moveProgress(event, viewportX)
     }
 }
-function moveProgress(event, viewportX:number){
+function moveProgress(event:MouseEvent, viewportX:number){
     //Security : we can't manipulate data if we are a simple Reader
     if($store.rights.isReader()){return}
     
@@ -262,7 +264,7 @@ function moveProgress(event, viewportX:number){
 
     }
 }
-function moveResizing(event, viewportX:number){
+function moveResizing(event:MouseEvent, viewportX:number){
     //Security : we can't manipulate data if we are a simple Reader
     if($store.rights.isReader()){return}
     
@@ -312,7 +314,7 @@ function moveResizing(event, viewportX:number){
     }
 }
 
-function showActionBar(event){
+function showActionBar(event:Event){
     //Security : we can't manipulate data if we are a simple Reader
     if($store.rights.isReader()){return}
     
@@ -320,12 +322,12 @@ function showActionBar(event){
     if(isDragging) {
         return
     } 
-    let collection:HTMLCollection = event.currentTarget.getElementsByClassName("showable")
+    let collection:HTMLCollection = (event.currentTarget as HTMLElement).getElementsByClassName("showable")
     Array.from(collection).forEach((element) => {
         element.classList.remove("hidden")
     });        
 }
-function hideActionBar(event){
+function hideActionBar(event:Event){
     //Security : we can't manipulate data if we are a simple Reader
     if($store.rights.isReader()){return}
     
@@ -333,14 +335,14 @@ function hideActionBar(event){
     if(isDragging) {
         return
     }
-    let collection:HTMLCollection = event.currentTarget.getElementsByClassName("showable")
+    let collection:HTMLCollection = (event.currentTarget as HTMLElement).getElementsByClassName("showable")
     Array.from(collection).forEach((element) => {
         element.classList.add("hidden")
     });
 }
 
-function toggleSwimlineVisibility(event){
-    let id = event.currentTarget.id.substring(1)
+function toggleSwimlineVisibility(event:Event){
+    let id = Number((event.currentTarget as HTMLElement).id.substring(1))
     let value = !$store.currentTimeline.swimlines[id].isShow
     $store.currentTimeline.tasks.forEach(task => {
         if(task.swimlineId == id) {
@@ -349,9 +351,9 @@ function toggleSwimlineVisibility(event){
     });
     $store.currentTimeline.tasks = $store.currentTimeline.tasks
 }
-function showToggle(event){
-    let id = event.currentTarget.id.substring(1)
-    document.getElementById("s"+id).classList.toggle("hidden")
+function showToggle(event:Event){
+    let id = Number((event.currentTarget as HTMLElement).id.substring(1));
+    (document.getElementById("s"+id) as HTMLElement).classList.toggle("hidden")
 }
     
 </script>         
@@ -362,24 +364,27 @@ function showToggle(event){
     id='svgSwimlineAndTasks'>
     
 {#each tasksToShow as task, i}
+
 {#if swimlinesToShow.has(task.id)}
+    {@const localSwimline = swimlinesToShow.get(task.id)}
+    {#if localSwimline}
+        <rect x="0" y="{i * GRID.ONE_TASK_H}" 
+            width="{GRID.ALL_WIDTH}" height="{localSwimline?.height}"  
+            fill="{COLORS[localSwimline.position % COLORS.length][0]}" id="c{task.swimlineId}" 
+            on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
 
-    <rect x="0" y="{i * GRID.ONE_TASK_H}" 
-        width="{GRID.ALL_WIDTH}" height="{swimlinesToShow.get(task.id)['height']}"  
-        fill="{COLORS[swimlinesToShow.get(task.id)['position'] % COLORS.length][0]}" id="c{task.swimlineId}" 
-        on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
+        <rect x="0" y="{i * GRID.ONE_TASK_H}" 
+            width="{GRID.LEFT_WIDTH}" height="{localSwimline.height}" fill="{COLORS[localSwimline.position % COLORS.length][1]}" id="d{task.swimlineId}" 
+            on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
+        
+        <text text-anchor="middle" x="{GRID.LEFT_WIDTH / 2}" y="{i * GRID.ONE_TASK_H + 5 + localSwimline.height / 2}" 
+            font-size="10" fill="{localSwimline.swimline.isShow?"#ffffff":"#888888"}">{localSwimline.swimline.label}</text>
 
-    <rect x="0" y="{i * GRID.ONE_TASK_H}" 
-        width="{GRID.LEFT_WIDTH}" height="{swimlinesToShow.get(task.id)['height']}" fill="{COLORS[swimlinesToShow.get(task.id)['position'] % COLORS.length][1]}" id="d{task.swimlineId}" 
-        on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
-    
-    <text text-anchor="middle" x="{GRID.LEFT_WIDTH / 2}" y="{i * GRID.ONE_TASK_H + 5 + swimlinesToShow.get(task.id)['height'] / 2}" 
-        font-size="10" fill="{swimlinesToShow.get(task.id)['timeline'].isShow?"#ffffff":"#888888"}">{swimlinesToShow.get(task.id)['timeline'].label}</text>
-
-    <image xlink:href="{swimlinesToShow.get(task.id)['timeline'].isShow?"/hide.png":"/see.png"}" x="0" y="{i * GRID.ONE_TASK_H}" height="24" width="24" 
-        data-html2canvas-ignore="true" 
-        on:click={toggleSwimlineVisibility} id="s{task.swimlineId}" class='toggleVisibility hidden'
-        on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle} />
+        <image xlink:href="{localSwimline.swimline.isShow?"/hide.png":"/see.png"}" x="0" y="{i * GRID.ONE_TASK_H}" height="24" width="24" 
+            data-html2canvas-ignore="true" 
+            on:click={toggleSwimlineVisibility} on:keydown={toggleSwimlineVisibility} id="s{task.swimlineId}" class='toggleVisibility hidden'
+            on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle} />
+    {/if}
 {:else}
     <rect x="0" y="{i * GRID.ONE_TASK_H}" 
         width="{GRID.ALL_WIDTH}" height="{GRID.ONE_TASK_H - 0.5}" fill="transparent"/>

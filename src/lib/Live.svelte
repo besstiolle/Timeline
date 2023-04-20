@@ -6,15 +6,15 @@ import LiveTableTask from './LiveTableTask.svelte';
 import LiveTableMilestone from './LiveTableMilestone.svelte';
 import ShadowBox from './ShadowBox.svelte';
     
-    export let openComponent
+    export let openComponent:()=>{}
 
     const css_class_warn = "date_warn"
     const css_class_warn_order = "date_warn_order"
 
-    function updateStore(prefix: string, position:string ): void{
+    function updateStore(prefix: string, position:number ): void{
 
-        let elm:HTMLElement = document.getElementById(prefix + position)
-        let val:string = elm['value']
+        let elm = document.getElementById(prefix + position) as HTMLInputElement
+        let val:string = elm.value
 
         if(val === undefined || val === ''){
             elm.classList.add(css_class_warn)
@@ -34,8 +34,8 @@ import ShadowBox from './ShadowBox.svelte';
         }
 
         if(prefix === LIVE_PREFIX.TS){
-            let other:HTMLElement = document.getElementById(LIVE_PREFIX.TE + position)
-            if (other['value'] < val) {
+            let other = document.getElementById(LIVE_PREFIX.TE + position) as HTMLInputElement
+            if (other.value < val) {
                 elm.classList.add(css_class_warn_order)
                 other.classList.add(css_class_warn_order)
                 return
@@ -45,8 +45,8 @@ import ShadowBox from './ShadowBox.svelte';
             }
         }
         if(prefix === LIVE_PREFIX.TE){
-            let other:HTMLElement = document.getElementById(LIVE_PREFIX.TS + position)
-            if (other['value'] > val) {
+            let other = document.getElementById(LIVE_PREFIX.TS + position) as HTMLInputElement
+            if (other.value > val) {
                 elm.classList.add(css_class_warn_order)
                 other.classList.add(css_class_warn_order)
                 return
@@ -75,9 +75,9 @@ import ShadowBox from './ShadowBox.svelte';
 
     function updateStore2(prefix: string): void{
 
-        let elm:HTMLElement = document.getElementById(prefix)
+        let elm = document.getElementById(prefix) as HTMLInputElement
         elm.classList.remove(css_class_warn)
-        let val:string = elm['value']
+        let val:string = elm.value
 
         let date:Date = new Date(val)
         if(!(val === undefined || val === '')){
@@ -92,13 +92,13 @@ import ShadowBox from './ShadowBox.svelte';
                 return
             }
 
-            let other:HTMLElement = document.getElementById(LIVE_PREFIX.TSF)
-            let bool:boolean = other['value'] > val
+            let other = document.getElementById(LIVE_PREFIX.TSF) as HTMLInputElement
+            let bool:boolean = other.value > val
             if(prefix === LIVE_PREFIX.TSF){
-                other = document.getElementById(LIVE_PREFIX.TEF)
-                bool = other['value'] < val
+                other = document.getElementById(LIVE_PREFIX.TEF) as HTMLInputElement
+                bool = other.value < val
             }
-            if (other['value'] !== '' && val !== '' && bool) {
+            if (other.value !== '' && val !== '' && bool) {
                 elm.classList.add(css_class_warn_order)
                 other.classList.add(css_class_warn_order)
                 return
@@ -120,15 +120,17 @@ import ShadowBox from './ShadowBox.svelte';
         $store.currentTimeline = $store.currentTimeline
     }
 
-    function getIndex(event) : number{
-        return  parseInt(event.currentTarget.attributes["name"].nodeValue.substring(1,event.currentTarget.attributes["name"].nodeValue.length))
+    function getIndex(event:Event) : number{
+        let str = (event.currentTarget as HTMLDivElement).getAttribute("data_name")
+        if(str == null) {return -1}
+        return  parseInt(str.substring(1,str.length))
     }
 
 </script>
 
 
 
-<ShadowBox bind:openComponent>
+<ShadowBox bind:openComponent closeComponent={()=>{}} id=''>
     <div class='title'><label for='titleOfTimeline'>Title : </label><input id='titleOfTimeline' type='text' bind:value={$store.currentTimeline.title}/></div>
     <LiveTableTask getIndex={getIndex} updateStore={updateStore} />
     <LiveTableMilestone getIndex={getIndex} updateStore={updateStore} />

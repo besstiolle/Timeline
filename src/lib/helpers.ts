@@ -114,7 +114,7 @@ export module Helpers {
      * @param dateMax the max date to compare
      * @returns the value of the constante DIFF
      */
-    export function getEstimationOfDiff(dateMin: Date, dateMax:Date){
+    export function getEstimationOfDiff(dateMin: Date, dateMax:Date):string{
         const diff = dateMax.getTime() - dateMin.getTime()
         if(diff > TIMERS.YEARS20){return DIFF.isMoreThan20Years}
         if(diff <= TIMERS.YEARS20 && diff > TIMERS.YEARS10){return DIFF.isBetween10YearsAnd20Years}
@@ -124,5 +124,8 @@ export module Helpers {
         if(diff <= TIMERS.MONTHS20 && diff > TIMERS.MONTHS5){return DIFF.isBetween5MonthsAnd20Months}
         if(diff <= TIMERS.MONTHS5 && diff > TIMERS.DAYS31){return DIFF.isBetween1MonthAnd5Months}
         if(diff <= TIMERS.DAYS31){return DIFF.isBelow1Month}
+
+        //Default return statement
+        return DIFF.isMoreThan20Years
     }
 }
