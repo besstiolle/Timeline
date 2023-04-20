@@ -4,6 +4,10 @@ import { Struct } from "$lib/struct.class";
 import { NotFoundException } from "$lib/timelineException.class";
 
 
+//Mock console.error() to avoid vi console pollution
+vi.spyOn(console, 'error').mockImplementation(() => {});
+
+
 describe('test factoryCards', () => {
     let task: Struct.Task = new Struct.Task(1,"label","2020-01-01", "2020-01-02", true , 99, true, "Swim1", 10)
     let result:string = "task;label;true;2020-01-01;2020-01-02;true;99;Swim1"

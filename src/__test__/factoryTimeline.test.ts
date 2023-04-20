@@ -8,10 +8,13 @@ vi.mock('$app/environment', () => ({
     default: {
         browser: true,
       },
-  }))
+}))
+
+//Mock console.error() to avoid vi console pollution
+vi.spyOn(console, 'error').mockImplementation(() => {});
 
 
-describe('test factoryCards', () => {
+describe('test FactoryTimeline.getMin', () => {
 
     let timeline1 = new Struct.Timeline("key", "title")
     let timeline2 = new Struct.Timeline("key", "title")
@@ -56,7 +59,7 @@ describe('test factoryCards', () => {
     })
 })
 
-describe('test factoryCards', () => {
+describe('test FactoryTimeline.getMax', () => {
 
     let timeline1 = new Struct.Timeline("key", "title")
     let timeline2 = new Struct.Timeline("key", "title")
@@ -101,7 +104,7 @@ describe('test factoryCards', () => {
     })
 })
 
-describe('test factoryCards', () => {
+describe('test FactoryTimeline.addTask', () => {
     let timeline = new Struct.Timeline("key", "title")
     let date1: string = "2020-01-01"
     let date2: string = "2021-12-31"
@@ -122,7 +125,7 @@ describe('test factoryCards', () => {
     })
 })
 
-describe('test factoryCards', () => {
+describe('test FactoryTimeline with duplicate creation', () => {
     let timeline = new Struct.Timeline("key", "title")
     let date1: string = "2020-01-01"
 
@@ -143,7 +146,7 @@ describe('test factoryCards', () => {
 })
 
 
-describe('test factoryCards', () => {
+describe('test FactoryTimeline.purge', () => {
     let timeline = new Struct.Timeline("key", "title")
     timeline.showAll = true
     let timelinePurged = new Struct.Timeline("key", "title")
@@ -168,7 +171,7 @@ describe('test factoryCards', () => {
     })
 })
 
-describe('test factoryCards', () => {
+describe('test FactoryTimeline.refresh with differents dates', () => {
     let timeline1 = new Struct.Timeline("key", "title")
     timeline1.tasks.push(new Struct.Task(1,"label 1", "2020-01-01", "2020-01-31", true, 100, true, "Swimline 1", 5))
 
@@ -215,7 +218,7 @@ describe('test factoryCards', () => {
     })
 })
 
-describe('test factoryCards', () => {
+describe('test FactoryTimeline.refresh with show/add & viewbox', () => {
 
     let date1: string = "2020-01-01"
     let taskVisible = new Struct.Task(1,"label 1", date1, date1, true, 100, true, "Swimline 1", 5)
@@ -260,7 +263,7 @@ describe('test factoryCards', () => {
     })
 })
 
-describe('test factoryCards', () => {
+describe('test FactoryTimeline.refresh with swimline', () => {
     let timeline1 = new Struct.Timeline("key", "title")
     let date1: string = "2020-01-01"
     timeline1.tasks.push(new Struct.Task(1,"label 1", date1, date1, true, 100, true, "Swimline 1", 0))
@@ -269,13 +272,12 @@ describe('test factoryCards', () => {
     timeline1.tasks.push(new Struct.Task(4,"label 4", date1, date1, true, 100, false, "Swimline 1", 0))
 
     let timeline2 = new Struct.Timeline("key", "title")
-    timeline2.tasks.push(new Struct.Task(1,"label 1", date1, date1, true, 100, true, "", 0))
-    timeline2.tasks.push(new Struct.Task(2,"label 2", date1, date1, true, 100, true, "", 0))
-    timeline2.tasks.push(new Struct.Task(3,"label 3", date1, date1, true, 100, false, "", 0))
-    timeline2.tasks.push(new Struct.Task(4,"label 4", date1, date1, true, 100, false, "", 0))
+    timeline2.tasks.push(new Struct.Task(1,"label 1", date1, date1, true, 100, true, "", -1))
+    timeline2.tasks.push(new Struct.Task(2,"label 2", date1, date1, true, 100, true, "", -1))
+    timeline2.tasks.push(new Struct.Task(3,"label 3", date1, date1, true, 100, false, "", -1))
+    timeline2.tasks.push(new Struct.Task(4,"label 4", date1, date1, true, 100, false, "", -1))
 
     FactoryTimeline.refresh(timeline1)
-    FactoryTimeline.refresh(timeline2)
     
     it("FactoryTimeline._refreshSwimlines with various swimlines", ()=> {
         expect(timeline1.swimlines.length).toBe(3)
@@ -292,6 +294,8 @@ describe('test factoryCards', () => {
         expect(timeline1.swimlines[2].countVisibleTasks).toBe(0)
         expect(timeline1.swimlines[2].isShow).toBe(false)
     })
+
+    FactoryTimeline.refresh(timeline2)
 
     it("FactoryTimeline._refreshSwimlines with no swimline", ()=> {
         expect(timeline2.swimlines.length).toBe(0)

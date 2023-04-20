@@ -5,6 +5,9 @@ import { JsonParser } from "$lib/jsonParser"
 import { Struct } from "$lib/struct.class"
 import { JsonParserException } from "$lib/timelineException.class"
 
+//Mock console.error() to avoid vi console pollution
+vi.spyOn(console, 'error').mockImplementation(() => {});
+
 describe('test Filtering by Full Text', () => {
 
     it('JsonParser.cardsReplacer with cards values', () => {

@@ -3,13 +3,15 @@ import { FactoryMilestone } from "$lib/factoryMilestone";
 import { Struct } from "$lib/struct.class";
 import { NotFoundException } from "$lib/timelineException.class";
 
+//Mock console.error() to avoid vi console pollution
+vi.spyOn(console, 'error').mockImplementation(() => {});
 
 describe('FactoryMilestone.join', () => {
     let milestone: Struct.Milestone = new Struct.Milestone(1,"label","2020-01-01", true)
     let result:string = "milestone;label;true;2020-01-01"
     it("FactoryMilestone.join with nominal values", ()=> {
         expect(FactoryMilestone.join(milestone,";")).toBe(result)
-    })
+    }) 
 })
 
 describe('FactoryMilestone.getById ', () => {
