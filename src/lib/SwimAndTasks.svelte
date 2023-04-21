@@ -9,6 +9,7 @@ import { Helpers } from "./helpers";
 
 import Task from "./Task.svelte";
 import { FactoryTask } from "./factoryTask";
+	import { text } from "svelte/internal";
 
 let tasksToShow: Struct.Task[] = []
 let swimlinesToShow: Map<number, Object> = new Map<number, Object>()
@@ -353,7 +354,54 @@ function showToggle(event){
     let id = event.currentTarget.id.substring(1)
     document.getElementById("s"+id).classList.toggle("hidden")
 }
+function getSVGElementById(root: any, id: string): any {
+    var node = root;
+
+    start: while (node) {
+        if (node.id == id) {
+            return node
+        }
+
+        if (node.firstChild) {
+            node = node.firstChild;
+            continue start;
+        }
+
+        while (node) {
+            if (node === root) {
+                break start;
+            }
+
+            if (node.nextSibling) {
+                node = node.nextSibling;
+                continue start;
+            }
+
+            node = node.parentNode;
+        }
+    }
+    return null
+}
+function test(event){
+    console.info("test")
+    let ghostText = document.getElementById("ghostText") as HTMLInputElement
+    let ghostTextWrapper = getSVGElementById("svgSwimlineAndTasks", "ghostTextWrapper") as SVGForeignObjectElement
+    let SVGTextElement = (event.currentTarget) as SVGTextElement
+    //positionnng SVG overlay above the currentTarget place.
+    /*ghostTextWrapper.setAttribute('x',SVGTextElement.getAttribute('x'))
+    ghostTextWrapper.setAttribute('y',SVGTextElement.getAttribute('y'))
+    ghostTextWrapper.setAttribute('clientWidth','200px')
+    ghostTextWrapper.setAttribute('clientHeight','200px')*/
+    console.info(SVGTextElement.getBoundingClientRect())
+   // ghostText.classList.toggle("hidden")
+}
+function test2(event){
+    console.info(event.currentTarget.value)
+}
+function test3(event){
     
+    console.info("out")
+}
 </script>         
 
 <svelte:window on:mouseup={up} on:mousemove="{move}"/>
@@ -374,7 +422,8 @@ function showToggle(event){
         on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
     
     <text text-anchor="middle" x="{GRID.LEFT_WIDTH / 2}" y="{i * GRID.ONE_TASK_H + 5 + swimlinesToShow.get(task.id)['height'] / 2}" 
-        font-size="10" fill="{swimlinesToShow.get(task.id)['timeline'].isShow?"#ffffff":"#888888"}">{swimlinesToShow.get(task.id)['timeline'].label}</text>
+        font-size="10" fill="{swimlinesToShow.get(task.id)['timeline'].isShow?"#ffffff":"#888888"}"
+        on:dblclick={test} class='editable noSelect'>{swimlinesToShow.get(task.id)['timeline'].label}</text>
 
     <image xlink:href="{swimlinesToShow.get(task.id)['timeline'].isShow?"/hide.png":"/see.png"}" x="0" y="{i * GRID.ONE_TASK_H}" height="24" width="24" 
         data-html2canvas-ignore="true" 
@@ -393,8 +442,21 @@ function showToggle(event){
 {/each}
 <tspan id='ghost' x='-1000'/>
 
+<!--<foreignObject id='ghostTextWrapper'  x='1000' y='100' width='100' height="100">
+<xhtml:input type='text' id='ghostText' on:change={test2} on:focusout={test3} class='' value='toto'/>
+</foreignObject> -->
+
 <style>
+    .editable {
+        cursor: text;
+    }
+    .noSelect {
+        user-select: none;
+    }
     .toggleVisibility{
         cursor: pointer;
+    }
+    #ghostText{
+        
     }
 </style>

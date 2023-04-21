@@ -56,6 +56,9 @@ import { GRID, MONTHS } from './constantes';
 
     let hasSwimline = currentTask.swimline && currentTask.swimline !== ""
     
+    function test(){
+        console.info("test3")
+    }
 
 </script>
 <svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
@@ -63,9 +66,9 @@ import { GRID, MONTHS } from './constantes';
     class="taskSVGSection" id="T{currentTask.id}" on:mouseover={showActionBar} on:focus={showActionBar} on:mouseout={hideActionBar} on:blur={hideActionBar} class:shouldBeHidden={!currentTask.isShow} >
     
         {#if hasSwimline}
-        <text text-anchor="end" x="{xGrayPosition - 5}" y="10.5" font-size="9" fill="{leftLabel}" >{currentTask.label}</text>
+        <text text-anchor="end" x="{xGrayPosition - 5}" y="10.5" font-size="9" fill="{leftLabel}" class='editable noSelect' on:dblclick={test}>{currentTask.label}</text>
         {:else}
-        <text text-anchor="end" x="{GRID.MIDDLE_X - 5}" y="10.5" font-size="9" fill="{leftLabel}">{currentTask.label}</text>
+        <text text-anchor="end" x="{GRID.MIDDLE_X - 5}" y="10.5" font-size="9" fill="{leftLabel}" class='editable noSelect' on:dblclick={test}>{currentTask.label}</text>
         <line stroke-dasharray="0.5 2" x1="{GRID.MIDDLE_X}" y1="8" x2="{xGrayPosition - 5}" y2="8" stroke="{dottedLine}" />
         {/if}
 
@@ -103,6 +106,12 @@ import { GRID, MONTHS } from './constantes';
 
 <style>
 
+    .editable {
+        cursor: text;
+    }
+    .noSelect {
+        user-select: none;
+    }
     .grabbable{
         cursor:grab;
         display: block;
