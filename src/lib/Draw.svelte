@@ -22,14 +22,12 @@ import { FactoryPicto } from './factoryPicto';
     let openUploadComponent:()=>{}
     let openLiveComponent:()=>{}
 
-    const delay = (ms:number) => {new Promise(res => setTimeout(res, ms))}
-
     let processRunning = false
     /**
      * Generate a thumbbnail every 30s and save it into the localstorage
      */
     let makeThumbnail = async () => {
-        await delay(30000) // 30s
+        await new Promise(res => setTimeout(res, 30000))
         if(!processRunning && browser) { //avoid ReferenceError: Image is not defined
             processRunning=true
             var image = new Image();
