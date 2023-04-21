@@ -103,7 +103,7 @@ import { FactoryCards } from './factoryCards';
 </script>
 
 
-<ShadowBox bind:openComponent closeComponent={()=>{}} id=''>
+<ShadowBox bind:openComponent id=''>
     {#if $store.currentTimeline.isOnline}
         <div class='warn'>Please be advice that going "<span>offline</span>" will remove every data from our server but it also cancel every previous shared link of your work</div>
         <div>You're currently : <span>ONLINE</span></div>

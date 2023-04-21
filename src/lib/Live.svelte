@@ -130,7 +130,7 @@ import ShadowBox from './ShadowBox.svelte';
 
 
 
-<ShadowBox bind:openComponent closeComponent={()=>{}} id=''>
+<ShadowBox bind:openComponent id=''>
     <div class='title'><label for='titleOfTimeline'>Title : </label><input id='titleOfTimeline' type='text' bind:value={$store.currentTimeline.title}/></div>
     <LiveTableTask getIndex={getIndex} updateStore={updateStore} />
     <LiveTableMilestone getIndex={getIndex} updateStore={updateStore} />

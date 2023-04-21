@@ -14,7 +14,8 @@ import Draw from '$lib/Draw.svelte';
 import Toast from '$lib/Toast.svelte';
 import { NotFoundOnlineException } from '$lib/timelineException.class';
 
-let toastComponent:Toast
+// @ts-ignore
+let toastComponent:Toast = null
 
 $store.rights = new Rights($page.url.searchParams)
 
@@ -32,9 +33,9 @@ $store.rights = new Rights($page.url.searchParams)
 
 
 const slug = $page.params.slug
-if(slug.endsWith(".png")){
-    console.error("An image was misconfigurated, eg bad = 'foo.png', good = '/foo.png'")
-    if(toastComponent !== undefined){
+if(!slug.match('^[a-zA-Z0-9]{64}$')){
+    console.error("An image may be misconfigurated, eg bad = 'foo.png', good = '/foo.png'", slug)
+    if(browser && toastComponent != null){
         toastComponent.show("An image was misconfigurated, eg bad = 'foo.png', good = '/foo.png'", false, 0)
     }
 }
@@ -50,7 +51,7 @@ if(!$store.rights.hasOwner() && currentTimeline?.ownerKey){
 } else if(!$store.rights.hasReader() && currentTimeline?.readKey){
     queryString = "?r=" + currentTimeline.readKey
 }
-if(queryString){
+if(queryString){    
     window.location.href = $page.url.protocol + '//' + $page.url.host + "/g/" + currentTimeline.key + queryString
 }
 

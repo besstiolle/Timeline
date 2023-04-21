@@ -1,16 +1,32 @@
+
 import { Helpers } from "./helpers"
-import { Rights } from "./rights.class"
+import type { Rights } from "./rights.class"
 
 export module Struct {
 
-	export class TimelineStore {
+	export interface TimelineStoreInterface{
+		cards : Array<Card>
+		currentTimeline : Timeline
+		lastUpdatedLocally : number
+		lastCommitedRemotely : number
+		_cancelRefreshLastUpdatedLocally: boolean
+		commitInProgress: boolean
+		rights: Rights
+	}
+	export class TimelineStore implements TimelineStoreInterface{
 		cards : Array<Card> = new Array<Card>()
-		currentTimeline : Timeline = new Timeline('','')
+		currentTimeline : Timeline
 		lastUpdatedLocally : number = -1
 		lastCommitedRemotely : number = -1
 		_cancelRefreshLastUpdatedLocally: boolean = false // Tricks : Set to true if we don't want to refresh lastUpdatedLocally property
 		commitInProgress: boolean = false
-		rights: Rights = new Rights(null)
+		rights: Rights
+
+		constructor(cards:Array<Card>, currentTimeline:Timeline, rights: Rights){
+			this.cards = cards
+			this.currentTimeline = currentTimeline
+			this.rights = rights
+		}
 	}
 
 	export class Card {
@@ -52,7 +68,7 @@ export module Struct {
 		dateEndFocus: string|null = null
 		//Check jsonParser.ts > timelineReviver() function if you add something here.
 		
-		constructor(key:string, title:string){
+		constructor(key:string = 'dummy', title:string = 'dummy'){
 			this.key = key	
 			this.title = title
 		}

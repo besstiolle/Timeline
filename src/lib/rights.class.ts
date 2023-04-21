@@ -5,7 +5,7 @@ export class Rights {
     w: string|null = null
     r: string|null = null
 
-    constructor(args:any){
+    constructor(args:any = null){
         if(args instanceof(URLSearchParams)){
             this.__constructorURLSearchParams(args)
         } else {

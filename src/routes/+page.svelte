@@ -15,7 +15,7 @@ import Toast from "$lib/Toast.svelte";
 let popUpComponent:PopUpConfirmation
 let toastComponent:Toast
 //Reset store currentTimeline information when we are here
-$store.currentTimeline=new Struct.Timeline('','')
+$store.currentTimeline=new Struct.Timeline()
 $store.lastCommitedRemotely=-1
 $store.lastUpdatedLocally=-1
 $store.rights=new Rights(null)

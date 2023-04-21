@@ -5,13 +5,18 @@ import { CustomLocalStorage } from './customLocalStorage';
 import { FactoryCards } from './factoryCards';
 import { FactoryTimeline } from './factoryTimeline';
 import { LOCAL_STORAGE } from './constantes';
+import { Rights } from './rights.class';
 
 
-let timelineStore = new Struct.TimelineStore()
-timelineStore.cards = CustomLocalStorage.getCards()
-if(!timelineStore.cards){
-    timelineStore.cards = new Array<Struct.Card>()
+
+let cards = CustomLocalStorage.getCards()
+if(!cards){
+    cards = new Array<Struct.Card>()
 }
+let timeline = new Struct.Timeline()
+let rights = new Rights(null)
+
+let timelineStore = new Struct.TimelineStore(cards, timeline, rights)
 export const store = writable(timelineStore);
 
 store.subscribe(val => updateLocalStorage(val))
@@ -27,7 +32,7 @@ function updateLocalStorage(timelineStore: Struct.TimelineStore){
         timelineStore._cancelRefreshLastUpdatedLocally = false
     }
     
-    if(currentTimeline){
+    if(currentTimeline && currentTimeline.isInitiate){
         
         //Inserting/Updating information of current Timline into the good card
         FactoryCards.updateCardsWithTimeline(cards, currentTimeline)

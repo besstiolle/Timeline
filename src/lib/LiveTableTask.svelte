@@ -58,6 +58,9 @@ function b_duplicate(event:Event){
     let index = getIndex(event)
     let tmpTasks : Array<Struct.Task> = $store.currentTimeline.tasks.splice(index+1, $store.currentTimeline.tasks.length)
 
+        console.info($store.currentTimeline.tasks)
+        console.info($store.currentTimeline.tasks[index])
+
     FactoryTimeline.addTask($store.currentTimeline, 
                             FactoryTask.clone($store.currentTimeline.tasks[index],
                                               $store.currentTimeline.getNextId()))
