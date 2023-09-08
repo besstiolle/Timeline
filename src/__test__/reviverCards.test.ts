@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { JsonParser } from "$lib/jsonParser"
 import { Struct } from "$lib/struct.class"
 import { JsonParserException } from "$lib/timelineException.class"
+import { Rights } from '$lib/rights.class';
 
 //Mock console.error() to avoid vi console pollution
 vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -11,7 +12,7 @@ vi.spyOn(console, 'error').mockImplementation(() => {});
 describe('test Filtering by Full Text', () => {
 
     it('JsonParser.cardsReplacer with cards values', () => {
-        let timelineStore = new Struct.TimelineStore()   
+        let timelineStore = new Struct.TimelineStore([], new Struct.Timeline(), new Rights())   
     
         let jsonResult = JSON.stringify(timelineStore.cards)
         let jsonExpected = '[]'
@@ -19,7 +20,7 @@ describe('test Filtering by Full Text', () => {
     })
 
     it('JsonParser.cardsReplacer with cards values', () => {
-        let timelineStore = new Struct.TimelineStore()   
+        let timelineStore = new Struct.TimelineStore([], new Struct.Timeline(), new Rights())  
     
         let jsonResult = JSON.stringify(timelineStore.cards)
         let jsonExpected = '[]'
@@ -27,7 +28,7 @@ describe('test Filtering by Full Text', () => {
     })
 
     it('JsonParser.cardsReplacer with cards values', () => {
-        let timelineStore = new Struct.TimelineStore()
+        let timelineStore = new Struct.TimelineStore([], new Struct.Timeline(), new Rights())  
         let card1 = new Struct.Card("key1", "title1") 
         card1.lastUpdated = new Date("2020-12-31")
         let card2 = new Struct.Card("key2", "title2") 
@@ -45,7 +46,7 @@ describe('test Filtering by Full Text', () => {
     })
 
     it('JsonParser.cardsReviver with cards values', () => {
-        let timelineStore = new Struct.TimelineStore()
+        let timelineStore = new Struct.TimelineStore([], new Struct.Timeline(), new Rights())  
         let card1 = new Struct.Card("key1", "title1") 
         card1.lastUpdated = new Date("2020-12-31")
         let card2 = new Struct.Card("key2", "title2") 
@@ -67,7 +68,7 @@ describe('test Filtering by Full Text', () => {
     })
 
     it('JsonParser.cardsReviver with unknow values', () => {
-        let timelineStore = new Struct.TimelineStore()
+        let timelineStore = new Struct.TimelineStore([], new Struct.Timeline(), new Rights())  
         // @ts-ignore
         timelineStore['unknowKey'] = 'bar'
     
