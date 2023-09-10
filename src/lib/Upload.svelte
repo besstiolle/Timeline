@@ -13,11 +13,15 @@ import ShadowBox from './ShadowBox.svelte';
 import Toast from './Toast.svelte';
 
 
-export let openComponent = () => {}
 export let download = (blob:Blob, extension:string) => {}
 const BOM = new Uint8Array([0xEF,0xBB,0xBF])
-let closeComponent = () => {}
+
+let shadowBox:ShadowBox
 let toastComponent:Toast
+
+export function openShadowBox(){
+    shadowBox.openComponent()
+}
 
 function downloadCsv () {
     const blob = new Blob([BOM, goCsv($store.currentTimeline)], {type:"data:text/csv;charset=utf-8"});
@@ -110,7 +114,7 @@ onMount(async () => {
             //Show resume
             toastComponent.show(`imported  ${abstractTimeline.tasks.length} tasks and ${abstractTimeline.milestones.length} milestones with success`,true, 5)
             //close windows
-            closeComponent()
+            shadowBox.closeComponent()
         }
 
         function onReaderLoadCsv(reader:FileReader){
@@ -171,7 +175,7 @@ onMount(async () => {
             //Show resume
             toastComponent.show(`imported  ${abstractTimeline.tasks.length} tasks and ${abstractTimeline.milestones.length} milestones with success`)
             //close windows
-            closeComponent()
+            shadowBox.closeComponent()
         }
 
         function parseAbstractTimeline(abstractTimeline:abstractTimelineInterface){
@@ -234,7 +238,7 @@ onMount(async () => {
 
   
 </script>
-<ShadowBox bind:openComponent bind:closeComponent id='droppable'>
+<ShadowBox bind:this={shadowBox} id='droppable'>
 
     <form method="post" action="" enctype="multipart/form-data">
         <div>

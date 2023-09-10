@@ -11,16 +11,17 @@ import { Rights } from './rights.class';
 import { FactoryCards } from './factoryCards';
 
     let toastComponent:Toast
-
-    //TODO : try fixing warn in console : "<Online> was created without expected prop 'openComponent'"
-    export let openComponent:()=>{}
-
+    let shadowBox:ShadowBox
+    
+    export function openShadowBox(){
+        shadowBox.openComponent()
+    }
     export function commit(){
         
         if($store.lastUpdatedLocally !== null && $store.lastCommitedRemotely !== null 
                 && $store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000){
             $store.commitInProgress = true
-            //console.info("gap > 2000 ms : %o", ($store.lastUpdatedLocally - $store.lastCommitedRemotely) / 1000)
+            console.debug("gap > 2000 ms : %o", ($store.lastUpdatedLocally - $store.lastCommitedRemotely) / 1000)
             create($store.currentTimeline).then((createResponseJson) => {
                 $store.lastCommitedRemotely = createResponseJson.message.ts
                 if(toastComponent){
@@ -36,7 +37,7 @@ import { FactoryCards } from './factoryCards';
                 $store.commitInProgress = false
             })
         } else {
-            //console.info("gap < 2000 ms : %o", ($store.lastUpdatedLocally - $store.lastCommitedRemotely) / 1000)
+            console.debug("gap < 2000 ms : %o", ($store.lastUpdatedLocally - $store.lastCommitedRemotely) / 1000)
         }        
     }
 
@@ -103,7 +104,7 @@ import { FactoryCards } from './factoryCards';
 </script>
 
 
-<ShadowBox bind:openComponent id=''>
+<ShadowBox bind:this={shadowBox}>
     {#if $store.currentTimeline.isOnline}
         <div class='warn'>Please be advice that going "<span>offline</span>" will remove every data from our server but it also cancel every previous shared link of your work</div>
         <div>You're currently : <span>ONLINE</span></div>

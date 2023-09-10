@@ -17,10 +17,9 @@ import Toast from './Toast.svelte';
 import { FactoryPicto } from './factoryPicto';
 
     let toastComponent:Toast
-    let openOnlineComponent:()=>{}
-    let commitOnlineComponent:()=>{}
-    let openUploadComponent:()=>{}
-    let openLiveComponent:()=>{}
+    let uploadComponent:Upload
+    let liveComponent:Live
+    let onlineComponent:Online
 
     let processRunning = false
     /**
@@ -93,18 +92,18 @@ import { FactoryPicto } from './factoryPicto';
 <div class="rightButtons">
     {#key $store}
     <div class="rightButtonDisabled" class:hidden={!$store.rights.hasWriter() || ($store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000)} title="There is nothing to save"><i class='saveCloud'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.hasWriter() || $store.commitInProgress || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 2 * 1000)} on:click={commitOnlineComponent} on:keydown={commitOnlineComponent} title="Save your modifications remotly"><i class='saveCloud'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.hasWriter() || $store.commitInProgress || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 2 * 1000)} on:click={onlineComponent.commit} on:keydown={onlineComponent.commit} title="Save your modifications remotly"><i class='saveCloud'></i></div>
 
-    <div class="rightButton" class:hidden={!$store.rights.isNone()} on:click={openOnlineComponent} on:keydown={openOnlineComponent} title="Share & save your chart online"><i class='online'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.isOwner()} on:click={openOnlineComponent} on:keydown={openOnlineComponent} title="Save your chart on your computer only"><i class='offline'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone()} on:click={onlineComponent.openShadowBox} on:keydown={onlineComponent.openShadowBox} title="Share & save your chart online"><i class='online'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isOwner()} on:click={onlineComponent.openShadowBox} on:keydown={onlineComponent.openShadowBox} title="Save your chart on your computer only"><i class='offline'></i></div>
 
     
     <div class="rightButton" class:hidden={!$store.currentTimeline.showAll} on:click={toggleShowHide}  on:keydown={toggleShowHide} title="Show regular tasks"><i class='hide'></i></div>
     <div class="rightButton" class:hidden={$store.currentTimeline.showAll} on:click={toggleShowHide} on:keydown={toggleShowHide} title="Show all tasks even if they're hidden"><i class='show'></i></div>
     {/key}
-    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={openUploadComponent} on:keydown={openUploadComponent} title='Import/Export your data'><i class='io'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={uploadComponent.openShadowBox} on:keydown={uploadComponent.openShadowBox} title='Import/Export your data'><i class='io'></i></div>
     <div class="rightButton" on:click={takeshot} on:keydown={takeshot} title='Take a screenshot'><i class='photo'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={openLiveComponent} on:keydown={openLiveComponent} title='Edit your milestones'><i class='edit'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={liveComponent.openShadowBox} on:keydown={liveComponent.openShadowBox} title='Edit your milestones'><i class='edit'></i></div>
 </div>
 
 <div class="bottomButtons">
@@ -113,9 +112,9 @@ import { FactoryPicto } from './factoryPicto';
     <div class="bottomButton" title='Ask me a new feature. Send me your bug description'><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline/issues/new'><i class='questions'></i></a></div>
 </div>
 
-<Upload bind:openComponent={openUploadComponent} download={download}/>
-<Live bind:openComponent={openLiveComponent}/>
-<Online bind:openComponent={openOnlineComponent} bind:commit={commitOnlineComponent}/>
+<Upload bind:this={uploadComponent} download={download}/>
+<Live bind:this={liveComponent}/>
+<Online bind:this={onlineComponent}/>
 <Toast bind:this={toastComponent}/>
 
 

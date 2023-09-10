@@ -1,16 +1,16 @@
 <script lang="ts">
 
-export let id:string
 let hidden = true
+export let id:string = ''
+export function closeComponent(){
+    hidden = true
+    document.body.classList.remove('lock')
+}
 export function openComponent(){
     hidden = false
     document.body.classList.add('lock')
 }   
 function handleKeydown(event:KeyboardEvent) {if (!hidden && event.key === 'Escape') {closeComponent()}}
-export function closeComponent(){
-    hidden = true
-    document.body.classList.remove('lock')
-}
 
 </script>
 

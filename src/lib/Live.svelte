@@ -6,10 +6,15 @@ import LiveTableTask from './LiveTableTask.svelte';
 import LiveTableMilestone from './LiveTableMilestone.svelte';
 import ShadowBox from './ShadowBox.svelte';
     
-    export let openComponent:()=>{}
+
+    let shadowBox:ShadowBox
 
     const css_class_warn = "date_warn"
     const css_class_warn_order = "date_warn_order"
+
+    export function openShadowBox(){
+        shadowBox.openComponent()
+    }
 
     function updateStore(prefix: string, position:number ): void{
 
@@ -73,67 +78,14 @@ import ShadowBox from './ShadowBox.svelte';
         $store.currentTimeline.tasks = $store.currentTimeline.tasks
     }
 
-    function updateStore2(prefix: string): void{
-
-        let elm = document.getElementById(prefix) as HTMLInputElement
-        elm.classList.remove(css_class_warn)
-        let val:string = elm.value
-
-        let date:Date = new Date(val)
-        if(!(val === undefined || val === '')){
-            if(!(date instanceof Date) || isNaN(date.getTime())){
-                elm.classList.add(css_class_warn)
-                return
-            }
-
-            let diff:number = Math.abs(new Date(val).getFullYear() - new Date().getFullYear())
-            if(diff > 40){
-                elm.classList.add(css_class_warn)
-                return
-            }
-
-            let other = document.getElementById(LIVE_PREFIX.TSF) as HTMLInputElement
-            let bool:boolean = other.value > val
-            if(prefix === LIVE_PREFIX.TSF){
-                other = document.getElementById(LIVE_PREFIX.TEF) as HTMLInputElement
-                bool = other.value < val
-            }
-            if (other.value !== '' && val !== '' && bool) {
-                elm.classList.add(css_class_warn_order)
-                other.classList.add(css_class_warn_order)
-                return
-            } else {
-                elm.classList.remove(css_class_warn_order)
-                other.classList.remove(css_class_warn_order)
-            }
-        }
-
-        
-
-        if(prefix === LIVE_PREFIX.TSF){
-            $store.currentTimeline.dateStartFocus = val
-        }
-        
-        if(prefix === LIVE_PREFIX.TEF){
-            $store.currentTimeline.dateEndFocus = val
-        }
-        $store.currentTimeline = $store.currentTimeline
-    }
-
-    function getIndex(event:Event) : number{
-        let str = (event.currentTarget as HTMLDivElement).getAttribute("data_name")
-        if(str == null) {return -1}
-        return  parseInt(str.substring(1,str.length))
-    }
-
 </script>
 
 
 
-<ShadowBox bind:openComponent id=''>
+<ShadowBox bind:this={shadowBox}>
     <div class='title'><label for='titleOfTimeline'>Title : </label><input id='titleOfTimeline' type='text' bind:value={$store.currentTimeline.title}/></div>
-    <LiveTableTask getIndex={getIndex} updateStore={updateStore} />
-    <LiveTableMilestone getIndex={getIndex} updateStore={updateStore} />
+    <LiveTableTask updateStore={updateStore} />
+    <LiveTableMilestone updateStore={updateStore} />
     <div><label for="showToday">Show `Today` vertical line : </label><input type="checkbox" bind:checked="{$store.currentTimeline.showToday}"  name="showToday" id="showToday" /></div>
     <!--<div><label for={LIVE_PREFIX.TSF}>A custom start date to make a focus : </label><input type="date" id="{LIVE_PREFIX.TSF}" value="{$store.currentTimeline.dateStartFocus}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore2(LIVE_PREFIX.TSF)} on:blur={() => updateStore2(LIVE_PREFIX.TSF)}></div>
     <div><label for={LIVE_PREFIX.TEF}>A custom end  date to make a focus : </label><input type="date" id="{LIVE_PREFIX.TEF}" value="{$store.currentTimeline.dateEndFocus}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore2(LIVE_PREFIX.TEF)} on:blur={() => updateStore2(LIVE_PREFIX.TEF)}></div>

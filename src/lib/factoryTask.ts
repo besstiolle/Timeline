@@ -50,11 +50,12 @@ export module FactoryTask {
      * Clone properly a <Struct.Task> with all its function.
      * @param task the task to clone
      * @param nextId the id to apply of the current task.id will be used
+     * @param suffix the optionnal suffix for label of the cloned object
      * @returns the new task cloned
      */
-    export function clone(task: Struct.Task, nextId?: number): Struct.Task{
+    export function clone(task: Struct.Task, nextId?: number , suffix:string=""): Struct.Task{
         return new Struct.Task(nextId?nextId:task.id, 
-                                task.label,
+                                task.label + suffix,
                                 task.dateStart,
                                 task.dateEnd,
                                 task.hasProgress,

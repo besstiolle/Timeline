@@ -7,8 +7,7 @@ import { FactoryTimeline } from './factoryTimeline';
 import { LIVE_PREFIX } from './constantes';
 import { FactoryTask } from './factoryTask';
 
-export let getIndex = (event:Event) => {return 0}
-export let updateStore =  (prefix:string, position:number) => {}
+export let updateStore:Function
 
 function updateProgression(position:number){
     let elm = document.getElementById(LIVE_PREFIX.PR + position) as HTMLInputElement
@@ -26,13 +25,17 @@ function updateProgression(position:number){
         
 }
 
-function b_delete(event:Event){
-    $store.currentTimeline.tasks.splice(getIndex(event), 1)
+function b_delete(index:number){
+    if(index < 0 || index > $store.currentTimeline.tasks.length -1){
+        console.warn("index was abnormal", index)
+        return;
+    }
+    $store.currentTimeline.tasks.splice(index, 1)
     $store.currentTimeline.tasks = $store.currentTimeline.tasks
 }
-function b_up(event:Event){
-    let index = getIndex(event)
-    if(index == 0){
+function b_up(index:number){
+    if(index <= 0 || index > $store.currentTimeline.tasks.length -1){
+        console.warn("index was abnormal", index)
         return;
     }
     let tmpTask: Struct.Task = $store.currentTimeline.tasks[index]
@@ -40,9 +43,9 @@ function b_up(event:Event){
     $store.currentTimeline.tasks[index - 1] = tmpTask
     $store.currentTimeline.tasks = $store.currentTimeline.tasks
 }
-function b_down(event:Event){
-    let index = getIndex(event)
-    if(index == ($store.currentTimeline.tasks.length-1)){
+function b_down(index:number){
+    if(index < 0 || index >= $store.currentTimeline.tasks.length -1){
+        console.warn("index was abnormal", index)
         return;
     }
     let tmpTask: Struct.Task = $store.currentTimeline.tasks[index]
@@ -50,20 +53,24 @@ function b_down(event:Event){
     $store.currentTimeline.tasks[index + 1] = tmpTask
     $store.currentTimeline.tasks = $store.currentTimeline.tasks
 }
-function b_show(event:Event){
-    let index = getIndex(event)
+function b_show(index:number){
+    if(index < 0 || index > $store.currentTimeline.tasks.length -1){
+        console.warn("index was abnormal", index)
+        return;
+    }
     $store.currentTimeline.tasks[index].isShow = !$store.currentTimeline.tasks[index].isShow 
 }
-function b_duplicate(event:Event){
-    let index = getIndex(event)
+function b_duplicate(index:number){
+    if(index < 0 || index > $store.currentTimeline.tasks.length -1){
+        console.warn("index was abnormal", index)
+        return;
+    }
     let tmpTasks : Array<Struct.Task> = $store.currentTimeline.tasks.splice(index+1, $store.currentTimeline.tasks.length)
-
-        console.info($store.currentTimeline.tasks)
-        console.info($store.currentTimeline.tasks[index])
 
     FactoryTimeline.addTask($store.currentTimeline, 
                             FactoryTask.clone($store.currentTimeline.tasks[index],
-                                              $store.currentTimeline.getNextId()))
+                                              $store.currentTimeline.getNextId(),
+                                              " (copy)"))
     tmpTasks.forEach(tmpTask => {
         FactoryTimeline.addTask($store.currentTimeline, tmpTask)
     });
@@ -85,32 +92,32 @@ function b_add(){
 }
 
 </script>
-
+{$store.currentTimeline.tasks.length}
 
 {#each $store.currentTimeline.tasks as task, i}
 <div class="live__line show_{task.isShow}">
     <div class='live__input_top'>
-        <div data-name="M{i}"  class="live_cmd" on:click="{b_show}" on:keydown="{b_show}" title="hide/show this line">
+        <div class="live_cmd" on:click="{e =>{b_show(i)}}" on:keydown="{e =>{b_show(i)}}" title="hide/show this line">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_show"/>
             </svg>
         </div>
-        <div data-name="T{i}"  class="live_cmd" on:click="{b_up}" on:keydown="{b_up}" title="go down this line">
+        <div class="live_cmd" on:click="{e =>{b_up(i)}}" on:keydown="{e =>{b_up(i)}}" title="go down this line">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_up"/>
             </svg>
         </div>
-        <div data-name="T{i}"  class="live_cmd" on:click="{b_down}" on:keydown="{b_down}" title="go up this line">
+        <div class="live_cmd" on:click="{e =>{b_down(i)}}" on:keydown="{e =>{b_down(i)}}" title="go up this line">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_down"/>
             </svg>
         </div>
-        <div data-name="T{i}"  class="live_cmd" on:click="{b_duplicate}" on:keydown="{b_duplicate}" title="duplicate this line">
+        <div class="live_cmd" on:click="{e =>{b_duplicate(i)}}" on:keydown="{e =>{b_duplicate(i)}}" title="duplicate this line">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_duplicate"/>
             </svg>
         </div>
-        <div data-name="T{i}"  class="live_cmd live_cmd_red" on:click="{b_delete}" on:keydown="{b_delete}" title="delete this line">
+        <div class="live_cmd live_cmd_red" on:click="{e =>{b_delete(i)}}" on:keydown="{e =>{b_delete(i)}}" title="delete this line">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_delete"/>
             </svg>
