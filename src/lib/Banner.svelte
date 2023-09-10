@@ -1,16 +1,21 @@
 <script lang="ts">
 import { DAYS, DIFF, GRID, MONTHS } from './constantes';
+import { store } from './stores';
 
-    import { store } from './stores';
+    interface jalonInterface{
+        left: number,
+        label: string,
+        classCss: string
+    }
 
-    let dateInc = new Date($store.currentTimeline.start);
+    let dateInc = $store.currentTimeline.getStart() as Date
 
     let i=0
-    let jalons=[]
-    let innerClassCss: string, innerLabel: any, left: number = null
-    while (i < 100 && $store.currentTimeline.getEnd() >= dateInc) {
+    let jalons:jalonInterface[]=[]
+    let innerClassCss: string, innerLabel: any, left: number
+    while (i < 100 && $store.currentTimeline.getEndTime() >= dateInc.getTime()) {
         i++
-        left = (dateInc.getTime() - $store.currentTimeline.getStart().getTime()) / ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()) * GRID.MIDDLE_WIDTH
+        left = (dateInc.getTime() - $store.currentTimeline.getStartTime()) / ($store.currentTimeline.getEndTime() - $store.currentTimeline.getStartTime()) * GRID.MIDDLE_WIDTH
         innerClassCss = ''
 
         if ($store.currentTimeline.differencial === DIFF.isMoreThan20Years){
@@ -79,8 +84,8 @@ import { DAYS, DIFF, GRID, MONTHS } from './constantes';
     <rect x="-10" y="0" width="{GRID.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient1)"/>
     <rect x="-10" y="30" width="{GRID.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient2)"/>
     {#each jalons as { left, label, classCss}, i}
-        <path d="M{parseInt(left) } 6 v 14" fill="transparent" stroke="#818C9C"/>
-        <text data-testid='jalonText_{i}' x="{parseInt(left) + 5}" y="17" font-size="12" fill="#818C9C" class="{classCss}">{label}</text>
+        <path d="M{left} 6 v 14" fill="transparent" stroke="#818C9C"/>
+        <text data-testid='jalonText_{i}' x="{left + 5}" y="17" font-size="12" fill="#818C9C" class="{classCss}">{label}</text>
     {/each}
 </svg>
 

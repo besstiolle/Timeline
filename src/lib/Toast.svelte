@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    let timeout = null
-    let toast
+    let timeout:any
+    let toast:HTMLElement
 
 
     export function show(content: string, success:boolean = true, timer:number = 3) {
@@ -32,7 +32,7 @@
 
 </script>
 
-<div bind:this={toast} on:click={hide}></div>
+<div bind:this={toast} on:click={hide} on:keydown={hide}></div>
 
 <style>
 

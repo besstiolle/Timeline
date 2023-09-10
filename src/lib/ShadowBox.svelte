@@ -1,27 +1,27 @@
 <script lang="ts">
 
-export let id = null
 let hidden = true
-export function openComponent(){
-    hidden = false
-    document.body.classList.add('lock')
-}   
-function handleKeydown(event) {if (!hidden && event.key === 'Escape') {closeComponent()}}
+export let id:string = ''
 export function closeComponent(){
     hidden = true
     document.body.classList.remove('lock')
 }
+export function openComponent(){
+    hidden = false
+    document.body.classList.add('lock')
+}   
+function handleKeydown(event:KeyboardEvent) {if (!hidden && event.key === 'Escape') {closeComponent()}}
 
 </script>
 
 <svelte:window on:keydown={handleKeydown}/>
 
-<div class="ShadowBoxBG" class:hidden on:click={closeComponent}></div>
+<div class="ShadowBoxBG" class:hidden on:click={closeComponent} on:keydown={closeComponent}></div>
 <div id={id} class="ShadowBox" class:hidden>
     <div class="ShadowContent">
         <slot>Default content for the Box Slot</slot>
     </div>            
-    <div class="ShadowClosing">Click <span class='pointer' on:click={closeComponent}>here</span> or tape <span>Escape key</span> to close this windows</div>
+    <div class="ShadowClosing">Click <span class='pointer' on:click={closeComponent} on:keydown={closeComponent}>here</span> or tape <span>Escape key</span> to close this windows</div>
 </div>
 
 <style>

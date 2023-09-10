@@ -27,28 +27,32 @@ export module FactoryMilestone {
         //A simple loop to reach for the good item because it's cheaper
         // than trying to maintain a map with id => index of array each time 
         // we change something into the $store
-        let result:Struct.Milestone = null
+
+        let found = null
         timeline.milestones.forEach(milestone => {
             if(milestone.id == id){
-                result = milestone
+                found = milestone
             } 
-        });
-        if(result) {
-            return result
-        }
-        
+        })
+
+        if( found ){
+            return found
+        } 
         throw new NotFoundException('Struct.Milestone', id)
+        
+        
     }
 
     /**
      * Clone properly a <Struct.Milestone> with all its function.
      * @param task the milestone to clone
      * @param nextId the id to apply of the current milestone.id will be used
+     * @param suffix the optionnal suffix for label of the cloned object
      * @returns the new milestone cloned
      */
-        export function clone(milestone: Struct.Milestone, nextId?: number): Struct.Milestone{
+        export function clone(milestone: Struct.Milestone, nextId?: number , suffix:string=""): Struct.Milestone{
             return new Struct.Milestone(nextId?nextId:milestone.id, 
-                                    milestone.label, 
+                                    milestone.label + suffix,
                                     milestone.date, 
                                     milestone.isShow
                                     )

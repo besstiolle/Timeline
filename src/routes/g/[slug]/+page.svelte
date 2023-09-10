@@ -1,5 +1,5 @@
 <script lang="ts">
-import { browser } from '$app/env';
+import { browser } from "$app/environment"
 import { page } from '$app/stores'
 import { store } from '$lib/stores';
 
@@ -14,7 +14,9 @@ import Draw from '$lib/Draw.svelte';
 import Toast from '$lib/Toast.svelte';
 import { NotFoundOnlineException } from '$lib/timelineException.class';
 
-let toastComponent
+// @ts-ignore
+let toastComponent:Toast = null
+
 $store.rights = new Rights($page.url.searchParams)
 
 
@@ -31,9 +33,11 @@ $store.rights = new Rights($page.url.searchParams)
 
 
 const slug = $page.params.slug
-if(slug.endsWith(".png")){
-    console.error("An image was misconfigurated, eg bad = 'foo.png', good = '/foo.png'")
-    toastComponent.show("An image was misconfigurated, eg bad = 'foo.png', good = '/foo.png'", false, 0)
+if(!slug.match('^[a-zA-Z0-9]{64}$')){
+    console.error("An image may be misconfigurated, eg bad = 'foo.png', good = '/foo.png'", slug)
+    if(browser && toastComponent != null){
+        toastComponent.show("An image was misconfigurated, eg bad = 'foo.png', good = '/foo.png'", false, 0)
+    }
 }
 let currentTimeline: Struct.Timeline = CustomLocalStorage.getTimeline(slug)
 
@@ -47,7 +51,7 @@ if(!$store.rights.hasOwner() && currentTimeline?.ownerKey){
 } else if(!$store.rights.hasReader() && currentTimeline?.readKey){
     queryString = "?r=" + currentTimeline.readKey
 }
-if(queryString){
+if(queryString){    
     window.location.href = $page.url.protocol + '//' + $page.url.host + "/g/" + currentTimeline.key + queryString
 }
 
@@ -58,22 +62,26 @@ if($store.rights.isNone()){
     }
     $store.currentTimeline = currentTimeline
 } else {
-    let seachParams = new URLSearchParams([['key', slug], [$store.rights.getTimelineField(), $store.rights.getSlugParamKeyValue()]])
-    get(seachParams).then((json)=>{    
+    let keyUrl = $store.rights.getTimelineField() 
+    if(keyUrl == null){keyUrl=''}
+    let valueUrl = $store.rights.getSlugParamKeyValue()
+    if(valueUrl == null){valueUrl=''}
+    let seachParams = new URLSearchParams([['key', slug], [keyUrl, valueUrl]])
+    get(seachParams).then((getResponseJson)=>{    
 
-        if(!json["message"]["data"]) {
-            console.error('node data not found in json["message"] : %o', json["message"])    
+        if(!getResponseJson.message.data) {
+            console.error('node data not found in json["message"] : %o', getResponseJson["message"])    
             throw new Error('node data not found in json["message"]')
         }
 
-        currentTimeline = JSON.parse(JSON.stringify(json["message"]["data"]), JsonParser.timelineReviver) 
+        currentTimeline = JSON.parse(JSON.stringify(getResponseJson.message.data), JsonParser.timelineReviver) 
           
 
         //We're using the tricks of cloning the content of the Svelte store to avoid multiple refresh of store
-        let cloneStore = {...$store}
+        let cloneStore = structuredClone($store)
         //Update date of lastUpdated in the clone
-        cloneStore.lastUpdatedLocally = null
-        cloneStore.lastCommitedRemotely = json["message"]["ts"]
+        cloneStore.lastUpdatedLocally = 0
+        cloneStore.lastCommitedRemotely = getResponseJson["message"]["ts"]
         cloneStore.currentTimeline = currentTimeline
         // Tricks : Set to true if we don't want to refresh lastUpdatedLocally property
         cloneStore._cancelRefreshLastUpdatedLocally = true

@@ -1,23 +1,39 @@
+
 import { Helpers } from "./helpers"
 import type { Rights } from "./rights.class"
 
 export module Struct {
 
-	export class TimelineStore {
+	export interface TimelineStoreInterface{
+		cards : Array<Card>
+		currentTimeline : Timeline
+		lastUpdatedLocally : number
+		lastCommitedRemotely : number
+		_cancelRefreshLastUpdatedLocally: boolean
+		commitInProgress: boolean
+		rights: Rights
+	}
+	export class TimelineStore implements TimelineStoreInterface{
 		cards : Array<Card> = new Array<Card>()
-		currentTimeline : Timeline = null
-		lastUpdatedLocally : number = null
-		lastCommitedRemotely : number = null
+		currentTimeline : Timeline
+		lastUpdatedLocally : number = -1
+		lastCommitedRemotely : number = -1
 		_cancelRefreshLastUpdatedLocally: boolean = false // Tricks : Set to true if we don't want to refresh lastUpdatedLocally property
 		commitInProgress: boolean = false
-		rights: Rights = null
+		rights: Rights
+
+		constructor(cards:Array<Card>, currentTimeline:Timeline, rights: Rights){
+			this.cards = cards
+			this.currentTimeline = currentTimeline
+			this.rights = rights
+		}
 	}
 
 	export class Card {
-		key : string = null 
-		title : string = null
-		lastUpdated : Date = null
-		isOnline: boolean = null
+		key : string 
+		title : string
+		lastUpdated : Date|null = null
+		isOnline: boolean = false
 		//Check jsonParser.ts > cardsReviver() function if you add something here.
 
 		constructor(key : string, title : string){
@@ -30,29 +46,29 @@ export module Struct {
 
 	export class Timeline {
 		
-		key : string = null
-		title : string = null
+		key : string
+		title : string
 		tasks : Array<Task> = new Array<Task>()
         milestones : Array<Milestone> = new Array<Milestone>()
 		swimlines : Array<Swimline> = new Array<Swimline>()
 		isInitiate : boolean = false
-		start: string = null
-		end: string = null
-		differencial: string = null
+		start: string|null = null
+		end: string|null = null
+		differencial: string|null = null
 		maxId: number = 0
 		viewbox: string = "0 0 0 0"
 		showAll: boolean = false
 		isOnline: boolean = false
-		ownerKey: string = null
-		writeKey: string = null
-		readKey: string = null
+		ownerKey: string|null = null
+		writeKey: string|null = null
+		readKey: string|null = null
 		showToday: boolean = true
 		showOutOfBounds: boolean = true
-		dateStartFocus: string = null
-		dateEndFocus: string = null
+		dateStartFocus: string|null = null
+		dateEndFocus: string|null = null
 		//Check jsonParser.ts > timelineReviver() function if you add something here.
 		
-		constructor(key:string, title:string){
+		constructor(key:string = 'dummy', title:string = 'dummy'){
 			this.key = key	
 			this.title = title
 		}
@@ -63,11 +79,23 @@ export module Struct {
 		}
 
 		getStart() : Date{
+			if(this.start == null){return new Date()}
 			return new Date(this.start)
 		}
 
+		getStartTime():number{
+			if(this.start == null){return new Date().getTime()}
+			return new Date(this.start).getTime()
+		}
+
 		getEnd() : Date{
+			if(this.end == null){return new Date()}
 			return new Date(this.end)
+		}
+
+		getEndTime():number{
+			if(this.end == null){return new Date().getTime()}
+			return new Date(this.end).getTime()
 		}
 
 		setStart(start: Date) : void{
@@ -78,11 +106,13 @@ export module Struct {
 			this.end = Helpers.toYYYY_MM_DD(end)
 		}
 
-		getStartFocus() : Date{
+		getStartFocus() : Date|null{
+			if(this.dateStartFocus == null){return null}
 			return new Date(this.dateStartFocus)
 		}
 
-		getEndFocus() : Date{
+		getEndFocus() : Date|null{
+			if(this.dateEndFocus == null){return null}
 			return new Date(this.dateEndFocus)
 		}
 
@@ -175,4 +205,34 @@ export module Struct {
 			this.isShow = true
 		}
 	}
+}
+
+/**
+ * Allow a proper typing in ts 
+ * TODELETE ?
+ */
+/*export interface HTMLInputEvent extends Event {
+    target: HTMLInputElement & EventTarget;
+}*/
+
+export interface abstractTimelineInterface{
+	title:string
+	version:string
+	tasks:abstratTaskInterface[]
+	milestones:abstractMilestoneInterface[]
+}
+export interface abstratTaskInterface{
+	swimline:string
+	label:string
+    start:string
+    end:string
+	progress:number
+    hasProgress:boolean
+    isShow:boolean
+}
+export interface abstractMilestoneInterface{
+	label:string
+	date:string
+	isShow:boolean
+
 }

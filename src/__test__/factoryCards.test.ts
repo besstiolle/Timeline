@@ -1,66 +1,77 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { FactoryCards } from "$lib/factoryCards"
 import { Struct } from "$lib/struct.class";
 
-jest.mock('$app/env', () => ({
-    default: {
-        browser: true,
-      },
-  }))
+
+describe('test factoryCards', () => {
+
+    vi.mock('$app/environment', () => ({
+        default: {
+            browser: true,
+        },
+    }))
+
+    it('FactoryCards.updateCardsWithTimeline with an existing key', () => {
+
+        let cards = new Array<Struct.Card>()
+        cards.push(new Struct.Card("key1", "title1"))
+        cards.push(new Struct.Card("key2", "title2"))
+        cards.push(new Struct.Card("key3", "title3"))
 
 
-function testUpdateCardsWithTimeline(){
+        let timeline:Struct.Timeline = new Struct.Timeline("key2","new title2")
 
-    let cards1 = new Array<Struct.Card>()
-    cards1.push(new Struct.Card("key1", "title1"))
-    cards1.push(new Struct.Card("key2", "title2"))
-    cards1.push(new Struct.Card("key3", "title3"))
-    let cards2 = [...cards1]
+        FactoryCards.updateCardsWithTimeline(cards, timeline)
+        
+        expect(cards.length).toEqual(3)
+        expect(cards[1].title).toEqual(timeline.title)
 
-
-    let timeline2:Struct.Timeline = new Struct.Timeline("key2","new title2")
-    let timeline4:Struct.Timeline = new Struct.Timeline("key4","new title4")
-
-    FactoryCards.updateCardsWithTimeline(cards1, timeline2)
-    FactoryCards.updateCardsWithTimeline(cards2, timeline4)
-    
-    test("FactoryCards.updateCardsWithTimeline with an existing key", ()=> {
-        expect(cards1.length).toEqual(3)
-        expect(cards1[1].title).toEqual(timeline2.title)
     })
-    
-    test("FactoryCards.updateCardsWithTimeline with an new key", ()=> {
-        expect(cards2.length).toEqual(4)
-        expect(cards2[3].key).toEqual(timeline4.key)
-        expect(cards2[3].title).toEqual(timeline4.title)
-        expect(cards2[3].lastUpdated).toBeDefined()
+
+    it('FactoryCards.updateCardsWithTimeline with an new key', () => {
+
+        let cards = new Array<Struct.Card>()
+        cards.push(new Struct.Card("key1", "title1"))
+        cards.push(new Struct.Card("key2", "title2"))
+        cards.push(new Struct.Card("key3", "title3"))
+
+
+        let timeline:Struct.Timeline = new Struct.Timeline("key4","new title4")
+
+        FactoryCards.updateCardsWithTimeline(cards, timeline)
+
+        expect(cards.length).toEqual(4)
+        expect(cards[3].key).toEqual(timeline.key)
+        expect(cards[3].title).toEqual(timeline.title)
+        expect(cards[3].lastUpdated).toBeDefined()
+        
     })
-    
-}
-testUpdateCardsWithTimeline()
 
-function testGetIndexByKey(){
-    let cards1 = new Array<Struct.Card>()
-    cards1.push(new Struct.Card("key1", "title1"))
-    cards1.push(new Struct.Card("key2", "title2"))
-    cards1.push(new Struct.Card("key3", "title3"))
+    it('FactoryCards.getIndexByKey with various parameters', () => {
 
-    expect(FactoryCards.getIndexByKey(cards1, "")).toBeNull()
-    expect(FactoryCards.getIndexByKey(cards1, "unknow")).toBeNull()
-    expect(FactoryCards.getIndexByKey(cards1, "key2")).toEqual(1)
-}
-testGetIndexByKey()
+        let cards = new Array<Struct.Card>()
+        cards.push(new Struct.Card("key1", "title1"))
+        cards.push(new Struct.Card("key2", "title2"))
+        cards.push(new Struct.Card("key3", "title3"))
 
-function testGetFirstIndexByTitle(){
-    let cards1 = new Array<Struct.Card>()
-    cards1.push(new Struct.Card("key1", "title1"))
-    cards1.push(new Struct.Card("key2", "title2"))
-    cards1.push(new Struct.Card("key3", "title3"))
-    cards1.push(new Struct.Card("key4", "title2"))
+        expect(FactoryCards.getIndexByKey(cards, "")).toBeNull()
+        expect(FactoryCards.getIndexByKey(cards, "unknow")).toBeNull()
+        expect(FactoryCards.getIndexByKey(cards, "key2")).toEqual(1)
+    })
 
-    expect(FactoryCards.getFirstIndexByTitle(cards1, "")).toBeNull()
-    expect(FactoryCards.getFirstIndexByTitle(cards1, "unknow")).toBeNull()
-    expect(FactoryCards.getFirstIndexByTitle(cards1, "title2")).toEqual(1)
+    it('FactoryCards.getFirstIndexByTitle with various parameters', () => {
 
-}
-testGetFirstIndexByTitle()
+        
+        let cards1 = new Array<Struct.Card>()
+        cards1.push(new Struct.Card("key1", "title1"))
+        cards1.push(new Struct.Card("key2", "title2"))
+        cards1.push(new Struct.Card("key3", "title3"))
+        cards1.push(new Struct.Card("key4", "title2"))
+
+        expect(FactoryCards.getFirstIndexByTitle(cards1, "")).toBeNull()
+        expect(FactoryCards.getFirstIndexByTitle(cards1, "unknow")).toBeNull()
+        expect(FactoryCards.getFirstIndexByTitle(cards1, "title2")).toEqual(1)
+    })
+
+})

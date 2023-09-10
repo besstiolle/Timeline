@@ -1,31 +1,43 @@
 
 <script lang="ts">
-import { CustomLocalStorage } from "$lib/customLocalStorage";
-import type { Struct } from "$lib/struct.class";
+    import { CustomLocalStorage } from "$lib/customLocalStorage";
+    import type { Struct } from "$lib/struct.class";
+	import { JsonParserException } from "$lib/timelineException.class";
 
 
 	
 let timelines: Array<Struct.Timeline> = new Array<Struct.Timeline>()
 let errors: Array<string> = new Array<string>()
-let cards = null
+let cards:Struct.Card[]
 try{
     cards = CustomLocalStorage.getCards()
-} catch (error) {
-    errors.push("error during retriving/parsing of Cards : %o" ,error)
-}
-
-if(cards){
     cards.forEach(card => {
         try{
             timelines.push(CustomLocalStorage.getTimeline(card.key))
         } catch (error) {
-            errors.push("error during retriving/parsing of Timeline '%o' : %o" ,card.key, error)
+            let message;if (error instanceof Error) {message = error.message} else {message = String(error)}
+
+            if(error instanceof JsonParserException){
+                errors.push("JsonParserException during retriving/parsing of Timeline '%o' : %o" ,card.key, message)
+            } else {
+                errors.push("unexpected error during retriving/parsing of Timeline '%o' : %o" ,card.key, message)
+            }
+            
         }
         
     });
-} 
+} catch (error) {
+    let message;if (error instanceof Error) {message = error.message} else {message = String(error)}
     
-function purge(event){
+    if(error instanceof JsonParserException){
+        errors.push("JsonParserException during retriving/parsing of Cards : %o", message)
+    } else {
+        errors.push("unexpected error during retriving/parsing of Cards : %o", message)
+    }
+}
+
+    
+function purge(event:Event){
     CustomLocalStorage.clear()
     alert("your localstorage is purged ✅")
     location.reload()

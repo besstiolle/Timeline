@@ -1,5 +1,5 @@
 
-import { browser } from "$app/env";
+import { browser } from "$app/environment"
 import { Helpers } from "./helpers"
 import { FactorySwimline } from "./factorySwimline";
 import { Struct } from "./struct.class";
@@ -125,8 +125,8 @@ export module FactoryTimeline {
         timeline.swimlines = new Array<Struct.Swimline>()
         
         let swimlineLabel: string
-        let previousSwimlineLabel: string
-        let previousSwimlineId: number
+        let previousSwimlineLabel = ''
+        let previousSwimlineId = -1
     
         //Initiate each swimline
         for(let i: number=0; i < timeline.tasks.length; i++){
@@ -138,14 +138,14 @@ export module FactoryTimeline {
                 previousSwimlineId = FactorySwimline.create(timeline,swimlineLabel)
             } else {
                 //reset previous Swimline id
-                previousSwimlineId = null
+                previousSwimlineId = -1
             }
             timeline.tasks[i].swimlineId = previousSwimlineId
             previousSwimlineLabel = swimlineLabel
         }
         //update swimlines count of visibles / invisibles tasks
         for(let i: number=0; i < timeline.tasks.length; i++){
-            if(timeline.tasks[i].swimlineId != null){
+            if(timeline.tasks[i].swimlineId != -1){
                 timeline.swimlines[timeline.tasks[i].swimlineId].countAllTasks++
                 if(timeline.tasks[i].isShow){
                     timeline.swimlines[timeline.tasks[i].swimlineId].countVisibleTasks++
@@ -219,14 +219,14 @@ export module FactoryTimeline {
             let swim1Id = FactorySwimline.create(timeline,"Swimline1")
             let swim2Id = FactorySwimline.create(timeline,"Swimline2")
 
-            addTask(timeline, new Struct.Task(0, "Random Task 0", "2021-01-15", "2021-04-01", true, 100, true, "", null))
-            addTask(timeline, new Struct.Task(1, "Random Task 1", "2021-12-01", "2022-04-01", false, 0, true, "", null))
+            addTask(timeline, new Struct.Task(0, "Random Task 0", "2021-01-15", "2021-04-01", true, 100, true, "", -1))
+            addTask(timeline, new Struct.Task(1, "Random Task 1", "2021-12-01", "2022-04-01", false, 0, true, "", -1))
             addTask(timeline, new Struct.Task(2, "Random Task 2", "2021-02-01", "2021-03-05", true, 15, true, "Swimline1", swim1Id))
             addTask(timeline, new Struct.Task(3, "Random Task 3", "2021-03-10", "2021-03-30", true, 0, true, "Swimline1", swim1Id))
-            addTask(timeline, new Struct.Task(4, "Random Task 4", "2021-02-01", "2021-05-01", true, 30, false, "", null))
-            addTask(timeline, new Struct.Task(5, "Random Task 5", "2021-01-31", "2021-03-01", true, 100, true, "", null))
+            addTask(timeline, new Struct.Task(4, "Random Task 4", "2021-02-01", "2021-05-01", true, 30, false, "", -1))
+            addTask(timeline, new Struct.Task(5, "Random Task 5", "2021-01-31", "2021-03-01", true, 100, true, "", -1))
             addTask(timeline, new Struct.Task(6, "Random Task 6", "2021-05-01", "2021-05-05", true, 25, true, "Swimline2", swim2Id))
-            addTask(timeline, new Struct.Task(7, "Random Task 7", "2021-12-01", "2022-04-01", true, 75, true, "", null))
+            addTask(timeline, new Struct.Task(7, "Random Task 7", "2021-12-01", "2022-04-01", true, 75, true, "", -1))
     
             addMilestone(timeline, new Struct.Milestone(8, "Milestone 1", "2020-12-01", true))
             addMilestone(timeline, new Struct.Milestone(9, "Milestone 2", "2021-03-20", true))

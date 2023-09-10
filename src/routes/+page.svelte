@@ -7,17 +7,18 @@ import { FactoryPicto } from "$lib/factoryPicto";
 
 import { Helpers } from "$lib/helpers";
 import PopUpConfirmation from "$lib/PopUpConfirmation.svelte";
+	import { Rights } from "$lib/rights.class";
 import { store } from "$lib/stores";
 import { Struct } from "$lib/struct.class";
 import Toast from "$lib/Toast.svelte";
 
-let popUpComponent
-let toastComponent
+let popUpComponent:PopUpConfirmation
+let toastComponent:Toast
 //Reset store currentTimeline information when we are here
-$store.currentTimeline=null
-$store.lastCommitedRemotely=null
-$store.lastUpdatedLocally=null
-$store.rights=null
+$store.currentTimeline=new Struct.Timeline()
+$store.lastCommitedRemotely=-1
+$store.lastUpdatedLocally=-1
+$store.rights=new Rights(null)
 
 function toStringDate(date: Date): string {
 	const DATE_SEPARATOR = "/"
@@ -34,7 +35,7 @@ function gotoNew(){
 	window.location.href = '/g/' + Helpers.randomeString(64)
 }
 
-function goto(event, key:string){
+function goto(event:Event|null, key:string){
 	window.location.href = '/g/' + key
 }
 
@@ -43,21 +44,21 @@ function goto(event, key:string){
  * @param event 
  * @param key the key of the chart user want to duplicate.
  */
-function duplicate(event, key:string):void {
+function duplicate(event:Event, key:string):void {
 	event.stopPropagation();
-	let clone:object = {...CustomLocalStorage.getTimeline(key)}
-	clone['ownerKey']=null
-	clone['writeKey']=null
-	clone['readKey']=null
-	clone['isOnline']=false
-	clone['title'] = generateTitle(clone['title'])
-	clone['key'] = Helpers.randomeString(64)
+	let clone:Struct.Timeline = structuredClone(CustomLocalStorage.getTimeline(key))
+	clone.ownerKey=null
+	clone.writeKey=null
+	clone.readKey=null
+	clone.isOnline=false
+	clone.title = generateTitle(clone['title'])
+	clone.key = Helpers.randomeString(64)
 
 	let newCard = new Struct.Card(clone['key'], clone['title'])
 	$store.cards.push(newCard)
 	CustomLocalStorage.save(clone['key'], clone)
 	//refresh store
-	$store.currentTimeline=null
+	$store.currentTimeline=new Struct.Timeline('','')
 }
 
 /**
@@ -81,7 +82,7 @@ function generateTitle(title:string):string{
  * @param event
  * @param key
  */
-function askDelete(event, key:string):void{
+function askDelete(event:Event, key:string):void{
 	event.stopPropagation();
 	let timelineToDelete: Struct.Timeline = CustomLocalStorage.getTimeline(key)
 	if(timelineToDelete && timelineToDelete.isOnline){
@@ -126,7 +127,7 @@ function doDelete(args:any[]):void{
 	
 	CustomLocalStorage.remove(LOCAL_STORAGE.KEY_PICTO + key)
 	//refresh store
-	$store.currentTimeline=null
+	$store.currentTimeline=new Struct.Timeline('','')
 }
 
 
@@ -162,21 +163,21 @@ function doDelete(args:any[]):void{
 {#key $store.cards}
 <div id='current'>
 	{#each $store.cards as card}
-		<div class='card' on:click={() => goto(null, card.key)}>
+		<div class='card' on:click={() => goto(null, card.key)} on:keydown={() => goto(null, card.key)}>
 			<img src={getThumbnail(card.key)} alt='miniature ' height="150px" width="250px" class='thumbnail'/>
 			<div class='title' >{card.title}</div>
-			<div class='lastUpdate'>Updated : {toStringDate(card.lastUpdated)}</div>
+			<div class='lastUpdate'>Updated : {#if card.lastUpdated}{toStringDate(card.lastUpdated)}{/if}</div>
 			<div class:hidden={!card.isOnline} class='information' title="This Timeline is saved remotely and can't be deleted">
 				<i class="online"></i>
 			</div>
 			<div class='action'>
-				<small>{card.key.substr(0,5)}</small>
-				<div name="T{card.key}"  class="live_cmd" on:click={(event) => duplicate(event, card.key)} title="duplicate this Timeline">
+				<small>{card.key.substring(0,5)}</small>
+				<div class="live_cmd" on:click={(event) => duplicate(event, card.key)} on:keydown={(event) => duplicate(event, card.key)} title="duplicate this Timeline">
 					<svg viewBox="0 0 20 20">
 						<use x="0" y="0" href="#b_duplicate"/>
 					</svg>
 				</div>
-				<div class:hidden={card.isOnline} name="T{card.key}"  class="live_cmd live_cmd_red" on:click={(event) => askDelete(event, card.key)} title="delete this Timeline">
+				<div class:hidden={card.isOnline} class="live_cmd live_cmd_red" on:click={(event) => askDelete(event, card.key)} on:keydown={(event) => askDelete(event, card.key)} title="delete this Timeline">
 					<svg viewBox="0 0 20 20">
 						<use x="0" y="0" href="#b_delete"/>
 					</svg>
@@ -184,7 +185,7 @@ function doDelete(args:any[]):void{
 			</div>
 		</div>
 	{/each}
-	<div class='emptyCard' on:click={gotoNew}><div class='addMore'>➕</div></div>
+	<div class='emptyCard' on:click={gotoNew} on:keydown={gotoNew}><div class='addMore'>➕</div></div>
 </div>
 {/key}
 <PopUpConfirmation bind:this={popUpComponent}/>

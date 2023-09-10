@@ -13,6 +13,6 @@ export function goCsv(currentTimeline: Struct.Timeline):string{
     buffer += 'title' + SEPARATOR + currentTimeline.title + RC
     buffer += currentTimeline.tasks.map(e => FactoryTask.join(e, SEPARATOR)).join(RC) + RC
     buffer += currentTimeline.milestones.map(e => FactoryMilestone.join(e, SEPARATOR)).join(RC) + RC
-    console.info(buffer)
+
     return buffer
 }

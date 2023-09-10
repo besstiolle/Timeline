@@ -10,7 +10,7 @@ export function timelineToObject(timeline: Struct.Timeline):object{
 }
 
 function purgeTasksToToml(tasks:Array<Struct.Task>){
-    let res = []
+    let res:Object[] = []
     tasks.forEach(task => {
         res.push({
             label: task.label,
@@ -25,7 +25,7 @@ function purgeTasksToToml(tasks:Array<Struct.Task>){
     return res
 }
 function purgeMilestoneToToml(milestones:Array<Struct.Milestone>){
-    let res = []
+    let res:Object[] = []
     milestones.forEach(milestone => {
         res.push({
             label: milestone.label,
@@ -41,7 +41,7 @@ export function goToml(o: object):string{
     if(type !== TYPE.OBJECT){
         throw "goToml need a object to work. type "+type+" was provided : "
     }
-    return __goTomlObject(null, <object>o, 's')
+    return __goTomlObject(null, o, 's')
 }
 
 const RC:string = '\r\n'
@@ -49,7 +49,7 @@ const QUOTES:string = '"'
 const REGEX_QUOTES = new RegExp('"', "g");
 const VERSION:string = '1.0'
 
-function __goTomlObject(objectKey:string = null, o: object, previousKeys:string = ''):string{
+function __goTomlObject(objectKey:string|null = null, o: object, previousKeys:string = ''):string{
     let type = null
     let buffer = ''
     let buffer2 = ''
@@ -62,29 +62,33 @@ function __goTomlObject(objectKey:string = null, o: object, previousKeys:string 
         buffer += `[${previousKeys}${objectKey}]` + RC
     }
 
+    let anyValue:any
     Object.keys(o).map((key) => {
-        type = getType(o[key])
+        //Obviously, it's exist...
+        //@ts-ignore
+        anyValue = o[key]
+        type = getType(anyValue)
         switch (type){
             case TYPE.ARRAY: 
-                buffer += __goTomlArray(key, (<Array<any>>o[key])) + RC
+                buffer += __goTomlArray(key, (<Array<any>>anyValue)) + RC
                 break
             case TYPE.NUMBER:  
-                buffer += __goTomlNumber(key, (<string>o[key])) + RC
+                buffer += __goTomlNumber(key, (<string>anyValue)) + RC
                 break
             case TYPE.BOOLEAN: 
-                buffer += __goTomlBoolean(key, (<string>o[key])) + RC
+                buffer += __goTomlBoolean(key, (<string>anyValue)) + RC
                 break
             case TYPE.STRING: 
-                buffer += __goTomlString(key, (<string>o[key])) + RC
+                buffer += __goTomlString(key, (<string>anyValue)) + RC
                 break
             case TYPE.DATE: 
-                buffer += __goTomlDate(key, (<Date>(o[key]))) + RC
+                buffer += __goTomlDate(key, (<Date>(anyValue))) + RC
                 break
             case TYPE.OBJECT: 
-                buffer += __goTomlObject(key, (<object>o[key]), objectKey?(previousKeys + objectKey):'') + RC
+                buffer += __goTomlObject(key, (<object>anyValue), objectKey?(previousKeys + objectKey):'') + RC
                 break
             case TYPE.ARRAY_OF_OBJECTS: 
-                buffer2 += __goTomlArrayOfObjects(key, (<Array<object>>o[key]), objectKey?(previousKeys + objectKey):'') + RC
+                buffer2 += __goTomlArrayOfObjects(key, (<Array<object>>anyValue), objectKey?(previousKeys + objectKey):'') + RC
                 break
             case TYPE.NULL: 
                 break
@@ -117,13 +121,13 @@ function __goTomlArray(key: string, o: Array<any>):string{
                 buffer += QUOTES + new Date(item).toISOString() + QUOTES 
                 break
             case TYPE.ARRAY:  
-                buffer += __goTomlArray(null, <Array<any>>item)
+                buffer += __goTomlArray('', <Array<any>>item)
                 break 
             default:
                 console.error('type %o wasn\'t expected in a simple Array', type)
         }
     })
-    if(key){
+    if(key !== ''){
         return `${key} = [ ${buffer} ]`
     } else {
         return `[ ${buffer} ]`
@@ -169,7 +173,7 @@ const TYPE = {
     NULL:'NULL'
 }
 
-function getType(o){
+function getType(o:any):string{
     if(o === null){
         return TYPE.NULL
     } else if( Array.isArray(o) && (<Array<any>>o).length && getType(<Array<any>>o[0]) === TYPE.OBJECT){
@@ -194,4 +198,7 @@ function getType(o){
                 console.error('type %o wasn\'t expected', type)
         }
     }
+
+    //Default statement
+    return TYPE.NULL
 }

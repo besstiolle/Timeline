@@ -56,7 +56,10 @@ color = "gray"
 `)
 
 //console.debug(result)
-} catch (e) {
+// The Exception return by the toml library is precisely "Error"
+// See more : https://www.npmjs.com/package/toml?activeTab=code
+//@ts-ignore
+} catch (e: Error) {
   console.error("Parsing error on line " + e.line + ", column " + e.column +
     ": " + e.message);
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { browser } from '$app/env';
+import { browser } from "$app/environment"
 import { store } from './stores';
 
 
@@ -23,34 +23,36 @@ $store.currentTimeline.milestones.forEach(milestone => {
 milestones = milestones.sort(compareMilestone)
 
 
-let ghostSVGNode: HTMLElement  = null
-let currentTarget: HTMLElement = null
+let ghostSVGNode: HTMLElement|null = null
+let currentTarget: HTMLElement|null = null
 let hoverGroup: boolean = false
-let recBox: DOMRect = null
+let recBox: DOMRect
 
 const GHOST_SVG_NODE_ID: string = "ghostSVGNode"
 /**
  * Triggered every time user try to "grab" an svg group of Milestone
  * @param event the event mousedown
  */
-function down(event){
+function down(event:Event){
     //Security : we can't manipulate data if we are a simple Reader
     if($store.rights.isReader()){return}
     
     //Avoid selecting text. source : https://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/
     event.preventDefault();
-    currentTarget = event.currentTarget //currentTarget => svg, target => sub element of svg
-    ghostSVGNode = <HTMLElement> currentTarget.cloneNode(true)
+    currentTarget = event.currentTarget as HTMLElement //currentTarget => svg, target => sub element of svg
+    ghostSVGNode = currentTarget.cloneNode(true) as HTMLElement
     ghostSVGNode.setAttribute("id", GHOST_SVG_NODE_ID)
 
     //Find the last node of our SVG group
-    let endMilestoneNode = document.getElementById("endMilestoneNode")
+    let endMilestoneNode = document.getElementById("endMilestoneNode") as HTMLElement
 
     //create ghost node <svg> after the last node of our SVG group
-    endMilestoneNode.parentNode.insertBefore(ghostSVGNode, endMilestoneNode)
+    if(endMilestoneNode.parentNode){
+        endMilestoneNode.parentNode.insertBefore(ghostSVGNode, endMilestoneNode)
+    }
     
     //Refresh our ghost Node reference
-    ghostSVGNode = document.getElementById(GHOST_SVG_NODE_ID)
+    ghostSVGNode = document.getElementById(GHOST_SVG_NODE_ID) as HTMLElement
 
     ghostSVGNode.classList.add("grabbing")
 }
@@ -59,14 +61,14 @@ function down(event){
  * Triggered every time user release the left clic of the mouse
  * @param event the event mouseup
  */
-function up(event){
+function up(event:MouseEvent){
     //Security : we can't manipulate data if we are a simple Reader
     if($store.rights.isReader()){return}
 
-    if(ghostSVGNode && hoverGroup){
+    if(ghostSVGNode && hoverGroup && currentTarget){
         let newX = event.clientX / window.innerWidth * GRID.ALL_WIDTH
         let date = processNewDate(newX - GRID.MIDDLE_X)
-        let idMilestone = currentTarget.getAttribute("id").substring(1) // M999 => 999
+        let idMilestone = (currentTarget.getAttribute("id") as string).substring(1) // M999 => 999
         let milestones = null
         try{
             milestones = FactoryMilestone.getById($store.currentTimeline, parseInt(idMilestone))    
@@ -89,12 +91,12 @@ function up(event){
  * Triggered every time user move the mouse
  * @param event the event mousemove
  */
-function move(event){
+function move(event:MouseEvent){
     //Security : we can't manipulate data if we are a simple Reader
     if($store.rights.isReader()){return}
 
     if(!recBox && browser){
-        recBox = document.getElementById("milestonesSection").getBoundingClientRect()
+        recBox = (document.getElementById("milestonesSection") as HTMLElement).getBoundingClientRect()
     }
 
     if(hoverGroup && (event.clientX <= recBox.left || event.clientX >= recBox.right

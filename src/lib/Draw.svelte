@@ -2,7 +2,7 @@
 import html2canvas from 'html2canvas';
 
 import { store } from './stores';
-import { browser } from "$app/env";
+import { browser } from "$app/environment"
 
 import { Helpers } from './helpers';
 
@@ -16,25 +16,25 @@ import Online from './Online.svelte';
 import Toast from './Toast.svelte';
 import { FactoryPicto } from './factoryPicto';
 
-    let toastComponent
-    let openOnlineComponent, commitOnlineComponent, openUploadComponent, openLiveComponent
-
-    const delay = ms => new Promise(res => setTimeout(res, ms));
+    let toastComponent:Toast
+    let uploadComponent:Upload
+    let liveComponent:Live
+    let onlineComponent:Online
 
     let processRunning = false
     /**
      * Generate a thumbbnail every 30s and save it into the localstorage
      */
     let makeThumbnail = async () => {
-        await delay(30000) // 30s
+        await new Promise(res => setTimeout(res, 30000))
         if(!processRunning && browser) { //avoid ReferenceError: Image is not defined
             processRunning=true
             var image = new Image();
-            html2canvas(document.getElementById('wrapper'), {
+            html2canvas(document.getElementById('wrapper') as HTMLElement, {
                 ignoreElements: function (el) {return el.classList.contains('toExcludeFromSnapshot')},
                 logging:false
             }).then(function (canvas) {
-                var ctx = canvas.getContext("2d");
+                var ctx = canvas.getContext("2d") as CanvasRenderingContext2D
                 ctx.drawImage(image, 0, 0, 128, 128)
                 var dataurl = canvas.toDataURL('image/jpeg', 0.1)
                 FactoryPicto.createPicto($store.currentTimeline, dataurl)
@@ -56,12 +56,12 @@ import { FactoryPicto } from './factoryPicto';
      * Generate a screenshot from the chart and save it on computer as a png image
      */
     function takeshot():void {  
-        html2canvas(document.getElementById('wrapper'), {
+        html2canvas(document.getElementById('wrapper') as HTMLElement, {
             ignoreElements: function (el) {return el.classList.contains('toExcludeFromSnapshot')},
             logging:false
         }).then(function (canvas) {
             canvas.toBlob(function(blob) {
-                download(blob, ".png")      
+                download(blob as Blob, ".png")      
             });
         });
     }
@@ -92,18 +92,18 @@ import { FactoryPicto } from './factoryPicto';
 <div class="rightButtons">
     {#key $store}
     <div class="rightButtonDisabled" class:hidden={!$store.rights.hasWriter() || ($store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000)} title="There is nothing to save"><i class='saveCloud'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.hasWriter() || $store.commitInProgress || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 2 * 1000)} on:click={commitOnlineComponent} title="Save your modifications remotly"><i class='saveCloud'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.hasWriter() || $store.commitInProgress || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 2 * 1000)} on:click={onlineComponent.commit} on:keydown={onlineComponent.commit} title="Save your modifications remotly"><i class='saveCloud'></i></div>
 
-    <div class="rightButton" class:hidden={!$store.rights.isNone()} on:click={openOnlineComponent} title="Share & save your chart online"><i class='online'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.isOwner()} on:click={openOnlineComponent} title="Save your chart on your computer only"><i class='offline'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone()} on:click={onlineComponent.openShadowBox} on:keydown={onlineComponent.openShadowBox} title="Share & save your chart online"><i class='online'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isOwner()} on:click={onlineComponent.openShadowBox} on:keydown={onlineComponent.openShadowBox} title="Save your chart on your computer only"><i class='offline'></i></div>
 
     
-    <div class="rightButton" class:hidden={!$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show regular tasks"><i class='hide'></i></div>
-    <div class="rightButton" class:hidden={$store.currentTimeline.showAll} on:click={toggleShowHide} title="Show all tasks even if they're hidden"><i class='show'></i></div>
+    <div class="rightButton" class:hidden={!$store.currentTimeline.showAll} on:click={toggleShowHide}  on:keydown={toggleShowHide} title="Show regular tasks"><i class='hide'></i></div>
+    <div class="rightButton" class:hidden={$store.currentTimeline.showAll} on:click={toggleShowHide} on:keydown={toggleShowHide} title="Show all tasks even if they're hidden"><i class='show'></i></div>
     {/key}
-    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={openUploadComponent} title='Import/Export your data'><i class='io'></i></div>
-    <div class="rightButton" on:click={takeshot} title='Take a screenshot'><i class='photo'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={openLiveComponent} title='Edit your milestones'><i class='edit'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={uploadComponent.openShadowBox} on:keydown={uploadComponent.openShadowBox} title='Import/Export your data'><i class='io'></i></div>
+    <div class="rightButton" on:click={takeshot} on:keydown={takeshot} title='Take a screenshot'><i class='photo'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={liveComponent.openShadowBox} on:keydown={liveComponent.openShadowBox} title='Edit your milestones'><i class='edit'></i></div>
 </div>
 
 <div class="bottomButtons">
@@ -112,9 +112,9 @@ import { FactoryPicto } from './factoryPicto';
     <div class="bottomButton" title='Ask me a new feature. Send me your bug description'><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline/issues/new'><i class='questions'></i></a></div>
 </div>
 
-<Upload bind:openComponent={openUploadComponent} download={download}/>
-<Live bind:openComponent={openLiveComponent}/>
-<Online bind:openComponent={openOnlineComponent} bind:commit={commitOnlineComponent}/>
+<Upload bind:this={uploadComponent} download={download}/>
+<Live bind:this={liveComponent}/>
+<Online bind:this={onlineComponent}/>
 <Toast bind:this={toastComponent}/>
 
 
