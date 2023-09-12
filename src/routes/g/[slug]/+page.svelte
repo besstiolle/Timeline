@@ -83,6 +83,7 @@ if($store.rights.isNone()){
         cloneStore.lastUpdatedLocally = 0
         cloneStore.lastCommitedRemotely = getResponseJson["message"]["ts"]
         cloneStore.currentTimeline = currentTimeline
+        cloneStore.rights = $store.rights
         // Tricks : Set to true if we don't want to refresh lastUpdatedLocally property
         cloneStore._cancelRefreshLastUpdatedLocally = true
         store.set(cloneStore)
@@ -115,7 +116,7 @@ if($store.rights.isNone()){
 </svelte:head>
 
 {#if $store.currentTimeline}
-<Draw/>
+    <Draw/>
 {/if}
 
 
