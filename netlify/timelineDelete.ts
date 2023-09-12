@@ -32,8 +32,8 @@ export async function remove(q, client, event, context) {
     }
 
     let timelineKey:string = event.queryStringParameters["key"]
-    let indexeToUse: string = null
-    let keyToUse: string = null
+    let indexeToUse: string
+    let keyToUse: string
 
     if(event.queryStringParameters["ownerKey"]) {
       if(!event.queryStringParameters["ownerKey"].match(REGEX.ALPHANUM64)){

@@ -1,8 +1,7 @@
-
-import type { Struct } from "$lib/struct.class"
 import {FaunaError} from "./FaunaError.class"
 import { JsonParser } from "../src/lib/jsonParser"
 import { COLLECTION, INDEXES } from "./faunaConstantes"
+import { Struct } from "../src/lib/struct.class"
 
 /**
  *  @param event : {
@@ -26,7 +25,7 @@ import { COLLECTION, INDEXES } from "./faunaConstantes"
  */
 export async function create(q, client, event, context) {
 
-    let timeline: Struct.Timeline = null
+    let timeline: Struct.Timeline
 
     //Sanitize object
     try{
@@ -86,7 +85,7 @@ export async function create(q, client, event, context) {
       ).then((ret) => {
         return {
           statusCode: 201,
-          body: JSON.stringify({ message: ret }, null, 2),
+          body: JSON.stringify({ message: ret }),
         }
       })
       .catch((err) => {
@@ -112,7 +111,7 @@ async function insert(q, client, timeline: Struct.Timeline){
     ).then((ret) => {
       return {
         statusCode: 201,
-        body: JSON.stringify({ message: ret }, null, 2),
+        body: JSON.stringify({ message: ret }),
       }
     })
     .catch((err) => {
