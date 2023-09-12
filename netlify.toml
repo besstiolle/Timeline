@@ -4,6 +4,11 @@
   command = "npm run build"
   # This is the directory is publishing to netlify's CDN
   publish = "build"
+  [[headers]]
+    # Define which paths this specific [[headers]] block will cover.
+    for = "/*"
+      [headers.values]
+      Access-Control-Allow-Origin = "*"
 
 [dev]
   # Force a static port to serve Netlify's Lambda Functions
