@@ -286,6 +286,6 @@ function doDelete(args:any[]):void{
     :global(div.live_cmd_red:hover){
         fill:rgb(56, 33, 33);
         background-color: rgb(221, 175, 175);
-        border: 1px solid rgb(221, 175, 175);;
+        border: 1px solid rgb(221, 175, 175);
     }
 </style>
