@@ -2,7 +2,7 @@
 
 I'm really glad you're reading this, because this project is fully open source and free to use, we will be more efficient together
 
-Feel free to contact me if you hava a question about the process of the contribution : kdanezis at gm*il .com
+Feel free to contact me if you hava a question about the process of the contribution : kdanezis at prot*n .me
 
 ## Submitting new idea
 
