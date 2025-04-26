@@ -97,27 +97,27 @@ function b_add(){
 {#each $store.currentTimeline.tasks as task, i}
 <div class="live__line show_{task.isShow}">
     <div class='live__input_top'>
-        <div class="live_cmd" on:click="{e =>{b_show(i)}}" on:keydown="{e =>{b_show(i)}}" title="hide/show this line">
+        <div class="live_cmd" on:click="{e =>{b_show(i)}}" on:keydown="{e =>{b_show(i)}}" title="hide/show this line" role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_show"/>
             </svg>
         </div>
-        <div class="live_cmd" on:click="{e =>{b_up(i)}}" on:keydown="{e =>{b_up(i)}}" title="go down this line">
+        <div class="live_cmd" on:click="{e =>{b_up(i)}}" on:keydown="{e =>{b_up(i)}}" title="go down this line" role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_up"/>
             </svg>
         </div>
-        <div class="live_cmd" on:click="{e =>{b_down(i)}}" on:keydown="{e =>{b_down(i)}}" title="go up this line">
+        <div class="live_cmd" on:click="{e =>{b_down(i)}}" on:keydown="{e =>{b_down(i)}}" title="go up this line" role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_down"/>
             </svg>
         </div>
-        <div class="live_cmd" on:click="{e =>{b_duplicate(i)}}" on:keydown="{e =>{b_duplicate(i)}}" title="duplicate this line">
+        <div class="live_cmd" on:click="{e =>{b_duplicate(i)}}" on:keydown="{e =>{b_duplicate(i)}}" title="duplicate this line" role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_duplicate"/>
             </svg>
         </div>
-        <div class="live_cmd live_cmd_red" on:click="{e =>{b_delete(i)}}" on:keydown="{e =>{b_delete(i)}}" title="delete this line">
+        <div class="live_cmd live_cmd_red" on:click="{e =>{b_delete(i)}}" on:keydown="{e =>{b_delete(i)}}" title="delete this line" role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_delete"/>
             </svg>
@@ -135,7 +135,7 @@ function b_add(){
 </div>
 {/each}
 <div class="live__action">
-    <div class="live__action__button" on:click="{b_add}" on:keydown="{b_add}" >
+    <div class="live__action__button" on:click="{b_add}" on:keydown="{b_add}"  role="button" tabindex="0">
         <svg class="svg-icon" viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_add"/>
         </svg>

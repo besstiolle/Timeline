@@ -16,12 +16,12 @@ function handleKeydown(event:KeyboardEvent) {if (!hidden && event.key === 'Escap
 
 <svelte:window on:keydown={handleKeydown}/>
 
-<div class="ShadowBoxBG" class:hidden on:click={closeComponent} on:keydown={closeComponent}></div>
+<div class="ShadowBoxBG" class:hidden on:click={closeComponent} on:keydown={closeComponent} role="button" tabindex="0"></div>
 <div id={id} class="ShadowBox" class:hidden>
     <div class="ShadowContent">
         <slot>Default content for the Box Slot</slot>
     </div>            
-    <div class="ShadowClosing">Click <span class='pointer' on:click={closeComponent} on:keydown={closeComponent}>here</span> or tape <span>Escape key</span> to close this windows</div>
+    <div class="ShadowClosing">Click <span class='pointer' on:click={closeComponent} on:keydown={closeComponent} role="button" tabindex="0">here</span> or tape <span>Escape key</span> to close this windows</div>
 </div>
 
 <style>

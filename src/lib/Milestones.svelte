@@ -137,7 +137,8 @@ function processNewDate(newX: number){
 {#each milestones as milestone, i}
     <svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
         x="{GRID.MIDDLE_X + (milestone.getDate().getTime() - $store.currentTimeline.getStart().getTime()) / ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()) * GRID.MIDDLE_WIDTH - 10}" y="{i%2 * 25}" 
-        class:milestoneSVGSection={!$store.rights.isReader()} class:shouldBeHidden={!milestone.isShow} on:mousedown={down} id="M{milestone.id}" >
+        class:milestoneSVGSection={!$store.rights.isReader()} class:shouldBeHidden={!milestone.isShow} on:mousedown={down} id="M{milestone.id}" 
+        role="presentation">
         
         <use x="0" y="0" href="#mapfiller" fill="transparent" stroke="transparent" class="toExcludeFromSnapshot"/>
         <use x="0" y="0" href="#map" />

@@ -1,6 +1,6 @@
 <script lang="ts">
 import { browser } from "$app/environment"
-import { page } from '$app/stores'
+import { page } from '$app/state';
 import { store } from '$lib/stores';
 
 import { CustomLocalStorage } from '$lib/customLocalStorage';
@@ -17,7 +17,7 @@ import { NotFoundOnlineException } from '$lib/timelineException.class';
 // @ts-ignore
 let toastComponent:Toast = null
 
-$store.rights = new Rights($page.url.searchParams)
+$store.rights = new Rights(page.url.searchParams)
 
 
 //TODO : disabling SSR or not on this page ?
@@ -32,7 +32,7 @@ $store.rights = new Rights($page.url.searchParams)
 // https://medium.com/geekculture/few-ways-to-generate-qr-code-using-javascript-54b6b5220c4f
 
 
-const slug = $page.params.slug
+const slug = page.params.slug
 if(!slug.match('^[a-zA-Z0-9]{64}$')){
     console.error("An image may be misconfigurated, eg bad = 'foo.png', good = '/foo.png'", slug)
     if(browser && toastComponent != null){
@@ -52,7 +52,7 @@ if(!$store.rights.hasOwner() && currentTimeline?.ownerKey){
     queryString = "?r=" + currentTimeline.readKey
 }
 if(queryString){    
-    window.location.href = $page.url.protocol + '//' + $page.url.host + "/g/" + currentTimeline.key + queryString
+    window.location.href = page.url.protocol + '//' + page.url.host + "/g/" + currentTimeline.key + queryString
 }
 
 if($store.rights.isNone()){
@@ -95,7 +95,7 @@ if($store.rights.isNone()){
                 toastComponent.show("Oups, your timeline doesn't seems to exist anymore on the remote endpoint.<br/> Please remove it from your local browser in the homepage", false, 10)
                 //Refresh page after 10s
                 setTimeout(function(){
-                    window.location.href = $page.url.protocol + '//' + $page.url.host + "/g/" + slug
+                    window.location.href = page.url.protocol + '//' + page.url.host + "/g/" + slug
                 }, 10000);
                 
             } else {

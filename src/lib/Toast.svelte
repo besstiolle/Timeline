@@ -32,7 +32,7 @@
 
 </script>
 
-<div bind:this={toast} on:click={hide} on:keydown={hide}></div>
+<div bind:this={toast} on:click={hide} on:keydown={hide} role="button" tabindex="0"></div>
 
 <style>
 

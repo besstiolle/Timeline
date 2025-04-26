@@ -246,8 +246,8 @@ onMount(async () => {
             <label for="file"><span class='action'>upload file</span> Must be a .csv or .toml file. You can also drag it over this windows.</label>
         </div>
         <button type="submit">Upload</button>
-        <div><span class='action' on:click={downloadCsv} on:keydown={downloadCsv}>download .csv</span> The CSV format is very simple and can be edited in Excel or Notepad++ & co</div>
-        <div><span class='action' on:click={downloadToml} on:keydown={downloadToml}>download .toml</span> The Toml format can be extended in the futur and can be edited with Notepad++ & co</div>
+        <div><span class='action' on:click={downloadCsv} on:keydown={downloadCsv} role="button" tabindex="0">download .csv</span> The CSV format is very simple and can be edited in Excel or Notepad++ & co</div>
+        <div><span class='action' on:click={downloadToml} on:keydown={downloadToml} role="button" tabindex="0">download .toml</span> The Toml format can be extended in the futur and can be edited with Notepad++ & co</div>
     </form>
 </ShadowBox>
 <Toast bind:this={toastComponent}/>

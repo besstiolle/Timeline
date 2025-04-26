@@ -1,6 +1,6 @@
 <script lang="ts">
     
-import { page } from '$app/stores';
+import { page } from '$app/state';
 import { store } from './stores';
 
 import { Helpers } from './helpers';
@@ -41,7 +41,7 @@ import { FactoryCards } from './factoryCards';
         }        
     }
 
-    const base_url = $page.url.protocol + '//' + $page.url.host
+    const base_url = page.url.protocol + '//' + page.url.host
  
     function doOffline(){
 
@@ -108,14 +108,14 @@ import { FactoryCards } from './factoryCards';
     {#if $store.currentTimeline.isOnline}
         <div class='warn'>Please be advice that going "<span>offline</span>" will remove every data from our server but it also cancel every previous shared link of your work</div>
         <div>You're currently : <span>ONLINE</span></div>
-        <div class='action' on:click={doOffline} on:keydown={doOffline}>Put me offline</div>
+        <div class='action' on:click={doOffline} on:keydown={doOffline} role="button" tabindex="0">Put me offline</div>
         <div><label for='readOnly'>Read-only URL : </label><input id='readOnly' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?r=" + $store.currentTimeline.readKey}'></div>
         <div><label for='writer'>Writer URL : </label><input id='writer' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?w=" + $store.currentTimeline.writeKey}'></div>
         <div><label for='owner'>Owner URL : </label><input id='owner' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?o=" + $store.currentTimeline.ownerKey}'></div>
     {:else}
         <div class='warn'>Please be advice that bringing your charts "<span>online</span>" may allow you to save your data on our server but it also may expose your datas to everyone</div>
         <div>You're currently : <span>OFFLINE</span></div>
-        <div class='action' on:click={doOnline} on:keydown={doOnline}>Put me online</div>
+        <div class='action' on:click={doOnline} on:keydown={doOnline} role="button" tabindex="0">Put me online</div>
     {/if}
 </ShadowBox>
 <Toast bind:this={toastComponent}/>

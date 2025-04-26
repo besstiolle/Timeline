@@ -92,24 +92,24 @@ import { FactoryPicto } from './factoryPicto';
 <div class="rightButtons">
     {#key $store}
     <div class="rightButtonDisabled" class:hidden={!$store.rights.hasWriter() || ($store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000)} title="There is nothing to save"><i class='saveCloud'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.hasWriter() || $store.commitInProgress || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 2 * 1000)} on:click={onlineComponent.commit} on:keydown={onlineComponent.commit} title="Save your modifications remotly"><i class='saveCloud'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.hasWriter() || $store.commitInProgress || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 2 * 1000)} on:click={onlineComponent.commit} on:keydown={onlineComponent.commit} title="Save your modifications remotly" role="button" tabindex="0"><i class='saveCloud'></i></div>
 
-    <div class="rightButton" class:hidden={!$store.rights.isNone()} on:click={onlineComponent.openShadowBox} on:keydown={onlineComponent.openShadowBox} title="Share & save your chart online"><i class='online'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.isOwner()} on:click={onlineComponent.openShadowBox} on:keydown={onlineComponent.openShadowBox} title="Save your chart on your computer only"><i class='offline'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone()} on:click={onlineComponent.openShadowBox} on:keydown={onlineComponent.openShadowBox} title="Share & save your chart online" role="button" tabindex="0"><i class='online'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isOwner()} on:click={onlineComponent.openShadowBox} on:keydown={onlineComponent.openShadowBox} title="Save your chart on your computer only" role="button" tabindex="0"><i class='offline'></i></div>
 
     
-    <div class="rightButton" class:hidden={!$store.currentTimeline.showAll} on:click={toggleShowHide}  on:keydown={toggleShowHide} title="Show regular tasks"><i class='hide'></i></div>
-    <div class="rightButton" class:hidden={$store.currentTimeline.showAll} on:click={toggleShowHide} on:keydown={toggleShowHide} title="Show all tasks even if they're hidden"><i class='show'></i></div>
+    <div class="rightButton" class:hidden={!$store.currentTimeline.showAll} on:click={toggleShowHide}  on:keydown={toggleShowHide} title="Show regular tasks" role="button" tabindex="0"><i class='hide'></i></div>
+    <div class="rightButton" class:hidden={$store.currentTimeline.showAll} on:click={toggleShowHide} on:keydown={toggleShowHide} title="Show all tasks even if they're hidden" role="button" tabindex="0"><i class='show'></i></div>
     {/key}
-    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={uploadComponent.openShadowBox} on:keydown={uploadComponent.openShadowBox} title='Import/Export your data'><i class='io'></i></div>
-    <div class="rightButton" on:click={takeshot} on:keydown={takeshot} title='Take a screenshot'><i class='photo'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={liveComponent.openShadowBox} on:keydown={liveComponent.openShadowBox} title='Edit your milestones'><i class='edit'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={uploadComponent.openShadowBox} on:keydown={uploadComponent.openShadowBox} title='Import/Export your data' role="button" tabindex="0"><i class='io'></i></div>
+    <div class="rightButton" on:click={takeshot} on:keydown={takeshot} title='Take a screenshot' role="button" tabindex="0"><i class='photo'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={liveComponent.openShadowBox} on:keydown={liveComponent.openShadowBox} title='Edit your milestones' role="button" tabindex="0"><i class='edit'></i></div>
 </div>
 
 <div class="bottomButtons">
-    <div class="bottomButton" title="Come to home page"><a href='/'><i class='home'></i></a></div>
-    <div class="bottomButton" title="Fork me on Github"><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline'><i class='github'></i></a></div>
-    <div class="bottomButton" title='Ask me a new feature. Send me your bug description'><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline/issues/new'><i class='questions'></i></a></div>
+    <div class="bottomButton" title="Come to home page"><a href='/' aria-label="Come back to homepage"><i class='home'></i></a></div>
+    <div class="bottomButton" title="Fork me on Github"><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline' aria-label="See project on Github"><i class='github' ></i></a></div>
+    <div class="bottomButton" title='Ask me a new feature. Send me your bug description'><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline/issues/new' aria-label="Create issue on Github"><i class='questions'></i></a></div>
 </div>
 
 <Upload bind:this={uploadComponent} download={download}/>

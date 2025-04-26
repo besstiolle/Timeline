@@ -371,11 +371,13 @@ function showToggle(event:Event){
         <rect x="0" y="{i * GRID.ONE_TASK_H}" 
             width="{GRID.ALL_WIDTH}" height="{localSwimline?.height}"  
             fill="{COLORS[localSwimline.position % COLORS.length][0]}" id="c{task.swimlineId}" 
-            on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
+            on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}
+            role="none"/>
 
         <rect x="0" y="{i * GRID.ONE_TASK_H}" 
             width="{GRID.LEFT_WIDTH}" height="{localSwimline.height}" fill="{COLORS[localSwimline.position % COLORS.length][1]}" id="d{task.swimlineId}" 
-            on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}/>
+            on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}
+            role="none"/>
         
         <text text-anchor="middle" x="{GRID.LEFT_WIDTH / 2}" y="{i * GRID.ONE_TASK_H + 5 + localSwimline.height / 2}" 
             font-size="10" fill="{localSwimline.swimline.isShow?"#ffffff":"#888888"}">{localSwimline.swimline.label}</text>
@@ -383,7 +385,8 @@ function showToggle(event:Event){
         <image xlink:href="{localSwimline.swimline.isShow?"/hide.png":"/see.png"}" x="0" y="{i * GRID.ONE_TASK_H}" height="24" width="24" 
             data-html2canvas-ignore="true" 
             on:click={toggleSwimlineVisibility} on:keydown={toggleSwimlineVisibility} id="s{task.swimlineId}" class='toggleVisibility hidden'
-            on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle} />
+            on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}
+            role="button" tabindex="0" />
     {/if}
 {:else}
     <rect x="0" y="{i * GRID.ONE_TASK_H}" 

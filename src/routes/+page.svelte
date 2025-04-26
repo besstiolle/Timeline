@@ -163,7 +163,7 @@ function doDelete(args:any[]):void{
 {#key $store.cards}
 <div id='current'>
 	{#each $store.cards as card}
-		<div class='card' on:click={() => goto(null, card.key)} on:keydown={() => goto(null, card.key)}>
+		<div class='card' on:click={() => goto(null, card.key)} on:keydown={() => goto(null, card.key)} role="button" tabindex="0">
 			<img src={getThumbnail(card.key)} alt='miniature ' height="150px" width="250px" class='thumbnail'/>
 			<div class='title' >{card.title}</div>
 			<div class='lastUpdate'>Updated : {#if card.lastUpdated}{toStringDate(card.lastUpdated)}{/if}</div>
@@ -172,12 +172,12 @@ function doDelete(args:any[]):void{
 			</div>
 			<div class='action'>
 				<small>{card.key.substring(0,5)}</small>
-				<div class="live_cmd" on:click={(event) => duplicate(event, card.key)} on:keydown={(event) => duplicate(event, card.key)} title="duplicate this Timeline">
+				<div class="live_cmd" on:click={(event) => duplicate(event, card.key)} on:keydown={(event) => duplicate(event, card.key)} title="duplicate this Timeline"  role="button" tabindex="0">
 					<svg viewBox="0 0 20 20">
 						<use x="0" y="0" href="#b_duplicate"/>
 					</svg>
 				</div>
-				<div class:hidden={card.isOnline} class="live_cmd live_cmd_red" on:click={(event) => askDelete(event, card.key)} on:keydown={(event) => askDelete(event, card.key)} title="delete this Timeline">
+				<div class:hidden={card.isOnline} class="live_cmd live_cmd_red" on:click={(event) => askDelete(event, card.key)} on:keydown={(event) => askDelete(event, card.key)} title="delete this Timeline"  role="button" tabindex="0">
 					<svg viewBox="0 0 20 20">
 						<use x="0" y="0" href="#b_delete"/>
 					</svg>
@@ -185,7 +185,7 @@ function doDelete(args:any[]):void{
 			</div>
 		</div>
 	{/each}
-	<div class='emptyCard' on:click={gotoNew} on:keydown={gotoNew}><div class='addMore'>➕</div></div>
+	<div class='emptyCard' on:click={gotoNew} on:keydown={gotoNew} role="button" tabindex="0"><div class='addMore'>➕</div></div>
 </div>
 {/key}
 <PopUpConfirmation bind:this={popUpComponent}/>

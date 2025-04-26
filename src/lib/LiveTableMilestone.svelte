@@ -80,27 +80,27 @@ function m_add(){
 {#each $store.currentTimeline.milestones as milestone, i}
 <div class="live__line show_{milestone.isShow}">
     
-    <div data-name="M{i}"  class="live_cmd" on:click="{e =>{m_show(i)}}" on:keydown="{e =>{m_show(i)}}" title="hide/show this line">
+    <div data-name="M{i}"  class="live_cmd" on:click="{e =>{m_show(i)}}" on:keydown="{e =>{m_show(i)}}" title="hide/show this line" role="button" tabindex="0">
         <svg viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_show"/>
         </svg>
     </div>
-    <div data-name="M{i}"  class="live_cmd" on:click="{e =>{m_up(i)}}" on:keydown="{e =>{m_up(i)}}" title="go down this line">
+    <div data-name="M{i}"  class="live_cmd" on:click="{e =>{m_up(i)}}" on:keydown="{e =>{m_up(i)}}" title="go down this line" role="button" tabindex="0">
         <svg viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_up"/>
         </svg>
     </div>
-    <div data-name="M{i}"  class="live_cmd" on:click="{e =>{m_down(i)}}" on:keydown="{e =>{m_down(i)}}" title="go up this line">
+    <div data-name="M{i}"  class="live_cmd" on:click="{e =>{m_down(i)}}" on:keydown="{e =>{m_down(i)}}" title="go up this line" role="button" tabindex="0">
         <svg viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_down"/>
         </svg>
     </div>
-    <div data-name="M{i}"  class="live_cmd" on:click="{e =>{m_duplicate(i)}}" on:keydown="{e =>{m_duplicate(i)}}" title="duplicate this line">
+    <div data-name="M{i}"  class="live_cmd" on:click="{e =>{m_duplicate(i)}}" on:keydown="{e =>{m_duplicate(i)}}" title="duplicate this line" role="button" tabindex="0">
         <svg viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_duplicate"/>
         </svg>
     </div>
-    <div data-name="M{i}"  class="live_cmd live_cmd_red" on:click="{e =>{m_delete(i)}}" on:keydown="{e =>{m_delete(i)}}" title="delete this line">
+    <div data-name="M{i}"  class="live_cmd live_cmd_red" on:click="{e =>{m_delete(i)}}" on:keydown="{e =>{m_delete(i)}}" title="delete this line" role="button" tabindex="0">
         <svg viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_delete"/>
         </svg>
@@ -111,7 +111,7 @@ function m_add(){
 {/each}
 
 <div class="live__action">
-    <div class="live__action__button" on:click="{m_add}" on:keydown="{m_add}" >
+    <div class="live__action__button" on:click="{m_add}" on:keydown="{m_add}"  role="button" tabindex="0">
         <svg class="svg-icon" viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_add"/>
         </svg>
