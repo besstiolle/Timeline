@@ -21,7 +21,7 @@ let swimlinesToShow: Map<number, swimlinesToShowInterface> = new Map<number, swi
 let previousSwimlineId:number = -1
 let height: number
 let position: number = 0
-$store.currentTimeline.tasks.forEach(task => {
+$store.currentTimeline.tasks.forEach((task:Struct.Task) => {
     if(task.isShow || $store.currentTimeline.showAll){
         tasksToShow.push(task)
 
@@ -344,7 +344,7 @@ function hideActionBar(event:Event){
 function toggleSwimlineVisibility(event:Event){
     let id = Number((event.currentTarget as HTMLElement).id.substring(1))
     let value = !$store.currentTimeline.swimlines[id].isShow
-    $store.currentTimeline.tasks.forEach(task => {
+    $store.currentTimeline.tasks.forEach((task:Struct.Task) => {
         if(task.swimlineId == id) {
             task.isShow = value
         }

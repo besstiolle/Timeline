@@ -31,9 +31,9 @@ import { FactoryPicto } from './factoryPicto';
             processRunning=true
             var image = new Image();
             html2canvas(document.getElementById('wrapper') as HTMLElement, {
-                ignoreElements: function (el) {return el.classList.contains('toExcludeFromSnapshot')},
+                ignoreElements: function (el:Element) {return el.classList.contains('toExcludeFromSnapshot')},
                 logging:false
-            }).then(function (canvas) {
+            }).then(function (canvas:HTMLCanvasElement) {
                 var ctx = canvas.getContext("2d") as CanvasRenderingContext2D
                 ctx.drawImage(image, 0, 0, 128, 128)
                 var dataurl = canvas.toDataURL('image/jpeg', 0.1)
@@ -57,9 +57,9 @@ import { FactoryPicto } from './factoryPicto';
      */
     function takeshot():void {  
         html2canvas(document.getElementById('wrapper') as HTMLElement, {
-            ignoreElements: function (el) {return el.classList.contains('toExcludeFromSnapshot')},
+            ignoreElements: function (el:Element) {return el.classList.contains('toExcludeFromSnapshot')},
             logging:false
-        }).then(function (canvas) {
+        }).then(function (canvas:HTMLCanvasElement) {
             canvas.toBlob(function(blob) {
                 download(blob as Blob, ".png")      
             });

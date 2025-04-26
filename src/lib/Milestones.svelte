@@ -14,7 +14,7 @@ function compareMilestone(a : Struct.Milestone, b : Struct.Milestone){
 }
 
 let milestones: Struct.Milestone[] = []
-$store.currentTimeline.milestones.forEach(milestone => { 
+$store.currentTimeline.milestones.forEach((milestone:Struct.Milestone) => { 
     if(milestone.isShow || $store.currentTimeline.showAll){
         milestones.push(milestone)
     }
