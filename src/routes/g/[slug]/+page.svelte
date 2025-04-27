@@ -13,6 +13,7 @@ import { get } from '$lib/timelineRepository';
 import Draw from '$lib/Draw.svelte';
 import Toast from '$lib/Toast.svelte';
 import { NotFoundOnlineException } from '$lib/timelineException.class';
+	import type { ResponseWithMeta } from "../../api/timeline/types";
 
 // @ts-ignore
 let toastComponent:Toast = null
@@ -61,27 +62,23 @@ if($store.rights.isNone()){
         currentTimeline = FactoryTimeline.initiate(currentTimeline)
     }
     $store.currentTimeline = currentTimeline
-} else {
+} else if(browser) {
     let keyUrl = $store.rights.getTimelineField() 
     if(keyUrl == null){keyUrl=''}
     let valueUrl = $store.rights.getSlugParamKeyValue()
     if(valueUrl == null){valueUrl=''}
     let seachParams = new URLSearchParams([['key', slug], [keyUrl, valueUrl]])
-    get(seachParams).then((getResponseJson)=>{    
+    get(seachParams).then((responseWithMeta:ResponseWithMeta)=>{    
 
-        if(!getResponseJson.message.data) {
-            console.error('node data not found in json["message"] : %o', getResponseJson["message"])    
-            throw new Error('node data not found in json["message"]')
-        }
 
-        currentTimeline = JSON.parse(JSON.stringify(getResponseJson.message.data), JsonParser.timelineReviver) 
+        currentTimeline = JSON.parse(JSON.stringify(responseWithMeta.data), JsonParser.timelineReviver) 
           
 
         //We're using the tricks of cloning the content of the Svelte store to avoid multiple refresh of store
         let cloneStore = structuredClone($store)
         //Update date of lastUpdated in the clone
         cloneStore.lastUpdatedLocally = 0
-        cloneStore.lastCommitedRemotely = getResponseJson["message"]["ts"]
+        cloneStore.lastCommitedRemotely = responseWithMeta.meta.ts
         cloneStore.currentTimeline = currentTimeline
         cloneStore.rights = $store.rights
         // Tricks : Set to true if we don't want to refresh lastUpdatedLocally property

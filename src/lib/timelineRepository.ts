@@ -1,9 +1,11 @@
+import type { ResponseWithMeta } from "../routes/api/timeline/types";
 import type { Struct } from "./struct.class";
 import { NotFoundOnlineException } from "./timelineException.class";
 
-const endpoint = import.meta.env.VITE_API_ENDPOINT_BASE_URL + '.netlify/functions/timeline?'
+//const endpoint = import.meta.env.VITE_API_ENDPOINT_BASE_URL + '.netlify/functions/timeline?'
+const endpoint = '/api/timeline'
 
-export async function create(timeline : Struct.Timeline): Promise<createJsonResponseinterface>{
+export async function create(timeline : Struct.Timeline): Promise<ResponseWithMeta>{
     //console.info("POST on endpoint : " + endpoint)
     if(!timeline.ownerKey && !timeline.writeKey){
         throw new Error("at least you must provide one of theses : ownerKey or writeKey in timeline object")
@@ -17,9 +19,11 @@ export async function create(timeline : Struct.Timeline): Promise<createJsonResp
     return await res.json()
 }
 
-export async function get(params: URLSearchParams): Promise<getJsonResponseinterface>{
+export async function get(params: URLSearchParams): Promise<ResponseWithMeta>{
     //console.info("GET on endpoint : " + endpoint + params)
-    const res = await fetch(endpoint + params, {
+    const key = params.get("key")
+    params.delete("key")
+    const res = await fetch(endpoint+"/"+key+"?" + params, {
         method: 'GET',
     }).then(res => {
         if(res.status == 404){
@@ -34,22 +38,16 @@ export async function get(params: URLSearchParams): Promise<getJsonResponseinter
 
 export async function remove(params: URLSearchParams): Promise<string>{
     //console.info("DELETE on endpoint : " + endpoint + params)
-    const res = await fetch(endpoint + params, {
+    const key = params.get("key")
+    params.delete("key")
+    const res = await fetch(endpoint+"/"+key+"?" + params, {
         method: 'DELETE',
+    }).then(res => {
+        if(res.status == 404){
+            throw new NotFoundOnlineException()
+        }
+        return res
     })
 
-    return await res.json()
-}
-
-export interface createJsonResponseinterface{
-    message:{
-        ts:number
-    }
-}
-
-export interface getJsonResponseinterface{
-    message:{
-        data:string
-        ts:number
-    }
+    return await res.text()
 }

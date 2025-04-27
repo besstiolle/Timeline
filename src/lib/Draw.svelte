@@ -91,8 +91,8 @@ import { FactoryPicto } from './factoryPicto';
 </script>
 <div class="rightButtons">
     {#key $store}
-    <div class="rightButtonDisabled" class:hidden={!$store.rights.hasWriter() || ($store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000)} title="There is nothing to save"><i class='saveCloud'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.hasWriter() || $store.commitInProgress || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 2 * 1000)} on:click={onlineComponent.commit} on:keydown={onlineComponent.commit} title="Save your modifications remotly" role="button" tabindex="0"><i class='saveCloud'></i></div>
+    <div class="rightButtonDisabled" class:hidden={!$store.rights.hasWriter() || ($store.lastUpdatedLocally - $store.lastCommitedRemotely > 5000 )} title="There is nothing to save"><i class='saveCloud'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.hasWriter() || $store.commitInProgress || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 5000)} on:click={onlineComponent.commit} on:keydown={onlineComponent.commit} title="Save your modifications remotly" role="button" tabindex="0"><i class='saveCloud'></i></div>
 
     <div class="rightButton" class:hidden={!$store.rights.isNone()} on:click={onlineComponent.openShadowBox} on:keydown={onlineComponent.openShadowBox} title="Share & save your chart online" role="button" tabindex="0"><i class='online'></i></div>
     <div class="rightButton" class:hidden={!$store.rights.isOwner()} on:click={onlineComponent.openShadowBox} on:keydown={onlineComponent.openShadowBox} title="Save your chart on your computer only" role="button" tabindex="0"><i class='offline'></i></div>

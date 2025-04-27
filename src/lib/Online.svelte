@@ -9,6 +9,7 @@ import ShadowBox from './ShadowBox.svelte';
 import Toast from './Toast.svelte';
 import { Rights } from './rights.class';
 import { FactoryCards } from './factoryCards';
+	import type { ResponseWithMeta } from '../routes/api/timeline/types';
 
     let toastComponent:Toast
     let shadowBox:ShadowBox
@@ -19,11 +20,12 @@ import { FactoryCards } from './factoryCards';
     export function commit(){
         
         if($store.lastUpdatedLocally !== null && $store.lastCommitedRemotely !== null 
-                && $store.lastUpdatedLocally - $store.lastCommitedRemotely > 2 * 1000){
+                && $store.lastUpdatedLocally - $store.lastCommitedRemotely > 5000){
             $store.commitInProgress = true
-            console.debug("gap > 2000 ms : %o", ($store.lastUpdatedLocally - $store.lastCommitedRemotely) / 1000)
-            create($store.currentTimeline).then((createResponseJson) => {
-                $store.lastCommitedRemotely = createResponseJson.message.ts
+            console.info($store.lastUpdatedLocally , $store.lastCommitedRemotely)
+            console.debug("gap > 5000 ms : %o", ($store.lastUpdatedLocally - $store.lastCommitedRemotely))
+            create($store.currentTimeline).then((responseWithMeta:ResponseWithMeta) => {
+                $store.lastCommitedRemotely = responseWithMeta.meta.ts
                 if(toastComponent){
                     toastComponent.show("Saved remotely with success")
                 }
@@ -37,7 +39,7 @@ import { FactoryCards } from './factoryCards';
                 $store.commitInProgress = false
             })
         } else {
-            console.debug("gap < 2000 ms : %o", ($store.lastUpdatedLocally - $store.lastCommitedRemotely) / 1000)
+            console.debug("gap < 5000 ms : %o", ($store.lastUpdatedLocally - $store.lastCommitedRemotely))
         }        
     }
 
@@ -76,8 +78,8 @@ import { FactoryCards } from './factoryCards';
         $store.currentTimeline.writeKey = Helpers.randomeString(64)
         $store.currentTimeline.readKey = Helpers.randomeString(64)
 
-        create($store.currentTimeline).then((json) => {
-            $store.lastCommitedRemotely = json['message']['ts']
+        create($store.currentTimeline).then((responseWithMeta:ResponseWithMeta) => {
+            $store.lastCommitedRemotely = responseWithMeta.meta.ts
             if(toastComponent){
                 toastComponent.show("Saved remotely with success")
             }

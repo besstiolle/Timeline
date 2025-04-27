@@ -27,7 +27,7 @@ function updateLocalStorage(timelineStore: Struct.TimelineStore){
     let currentTimeline = timelineStore.currentTimeline
     let cards = timelineStore.cards
     if(!timelineStore._cancelRefreshLastUpdatedLocally){
-        timelineStore.lastUpdatedLocally = new Date().getTime() * 1000
+        timelineStore.lastUpdatedLocally = new Date().getTime()
     } else {
         timelineStore._cancelRefreshLastUpdatedLocally = false
     }
