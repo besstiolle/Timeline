@@ -1,9 +1,11 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { accessControl, controlKey, controlSlugAndKeys } from '../keyValidator';
+import { accessControl, controlSlugAndKeys } from '../keyValidator';
 import { deleteTimelineByKey, findLastTimelineByKey } from '../repository';
 import type { ResponseWithMeta } from '../types';
 import type { Struct } from '$lib/struct.class';
+import { TIMELINE_NOT_FOUND_ProblemJsonResponse } from '$lib/api/problemJson';
+import { _FALLBACK, _OPTIONS, requestToInstance } from '$lib/api/apiUtils';
 
 /**
  * GET /api/timeline/xxxx?o|w|r=xxxxx
@@ -16,12 +18,13 @@ import type { Struct } from '$lib/struct.class';
  */
 export const GET: RequestHandler = (event) => {
 
+  const instance = requestToInstance(event.request)
   const ownerKey:string|null = event.url.searchParams.get("ownerKey")
   const writeKey:string|null = event.url.searchParams.get("writeKey")
   const readKey:string|null = event.url.searchParams.get("readKey")
 
   //Control of integrity for our parameters
-  const responseControlSlugAndKeys = controlSlugAndKeys(event.params.slug, ownerKey, writeKey, readKey)
+  const responseControlSlugAndKeys = controlSlugAndKeys(instance, event.params.slug, ownerKey, writeKey, readKey)
   if(responseControlSlugAndKeys != null){return responseControlSlugAndKeys}
   
   const structDb = findLastTimelineByKey(event.locals.db, event.params.slug)
@@ -32,12 +35,11 @@ export const GET: RequestHandler = (event) => {
   }
   
   if(structDb == undefined || timelineFromDb == undefined){
-    console.error("key : '%s' not found", event.params.slug)
-    return new Response('Not Found', { status: 404 });
+    return new TIMELINE_NOT_FOUND_ProblemJsonResponse(instance, event.params.slug)
   }
 
   // Access Control
-  const responseAccessControl = accessControl(timelineFromDb,ownerKey,writeKey,readKey)
+  const responseAccessControl = accessControl(instance, timelineFromDb,ownerKey,writeKey,readKey)
   if(responseAccessControl !== null){return responseAccessControl}
 
   //Avoid returning sensibles informations
@@ -56,7 +58,7 @@ export const GET: RequestHandler = (event) => {
     data : timelineFromDb
   }
 
-  return json (responseWithMeta)
+  return json (responseWithMeta, { status: 200 })
 }
 
 /**
@@ -69,15 +71,12 @@ export const GET: RequestHandler = (event) => {
  *  a 404 Response if instance is not found
  */
 export const DELETE: RequestHandler = (event):Response => {
+  const instance = requestToInstance(event.request)
   const ownerKey:string|null = event.url.searchParams.get("ownerKey")
 
-  //Control of integrity for our parameters
-  const responseControlSlug = controlKey(event.params.slug)
-  if(responseControlSlug !== null){return responseControlSlug}
-  
-  const responseControlKey = controlKey(ownerKey)
-  if(responseControlKey !== null){return responseControlKey}
-  
+  const responseControlSlugAndKeys = controlSlugAndKeys(instance, event.params.slug, ownerKey, null, null)
+  if(responseControlSlugAndKeys != null){return responseControlSlugAndKeys}
+
   const structDb = findLastTimelineByKey(event.locals.db, event.params.slug)
   let timelineFromDb;
 
@@ -86,30 +85,25 @@ export const DELETE: RequestHandler = (event):Response => {
   }
   
   if(structDb == undefined || timelineFromDb == undefined){
-    console.error("key : '%s' not found", event.params.slug)
-    return new Response('Not Found', { status: 404 });
+    return new TIMELINE_NOT_FOUND_ProblemJsonResponse(instance,event.params.slug)
   }
 
-
-
   // Access Control
-  const responseAccessControl = accessControl(timelineFromDb,ownerKey,null,null)
+  const responseAccessControl = accessControl(instance, timelineFromDb,ownerKey,null,null)
   if(responseAccessControl !== null){return responseAccessControl}
-
-  //TODO delete collection
+ 
   const info = deleteTimelineByKey(event.locals.db, event.params.slug)
-  console.info("deleted %d instances of Timeline with key %s",info.changes,event.params.slug)
 
-  return new Response(null, { status: 204 })
+  return json(null, { status: 204 });
 }
 
 
 /**
  * default OPTIONS method 
- * @returns a 200 Response
+ * @returns a 204 Response
  */
 export const OPTIONS: RequestHandler = async (event) => {
-  return new Response('OK', { status: 200 });
+  return _OPTIONS(['GET', 'DELETE'])
 }
 
 /**
@@ -117,5 +111,5 @@ export const OPTIONS: RequestHandler = async (event) => {
  * @returns a 405 Response
  */
 export const fallback: RequestHandler = async ({ request }) => {
-	return new Response("Method Not Allowed", { status: 405 })
+  return _FALLBACK(request)
 };

@@ -3,6 +3,20 @@ import type { Database, RunResult } from "better-sqlite3";
 import type { StructTimelineInDbInterface } from "./types";
 
 /**
+ * return the number of instance of StructTimelineInDbInterface by key
+ * @param db the Database
+ * @param key the indexed key 
+ * @returns an number of StructTimelineInDbInterface object if found or 0
+ */
+export function countTimelineByKey(db:Database, key:string):number{
+
+  const stmtFindExistingTimeline = db.prepare('SELECT count(*) as count FROM timelines WHERE key = ?');
+  const countDb = (stmtFindExistingTimeline.get(key) as any).count as number
+
+  return countDb
+}
+
+/**
  * return the most recent instance of StructTimelineInDbInterface or undefined if not found
  * @param db the Database
  * @param key the indexed key 
