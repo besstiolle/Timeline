@@ -6,10 +6,12 @@ import { findLastTimelineByKey } from './repository';
 import type { ResponseWithMeta } from './types';
 import { insertTimeline } from './repository';
 import { json } from '@sveltejs/kit';
-import { controlSlugAndKeys } from './keyValidator';
-import { EMPTY_OWNERKEY_ProblemJsonResponse, INVALID_PAYLOAD_ProblemJsonResponse } from '$lib/api/problemJson';
+import { EMPTY_KEYS_ProblemJsonResponse, EMPTY_OWNERKEY_ProblemJsonResponse, INVALID_PAYLOAD_ProblemJsonResponse, REGEX_FAILED_ProblemJsonResponse } from '$lib/api/problemJson';
 import { requestToInstance as requestToInstance } from '$lib/api/apiUtils';
 import { _FALLBACK, _OPTIONS } from '$lib/api/apiUtils';
+
+
+const ALPHANUM64 = new RegExp("^[A-Z0-9a-z]{64}$");
 
 /**
  * POST /api/timeline
@@ -19,16 +21,16 @@ import { _FALLBACK, _OPTIONS } from '$lib/api/apiUtils';
  *  a 400 Response if there is a malformed body
  *  a 401 Response if security keys don't match
  */
-export const POST: RequestHandler = async (event) => {
+export const POST: RequestHandler = async (requestEvent) => {
 
-  const instance = requestToInstance(event.request)
-  const db = event.locals.db;
+  const instance = requestToInstance(requestEvent.request)
+  const db = requestEvent.locals.db;
 
   let timelineFromParam: Struct.Timeline
 
   //Sanitize object
   try{
-      const rawData = await event.request.text();
+      const rawData = await requestEvent.request.text();
       //console.info(`rawData = ${rawData}`)
       if(rawData =='{}' || rawData.trim() == '' || rawData.trim() == '""'){
         return new INVALID_PAYLOAD_ProblemJsonResponse(instance)
@@ -51,7 +53,7 @@ export const POST: RequestHandler = async (event) => {
   if(responseControlSlugAndKeys != null){return responseControlSlugAndKeys}
   
   //Loading the timeline from db
-  const structDb = findLastTimelineByKey(event.locals.db, timelineHash)
+  const structDb = findLastTimelineByKey(requestEvent.locals.db, timelineHash)
   let timelineFromDb;
 
   if(structDb !== undefined){
@@ -95,13 +97,47 @@ export const POST: RequestHandler = async (event) => {
  * default OPTIONS method 
  * @returns a 204 Response
  */
-export const OPTIONS: RequestHandler = async (event) => {
+export const OPTIONS: RequestHandler = async (requestEvent) => {
   return _OPTIONS(['POST'])
 }
 /**
  * Fallback method : we refuse the connexion
  * @returns a 405 Response
  */
-export const fallback: RequestHandler = async ({ request }) => {
-  return _FALLBACK(request)
+export const fallback: RequestHandler = async ({ request: requestEvent }) => {
+  return _FALLBACK(requestEvent)
 };
+
+/**
+ * Integrity's control of slug & the 3 keys.
+ * @param instance the url of the Request
+ * @param slug the key of the Struct.Timeline
+ * @param ownerKey the key of the owner Right
+ * @param writeKey the key of the write Right
+ * @param readKey the key of the read Right
+ * @returns 
+ *  null if everything is ok
+ *  a 422 Response if a control is not ok
+ */
+function controlSlugAndKeys(instance:string,slug:string, ownerKey:string|null, writeKey:string|null, readKey:string|null):Response|null{
+
+  if(slug==null || !slug.match(ALPHANUM64)){
+      return new REGEX_FAILED_ProblemJsonResponse(instance,'slug',slug,ALPHANUM64.source)
+  }
+  if(ownerKey!==null && !ownerKey.match(ALPHANUM64)){
+      const value = (ownerKey==null?ownerKey='':ownerKey)
+      return new REGEX_FAILED_ProblemJsonResponse(instance,'ownerKey',value,ALPHANUM64.source)
+  }
+  if(writeKey==null || !writeKey.match(ALPHANUM64)){
+      const value = (writeKey==null?writeKey='':writeKey)
+      return new REGEX_FAILED_ProblemJsonResponse(instance,'writeKey',value,ALPHANUM64.source)
+  }
+  if(readKey==null || !readKey.match(ALPHANUM64)){
+      const value = (readKey==null?readKey='':readKey)
+      return new REGEX_FAILED_ProblemJsonResponse(instance,'readKey',value,ALPHANUM64.source)
+  }
+  if(ownerKey == null && writeKey == null && readKey == null){
+      return new EMPTY_KEYS_ProblemJsonResponse(instance)
+  }
+  return null
+}

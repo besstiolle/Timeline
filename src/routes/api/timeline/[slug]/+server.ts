@@ -1,12 +1,15 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { accessControl, controlSlugAndKeys } from '../keyValidator';
+import { accessControl, controlSlugAndKeys, controlSlugAndOwnerKeysOnly } from '../keyValidator';
 import { deleteTimelineByKey, findLastTimelineByKey } from '../repository';
 import type { ResponseWithMeta } from '../types';
 import type { Struct } from '$lib/struct.class';
 import { TIMELINE_NOT_FOUND_ProblemJsonResponse } from '$lib/api/problemJson';
 import { _FALLBACK, _OPTIONS, requestToInstance } from '$lib/api/apiUtils';
+import { REGEX_FAILED_ProblemJsonResponse } from '$lib/api/problemJson';
+import { EMPTY_KEYS_ProblemJsonResponse } from '$lib/api/problemJson';
 
+const ALPHANUM64 = new RegExp("^[A-Z0-9a-z]{64}$");
 /**
  * GET /api/timeline/xxxx?o|w|r=xxxxx
  * Retrive an instance of Struct.Timeline
@@ -16,18 +19,35 @@ import { _FALLBACK, _OPTIONS, requestToInstance } from '$lib/api/apiUtils';
  *  a 401 Response if security keys don't match
  *  a 404 Response if instance is not found
  */
-export const GET: RequestHandler = (event) => {
+export const GET: RequestHandler = (requestEvent) => {
 
-  const instance = requestToInstance(event.request)
-  const ownerKey:string|null = event.url.searchParams.get("ownerKey")
-  const writeKey:string|null = event.url.searchParams.get("writeKey")
-  const readKey:string|null = event.url.searchParams.get("readKey")
+  const instance = requestToInstance(requestEvent.request)
+  const slug = requestEvent.params.slug
+  const ownerKey:string|null = requestEvent.url.searchParams.get("ownerKey")
+  const writeKey:string|null = requestEvent.url.searchParams.get("writeKey")
+  const readKey:string|null = requestEvent.url.searchParams.get("readKey")
 
   //Control of integrity for our parameters
-  const responseControlSlugAndKeys = controlSlugAndKeys(instance, event.params.slug, ownerKey, writeKey, readKey)
-  if(responseControlSlugAndKeys != null){return responseControlSlugAndKeys}
+  if(slug==null || !slug.match(ALPHANUM64)){
+      return new REGEX_FAILED_ProblemJsonResponse(instance,'slug',slug,ALPHANUM64.source)
+  }
+  if(ownerKey!==null && !ownerKey.match(ALPHANUM64)){
+      const value = (ownerKey==null?'':ownerKey)
+      return new REGEX_FAILED_ProblemJsonResponse(instance,'ownerKey',value,ALPHANUM64.source)
+  }
+  if(writeKey!==null && !writeKey.match(ALPHANUM64)){
+      const value = (writeKey==null?'':writeKey)
+      return new REGEX_FAILED_ProblemJsonResponse(instance,'writeKey',value,ALPHANUM64.source)
+  }
+  if(readKey!==null && !readKey.match(ALPHANUM64)){
+      const value = (readKey==null?'':readKey)
+      return new REGEX_FAILED_ProblemJsonResponse(instance,'readKey',value,ALPHANUM64.source)
+  }
+  if(ownerKey == null && writeKey == null && readKey == null){
+      return new EMPTY_KEYS_ProblemJsonResponse(instance)
+  }
   
-  const structDb = findLastTimelineByKey(event.locals.db, event.params.slug)
+  const structDb = findLastTimelineByKey(requestEvent.locals.db, slug)
   let timelineFromDb;
 
   if(structDb !== undefined){
@@ -35,7 +55,7 @@ export const GET: RequestHandler = (event) => {
   }
   
   if(structDb == undefined || timelineFromDb == undefined){
-    return new TIMELINE_NOT_FOUND_ProblemJsonResponse(instance, event.params.slug)
+    return new TIMELINE_NOT_FOUND_ProblemJsonResponse(instance, slug)
   }
 
   // Access Control
@@ -70,14 +90,21 @@ export const GET: RequestHandler = (event) => {
  *  a 401 Response if security keys don't match
  *  a 404 Response if instance is not found
  */
-export const DELETE: RequestHandler = (event):Response => {
-  const instance = requestToInstance(event.request)
-  const ownerKey:string|null = event.url.searchParams.get("ownerKey")
+export const DELETE: RequestHandler = (requestEvent):Response => {
+  const instance = requestToInstance(requestEvent.request)
+  const slug = requestEvent.params.slug
+  const ownerKey:string|null = requestEvent.url?.searchParams?.get("ownerKey")
 
-  const responseControlSlugAndKeys = controlSlugAndKeys(instance, event.params.slug, ownerKey, null, null)
-  if(responseControlSlugAndKeys != null){return responseControlSlugAndKeys}
+  //Control format of Slug & OwnerKey
+  if(slug==null || !slug.match(ALPHANUM64)){
+      return new REGEX_FAILED_ProblemJsonResponse(instance,'slug',slug,ALPHANUM64.source)
+  }
+  if(ownerKey==null || !ownerKey.match(ALPHANUM64)){
+      const value = (ownerKey==null?'':ownerKey)
+      return new REGEX_FAILED_ProblemJsonResponse(instance,'ownerKey',value,ALPHANUM64.source)
+  }
 
-  const structDb = findLastTimelineByKey(event.locals.db, event.params.slug)
+  const structDb = findLastTimelineByKey(requestEvent.locals.db, slug)
   let timelineFromDb;
 
   if(structDb !== undefined){
@@ -85,17 +112,17 @@ export const DELETE: RequestHandler = (event):Response => {
   }
   
   if(structDb == undefined || timelineFromDb == undefined){
-    return new TIMELINE_NOT_FOUND_ProblemJsonResponse(instance,event.params.slug)
+    return new TIMELINE_NOT_FOUND_ProblemJsonResponse(instance,slug)
   }
 
   // Access Control
   const responseAccessControl = accessControl(instance, timelineFromDb,ownerKey,null,null)
   if(responseAccessControl !== null){return responseAccessControl}
  
-  const info = deleteTimelineByKey(event.locals.db, event.params.slug)
+  const info = deleteTimelineByKey(requestEvent.locals.db, slug)
 
-  return json(null, { status: 204 });
-}
+  return json(undefined, { status: 204 });
+} 
 
 
 /**

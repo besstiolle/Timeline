@@ -4,15 +4,21 @@ import type {Database} from "better-sqlite3";
 
 export class RequestEventStub {
     request: Request;
+    params: Record<string, unknown> = {};
     locals: Record<string, unknown> = {};
+    url: URL;
 
-    constructor(method: string, url: string, body?: string|null,db?:Database) {
+    constructor(method: string, url: string, body?: string|null,db?:Database, slug?:string|null) {
+      let inner_url = new URL(url)
+     // console.info(method, inner_url.toString(),inner_url.searchParams.get('ownerKey'))
       this.request = new Request(new URL(url), 
         { method: method,
           body: body
         });
 
+      this.params.slug = slug
       this.locals.db = db
+      this.url = inner_url
     }
 }
 

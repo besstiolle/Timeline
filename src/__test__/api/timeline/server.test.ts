@@ -11,6 +11,7 @@ import { countTimelineByKey } from '../../../routes/api/timeline/repository';
 const ENTRYPOINT = 'https://dummyEntrypoint.io/api/timeline'
 const HEADER_ACCESS_CONTROL_ALLOW_METHOD = 'Access-Control-Allow-Methods'
 const HEADER_ALLOW = 'allow'
+const FAKE_KEY = 'WrongKey64Car000000000000000000000000000000000000000000000000000'
 // @ts-ignore
 let db:Database;
 
@@ -181,14 +182,14 @@ it('POST /api/timeline should return 401 if access key are different vs what is 
 
   //a second insertion by altered owner key : 401
   clone = structuredClone(VALID_DUMMY_TIMELINE) as any
-  clone.ownerKey = 'WrongKeyxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+  clone.ownerKey = FAKE_KEY
   testIntegrityOfKey(clone, 401)
   expect(counter).toBe(1);
 
   //a second insertion by altered write key and no owner key : 401
   clone = structuredClone(VALID_DUMMY_TIMELINE) as any
   clone.ownerKey = null
-  clone.writeKey = 'WrongKeyxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+  clone.writeKey = FAKE_KEY
   testIntegrityOfKey(clone, 401)
   expect(counter).toBe(1);
 })
