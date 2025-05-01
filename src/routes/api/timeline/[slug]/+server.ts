@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { accessControl, controlSlugAndKeys, controlSlugAndOwnerKeysOnly } from '../keyValidator';
+import { accessControl } from '../keyValidator';
 import { deleteTimelineByKey, findLastTimelineByKey } from '../repository';
 import type { ResponseWithMeta } from '../types';
 import type { Struct } from '$lib/struct.class';
