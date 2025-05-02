@@ -4,6 +4,9 @@ import { NotFoundOnlineException } from "./timelineException.class";
 
 //const endpoint = import.meta.env.VITE_API_ENDPOINT_BASE_URL + '.netlify/functions/timeline?'
 const endpoint = '/api/timeline'
+const headers = {
+    'content-type':'application/json'
+}
 
 export async function create(timeline : Struct.Timeline): Promise<ResponseWithMeta>{
     //console.info("POST on endpoint : " + endpoint)
@@ -13,7 +16,8 @@ export async function create(timeline : Struct.Timeline): Promise<ResponseWithMe
 
     const res = await fetch(endpoint, {
         method: 'POST',
-        body: JSON.stringify(timeline)
+        body: JSON.stringify(timeline),
+        headers: headers
     })
 
     return await res.json()
@@ -25,6 +29,7 @@ export async function get(params: URLSearchParams): Promise<ResponseWithMeta>{
     params.delete("key")
     const res = await fetch(endpoint+"/"+key+"?" + params, {
         method: 'GET',
+        headers: headers
     }).then(res => {
         if(res.status == 404){
             throw new NotFoundOnlineException()
@@ -42,6 +47,7 @@ export async function remove(params: URLSearchParams): Promise<string>{
     params.delete("key")
     const res = await fetch(endpoint+"/"+key+"?" + params, {
         method: 'DELETE',
+        headers: headers
     }).then(res => {
         if(res.status == 404){
             throw new NotFoundOnlineException()
