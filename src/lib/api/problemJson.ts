@@ -27,7 +27,7 @@ export abstract class ProblemJsonResponse extends Response{
             type:type,
             title:title,
             status:status,
-            detail:import.meta.env.PROD?detail:"",
+            detail:import.meta.env.DEV?detail:"",
             instance:instance
         }
         const bodyText = JSON.stringify(body)
