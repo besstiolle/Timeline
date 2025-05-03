@@ -1,0 +1,9 @@
+services:
+  timechart:
+    image: timechart:latest
+    container_name: timechart
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    volumes:
+      - ${DB_LOCATION}:/app/db
