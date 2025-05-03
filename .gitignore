@@ -7,7 +7,5 @@ node_modules
 .env.*
 !.env.example
 /coverage/**
-db.sqlite
-db.sqlite-shm
-db.sqlite-wal
 *.local
+/db/**
