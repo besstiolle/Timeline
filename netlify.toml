@@ -14,29 +14,3 @@
 [dev]
   # Force a static port to serve Netlify's Lambda Functions
 	functionsPort = 3001
-
-[[redirects]]
-  from = "/"
-  to = "https://timechart.dev"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "https://timeline-chart.dev/g/:slug?o=:key"
-  to = "https://timechart.dev/g/:slug?o=:key"
-  status = 301
-  force = true
-
-
-[[redirects]]
-  from = "https://timeline-chart.dev/g/:slug?w=:key"
-  to = "https://timechart.dev/g/:slug?w=:key"
-  status = 301
-  force = true
-
-
-[[redirects]]
-  from = "https://timeline-chart.dev/g/:slug?r=:key"
-  to = "https://timechart.dev/g/:slug?r=:key"
-  status = 301
-  force = true
