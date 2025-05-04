@@ -1,11 +1,11 @@
-import type { RequestHandler } from './$types';
+
 import type { Struct } from '$lib/struct.class';
 import { JsonParser } from '$lib/jsonParser';
 import { accessControl } from './keyValidator';
 import { findLastTimelineByKey } from './repository';
 import type { ResponseWithMeta } from './types';
 import { insertTimeline } from './repository';
-import { json } from '@sveltejs/kit';
+import { json, type RequestEvent, type RequestHandler } from '@sveltejs/kit';
 import { EMPTY_KEYS_ProblemJsonResponse, EMPTY_OWNERKEY_ProblemJsonResponse, INVALID_PAYLOAD_ProblemJsonResponse, REGEX_FAILED_ProblemJsonResponse } from '$lib/api/problemJson';
 import { requestToInstance as requestToInstance } from '$lib/api/apiUtils';
 import { _FALLBACK, _OPTIONS } from '$lib/api/apiUtils';
@@ -21,7 +21,7 @@ const ALPHANUM64 = new RegExp("^[A-Z0-9a-z]{64}$");
  *  a 400 Response if there is a malformed body
  *  a 401 Response if security keys don't match
  */
-export const POST: RequestHandler = async (requestEvent) => {
+export const POST: RequestHandler = async (requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>) => {
 
   const instance = requestToInstance(requestEvent.request)
   const db = requestEvent.locals.db;
@@ -97,7 +97,7 @@ export const POST: RequestHandler = async (requestEvent) => {
  * default OPTIONS method 
  * @returns a 204 Response
  */
-export const OPTIONS: RequestHandler = async (requestEvent) => {
+export const OPTIONS: RequestHandler = async (requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>) => {
   return _OPTIONS(['POST'])
 }
 /**

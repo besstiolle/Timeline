@@ -8,6 +8,7 @@ import { TIMELINE_NOT_FOUND_ProblemJsonResponse } from '$lib/api/problemJson';
 import { _FALLBACK, _OPTIONS, requestToInstance } from '$lib/api/apiUtils';
 import { REGEX_FAILED_ProblemJsonResponse } from '$lib/api/problemJson';
 import { EMPTY_KEYS_ProblemJsonResponse } from '$lib/api/problemJson';
+import type { RequestEvent } from '@sveltejs/kit';
 
 const ALPHANUM64 = new RegExp("^[A-Z0-9a-z]{64}$");
 /**
@@ -19,7 +20,7 @@ const ALPHANUM64 = new RegExp("^[A-Z0-9a-z]{64}$");
  *  a 401 Response if security keys don't match
  *  a 404 Response if instance is not found
  */
-export const GET: RequestHandler = (requestEvent) => {
+export const GET: RequestHandler = (requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>) => {
 
   const instance = requestToInstance(requestEvent.request)
   const slug = requestEvent.params.slug
@@ -28,8 +29,8 @@ export const GET: RequestHandler = (requestEvent) => {
   const readKey:string|null = requestEvent.url.searchParams.get("readKey")
 
   //Control of integrity for our parameters
-  if(slug==null || !slug.match(ALPHANUM64)){
-      return new REGEX_FAILED_ProblemJsonResponse(instance,'slug',slug,ALPHANUM64.source)
+  if(slug==undefined || !slug.match(ALPHANUM64)){
+      return new REGEX_FAILED_ProblemJsonResponse(instance,'slug',slug?slug:"",ALPHANUM64.source)
   }
   if(ownerKey!==null && !ownerKey.match(ALPHANUM64)){
       const value = (ownerKey==null?'':ownerKey)
@@ -90,14 +91,14 @@ export const GET: RequestHandler = (requestEvent) => {
  *  a 401 Response if security keys don't match
  *  a 404 Response if instance is not found
  */
-export const DELETE: RequestHandler = (requestEvent):Response => {
+export const DELETE: RequestHandler = (requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>):Response => {
   const instance = requestToInstance(requestEvent.request)
   const slug = requestEvent.params.slug
   const ownerKey:string|null = requestEvent.url?.searchParams?.get("ownerKey")
 
   //Control format of Slug & OwnerKey
-  if(slug==null || !slug.match(ALPHANUM64)){
-      return new REGEX_FAILED_ProblemJsonResponse(instance,'slug',slug,ALPHANUM64.source)
+  if(slug==undefined || !slug.match(ALPHANUM64)){
+      return new REGEX_FAILED_ProblemJsonResponse(instance,'slug',slug?slug:"",ALPHANUM64.source)
   }
   if(ownerKey==null || !ownerKey.match(ALPHANUM64)){
       const value = (ownerKey==null?'':ownerKey)
@@ -129,7 +130,7 @@ export const DELETE: RequestHandler = (requestEvent):Response => {
  * default OPTIONS method 
  * @returns a 204 Response
  */
-export const OPTIONS: RequestHandler = async (event) => {
+export const OPTIONS: RequestHandler = async (requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>) => {
   return _OPTIONS(['GET', 'DELETE'])
 }
 
@@ -137,6 +138,6 @@ export const OPTIONS: RequestHandler = async (event) => {
  * Fallback method : we refuse the connexion
  * @returns a 405 Response
  */
-export const fallback: RequestHandler = async ({ request }) => {
-  return _FALLBACK(request)
+export const fallback: RequestHandler = async ({ request: requestEvent }) => {
+  return _FALLBACK(requestEvent)
 };
