@@ -1,7 +1,2 @@
 /js/script.js https://plausible.io/js/script.js 200
 /api/event https://plausible.io/api/event 200
-
-/ https://timechart.dev
-/g/:slug o=:key https://timechart.dev/g/:slug?o=:key 301
-/g/:slug w=:key https://timechart.dev/g/:slug?w=:key 301
-/g/:slug r=:key https://timechart.dev/g/:slug?r=:key 301
