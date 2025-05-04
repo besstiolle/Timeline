@@ -1,6 +1,6 @@
 services:
   timechart:
-    image: timechart:latest
+    image: besstiolle/timechart:latest
     container_name: timechart
     ports:
       - 3000:3000
