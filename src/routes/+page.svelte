@@ -18,3 +18,4 @@
 
 <h2>We moved 🛩️ ! Please found your timelines here : <a href='{redirectURI}'>https://timechart.dev</a></h2>
 
+<p>If you have any questions, please contact me on linkedin : <a href='https://www.linkedin.com/in/kevin-danezis/'>https://www.linkedin.com/in/kevin-danezis/</a></p>
