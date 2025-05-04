@@ -62,13 +62,15 @@ npm run test --coverage
 
 ## Demo
 
-Si vous souhaitez tester TimeChart ou si vous n'avez pas les connaissances nécessaires (ni l'envie) d'héberger chez vous cette application, nous vous proposons d'utiliser le serveur officiel de [TimeChart](https://timeline-chart.dev/).
+If you'd like to try out TimeChart, or if you don't have the knowledge (or inclination) to host the application yourself, we suggest you use the official [TimeChart](https://timeline-chart.dev/) server.
 
-Avantages : 
- * ✅ Gratuit (tant que je sais payer les factures)
- * ✅ Vous ne vous occupez pas de la maintenance (montée de version, support du serveur, backup)
+Advantages :
 
-Gardez en tête que les données que vous saisissez sont stockées chez moi.
+ * ✅ Free and available (as long as I can to pay the bills)
+ * ✅ You don't have to worry about maintenance (version upgrades, server support, backup).
+
+Keep in mind that the data you enter are stored with me.
+
 
 ## Installation
 
