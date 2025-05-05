@@ -64,18 +64,19 @@ import { store } from './stores';
     }
 </script>
 
-    
-<defs>
-    <linearGradient id="Gradient1" x1="0" x2="0" y1="0" y2="1">
-        <stop offset="0%" stop-color="#475569"/>
-        <stop offset="100%" stop-color="#4F5764" />
-    </linearGradient>
-    
-    <linearGradient id="Gradient2" x1="0" x2="0" y1="0" y2="1">
-        <stop offset="0%" stop-color="#475569" stop-opacity="0.3"/>
-        <stop offset="100%" stop-opacity="0"/>
-    </linearGradient>
-</defs>
+<svg xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="Gradient1" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#475569"/>
+            <stop offset="100%" stop-color="#4F5764" />
+        </linearGradient>
+        
+        <linearGradient id="Gradient2" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#475569" stop-opacity="0.3"/>
+            <stop offset="100%" stop-opacity="0"/>
+        </linearGradient>
+    </defs>
+</svg>
 
 
 <svg data-testid='Banner.svelte' viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
