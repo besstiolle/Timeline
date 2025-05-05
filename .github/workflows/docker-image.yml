@@ -20,8 +20,17 @@ jobs:
           CLEAN_TAG=$(echo "$RAW_TAG" | sed -E 's/^[^0-9]*//')
           echo "VERSION=$CLEAN_TAG" >> "$GITHUB_OUTPUT"
 
-      - name: Build Docker image with version and latest tags
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Build Docker image
         run: |
           VERSION=${{ steps.get_version.outputs.VERSION }}
-          docker build --pull --rm --file Dockerfile --tag besstiolle/timechart:$VERSION .
-          docker build --pull --rm --file Dockerfile --tag besstiolle/timechart:latest .
+          docker build --pull --rm -f Dockerfile -t ${{ secrets.DOCKERHUB_REPO }}:$VERSION .
+          docker tag ${{ secrets.DOCKERHUB_REPO }}:$VERSION ${{ secrets.DOCKERHUB_REPO }}:latest
+
+      - name: Push Docker image
+        run: |
+          VERSION=${{ steps.get_version.outputs.VERSION }}
+          docker push ${{ secrets.DOCKERHUB_REPO }}:$VERSION
+          docker push ${{ secrets.DOCKERHUB_REPO }}:latest
