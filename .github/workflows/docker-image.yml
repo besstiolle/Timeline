@@ -1,0 +1,27 @@
+name: Docker Image CI
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: get_version
+        run: |
+          RAW_TAG=${GITHUB_REF#refs/tags/}
+          CLEAN_TAG=$(echo "$RAW_TAG" | sed -E 's/^[^0-9]*//')
+          echo "VERSION=$CLEAN_TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Build Docker image with version and latest tags
+        run: |
+          VERSION=${{ steps.get_version.outputs.VERSION }}
+          docker build --pull --rm --file Dockerfile --tag besstiolle/timechart:$VERSION .
+          docker build --pull --rm --file Dockerfile --tag besstiolle/timechart:latest .
