@@ -1,3 +1,4 @@
+import { m } from "../paraglide/messages"
 
 export const GRID = {
     ALL_WIDTH:1000,
@@ -14,9 +15,26 @@ export const GRID = {
     TODAY_H:0
 }
 
-export const MONTHS = ['Jan.','Fev.','Mar.','Avr.','Mai','Juin','Juil.','Aout','Sept.','Oct.','Nov.','Dec.']
+export const MONTHS = [m.cst_january(),
+                        m.cst_february(),
+                        m.cst_march(),
+                        m.cst_april(),
+                        m.cst_may(),
+                        m.cst_june(),
+                        m.cst_july(),
+                        m.cst_august(),
+                        m.cst_september(),
+                        m.cst_october(),
+                        m.cst_november(),
+                        m.cst_december()]
 
-export const DAYS = ['Di.', 'Lu.','Ma.','Me.','Je.','Ve.','Sa.']
+export const DAYS = [m.cst_sunday(), 
+                    m.cst_monday(),
+                    m.cst_tuesday(),
+                    m.cst_wednesday(),
+                    m.cst_thursday(),
+                    m.cst_friday(),
+                    m.cst_saturday(),]
 
 export const LIVE_PREFIX = {
     TS:"taskStart_",

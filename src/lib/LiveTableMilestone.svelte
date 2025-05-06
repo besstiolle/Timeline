@@ -6,6 +6,7 @@ import { Struct } from './struct.class';
 import { FactoryTimeline } from './factoryTimeline';
 import { LIVE_PREFIX } from './constantes';
 import { FactoryMilestone } from './factoryMilestone';
+	import { m } from '../paraglide/messages';
 
 export let updateStore:Function
 
@@ -80,27 +81,27 @@ function m_add(){
 {#each $store.currentTimeline.milestones as milestone, i}
 <div class="live__line show_{milestone.isShow}">
     
-    <div data-name="M{i}"  class="live_cmd" on:click="{e =>{m_show(i)}}" on:keydown="{e =>{m_show(i)}}" title="hide/show this line" role="button" tabindex="0">
+    <div data-name="M{i}"  class="live_cmd" on:click="{e =>{m_show(i)}}" on:keydown="{e =>{m_show(i)}}" title={m.live_milestone_editor_toggle()} role="button" tabindex="0">
         <svg viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_show"/>
         </svg>
     </div>
-    <div data-name="M{i}"  class="live_cmd" on:click="{e =>{m_up(i)}}" on:keydown="{e =>{m_up(i)}}" title="go down this line" role="button" tabindex="0">
+    <div data-name="M{i}"  class="live_cmd" on:click="{e =>{m_up(i)}}" on:keydown="{e =>{m_up(i)}}" title={m.live_milestone_editor_down()} role="button" tabindex="0">
         <svg viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_up"/>
         </svg>
     </div>
-    <div data-name="M{i}"  class="live_cmd" on:click="{e =>{m_down(i)}}" on:keydown="{e =>{m_down(i)}}" title="go up this line" role="button" tabindex="0">
+    <div data-name="M{i}"  class="live_cmd" on:click="{e =>{m_down(i)}}" on:keydown="{e =>{m_down(i)}}" title={m.live_milestone_editor_up()} role="button" tabindex="0">
         <svg viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_down"/>
         </svg>
     </div>
-    <div data-name="M{i}"  class="live_cmd" on:click="{e =>{m_duplicate(i)}}" on:keydown="{e =>{m_duplicate(i)}}" title="duplicate this line" role="button" tabindex="0">
+    <div data-name="M{i}"  class="live_cmd" on:click="{e =>{m_duplicate(i)}}" on:keydown="{e =>{m_duplicate(i)}}" title={m.live_milestone_editor_clone()} role="button" tabindex="0">
         <svg viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_duplicate"/>
         </svg>
     </div>
-    <div data-name="M{i}"  class="live_cmd live_cmd_red" on:click="{e =>{m_delete(i)}}" on:keydown="{e =>{m_delete(i)}}" title="delete this line" role="button" tabindex="0">
+    <div data-name="M{i}"  class="live_cmd live_cmd_red" on:click="{e =>{m_delete(i)}}" on:keydown="{e =>{m_delete(i)}}" title={m.live_milestone_editor_delete()} role="button" tabindex="0">
         <svg viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_delete"/>
         </svg>
@@ -115,6 +116,6 @@ function m_add(){
         <svg class="svg-icon" viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_add"/>
         </svg>
-        <span>Add a new Milestone</span>
+        <span>{m.live_milestone_editor_new()}</span>
     </div>
 </div>

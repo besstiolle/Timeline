@@ -6,6 +6,7 @@ import { Struct } from './struct.class';
 import { FactoryTimeline } from './factoryTimeline';
 import { LIVE_PREFIX } from './constantes';
 import { FactoryTask } from './factoryTask';
+	import { m } from '../paraglide/messages';
 
 export let updateStore:Function
 
@@ -97,27 +98,27 @@ function b_add(){
 {#each $store.currentTimeline.tasks as task, i}
 <div class="live__line show_{task.isShow}">
     <div class='live__input_top'>
-        <div class="live_cmd" on:click="{e =>{b_show(i)}}" on:keydown="{e =>{b_show(i)}}" title="hide/show this line" role="button" tabindex="0">
+        <div class="live_cmd" on:click="{e =>{b_show(i)}}" on:keydown="{e =>{b_show(i)}}" title={m.live_task_editor_toggle()} role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_show"/>
             </svg>
         </div>
-        <div class="live_cmd" on:click="{e =>{b_up(i)}}" on:keydown="{e =>{b_up(i)}}" title="go down this line" role="button" tabindex="0">
+        <div class="live_cmd" on:click="{e =>{b_up(i)}}" on:keydown="{e =>{b_up(i)}}" title={m.live_task_editor_down()} role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_up"/>
             </svg>
         </div>
-        <div class="live_cmd" on:click="{e =>{b_down(i)}}" on:keydown="{e =>{b_down(i)}}" title="go up this line" role="button" tabindex="0">
+        <div class="live_cmd" on:click="{e =>{b_down(i)}}" on:keydown="{e =>{b_down(i)}}" title={m.live_task_editor_up()} role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_down"/>
             </svg>
         </div>
-        <div class="live_cmd" on:click="{e =>{b_duplicate(i)}}" on:keydown="{e =>{b_duplicate(i)}}" title="duplicate this line" role="button" tabindex="0">
+        <div class="live_cmd" on:click="{e =>{b_duplicate(i)}}" on:keydown="{e =>{b_duplicate(i)}}" title={m.live_task_editor_clone()} role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_duplicate"/>
             </svg>
         </div>
-        <div class="live_cmd live_cmd_red" on:click="{e =>{b_delete(i)}}" on:keydown="{e =>{b_delete(i)}}" title="delete this line" role="button" tabindex="0">
+        <div class="live_cmd live_cmd_red" on:click="{e =>{b_delete(i)}}" on:keydown="{e =>{b_delete(i)}}" title={m.live_task_editor_delete()} role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_delete"/>
             </svg>
@@ -130,7 +131,7 @@ function b_add(){
         <progress max="100" value="{task.progress}"> {task.progress}% </progress>
     </div>
     <div class='live__input_bottom'>
-        <label for="hasProgress{i}">Show Progression : </label><input type="checkbox" bind:checked="{task.hasProgress}"  name="hasProgress{i}" id="hasProgress{i}" />
+        <label for="hasProgress{i}">{m.live_task_editor_show_progress()} : </label><input type="checkbox" bind:checked="{task.hasProgress}"  name="hasProgress{i}" id="hasProgress{i}" />
     </div>
 </div>
 {/each}
@@ -139,7 +140,7 @@ function b_add(){
         <svg class="svg-icon" viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_add"/>
         </svg>
-        <span>Add a new Task</span>
+        <span>{m.live_task_editor_new()}</span>
     </div>
 </div>
    

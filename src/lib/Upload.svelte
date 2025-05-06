@@ -10,6 +10,7 @@ import { goCsv } from './csv';
 import ShadowBox from './ShadowBox.svelte';
 import Toast from './Toast.svelte';
 	import type { Action } from 'svelte/action';
+	import { m } from '../paraglide/messages';
 
 
 export let download = (blob:Blob, extension:string) => {}
@@ -127,7 +128,7 @@ const svelteAction: Action = (node) => {
             let abstractTimeline = toml.parse(reader.result as string)
             parseAbstractTimeline(abstractTimeline)
             //Show resume
-            toastComponent.show(`imported  ${abstractTimeline.tasks.length} tasks and ${abstractTimeline.milestones.length} milestones with success`,true, 5)
+            toastComponent.show(m.upload_toast_upload_success({countTasks:abstractTimeline.tasks.length, countMilestones:abstractTimeline.milestones.length}),true, 5)
             //close windows
             shadowBox.closeComponent()
         }
@@ -188,7 +189,7 @@ const svelteAction: Action = (node) => {
             
             parseAbstractTimeline(abstractTimeline)
             //Show resume
-            toastComponent.show(`imported  ${abstractTimeline.tasks.length} tasks and ${abstractTimeline.milestones.length} milestones with success`)
+            toastComponent.show(m.upload_toast_upload_success({countTasks:abstractTimeline.tasks.length, countMilestones:abstractTimeline.milestones.length}),true, 5)
             //close windows
             shadowBox.closeComponent()
         }
@@ -254,11 +255,11 @@ const svelteAction: Action = (node) => {
     <form method="post" action="" enctype="multipart/form-data" use:svelteAction>
         <div>
             <input type="file" name="files[]" accept=".csv,.toml" id="file"/>
-            <label for="file"><span class='action'>upload file</span> Must be a .csv or .toml file. You can also drag it over this windows.</label>
+            <label for="file"><span class='action'>{m.upload_label_action()}</span> {m.upload_label_action_text}</label>
         </div>
-        <button type="submit">Upload</button>
-        <div><span class='action' on:click={downloadCsv} on:keydown={downloadCsv} role="button" tabindex="0">download .csv</span> The CSV format is very simple and can be edited in Excel or Notepad++ & co</div>
-        <div><span class='action' on:click={downloadToml} on:keydown={downloadToml} role="button" tabindex="0">download .toml</span> The Toml format can be extended in the futur and can be edited with Notepad++ & co</div>
+        <button type="submit">{m.upload_action()}</button>
+        <div><span class='action' on:click={downloadCsv} on:keydown={downloadCsv} role="button" tabindex="0">{m.upload_label_download_csv_action()}</span> {m.upload_label_download_csv_action_text()}</div>
+        <div><span class='action' on:click={downloadToml} on:keydown={downloadToml} role="button" tabindex="0">{m.upload_label_download_toml_action()}</span> {m.upload_label_download_toml_action_text()}</div>
     </form>
 </ShadowBox>
 <Toast bind:this={toastComponent}/>

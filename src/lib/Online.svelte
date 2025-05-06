@@ -10,6 +10,7 @@ import Toast from './Toast.svelte';
 import { Rights } from './rights.class';
 import { FactoryCards } from './factoryCards';
 	import type { ResponseWithMeta } from '../routes/api/timeline/types';
+	import { m } from '../paraglide/messages';
 
     let toastComponent:Toast
     let shadowBox:ShadowBox
@@ -27,12 +28,12 @@ import { FactoryCards } from './factoryCards';
             create($store.currentTimeline).then((responseWithMeta:ResponseWithMeta) => {
                 $store.lastCommitedRemotely = responseWithMeta.meta.ts
                 if(toastComponent){
-                    toastComponent.show("Saved remotely with success")
+                    toastComponent.show(m.online_toast_saved_success())
                 }
             }).catch((err) => {
                 console.error("Error where calling create() in Online.commit() : %o", err)
                 if(toastComponent){
-                    toastComponent.show("Oups, we couldn't reach the remote endpoint. Please try later.<br/> Please check your browser console for more informations. Click me to dismiss the notif", false, 0)
+                    toastComponent.show(m.online_toast_remote_offline(), false, 0)
                 }
             }).finally(()=>{
                 
@@ -64,7 +65,7 @@ import { FactoryCards } from './factoryCards';
         }).catch((err) => {
             console.error("Error where calling remove() in Online.doOffline() : %o", err)
             if(toastComponent){
-                toastComponent.show("Oups, we couldn't reach the remote endpoint. Please try later.<br/> Please check your browser console for more informations. Click me to dismiss the notif", false, 0)
+                toastComponent.show(m.online_toast_remote_offline(), false, 0)
             }
         }).finally(()=>{
         })
@@ -81,7 +82,7 @@ import { FactoryCards } from './factoryCards';
         create($store.currentTimeline).then((responseWithMeta:ResponseWithMeta) => {
             $store.lastCommitedRemotely = responseWithMeta.meta.ts
             if(toastComponent){
-                toastComponent.show("Saved remotely with success")
+                toastComponent.show(m.online_toast_saved_success())
             }
             //Refresh internal Rights value
             $store.rights = new Rights($store.currentTimeline.ownerKey)
@@ -89,7 +90,7 @@ import { FactoryCards } from './factoryCards';
         }).catch((err) => {
             console.error("Error where calling create() in Online.doOnline() : %o", err)
             if(toastComponent){
-                toastComponent.show("Oups, we couldn't reach the remote endpoint. Please try later.<br/> Please check your browser console for more informations. Click me to dismiss the notif", false, 0)
+                toastComponent.show(m.online_toast_remote_offline(), false, 0)
             }
             
             $store.currentTimeline.isOnline = false
@@ -108,16 +109,16 @@ import { FactoryCards } from './factoryCards';
 
 <ShadowBox bind:this={shadowBox}>
     {#if $store.currentTimeline.isOnline}
-        <div class='warn'>Please be advice that going "<span>offline</span>" will remove every data from our server but it also cancel every previous shared link of your work</div>
-        <div>You're currently : <span>ONLINE</span></div>
-        <div class='action' on:click={doOffline} on:keydown={doOffline} role="button" tabindex="0">Put me offline</div>
-        <div><label for='readOnly'>Read-only URL : </label><input id='readOnly' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?r=" + $store.currentTimeline.readKey}'></div>
-        <div><label for='writer'>Writer URL : </label><input id='writer' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?w=" + $store.currentTimeline.writeKey}'></div>
-        <div><label for='owner'>Owner URL : </label><input id='owner' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?o=" + $store.currentTimeline.ownerKey}'></div>
+        <div class='warn'>{m.online_warn_before_offline_0()} "<span>{m.online_warn_before_offline_1()}</span>" {m.online_warn_before_offline_2()}</div>
+        <div>{m.online_status()} : <span>{m.online_status_online()}</span></div>
+        <div class='action' on:click={doOffline} on:keydown={doOffline} role="button" tabindex="0">{m.online_action_offline()}</div>
+        <div><label for='readOnly'>{m.online_readonly()} : </label><input id='readOnly' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?r=" + $store.currentTimeline.readKey}'></div>
+        <div><label for='writer'>{m.online_writer()} : </label><input id='writer' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?w=" + $store.currentTimeline.writeKey}'></div>
+        <div><label for='owner'>{m.online_owner()} : </label><input id='owner' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?o=" + $store.currentTimeline.ownerKey}'></div>
     {:else}
-        <div class='warn'>Please be advice that bringing your charts "<span>online</span>" may allow you to save your data on our server but it also may expose your datas to everyone</div>
-        <div>You're currently : <span>OFFLINE</span></div>
-        <div class='action' on:click={doOnline} on:keydown={doOnline} role="button" tabindex="0">Put me online</div>
+        <div class='warn'>{m.online_warn_before_online_0()} "<span>{m.online_warn_before_online_1()}</span>" {m.online_warn_before_online_0()}</div>
+        <div>{m.online_status()} : <span>{m.online_status_offline()}</span></div>
+        <div class='action' on:click={doOnline} on:keydown={doOnline} role="button" tabindex="0">{m.online_action_online()}</div>
     {/if}
 </ShadowBox>
 <Toast bind:this={toastComponent}/>
