@@ -141,3 +141,56 @@ Explanations:
  * **`--rm --name timechart_latest`** *Optional* : sets a clear name for the container and deletes it once the container has been switched off. (No data loss is expected if you use the option `-v /your/own/directory/to/db:/app/db`)
  * **`-p 3000:3000`** *Optional* : Used to expose port 3000. You can configure to expose another port. For example, exposing port 8080 would give: `-p 8080:3000`
  * **`-v /your/own/directory/to/db:/app/db`** : Defines the location of your database on the host disk.
+
+## Translation
+
+We've been using [inlang](https://inlang.com/) and its equivalent [Paraglide JS](https://inlang.com/m/gerre34r/library-inlang-paraglideJs) to translate this software since TimeChart version 0.2.0.
+
+The following translations are currently available:
+
+ * ✅ English
+ * ✅ Français
+
+Don't hesitate to push a PR to improve translation coverage.
+
+### Add a new language
+
+To add a new language, create the corresponding file in `./messages/` (example: es.json for Spanish)
+Modify the `project.inlang/settings.json` file and add the code in the `locales` node (example: `es` for Spanish)
+
+```json
+  "locales": [
+    "en",
+    "fr"
+  ],
+```
+
+```json
+    "locales": [
+    "en",
+    "fr",
+    "es"
+  ],
+```
+
+### Update translations, complete missing translations
+
+Open the language file in `./messages/` (example: ./messages/es.json for Spanish) and add the missing key or modify the text.
+
+```json
+  "example_message": "Hola {username}",
+```
+
+### Useful commands
+
+Validate the entire translation structure: 
+
+```bash
+npx @inlang/cli validate --project project.inlang
+```
+
+Help translate missing text (this requires proofreading after all)
+
+```bash
+npx @inlang/cli machine translate --project project.inlang
+```

@@ -1,147 +1,149 @@
-
 <script lang="ts">
-import { LOCAL_STORAGE } from "$lib/constantes";
-import { CustomLocalStorage } from "$lib/customLocalStorage";
-import { FactoryCards } from "$lib/factoryCards";
-import { FactoryPicto } from "$lib/factoryPicto";
+	import { LOCAL_STORAGE } from "$lib/constantes";
+	import { CustomLocalStorage } from "$lib/customLocalStorage";
+	import { FactoryCards } from "$lib/factoryCards";
+	import { FactoryPicto } from "$lib/factoryPicto";
 
-import { Helpers } from "$lib/helpers";
-import PopUpConfirmation from "$lib/PopUpConfirmation.svelte";
+	import { Helpers } from "$lib/helpers";
+	import PopUpConfirmation from "$lib/PopUpConfirmation.svelte";
 	import { Rights } from "$lib/rights.class";
-import { store } from "$lib/stores";
-import { Struct } from "$lib/struct.class";
-import Toast from "$lib/Toast.svelte";
-
-let popUpComponent:PopUpConfirmation
-let toastComponent:Toast
-//Reset store currentTimeline information when we are here
-$store.currentTimeline=new Struct.Timeline()
-$store.lastCommitedRemotely=-1
-$store.lastUpdatedLocally=-1
-$store.rights=new Rights(null)
-
-function toStringDate(date: Date): string {
-	const DATE_SEPARATOR = "/"
-	const HOUR_SEPARATOR = "h"
-	const SPACE_SEPARATOR = " "
-	return date.getDate().toString().padStart(2, '0') 
-		+ DATE_SEPARATOR + (date.getMonth() + 1).toString().padStart(2, '0') 
-		+ SPACE_SEPARATOR + date.getHours().toString().padStart(2, '0') 
-		+ HOUR_SEPARATOR + date.getMinutes().toString().padStart(2, '0') 
-}
+	import { store } from "$lib/stores";
+	import { Struct } from "$lib/struct.class";
+	import Toast from "$lib/Toast.svelte";
+	import { m } from "../paraglide/messages";
+	import { setLocale } from "../paraglide/runtime";
 
 
-function gotoNew(){
-	window.location.href = '/g/' + Helpers.randomeString(64)
-}
+	let popUpComponent:PopUpConfirmation
+	let toastComponent:Toast
+	//Reset store currentTimeline information when we are here
+	$store.currentTimeline=new Struct.Timeline()
+	$store.lastCommitedRemotely=-1
+	$store.lastUpdatedLocally=-1
+	$store.rights=new Rights(null)
 
-function goto(event:Event|null, key:string){
-	window.location.href = '/g/' + key
-}
+	function toStringDate(date: Date): string {
+		const DATE_SEPARATOR = "/"
+		const HOUR_SEPARATOR = "h"
+		const SPACE_SEPARATOR = " "
+		return date.getDate().toString().padStart(2, '0') 
+			+ DATE_SEPARATOR + (date.getMonth() + 1).toString().padStart(2, '0') 
+			+ SPACE_SEPARATOR + date.getHours().toString().padStart(2, '0') 
+			+ HOUR_SEPARATOR + date.getMinutes().toString().padStart(2, '0') 
+	}
 
-/**
- * Called to duplicate a existing chart
- * @param event 
- * @param key the key of the chart user want to duplicate.
- */
-function duplicate(event:Event, key:string):void {
-	event.stopPropagation();
-	let clone:Struct.Timeline = structuredClone(CustomLocalStorage.getTimeline(key))
-	clone.ownerKey=null
-	clone.writeKey=null
-	clone.readKey=null
-	clone.isOnline=false
-	clone.title = generateTitle(clone['title'])
-	clone.key = Helpers.randomeString(64)
 
-	let newCard = new Struct.Card(clone['key'], clone['title'])
-	$store.cards.push(newCard)
-	CustomLocalStorage.save(clone['key'], clone)
-	//refresh store
-	$store.currentTimeline=new Struct.Timeline('','')
-}
+	function gotoNew(){
+		window.location.href = '/g/' + Helpers.randomeString(64)
+	}
 
-/**
- * Generate a new title with unique extension like [0-9]
- * @param title the original title 
- */
-function generateTitle(title:string):string{
-	let index = 1
-	while(true){
-		if(FactoryCards.getFirstIndexByTitle($store.cards, title +  ' [' + index + ']') !== null){
-			index++
-		} else {
-			break
+	function goto(event:Event|null, key:string){
+		window.location.href = '/g/' + key
+	}
+
+	/**
+	 * Called to duplicate a existing chart
+	 * @param event 
+	 * @param key the key of the chart user want to duplicate.
+	 */
+	function duplicate(event:Event, key:string):void {
+		event.stopPropagation();
+		let clone:Struct.Timeline = structuredClone(CustomLocalStorage.getTimeline(key))
+		clone.ownerKey=null
+		clone.writeKey=null
+		clone.readKey=null
+		clone.isOnline=false
+		clone.title = generateTitle(clone['title'])
+		clone.key = Helpers.randomeString(64)
+
+		let newCard = new Struct.Card(clone['key'], clone['title'])
+		$store.cards.push(newCard)
+		CustomLocalStorage.save(clone['key'], clone)
+		//refresh store
+		$store.currentTimeline=new Struct.Timeline('','')
+	}
+
+	/**
+	 * Generate a new title with unique extension like [0-9]
+	 * @param title the original title 
+	 */
+	function generateTitle(title:string):string{
+		let index = 1
+		while(true){
+			if(FactoryCards.getFirstIndexByTitle($store.cards, title +  ' [' + index + ']') !== null){
+				index++
+			} else {
+				break
+			}
 		}
+		return title +  ' [' + index + ']'
 	}
-	return title +  ' [' + index + ']'
-}
 
-/**
- * Show popup to ask user if he really want to delete a chart
- * @param event
- * @param key
- */
-function askDelete(event:Event, key:string):void{
-	event.stopPropagation();
-	let timelineToDelete: Struct.Timeline = CustomLocalStorage.getTimeline(key)
-	if(timelineToDelete && timelineToDelete.isOnline){
-		console.warn(`this chart "${timelineToDelete.title}" is online and can't be deleted`)
-		toastComponent.show(`this chart "${timelineToDelete.title}" is online and can't be deleted`,false, 5)
-		return
+	/**
+	 * Show popup to ask user if he really want to delete a chart
+	 * @param event
+	 * @param key
+	 */
+	function askDelete(event:Event, key:string):void{
+		event.stopPropagation();
+		let timelineToDelete: Struct.Timeline = CustomLocalStorage.getTimeline(key)
+		if(timelineToDelete && timelineToDelete.isOnline){
+			console.warn(m.landing_toast_remote_timeline_cant_be_deleted({title:timelineToDelete.title}))
+			toastComponent.show(m.landing_toast_remote_timeline_cant_be_deleted({title:timelineToDelete.title}),false, 5)
+			return
+		}
+		popUpComponent.show(m.landing_popup_confirmation_before_deletion_text(), doDelete , m.landing_popup_confirmation_before_deletion_continue(), [key], doNotDelete, m.landing_popup_confirmation_before_deletion_cancel(), [])
+		
 	}
-	popUpComponent.show("Are you sure you want to delete this chart ? This operation cannot be undone.", doDelete , "Confirm deletion", [key], doNotDelete, "Cancel", [])
-	
-}
 
-/**
- * Callback called if the user cancel the delete action
- *  Nothing will happen
- * @param args
- */
-function doNotDelete(args:any[]){
-	//Nothing more to do
-}
-
-/**
- * Callback called if the user confirme the delete action
- *  The chart will be deleted
- *  The cards will be refresh without the cart deleted
- *  The picto will be deleted
- * @param args
- */
-function doDelete(args:any[]):void{
-	let key=args[0]
-
-	let timelineToDelete: Struct.Timeline = CustomLocalStorage.getTimeline(key)
-	if(timelineToDelete && timelineToDelete.isOnline){
-		console.warn(`this chart "${timelineToDelete.title}" is online and can't be deleted`)
-		toastComponent.show(`this chart "${timelineToDelete.title}" is online and can't be deleted`,false, 5)
-		return
+	/**
+	 * Callback called if the user cancel the delete action
+	 *  Nothing will happen
+	 * @param args
+	 */
+	function doNotDelete(args:any[]){
+		//Nothing more to do
 	}
-	CustomLocalStorage.remove(key)
-	let index = FactoryCards.getIndexByKey($store.cards, key)
-	if(index !== null){
-		$store.cards.splice(index,1)
+
+	/**
+	 * Callback called if the user confirme the delete action
+	 *  The chart will be deleted
+	 *  The cards will be refresh without the cart deleted
+	 *  The picto will be deleted
+	 * @param args
+	 */
+	function doDelete(args:any[]):void{
+		let key=args[0]
+
+		let timelineToDelete: Struct.Timeline = CustomLocalStorage.getTimeline(key)
+		if(timelineToDelete && timelineToDelete.isOnline){
+			console.warn(`this chart "${timelineToDelete.title}" is online and can't be deleted`)
+			toastComponent.show(`this chart "${timelineToDelete.title}" is online and can't be deleted`,false, 5)
+			return
+		}
+		CustomLocalStorage.remove(key)
+		let index = FactoryCards.getIndexByKey($store.cards, key)
+		if(index !== null){
+			$store.cards.splice(index,1)
+		}
+		
+		CustomLocalStorage.remove(LOCAL_STORAGE.KEY_PICTO + key)
+		//refresh store
+		$store.currentTimeline=new Struct.Timeline('','')
 	}
-	
-	CustomLocalStorage.remove(LOCAL_STORAGE.KEY_PICTO + key)
-	//refresh store
-	$store.currentTimeline=new Struct.Timeline('','')
-}
 
 
-/**
- * Retrive the picto from localStorage with the timeline's key 
- * @param key
- */
- function getThumbnail(key:string):string{
-	let thumbnail = FactoryPicto.getPicto(key)	
-	if(thumbnail == null){
-		thumbnail = '/notFound.webp'
+	/**
+	 * Retrive the picto from localStorage with the timeline's key 
+	 * @param key
+	 */
+	function getThumbnail(key:string):string{
+		let thumbnail = FactoryPicto.getPicto(key)	
+		if(thumbnail == null){
+			thumbnail = '/notFound.webp'
+		}
+		return thumbnail
 	}
-	return thumbnail
- }
 
 </script>
 
@@ -157,32 +159,37 @@ function doDelete(args:any[]):void{
 	</defs>
 </svg>
 <div id="search">
-	<div id='label'>Would you like to come back to your creations ?</div>
-	<div id='create'>Or <button on:click={gotoNew}>create</button> a new one !</div>
+	<div id='label'>{m.landing_comming_back()}</div>
+	<div id='create'>{m.landing_or()}<button on:click={gotoNew}>{m.landing_create()}</button>{m.landing_a_new_one()}</div>
 </div>
+
+
+<button on:click={setLocale("fr")}>FR</button>-<button on:click={setLocale("en")}>EN</button>
+
 {#key $store.cards}
 <div id='current'>
 	{#each $store.cards as card}
 		<div class='card' on:click={() => goto(null, card.key)} on:keydown={() => goto(null, card.key)} role="button" tabindex="0">
 			<img src={getThumbnail(card.key)} alt='miniature ' height="150px" width="250px" class='thumbnail'/>
 			<div class='title' >{card.title}</div>
-			<div class='lastUpdate'>Updated : {#if card.lastUpdated}{toStringDate(card.lastUpdated)}{/if}</div>
-			<div class:hidden={!card.isOnline} class='information' title="This Timeline is saved remotely and can't be deleted">
+			<div class='lastUpdate'>{m.landing_updated_text()} : {#if card.lastUpdated}{toStringDate(card.lastUpdated)}{/if}</div>
+			<div class:hidden={!card.isOnline} class='information' title={m.landing_title_remote_timeline_cant_be_deleted()}>
 				<i class="online"></i>
 			</div>
 			<div class='action'>
 				<small>{card.key.substring(0,5)}</small>
-				<div class="live_cmd" on:click={(event) => duplicate(event, card.key)} on:keydown={(event) => duplicate(event, card.key)} title="duplicate this Timeline"  role="button" tabindex="0">
+				<div class="live_cmd" on:click={(event) => duplicate(event, card.key)} on:keydown={(event) => duplicate(event, card.key)} title={m.landing_action_duplicate()}  role="button" tabindex="0">
 					<svg viewBox="0 0 20 20">
 						<use x="0" y="0" href="#b_duplicate"/>
 					</svg>
 				</div>
-				<div class:hidden={card.isOnline} class="live_cmd live_cmd_red" on:click={(event) => askDelete(event, card.key)} on:keydown={(event) => askDelete(event, card.key)} title="delete this Timeline"  role="button" tabindex="0">
+				<div class:hidden={card.isOnline} class="live_cmd live_cmd_red" on:click={(event) => askDelete(event, card.key)} on:keydown={(event) => askDelete(event, card.key)} title={m.landing_action_delete()}  role="button" tabindex="0">
 					<svg viewBox="0 0 20 20">
 						<use x="0" y="0" href="#b_delete"/>
 					</svg>
 				</div>
 			</div>
+			is online : {card.isOnline}
 		</div>
 	{/each}
 	<div class='emptyCard' on:click={gotoNew} on:keydown={gotoNew} role="button" tabindex="0"><div class='addMore'>➕</div></div>

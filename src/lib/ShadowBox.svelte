@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { m } from "../paraglide/messages";
+
 
 let hidden = true
 export let id:string = ''
@@ -21,7 +23,17 @@ function handleKeydown(event:KeyboardEvent) {if (!hidden && event.key === 'Escap
     <div class="ShadowContent">
         <slot>Default content for the Box Slot</slot>
     </div>            
-    <div class="ShadowClosing">Click <span class='pointer' on:click={closeComponent} on:keydown={closeComponent} role="button" tabindex="0">here</span> or tape <span>Escape key</span> to close this windows</div>
+    <div class="ShadowClosing">
+        {m.shadowbox_exit_instruction_0()} 
+        <span class='pointer' on:click={closeComponent} on:keydown={closeComponent} role="button" tabindex="0">
+            {m.shadowbox_exit_instruction_1()}
+        </span>
+        {m.shadowbox_exit_instruction_2()} 
+        <span>
+            {m.shadowbox_exit_instruction_3()}
+        </span>
+        {m.shadowbox_exit_instruction_4()}
+    </div>
 </div>
 
 <style>
