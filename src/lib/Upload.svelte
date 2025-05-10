@@ -255,7 +255,7 @@ const svelteAction: Action = (node) => {
     <form method="post" action="" enctype="multipart/form-data" use:svelteAction>
         <div>
             <input type="file" name="files[]" accept=".csv,.toml" id="file"/>
-            <label for="file"><span class='action'>{m.upload_label_action()}</span> {m.upload_label_action_text}</label>
+            <label for="file"><span class='action'>{m.upload_label_action()}</span> {m.upload_label_action_text()}</label>
         </div>
         <button type="submit">{m.upload_action()}</button>
         <div><span class='action' on:click={downloadCsv} on:keydown={downloadCsv} role="button" tabindex="0">{m.upload_label_download_csv_action()}</span> {m.upload_label_download_csv_action_text()}</div>
