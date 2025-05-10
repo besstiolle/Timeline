@@ -1,20 +1,21 @@
 <script lang="ts">
-import html2canvas from 'html2canvas';
+    import html2canvas from 'html2canvas-pro';
 
-import { store } from './stores';
-import { browser } from "$app/environment"
+    import { store } from './stores';
+    import { browser } from "$app/environment"
 
-import { Helpers } from './helpers';
+    import { Helpers } from './helpers';
 
-import Banner from './Banner.svelte';
-import Milestones from './Milestones.svelte';
-import Today from './Today.svelte';
-import Upload from './Upload.svelte';
-import Live from './Live.svelte';
-import SwimAndTasks from './SwimAndTasks.svelte';
-import Online from './Online.svelte';
-import Toast from './Toast.svelte';
-import { FactoryPicto } from './factoryPicto';
+    import Banner from './Banner.svelte';
+    import Milestones from './Milestones.svelte';
+    import Today from './Today.svelte';
+    import Upload from './Upload.svelte';
+    import Live from './Live.svelte';
+    import SwimAndTasks from './SwimAndTasks.svelte';
+    import Online from './Online.svelte';
+    import Toast from './Toast.svelte';
+    import { FactoryPicto } from './factoryPicto';
+
 
     let toastComponent:Toast
     let uploadComponent:Upload
@@ -22,35 +23,45 @@ import { FactoryPicto } from './factoryPicto';
     let onlineComponent:Online
 
     let processRunning = false
+
     /**
      * Generate a thumbbnail every 30s and save it into the localstorage
      */
-    let makeThumbnail = async () => {
-        await new Promise(res => setTimeout(res, 30000))
-        if(!processRunning && browser) { //avoid ReferenceError: Image is not defined
+    function makeThumbnail(){
+        if(!browser) {
+            return
+        }
+
+        if(!processRunning) {
+            //console.debug("making a snapshot")
             processRunning=true
             var image = new Image();
-            html2canvas(document.getElementById('wrapper') as HTMLElement, {
+            const wrapper = document.getElementById('wrapper') as HTMLElement
+            if(wrapper == null){
+                //console.debug("stop snapshot")
+                clearInterval(timerId)
+                return
+            }
+            html2canvas(wrapper, {
                 ignoreElements: function (el:Element) {return el.classList.contains('toExcludeFromSnapshot')},
+                scale:0.1,
                 logging:false
             }).then(function (canvas:HTMLCanvasElement) {
                 var ctx = canvas.getContext("2d") as CanvasRenderingContext2D
                 ctx.drawImage(image, 0, 0, 128, 128)
-                var dataurl = canvas.toDataURL('image/jpeg', 0.1)
+                var dataurl = canvas.toDataURL('image/jpeg', 1)
                 FactoryPicto.createPicto($store.currentTimeline, dataurl)
-                processRunning=false
-                makeThumbnail()
+            }).catch((error)=>{
+                console.error("erreur capté : ", error)
             }).finally(() => {
                 processRunning=false
             })
-        } else if(!browser) {
-            return
-        } else {
-            console.info("process was busy, we'll waiting 30s more")
-            makeThumbnail()
         }
     }
-    makeThumbnail()
+
+    const timerId = setInterval(makeThumbnail, 5000)
+    
+    
 
     /**
      * Generate a screenshot from the chart and save it on computer as a png image
@@ -106,12 +117,6 @@ import { FactoryPicto } from './factoryPicto';
     <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={liveComponent.openShadowBox} on:keydown={liveComponent.openShadowBox} title='Edit your milestones' role="button" tabindex="0"><i class='edit'></i></div>
 </div>
 
-<div class="bottomButtons">
-    <div class="bottomButton" title="Come to home page"><a href='/' aria-label="Come back to homepage"><i class='home'></i></a></div>
-    <div class="bottomButton" title="Fork me on Github"><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline' aria-label="See project on Github"><i class='github' ></i></a></div>
-    <div class="bottomButton" title='Ask me a new feature. Send me your bug description'><a target='_blank' rel=external href='https://github.com/besstiolle/Timeline/issues/new' aria-label="Create issue on Github"><i class='questions'></i></a></div>
-</div>
-
 <Upload bind:this={uploadComponent} download={download}/>
 <Live bind:this={liveComponent}/>
 <Online bind:this={onlineComponent}/>
@@ -119,7 +124,7 @@ import { FactoryPicto } from './factoryPicto';
 
 
 {#key $store}
-<div id="wrapper">
+<div id="wrapper" class="">
     <svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg">
         <!-- http://svgicons.sparkk.fr/ -->
         <!-- https://svgedit.netlify.app/editor/index.html -->
@@ -152,6 +157,7 @@ import { FactoryPicto } from './factoryPicto';
 <!--Grid/-->
 
 <style>
+
 :global(svg){
     font-family:"Verdana";
     font-size:8px;
@@ -163,14 +169,14 @@ import { FactoryPicto } from './factoryPicto';
     right: 0;
 }
 
-.rightButton, .rightButtonDisabled, .bottomButton{
+.rightButton, .rightButtonDisabled{
     border-radius: 50%;
     margin: 16px;
-    height: 32px;
-    width: 32px;
-    padding: 10px;
+    height: 46px;
+    width: 46px;
+    padding: 6px;
 }
-.rightButton:hover, .bottomButton:hover{
+.rightButton:hover{
     cursor:pointer;
 }
 
@@ -185,24 +191,6 @@ import { FactoryPicto } from './factoryPicto';
     border: 1px solid rgb(17, 122, 101, 0.5);
     background-color: rgb(22, 160, 133, 0.5);
     cursor:not-allowed;
-}
-
-.bottomButtons{
-    position: fixed;
-    bottom: 0;
-    left:45%;
-}
-.bottomButton {
-    border: 1px solid #cccccc;
-    background-color: #ffffff;
-    padding: 5px;
-    display: inline-block;
-}
-.bottomButton:hover{
-    background-color: rgb(255, 255, 255, 0.5);
-}
-.bottomButton a{
-    border:none;
 }
 
 

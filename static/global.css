@@ -1,14 +1,3 @@
-html, body {
-      height: 100%;
-      width:100%;
-      max-width:100%;
-      margin: 0;
-      font-family: Roboto, sans-serif;
-      color: #0f3c4b;
-      background-color: #e5edf1;
-      overflow-y: auto;
-}
-  
 a{
   transition: color 0.2s ease, border-bottom-color 0.2s ease;
   border-bottom: dotted 1px;
@@ -29,9 +18,6 @@ i{
   background-image: url('/pics.png');
   display: inline-block;
 }
-.github{background-position: 0 0;}
-.home{background-position: 0 -64px;}
-.questions{background-position: -32px -64px;}
 .edit{background-position: -32px -32px;}
 .photo{background-position: 0 -32px;}
 .io{background-position: 0px -96px;}

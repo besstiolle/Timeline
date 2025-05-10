@@ -1,298 +1,74 @@
 <script lang="ts">
-	import { LOCAL_STORAGE } from "$lib/constantes";
-	import { CustomLocalStorage } from "$lib/customLocalStorage";
-	import { FactoryCards } from "$lib/factoryCards";
-	import { FactoryPicto } from "$lib/factoryPicto";
 
 	import { Helpers } from "$lib/helpers";
-	import PopUpConfirmation from "$lib/PopUpConfirmation.svelte";
 	import { Rights } from "$lib/rights.class";
 	import { store } from "$lib/stores";
 	import { Struct } from "$lib/struct.class";
-	import Toast from "$lib/Toast.svelte";
+	import Cards from "../components/Cards.svelte";
 	import { m } from "../paraglide/messages";
-	import { setLocale } from "../paraglide/runtime";
 
-
-	let popUpComponent:PopUpConfirmation
-	let toastComponent:Toast
 	//Reset store currentTimeline information when we are here
 	$store.currentTimeline=new Struct.Timeline()
 	$store.lastCommitedRemotely=-1
 	$store.lastUpdatedLocally=-1
 	$store.rights=new Rights(null)
 
-	function toStringDate(date: Date): string {
-		const DATE_SEPARATOR = "/"
-		const HOUR_SEPARATOR = "h"
-		const SPACE_SEPARATOR = " "
-		return date.getDate().toString().padStart(2, '0') 
-			+ DATE_SEPARATOR + (date.getMonth() + 1).toString().padStart(2, '0') 
-			+ SPACE_SEPARATOR + date.getHours().toString().padStart(2, '0') 
-			+ HOUR_SEPARATOR + date.getMinutes().toString().padStart(2, '0') 
-	}
-
-
 	function gotoNew(){
 		window.location.href = '/g/' + Helpers.randomeString(64)
 	}
 
-	function goto(event:Event|null, key:string){
-		window.location.href = '/g/' + key
-	}
-
-	/**
-	 * Called to duplicate a existing chart
-	 * @param event 
-	 * @param key the key of the chart user want to duplicate.
-	 */
-	function duplicate(event:Event, key:string):void {
-		event.stopPropagation();
-		let clone:Struct.Timeline = structuredClone(CustomLocalStorage.getTimeline(key))
-		clone.ownerKey=null
-		clone.writeKey=null
-		clone.readKey=null
-		clone.isOnline=false
-		clone.title = generateTitle(clone['title'])
-		clone.key = Helpers.randomeString(64)
-
-		let newCard = new Struct.Card(clone['key'], clone['title'])
-		$store.cards.push(newCard)
-		CustomLocalStorage.save(clone['key'], clone)
-		//refresh store
-		$store.currentTimeline=new Struct.Timeline('','')
-	}
-
-	/**
-	 * Generate a new title with unique extension like [0-9]
-	 * @param title the original title 
-	 */
-	function generateTitle(title:string):string{
-		let index = 1
-		while(true){
-			if(FactoryCards.getFirstIndexByTitle($store.cards, title +  ' [' + index + ']') !== null){
-				index++
-			} else {
-				break
-			}
-		}
-		return title +  ' [' + index + ']'
-	}
-
-	/**
-	 * Show popup to ask user if he really want to delete a chart
-	 * @param event
-	 * @param key
-	 */
-	function askDelete(event:Event, key:string):void{
-		event.stopPropagation();
-		let timelineToDelete: Struct.Timeline = CustomLocalStorage.getTimeline(key)
-		if(timelineToDelete && timelineToDelete.isOnline){
-			console.warn(m.landing_toast_remote_timeline_cant_be_deleted({title:timelineToDelete.title}))
-			toastComponent.show(m.landing_toast_remote_timeline_cant_be_deleted({title:timelineToDelete.title}),false, 5)
-			return
-		}
-		popUpComponent.show(m.landing_popup_confirmation_before_deletion_text(), doDelete , m.landing_popup_confirmation_before_deletion_continue(), [key], doNotDelete, m.landing_popup_confirmation_before_deletion_cancel(), [])
-		
-	}
-
-	/**
-	 * Callback called if the user cancel the delete action
-	 *  Nothing will happen
-	 * @param args
-	 */
-	function doNotDelete(args:any[]){
-		//Nothing more to do
-	}
-
-	/**
-	 * Callback called if the user confirme the delete action
-	 *  The chart will be deleted
-	 *  The cards will be refresh without the cart deleted
-	 *  The picto will be deleted
-	 * @param args
-	 */
-	function doDelete(args:any[]):void{
-		let key=args[0]
-
-		let timelineToDelete: Struct.Timeline = CustomLocalStorage.getTimeline(key)
-		if(timelineToDelete && timelineToDelete.isOnline){
-			console.warn(`this chart "${timelineToDelete.title}" is online and can't be deleted`)
-			toastComponent.show(`this chart "${timelineToDelete.title}" is online and can't be deleted`,false, 5)
-			return
-		}
-		CustomLocalStorage.remove(key)
-		let index = FactoryCards.getIndexByKey($store.cards, key)
-		if(index !== null){
-			$store.cards.splice(index,1)
-		}
-		
-		CustomLocalStorage.remove(LOCAL_STORAGE.KEY_PICTO + key)
-		//refresh store
-		$store.currentTimeline=new Struct.Timeline('','')
-	}
-
-
-	/**
-	 * Retrive the picto from localStorage with the timeline's key 
-	 * @param key
-	 */
-	function getThumbnail(key:string):string{
-		let thumbnail = FactoryPicto.getPicto(key)	
-		if(thumbnail == null){
-			thumbnail = '/notFound.webp'
-		}
-		return thumbnail
-	}
 
 </script>
 
 <svelte:head>
 	<title>Timeline Charts</title>
 </svelte:head>
-<svg xmlns="http://www.w3.org/2000/svg">
+
+<svg xmlns="http://www.w3.org/2000/svg" class="hidden">
 	<defs>
-		<circle id="filler" cx="10" cy="10" fill="transparent" r="8"/>
-		<path id="b_down"           d="M17.659,9.597h-1.224c-0.199-3.235-2.797-5.833-6.032-6.033V2.341c0-0.222-0.182-0.403-0.403-0.403S9.597,2.119,9.597,2.341v1.223c-3.235,0.2-5.833,2.798-6.033,6.033H2.341c-0.222,0-0.403,0.182-0.403,0.403s0.182,0.403,0.403,0.403h1.223c0.2,3.235,2.798,5.833,6.033,6.032v1.224c0,0.222,0.182,0.403,0.403,0.403s0.403-0.182,0.403-0.403v-1.224c3.235-0.199,5.833-2.797,6.032-6.032h1.224c0.222,0,0.403-0.182,0.403-0.403S17.881,9.597,17.659,9.597 M14.435,10.403h1.193c-0.198,2.791-2.434,5.026-5.225,5.225v-1.193c0-0.222-0.182-0.403-0.403-0.403s-0.403,0.182-0.403,0.403v1.193c-2.792-0.198-5.027-2.434-5.224-5.225h1.193c0.222,0,0.403-0.182,0.403-0.403S5.787,9.597,5.565,9.597H4.373C4.57,6.805,6.805,4.57,9.597,4.373v1.193c0,0.222,0.182,0.403,0.403,0.403s0.403-0.182,0.403-0.403V4.373c2.791,0.197,5.026,2.433,5.225,5.224h-1.193c-0.222,0-0.403,0.182-0.403,0.403S14.213,10.403,14.435,10.403"></path>
+		<g id="ico_plus" transform="translate(28.000000, 278.000000)">
+			<path class="st0" d="M4-222.1c-13.2,0-23.9-10.7-23.9-23.9c0-13.2,10.7-23.9,23.9-23.9s23.9,10.7,23.9,23.9     C27.9-232.8,17.2-222.1,4-222.1L4-222.1z M4-267.3c-11.7,0-21.3,9.6-21.3,21.3s9.6,21.3,21.3,21.3s21.3-9.6,21.3-21.3     S15.7-267.3,4-267.3L4-267.3z" id="Fill-38"/>
+			<polygon class="st0" id="Fill-39" points="-8.7,-247.4 16.7,-247.4 16.7,-244.6 -8.7,-244.6    "/>
+			<polygon class="st0" id="Fill-40" points="2.6,-258.7 5.4,-258.7 5.4,-233.3 2.6,-233.3    "/>
+		</g>
+
+		<g id="ico_menu">
+			<path d="M13,16c0,1.654,1.346,3,3,3s3-1.346,3-3s-1.346-3-3-3S13,14.346,13,16z" id="XMLID_294_"/>
+			<path d="M13,26c0,1.654,1.346,3,3,3s3-1.346,3-3s-1.346-3-3-3S13,24.346,13,26z" id="XMLID_295_"/>
+			<path d="M13,6c0,1.654,1.346,3,3,3s3-1.346,3-3s-1.346-3-3-3S13,4.346,13,6z" id="XMLID_297_"/>
+		</g>
 		<path id="b_delete"         d="M10.185,1.417c-4.741,0-8.583,3.842-8.583,8.583c0,4.74,3.842,8.582,8.583,8.582S18.768,14.74,18.768,10C18.768,5.259,14.926,1.417,10.185,1.417 M10.185,17.68c-4.235,0-7.679-3.445-7.679-7.68c0-4.235,3.444-7.679,7.679-7.679S17.864,5.765,17.864,10C17.864,14.234,14.42,17.68,10.185,17.68 M10.824,10l2.842-2.844c0.178-0.176,0.178-0.46,0-0.637c-0.177-0.178-0.461-0.178-0.637,0l-2.844,2.841L7.341,6.52c-0.176-0.178-0.46-0.178-0.637,0c-0.178,0.176-0.178,0.461,0,0.637L9.546,10l-2.841,2.844c-0.178,0.176-0.178,0.461,0,0.637c0.178,0.178,0.459,0.178,0.637,0l2.844-2.841l2.844,2.841c0.178,0.178,0.459,0.178,0.637,0c0.178-0.176,0.178-0.461,0-0.637L10.824,10z"></path>
 		<path id="b_duplicate"      d="M17.391,2.406H7.266c-0.232,0-0.422,0.19-0.422,0.422v3.797H3.047c-0.232,0-0.422,0.19-0.422,0.422v10.125c0,0.232,0.19,0.422,0.422,0.422h10.125c0.231,0,0.422-0.189,0.422-0.422v-3.797h3.797c0.232,0,0.422-0.19,0.422-0.422V2.828C17.812,2.596,17.623,2.406,17.391,2.406 M12.749,16.75h-9.28V7.469h3.375v5.484c0,0.231,0.19,0.422,0.422,0.422h5.483V16.75zM16.969,12.531H7.688V3.25h9.281V12.531z"></path>
+		<g id="ico_delete">
+			<path class="st1" d="M17.7,23.3H6.3c-1,0-1.7-0.8-1.7-1.7V6.6h14.8v14.9C19.4,22.5,18.6,23.3,17.7,23.3z"/>
+			<path class="st1" d="M20.4,6V4.2c0-0.7-0.6-1.3-1.3-1.3h-3.7L15,1.4C14.8,1,14.5,0.8,14,0.8H10C9.6,0.8,9.2,1,9,1.4L8.6,2.8H4.9     c-0.7,0-1.3,0.6-1.3,1.3V6c0,0.3,0.3,0.6,0.6,0.6h15.6C20.2,6.6,20.4,6.3,20.4,6z"/>
+			<line class="st1" x1="8.8" x2="8.8" y1="10.2" y2="19.7"/>
+			<line class="st1" x1="12" x2="12" y1="10.2" y2="19.7"/>
+			<line class="st1" x1="15.2" x2="15.2" y1="10.2" y2="19.7"/>
+		</g>
+		<g id="ico_cloud">
+			<path d="M399.3,232.8c0-1.2,0.2-2.4,0.2-3.6c0-64.3-52.8-117.2-116.8-117.2c-46.1,0-85.8,27.9-104.4,67c-8.1-4.1-17.1-6.4-26.8-6.4  c-29.6,0-54.1,23.7-58.9,52C57.4,236.8,32,268.8,32,308.4c0,49.8,40.1,91.6,89.6,91.6H398c45,0,82-38.9,82-84.3  C480,270.1,444.6,232.9,399.3,232.8z M397.5,383.6l-3.2,0.4H122.4c-40.9,0-74.2-34.9-74.2-76.1c0-31.9,20.2-58.4,50.2-68.8l8.4-3  l1.5-8.8c3.6-21.6,22.1-39.3,43.9-39.3c6.9,0,13.7,1.6,19.9,4.8l13.5,6.8l6.5-13.7c16.6-34.9,52.1-58.2,90.4-58.2  c55.3,0,100.9,44.1,100.9,99.7c0,13.3-0.2,20.3-0.2,20.3l15.2,0.1c36.7,0.5,65.6,30.5,65.6,67.4C464,352.1,434.2,383.4,397.5,383.6z  "/>
+		</g>
 	</defs>
 </svg>
-<div id="search">
-	<div id='label'>{m.landing_comming_back()}</div>
-	<div id='create'>{m.landing_or()}<button on:click={gotoNew}>{m.landing_create()}</button>{m.landing_a_new_one()}</div>
+
+<div class="w-lg m-auto mt-15">
+	<img src='logo672.png' alt="TimeChart logo"/>
+	<div>
+		<p class="p-2 text-justify indent-5">{m.landing_welcome()}</p>
+		<p class="p-2 text-justify indent-5">{m.landing_we_are()}</p>
+	</div>
+	<button class="mx-auto mt-10 flex gap-2 rounded-full shadow-xl/15 bg-linear-to-r/srgb from-cyan-600 to-emerald-500 hover:bg-linear-to-r/hsl hover:to-cyan-600 hover:from-emerald-500 p-3 cursor-pointer" 
+		on:click={gotoNew}>
+		<svg viewBox="0 0 64 64" class='size-6 fill-gray-800 dark:fill-blue-50'>
+			<use x="0" y="0" href="#ico_plus"/>
+		</svg>
+		{m.landing_create()}
+	</button>
 </div>
 
-
-<button on:click={setLocale("fr")}>FR</button>-<button on:click={setLocale("en")}>EN</button>
-
-{#key $store.cards}
-<div id='current'>
-	{#each $store.cards as card}
-		<div class='card' on:click={() => goto(null, card.key)} on:keydown={() => goto(null, card.key)} role="button" tabindex="0">
-			<img src={getThumbnail(card.key)} alt='miniature ' height="150px" width="250px" class='thumbnail'/>
-			<div class='title' >{card.title}</div>
-			<div class='lastUpdate'>{m.landing_updated_text()} : {#if card.lastUpdated}{toStringDate(card.lastUpdated)}{/if}</div>
-			<div class:hidden={!card.isOnline} class='information' title={m.landing_title_remote_timeline_cant_be_deleted()}>
-				<i class="online"></i>
-			</div>
-			<div class='action'>
-				<small>{card.key.substring(0,5)}</small>
-				<div class="live_cmd" on:click={(event) => duplicate(event, card.key)} on:keydown={(event) => duplicate(event, card.key)} title={m.landing_action_duplicate()}  role="button" tabindex="0">
-					<svg viewBox="0 0 20 20">
-						<use x="0" y="0" href="#b_duplicate"/>
-					</svg>
-				</div>
-				<div class:hidden={card.isOnline} class="live_cmd live_cmd_red" on:click={(event) => askDelete(event, card.key)} on:keydown={(event) => askDelete(event, card.key)} title={m.landing_action_delete()}  role="button" tabindex="0">
-					<svg viewBox="0 0 20 20">
-						<use x="0" y="0" href="#b_delete"/>
-					</svg>
-				</div>
-			</div>
-			is online : {card.isOnline}
-		</div>
-	{/each}
-	<div class='emptyCard' on:click={gotoNew} on:keydown={gotoNew} role="button" tabindex="0"><div class='addMore'>➕</div></div>
-</div>
-{/key}
-<PopUpConfirmation bind:this={popUpComponent}/>
-<Toast bind:this={toastComponent}/>
+<Cards />
 
 <style>
-	#search{
-		width: 50vw;
-		background-color: beige;
-		border-radius: 10px;
-		border:1px dotted;
-		margin:5vw auto 0 auto;
-		font-size: 2rem;
-		font-family: 'Trebuchet MS', Helvetica, sans-serif;
-		text-align:center;
-	}
-	#label{
-		padding: 2vw;
-	}
-	#create{
-		padding: 2vw;
-	}
-	button{
-		transform: rotate(-10deg);
-		cursor: pointer;
-		border: none;
-		background-color: transparent;
-		color:green;
-		font-size: 2rem;
-		font-family: 'Trebuchet MS', Helvetica, sans-serif;
-	}
-	button:hover{
-		transform: rotate(-9deg);
-	}
-	#current{
-		width: 40vw;
-		margin: 2vw auto 0 auto;
-	}
-	.card, .emptyCard{
-		position: relative;
-		margin-bottom: 20px;
-	}
-	.card:hover, .emptyCard:hover{
-		background-color: rgb(215, 233, 206);	
-		cursor: pointer;
-		transform: scale(1.05);
-	}
-	.thumbnail{
-		border:1px solid #888;
-		border-radius: 5px;
-		padding: 5px;
-		display: inline-block;
-	}
-	.title{
-		font-size: 2em;
-		position: absolute;
-		top:0;
-		left:275px;
-	}
-	.lastUpdate{
-		font-size: 1rem;
-		position: absolute;
-		top:50px;
-		left:275px;
-	}
 	
-	.information{
-		position: absolute;
-		bottom:0px;
-		left:225px;
-	}
-	.action{
-		position: absolute;
-		bottom: 0vw;
-		font-size: 1rem;
-		padding: 0.51vw;
-		right: 0;
-	}
-	.addMore{
-		font-size: 6em;
-		position: absolute;
-		top: 7px;
-		left: 48%;
-	}
-	:global(div.live_cmd){
-        width:20px;
-        height: 20px;
-        display:inline-block;
-        margin:1px;
-    }
-    :global(div.live_cmd:hover){
-        fill:rgb(33, 56, 33);
-        background-color: rgb(188, 224, 154);
-        border-radius: 45px;
-        border: 1px solid rgb(188, 224, 154);
-        margin:0;
-    }
-    :global(div.live_cmd_red:hover){
-        fill:rgb(56, 33, 33);
-        background-color: rgb(221, 175, 175);
-        border: 1px solid rgb(221, 175, 175);
-    }
 </style>
