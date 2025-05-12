@@ -1,8 +1,6 @@
 <script lang="ts">
 import toml from 'toml'
 
-import { onMount } from 'svelte';
-
 import { store } from './stores';
 import { Struct, type abstractMilestoneInterface, type abstratTaskInterface as abstractTaskInterface, type abstractTimelineInterface } from './struct.class';
 import { FactoryTimeline } from './factoryTimeline';
@@ -11,6 +9,7 @@ import { goToml, timelineToObject } from './toml';
 import { goCsv } from './csv';
 import ShadowBox from './ShadowBox.svelte';
 import Toast from './Toast.svelte';
+	import type { Action } from 'svelte/action';
 
 
 export let download = (blob:Blob, extension:string) => {}
@@ -33,16 +32,24 @@ function downloadToml () {
     download(blob, ".toml") 
 }
 
+    let _isAdvancedUpload:boolean|null = null
+    function isAdvancedUpload():boolean{
+        if(_isAdvancedUpload == null){
+            const div = document.createElement('div')
+            _isAdvancedUpload = (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
+        }
+        return _isAdvancedUpload as boolean
+    }
 
-onMount(async () => {
-    let isAdvancedUpload = function() {
-        let div = document.createElement('div');
-        return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
-    }();
-
-
+/**
+ * https://svelte.dev/docs/svelte/use
+ **/
+const svelteAction: Action = (node) => {
+    //console.info("current node : ",node)
     let formElement = document.getElementById('droppable') as HTMLElement
-    if (isAdvancedUpload) {
+    //console.info("formElement : ",formElement)
+    if (formElement && isAdvancedUpload()) {
+        //console.info("isAdvancedUpload")
         formElement.classList.add('has-advanced-upload');
 
         let funcDrag = function(e:Event) {
@@ -71,8 +78,15 @@ onMount(async () => {
         formElement.addEventListener('dragend', funcDragLeave)
         formElement.addEventListener('drop', funcDragLeave)
 
+        formElement.addEventListener('drop', onDrop);
+        (document.getElementById('file') as HTMLElement).addEventListener('change', onChange);
+    } else {
+        console.warn(" not isAdvancedUpload")
+    }
+}
         
         function onChange(event:Event) {
+            //console.info("onChange")
             let htmlElement = event.target as HTMLInputElement
             if(htmlElement.files){
                 readFiles(htmlElement.files)
@@ -80,6 +94,7 @@ onMount(async () => {
         }
 
         function onDrop(event:DragEvent ) {
+            //console.info("onDrop")
             if(event.dataTransfer){
                 readFiles(event.dataTransfer.files)
             }
@@ -231,16 +246,12 @@ onMount(async () => {
             $store.currentTimeline = $store.currentTimeline
         }
 
-        (document.getElementById('file') as HTMLElement).addEventListener('change', onChange);
-        formElement.addEventListener('drop', onDrop);
-    }
-});
-
   
 </script>
 <ShadowBox bind:this={shadowBox} id='droppable'>
-
-    <form method="post" action="" enctype="multipart/form-data">
+    
+    <!-- https://svelte.dev/docs/svelte/use -->
+    <form method="post" action="" enctype="multipart/form-data" use:svelteAction>
         <div>
             <input type="file" name="files[]" accept=".csv,.toml" id="file"/>
             <label for="file"><span class='action'>upload file</span> Must be a .csv or .toml file. You can also drag it over this windows.</label>
