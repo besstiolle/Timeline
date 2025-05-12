@@ -7,6 +7,7 @@ import { FactoryTimeline } from './factoryTimeline';
 import { LIVE_PREFIX } from './constantes';
 import { FactoryTask } from './factoryTask';
 	import { m } from '../paraglide/messages';
+	import { fillBright, strokeBright } from './colorHelper';
 
 export let updateStore:Function
 
@@ -93,7 +94,6 @@ function b_add(){
 }
 
 </script>
-{$store.currentTimeline.tasks.length}
 
 {#each $store.currentTimeline.tasks as task, i}
 <div class="live__line show_{task.isShow}">

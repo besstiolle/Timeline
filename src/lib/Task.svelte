@@ -1,5 +1,6 @@
 <script lang="ts">
-import { GRID, MONTHS } from './constantes';
+	import { fillBright, fillNormal, strokeNormal } from './colorHelper';
+    import { GRID, MONTHS } from './constantes';
 
 
     import { Helpers } from './helpers';
@@ -22,9 +23,10 @@ import { GRID, MONTHS } from './constantes';
     const grey = "#95A5A6";
     const greyStroke = "#9B9B9B";
     const white = "#FFFFFF";
-    const rightLabel = "#44546A";
-    const leftLabel = "#000000";
-    const dottedLine = "#44546A";
+    //const rightLabel = "#44546A";
+    //const leftLabel = "#000000";
+    //const dottedLine = "#44546A";
+
 
     let styleColor = {fill : green, stroke: greenStroke} //default : full
     if(currentTask.hasProgress && currentTask.progress < 100){
@@ -64,10 +66,10 @@ import { GRID, MONTHS } from './constantes';
     role="none">
     
         {#if hasSwimline}
-        <text text-anchor="end" x="{xGrayPosition - 5}" y="10.5" font-size="9" fill="{leftLabel}" >{currentTask.label}</text>
+        <text text-anchor="end" x="{xGrayPosition - 5}" y="10.5" font-size="9" class={fillBright()}>{currentTask.label}</text>
         {:else}
-        <text text-anchor="end" x="{GRID.MIDDLE_X - 5}" y="10.5" font-size="9" fill="{leftLabel}">{currentTask.label}</text>
-        <line stroke-dasharray="0.5 2" x1="{GRID.MIDDLE_X}" y1="8" x2="{xGrayPosition - 5}" y2="8" stroke="{dottedLine}" />
+        <text text-anchor="end" x="{GRID.MIDDLE_X - 5}" y="10.5" font-size="9" class={fillBright()}>{currentTask.label}</text>
+        <line stroke-dasharray="0.5 2" x1="{GRID.MIDDLE_X}" y1="8" x2="{xGrayPosition - 5}" y2="8" class={strokeNormal()} />
         {/if}
 
         {#if currentTask.hasProgress}
@@ -81,22 +83,22 @@ import { GRID, MONTHS } from './constantes';
         <rect id="T{currentTask.id}_progressBar" x="{xGrayPosition}" y="0" width="{widthGray}" height="15" rx="5" ry="5" fill="{styleColor.fill}" stroke="{styleColor.stroke}" stroke-width="0.05em"/>    
         {/if}
 
-        <text id="T{currentTask.id}_rlabel" x="{x2GrayPosition + 5}" y="10.5" fill="{rightLabel}">{labelRight}</text>
+        <text id="T{currentTask.id}_rlabel" x="{x2GrayPosition + 5}" y="10.5" class={fillNormal()}>{labelRight}</text>
         <!-- Draggable overlay -->
         <rect id="T{currentTask.id}_rec" x="{xGrayPosition}" y="0" width="{widthGray}" class="showable hidden" height="15" rx="5" ry="5" fill="url(#pattern_A)"/> 
 
         <svg  id="T{currentTask.id}_l" x="{xGrayPosition - 5}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class:grabbable={!$store.rights.isReader()} class="showable hidden">
             <use href="#filler" on:mousedown={downLeft} role="presentation"/>
-            <use href="#drag_left" fill="{rightLabel}" on:mousedown={downLeft} role="presentation"/>
+            <use href="#drag_left" class={fillNormal()} on:mousedown={downLeft} role="presentation"/>
         </svg>
         <svg  id="T{currentTask.id}_r" x="{x2GrayPosition - 10}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class:grabbable={!$store.rights.isReader()} class="showable hidden">
             <use href="#filler" on:mousedown={downRight}  role="presentation"/>
-            <use href="#drag_right" fill="{rightLabel}" on:mousedown={downRight} role="presentation"/>    
+            <use href="#drag_right" class={fillNormal()} on:mousedown={downRight} role="presentation"/>    
         </svg>
         {#if currentTask.hasProgress}
         <svg  id="T{currentTask.id}_p" x="{xGrayPosition + ((x2GrayPosition - xGrayPosition) / 2) - 10}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class:grabbable={!$store.rights.isReader()} class="showable hidden">
             <use href="#filler"  on:mousedown={downProgress}  role="presentation"/>
-            <use href="#drag_progress" fill="{rightLabel}" on:mousedown={downProgress} role="presentation"/>    
+            <use href="#drag_progress" class={fillNormal()} on:mousedown={downProgress} role="presentation"/>    
         </svg>
         {/if}
         <!-- END overlay-->

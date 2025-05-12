@@ -103,35 +103,65 @@ import { FactoryCards } from './factoryCards';
         //update cards with the online/offline information
         FactoryCards.updateCardsWithTimeline($store.cards, $store.currentTimeline)
     }
+
+    function select(event:MouseEvent) {
+        //const input = document.getElementById("text-box");
+        //input.focus();
+        //input.select();
+        const input = event.target as HTMLInputElement
+        input.focus()
+        input.select()
+    }
+
     
 </script>
 
 
 <ShadowBox bind:this={shadowBox}>
     {#if $store.currentTimeline.isOnline}
-        <div class='warn'>{m.online_warn_before_offline_0()} "<span>{m.online_warn_before_offline_1()}</span>" {m.online_warn_before_offline_2()}</div>
-        <div>{m.online_status()} : <span>{m.online_status_online()}</span></div>
-        <div class='action' on:click={doOffline} on:keydown={doOffline} role="button" tabindex="0">{m.online_action_offline()}</div>
-        <div><label for='readOnly'>{m.online_readonly()} : </label><input id='readOnly' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?r=" + $store.currentTimeline.readKey}'></div>
-        <div><label for='writer'>{m.online_writer()} : </label><input id='writer' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?w=" + $store.currentTimeline.writeKey}'></div>
-        <div><label for='owner'>{m.online_owner()} : </label><input id='owner' readonly type='text' value='{base_url + "/g/" + $store.currentTimeline.key + "?o=" + $store.currentTimeline.ownerKey}'></div>
+        <div class='warn'>{m.online_warn_before_offline_0()} "<span class="font-bold">{m.online_warn_before_offline_1()}</span>" {m.online_warn_before_offline_2()}</div>
+        
+        <!--Action-->
+        <button class="mx-auto mt-10 flex gap-2 rounded-full shadow-xl/15  p-3 cursor-pointer 
+                bg-linear-to-r/srgb from-cyan-600 to-emerald-500 hover:bg-linear-to-r/hsl hover:to-cyan-600 hover:from-emerald-500 " 
+                on:click={doOffline}>
+            <svg viewBox="0 0 600 600" class='size-6 fill-gray-800 dark:fill-blue-50'>
+                <use x="5" y="75" href="#ico_cloud"/>
+            </svg>
+            {m.online_action_offline()}
+        </button>
+
+        <div class="text-left ml-30 mt-5">
+            <label class="block" for='readOnly'>{m.online_readonly()} : </label>
+            <input class="block w-125" id='readOnly' readonly type='text' on:click={select}
+                value='{base_url + "/g/" + $store.currentTimeline.key + "?r=" + $store.currentTimeline.readKey}'>
+        </div>
+        <div class="text-left ml-30 mt-5">
+            <label class="block" for='writer'>{m.online_writer()} : </label>
+            <input class="block w-125" id='writer' readonly type='text' on:click={select}
+                value='{base_url + "/g/" + $store.currentTimeline.key + "?w=" + $store.currentTimeline.writeKey}'>
+        </div>
+        <div class="text-left ml-30 mt-5">
+            <label class="block" for='owner'>{m.online_owner()} : </label>
+            <input class="block w-125" id='owner' readonly type='text' on:click={select}
+                value='{base_url + "/g/" + $store.currentTimeline.key + "?o=" + $store.currentTimeline.ownerKey}'>
+        </div>
     {:else}
-        <div class='warn'>{m.online_warn_before_online_0()} "<span>{m.online_warn_before_online_1()}</span>" {m.online_warn_before_online_0()}</div>
-        <div>{m.online_status()} : <span>{m.online_status_offline()}</span></div>
-        <div class='action' on:click={doOnline} on:keydown={doOnline} role="button" tabindex="0">{m.online_action_online()}</div>
+        <div class='warn'>{m.online_warn_before_online_0()} "<span class="font-bold">{m.online_warn_before_online_1()}</span>" {m.online_warn_before_online_2()}</div>
+
+        <!--Action-->
+        <button class="mx-auto mt-10 flex gap-2 rounded-full shadow-xl/15  p-3 cursor-pointer 
+                bg-linear-to-r/srgb from-cyan-600 to-emerald-500 hover:bg-linear-to-r/hsl hover:to-cyan-600 hover:from-emerald-500 " 
+                on:click={doOnline}>
+            <svg viewBox="0 0 600 600" class='size-6 fill-gray-800 dark:fill-blue-50'>
+                <use x="5" y="75" href="#ico_cloud"/>
+            </svg>
+            {m.online_action_online()}
+	    </button>
     {/if}
 </ShadowBox>
 <Toast bind:this={toastComponent}/>
 
 <style>
-    .action{
-        background-color: rgb(22, 160, 133, 1);
-        display: inline-block;
-        padding: 1vh 2vw;
-        margin: 2vh;
-        cursor: pointer;
-    }
-    input{
-        width: 50vw;
-    }
+
 </style>

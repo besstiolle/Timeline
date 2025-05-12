@@ -83,8 +83,11 @@ import ShadowBox from './ShadowBox.svelte';
 
 
 
-<ShadowBox bind:this={shadowBox}>
-    <div class='title'><label for='titleOfTimeline'>{m.live_editor_title()} : </label><input id='titleOfTimeline' type='text' bind:value={$store.currentTimeline.title}/></div>
+<ShadowBox bind:this={shadowBox} id='uploadSB'>
+    <div class='title'>
+        <label for='titleOfTimeline'>{m.live_editor_title()} : </label>
+        <input id='titleOfTimeline' type='text' bind:value={$store.currentTimeline.title} class="w-2xl"/>
+    </div>
     <LiveTableTask updateStore={updateStore} />
     <LiveTableMilestone updateStore={updateStore} />
     <div><label for="showToday">{m.live_editor_show_today_vertical_line()} : </label><input type="checkbox" bind:checked="{$store.currentTimeline.showToday}"  name="showToday" id="showToday" /></div>
@@ -95,6 +98,11 @@ import ShadowBox from './ShadowBox.svelte';
 
 <style>
 
+    /* Surcharge */
+    :global(#uploadSB){
+        width: 60vw;
+        left: 20vw;
+    }
     :global(div.live__line){
         margin:0.2em auto;
         width: 90%;
@@ -107,22 +115,14 @@ import ShadowBox from './ShadowBox.svelte';
     }
 
     :global(input){
-        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-        background-color: #bdd2da;
+        background-color: var(--color-slate-200);
         border: 0px none;
         border-radius: 5px;
-        font-size:1.2rem
+    }
+    :global(.dark input){
+        background-color: var(--color-slate-900);
     }
 
-    div.title{
-        margin: 30px auto;
-        font-size: 2rem;
-        text-align: center;
-    }
-    div.title input{
-        font-size:2rem;
-        width: 25em;
-    }
 
     :global(input.label){
         width: 13em;
