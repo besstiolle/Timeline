@@ -1,0 +1,52 @@
+name: Update version.json
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo (with full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract tag and info
+        id: extract
+        run: |
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          MAJOR=$(echo $TAG_NAME | grep -oP '^v\d+')
+          COMMIT=$(git rev-parse --short HEAD)
+          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
+          echo "MAJOR=$MAJOR" >> $GITHUB_ENV
+          echo "COMMIT=$COMMIT" >> $GITHUB_ENV
+
+      - name: Checkout main branch
+        run: |
+          git checkout main
+
+      - name: Update version.json
+        run: |
+          FILE="version.json"
+          if [ ! -f "$FILE" ]; then
+            echo "{}" > $FILE
+          fi
+
+          jq \
+            --arg major "$MAJOR" \
+            --arg version "$TAG_NAME" \
+            --arg commit "$COMMIT" \
+            '.[$major] = {latest: $version, commit: $commit}' \
+            $FILE > tmp.$FILE && mv tmp.$FILE $FILE
+
+      - name: Commit & push version.json
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add version.json
+          git commit -m "Update version.json for $TAG_NAME"
+          git push origin main
