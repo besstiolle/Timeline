@@ -100,12 +100,12 @@ import ShadowBox from './ShadowBox.svelte';
 
     /* Surcharge */
     :global(#uploadSB){
-        width: 60vw;
-        left: 20vw;
+        min-width: 80vw;
+        width: auto;
+        left: 10vw;
     }
     :global(div.live__line){
         margin:0.2em auto;
-        width: 90%;
     }
     :global(.live__input_top, live__input_bottom){
         margin:0.2em auto;

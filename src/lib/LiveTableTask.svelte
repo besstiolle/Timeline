@@ -7,7 +7,6 @@ import { FactoryTimeline } from './factoryTimeline';
 import { LIVE_PREFIX } from './constantes';
 import { FactoryTask } from './factoryTask';
 	import { m } from '../paraglide/messages';
-	import { fillBright, strokeBright } from './colorHelper';
 
 export let updateStore:Function
 
@@ -129,8 +128,6 @@ function b_add(){
         <input type="text" bind:value="{task.swimline}" class="label"/>
         <input type="number" id={LIVE_PREFIX.PR}{i} value="{task.progress}" min="0" max="100" class="progress" on:change={() => updateProgression(i)} on:blur={() => updateProgression(i)}/>
         <progress max="100" value="{task.progress}"> {task.progress}% </progress>
-    </div>
-    <div class='live__input_bottom'>
         <label for="hasProgress{i}">{m.live_task_editor_show_progress()} : </label><input type="checkbox" bind:checked="{task.hasProgress}"  name="hasProgress{i}" id="hasProgress{i}" />
     </div>
 </div>

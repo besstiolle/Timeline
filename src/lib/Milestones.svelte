@@ -6,7 +6,6 @@
     import type { Struct } from './struct.class';
     import { FactoryMilestone } from './factoryMilestone';
     import { GRID, MONTHS } from './constantes';
-	import { fillBright, fillNormal, strokeBright } from "./colorHelper";
 
     function compareMilestone(a : Struct.Milestone, b : Struct.Milestone){
         if(a.date > b.date){return 1}
@@ -142,14 +141,14 @@
         role="presentation">
         
         <use x="0" y="0" href="#mapfiller" class="fill-transparent stroke-transparent toExcludeFromSnapshot"/>
-        <use x="0" y="0" href="#map" class="svgWithFiller {fillBright()}"/>
+        <use x="0" y="0" href="#map" class="svgWithFiller primaryFill"/>
         {#if i%2 == 0}
-        <line stroke-dasharray="1" x1="10" y1="20" x2="10" y2="50" class={strokeBright()} />
+        <line stroke-dasharray="1" x1="10" y1="20" x2="10" y2="50" class="primaryStroke" />
         {:else}
-        <line stroke-dasharray="1" x1="10" y1="20" x2="10" y2="25" class={strokeBright()} />
+        <line stroke-dasharray="1" x1="10" y1="20" x2="10" y2="25" class="primaryStroke" />
         {/if}
-        <text x="17" y="9" font-size="10" class="{fillBright()}">{milestone.label}</text>
-        <text x="17" y="18" class={fillNormal()}>{milestone.getDate().getDate()}-{MONTHS[milestone.getDate().getMonth()]}</text>
+        <text x="17" y="9" font-size="10" class="primaryFill">{milestone.label}</text>
+        <text x="17" y="18" class="primaryFill">{milestone.getDate().getDate()}-{MONTHS[milestone.getDate().getMonth()]}</text>
     </svg>
     <line id='endMilestoneNode' x1="0" y1="0" x2="0" y2="0" stroke="transparent" />
 {/each}

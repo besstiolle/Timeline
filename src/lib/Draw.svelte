@@ -159,7 +159,7 @@
         <Milestones/>
         <Banner/>
         <SwimAndTasks/>
-        <Today/> 
+        <Today/>
         
     </svg>
 </div>
@@ -205,10 +205,10 @@
 
 
 :global(.shouldBeHidden, .shouldBeHidden text, .shouldBeHidden .svgWithFiller){
-    fill:var(--color-slate-400);
+    fill:var(--color-slate-400) !important;
 }
 :global(.shouldBeHidden line){
-    stroke:var(--color-slate-400);
+    stroke:var(--color-slate-400) !important;
 }
 .rightButtonDisabled > i{
     opacity: 0.5;

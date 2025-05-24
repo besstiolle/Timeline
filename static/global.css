@@ -26,3 +26,19 @@ i{
 .online{background-position: -64px -32px;}
 .offline{background-position: -64px -64px;}
 .saveCloud{background-position: -96px -64px;}
+
+
+/* PRIMARY COLOR : slate-900  & dark:slate-100 */
+.primary{color:var(--color-slate-900);}
+.dark .primary{color:var(--color-slate-100);}
+.primaryFill{fill:var(--color-slate-900);}
+.dark .primaryFill{fill:var(--color-slate-100);}
+.primaryStroke{stroke:var(--color-slate-900);}
+.dark .primaryStroke{stroke:var(--color-slate-100);}
+/* SECONDARY COLOR : slate-600  & dark:slate-400 */
+.secondary{color:var(--color-slate-600);}
+.dark .secondary{color:var(--color-slate-400);}
+.secondaryFill{fill:var(--color-slate-600);}
+.dark .secondaryFill{fill:var(--color-slate-400);}
+.secondaryStroke{stroke:var(--color-slate-600);}
+.dark .secondaryStroke{stroke:var(--color-slate-400);}
