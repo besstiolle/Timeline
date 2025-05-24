@@ -60,6 +60,12 @@ You can also ask for coverage
 npm run test --coverage
 ```
 
+Or checking for Svelte warning
+
+```bash
+npx sv check
+```
+
 ## Demo
 
 If you'd like to try out TimeChart, or if you don't have the knowledge (or inclination) to host the application yourself, we suggest you use the official [TimeChart](https://timeline-chart.dev/) server.
