@@ -23,16 +23,17 @@
         shadowBox.openComponent()
     }
 
-    function downloadCsv (event:MouseEvent) {
+    function downloadCsv (event:MouseEvent|KeyboardEvent) {
         event.preventDefault();
         const blob = new Blob([BOM, goCsv($store.currentTimeline)], {type:"data:text/csv;charset=utf-8"});
         download(blob, ".csv") 
     }
 
-function downloadToml () {
-    const blob = new Blob([BOM, goToml(timelineToObject($store.currentTimeline))], {type:"application/toml;charset=utf-8"})
-    download(blob, ".toml") 
-}
+    function downloadToml (event:MouseEvent|KeyboardEvent) {
+        event.preventDefault();
+        const blob = new Blob([BOM, goToml(timelineToObject($store.currentTimeline))], {type:"application/toml;charset=utf-8"})
+        download(blob, ".toml") 
+    }
 
     let _isAdvancedUpload:boolean|null = null
     function isAdvancedUpload():boolean{
