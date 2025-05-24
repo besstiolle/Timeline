@@ -1,0 +1,16 @@
+name: Docker Image CI
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build --pull --rm -f Dockerfile -t ${{ secrets.DOCKERHUB_REPO }}:nightly .
