@@ -76,13 +76,13 @@
   "live_milestone_editor_delete": "supprimer cette ligne",
   "live_milestone_editor_new": "Ajouter un nouveau Jalon",
   "today_text": "maintenant",
-  "landing_welcome": "Bienvenu sur Timechart, notre (votre?) outil favori pour réaliser des projets de timeline.",
-  "landing_we_are": "Ce projet est drivé depuis le début par un unique objectif : permettre de générer gratuitement et simplement des représentations de planning et d'avancement de projets",
   "landing_create": "Créer votre projet",
-  "landing_action_cloud": "Projet en ligne",
   "landing_toast_remote_timeline_cant_be_deleted": "Cette Chronologie  \"{title}\" es en ligne et ne peut pas être supprimée",
   "landing_comming_back": "Souhaitez vous revenir à vos créations ?",
   "landing_or": "Ou ",
   "landing_a_new_one": " une nouvelle !",
-  "landing_title_remote_timeline_cant_be_deleted": "Cette Chronologie est enregistrée en ligne et ne peut pas être supprimée"
+  "landing_title_remote_timeline_cant_be_deleted": "Cette Chronologie est enregistrée en ligne et ne peut pas être supprimée",
+  "landing_welcome": "Bienvenu sur Timechart, notre (votre?) outil favori pour réaliser des projets de timeline.",
+  "landing_we_are": "Ce projet est drivé depuis le début par un unique objectif : permettre de générer gratuitement et simplement des représentations de planning et d'avancement de projets",
+  "landing_action_cloud": "Projet en ligne"
 }
