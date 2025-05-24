@@ -12,6 +12,7 @@ COPY svelte.config.js ./
 COPY tsconfig.json ./
 COPY vite.config.ts ./
 COPY messages ./messages
+COPY .svelte-kit ./.svelte-kit
 
 # Installing dependancies, building
 RUN npm ci
