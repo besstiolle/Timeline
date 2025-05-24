@@ -13,6 +13,7 @@ COPY tsconfig.json ./
 COPY vite.config.ts ./
 COPY messages ./messages
 COPY .svelte-kit ./.svelte-kit
+COPY project.inlang ./project.inlang
 
 # Installing dependancies, building
 RUN npm ci
