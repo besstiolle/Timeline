@@ -1,7 +1,7 @@
 import { Struct } from "./struct.class";
 import { NotFoundException } from "./timelineException.class";
 
-export module FactoryTask {
+export namespace FactoryTask {
 
     
     /**

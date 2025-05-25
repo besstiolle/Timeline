@@ -1,6 +1,6 @@
 import { Struct } from "./struct.class";
 
-export module FactoryCards {
+export namespace FactoryCards {
 
     /**
 	 * copy information from timline (title/key) and copy them into the (new?) card.

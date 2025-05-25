@@ -2,7 +2,7 @@
 import { Helpers } from "./helpers"
 import type { Rights } from "./rights.class"
 
-export module Struct {
+export namespace Struct {
 
 	export interface TimelineStoreInterface{
 		cards : Array<Card>

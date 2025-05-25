@@ -2,7 +2,7 @@
 import { Struct } from "./struct.class";
 import { NotFoundException } from "./timelineException.class";
 
-export module FactoryMilestone {
+export namespace FactoryMilestone {
 
     /**
      * return the values of the Milestone concatenated for CSV with a custom separator

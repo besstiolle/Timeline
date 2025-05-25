@@ -1,7 +1,7 @@
 import { DIFF, GRID, TIMERS } from "./constantes";
 import type { Struct } from "./struct.class";
 
-export module Helpers {
+export namespace Helpers {
 
     /**
      * Return the date to a string validating the format YYYYMMDD_HHmm

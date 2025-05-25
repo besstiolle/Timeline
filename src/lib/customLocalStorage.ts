@@ -3,7 +3,7 @@ import { LOCAL_STORAGE } from "./constantes"
 import { JsonParser } from "./jsonParser"
 import type { Struct } from "./struct.class"
 
-export module CustomLocalStorage{
+export namespace CustomLocalStorage{
 
     
     /**

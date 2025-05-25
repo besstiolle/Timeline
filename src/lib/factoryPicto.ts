@@ -3,7 +3,7 @@ import { LOCAL_STORAGE } from "./constantes";
 import { CustomLocalStorage } from "./customLocalStorage";
 import type { Struct } from "./struct.class";
 
-export module FactoryPicto {
+export namespace FactoryPicto {
 
     /**
      * 

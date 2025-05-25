@@ -6,7 +6,7 @@ import { Struct } from "./struct.class";
 import { DIFF, GRID } from "./constantes";
 import { DuplicateEntityException } from "./timelineException.class";
 
-export module FactoryTimeline {
+export namespace FactoryTimeline {
 
     /**
      * Return the min date of all tasks & all minestones.

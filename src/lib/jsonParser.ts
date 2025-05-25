@@ -1,7 +1,7 @@
 import { Struct } from "./struct.class";
 import { JsonParserException } from "./timelineException.class";
 
-export module JsonParser {
+export namespace JsonParser {
 
 
     /**
