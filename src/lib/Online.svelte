@@ -131,19 +131,19 @@ import { FactoryCards } from './factoryCards';
             {m.online_action_offline()}
         </button>
 
-        <div class="text-left ml-30 mt-5">
+        <div class="text-left mx-30 mt-5">
             <label class="block" for='readOnly'>{m.online_readonly()} : </label>
-            <input class="block w-125" id='readOnly' readonly type='text' onclick={select}
+            <input class="block w-full" id='readOnly' readonly type='text' onclick={select}
                 value='{base_url + "/g/" + $store.currentTimeline.key + "?r=" + $store.currentTimeline.readKey}'>
         </div>
-        <div class="text-left ml-30 mt-5">
+        <div class="text-left mx-30 mt-5">
             <label class="block" for='writer'>{m.online_writer()} : </label>
-            <input class="block w-125" id='writer' readonly type='text' onclick={select}
+            <input class="block w-full" id='writer' readonly type='text' onclick={select}
                 value='{base_url + "/g/" + $store.currentTimeline.key + "?w=" + $store.currentTimeline.writeKey}'>
         </div>
-        <div class="text-left ml-30 mt-5">
+        <div class="text-left mx-30 mt-5">
             <label class="block" for='owner'>{m.online_owner()} : </label>
-            <input class="block w-125" id='owner' readonly type='text' onclick={select}
+            <input class="block w-full" id='owner' readonly type='text' onclick={select}
                 value='{base_url + "/g/" + $store.currentTimeline.key + "?o=" + $store.currentTimeline.ownerKey}'>
         </div>
     {:else}
