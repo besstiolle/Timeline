@@ -80,5 +80,10 @@
   "landing_we_are": "From the outset, this project has been driven by a single objective: to generate free, easy-to-use representations of project planning and progress.",
   "landing_create": "Create your project",
   "landing_action_cloud": "Project on cloud",
-  "landing_toast_remote_timeline_cant_be_deleted": "this chart \"{title}\" is online and can't be deleted"
+  "landing_toast_remote_timeline_cant_be_deleted": "this chart \"{title}\" is online and can't be deleted",
+  "version_update_available": "An update is available.",
+  "version_major": "This is a major update and may result in breaking changes. Please check the release notes before updating.",
+  "version_minor": "This update is minor and adds new features. Don't forget to take a look at the release notes.",
+  "version_fix": "This update fixes a number of bugs. Don't forget to update.",
+  "version_link_to_release": "Click here to open the release note for the version"
 }

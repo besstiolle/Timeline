@@ -80,5 +80,10 @@
   "landing_toast_remote_timeline_cant_be_deleted": "Cette Chronologie  \"{title}\" es en ligne et ne peut pas être supprimée",
   "landing_welcome": "Bienvenu sur Timechart, notre (votre?) outil favori pour réaliser des projets de timeline.",
   "landing_we_are": "Ce projet est drivé depuis le début par un unique objectif : permettre de générer gratuitement et simplement des représentations de planning et d'avancement de projets",
-  "landing_action_cloud": "Projet en ligne"
+  "landing_action_cloud": "Projet en ligne",
+  "version_update_available": "Une mise à jour est disponible.",
+  "version_major": "Cette mise à jour est majeure et peut entrainer des breaking changes. Prenez soin de vérifier les notes de versions avant de mettre à jour.",
+  "version_minor": "Cette mise à jour est mineur et ajoute de nouvelles fonctionnalités. Pensez à jetter un coup d'oeil aux notes de versions.",
+  "version_fix": "Cette mise à jour corrige un certain nombre de bugs. Pensez à vous mettre à jour.",
+  "version_link_to_release": "Cliquez ici pour ouvrir la release note de la version"
 }

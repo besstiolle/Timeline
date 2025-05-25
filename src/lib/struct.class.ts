@@ -236,3 +236,23 @@ export interface abstractMilestoneInterface{
 	isShow:boolean
 
 }
+
+export interface GitVersionMajor{
+	latest:string
+	commit:string
+}
+
+export type GitVersions = Record<string, GitVersionMajor>
+
+export interface Version{
+	x:number
+	y:number
+	z:number
+}
+
+/**
+ * Represent the object returned on /api/about
+ */
+export interface AboutInterface{
+	version:string
+}

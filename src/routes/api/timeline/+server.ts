@@ -106,7 +106,7 @@ export const OPTIONS: RequestHandler = async (requestEvent: RequestEvent<Partial
  */
 export const fallback: RequestHandler = async ({ request: requestEvent }) => {
   return _FALLBACK(requestEvent)
-};
+}
 
 /**
  * Integrity's control of slug & the 3 keys.
