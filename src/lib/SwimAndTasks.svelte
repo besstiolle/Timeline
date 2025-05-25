@@ -358,7 +358,7 @@ function showToggle(event:Event){
     
 </script>         
 
-<svelte:window on:mouseup={up} on:mousemove="{move}"/>
+<svelte:window onmouseup={up} onmousemove="{move}"/>
 <svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
     x="0" y="{GRID.MILESTONE_H + GRID.ANNUAL_H - 5}"
     id='svgSwimlineAndTasks'>
@@ -371,12 +371,12 @@ function showToggle(event:Event){
         <rect x="0" y="{i * GRID.ONE_TASK_H}" 
             width="{GRID.ALL_WIDTH}" height="{localSwimline?.height}"  
             fill="{COLORS[localSwimline.position % COLORS.length][0]}" id="c{task.swimlineId}" 
-            on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}
+            onmouseover={showToggle} onfocus={showToggle} onmouseout={showToggle} onblur={showToggle}
             role="none"/>
 
         <rect x="0" y="{i * GRID.ONE_TASK_H}" 
             width="{GRID.LEFT_WIDTH}" height="{localSwimline.height}" fill="{COLORS[localSwimline.position % COLORS.length][1]}" id="d{task.swimlineId}" 
-            on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}
+            onmouseover={showToggle} onfocus={showToggle} onmouseout={showToggle} onblur={showToggle}
             role="none"/>
         
         <text text-anchor="middle" x="{GRID.LEFT_WIDTH / 2}" y="{i * GRID.ONE_TASK_H + 5 + localSwimline.height / 2}" 
@@ -384,8 +384,8 @@ function showToggle(event:Event){
 
         <image xlink:href="{localSwimline.swimline.isShow?"/hide.png":"/see.png"}" x="0" y="{i * GRID.ONE_TASK_H}" height="24" width="24" 
             data-html2canvas-ignore="true" 
-            on:click={toggleSwimlineVisibility} on:keydown={toggleSwimlineVisibility} id="s{task.swimlineId}" class='toggleVisibility hidden'
-            on:mouseover={showToggle} on:focus={showToggle} on:mouseout={showToggle} on:blur={showToggle}
+            onclick={toggleSwimlineVisibility} onkeydown={toggleSwimlineVisibility} id="s{task.swimlineId}" class='toggleVisibility hidden'
+            onmouseover={showToggle} onfocus={showToggle} onmouseout={showToggle} onblur={showToggle}
             role="button" tabindex="0" />
     {/if}
 {:else}

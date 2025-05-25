@@ -260,8 +260,8 @@ const svelteAction: Action = (node) => {
             <label for="file"><span class='action'>{m.upload_label_action()}</span> {m.upload_label_action_text()}</label>
         </div>
         <button type="submit">{m.upload_action()}</button>
-        <div><span class='action' on:click={downloadCsv} on:keydown={downloadCsv} role="button" tabindex="0">{m.upload_label_download_csv_action()}</span> {m.upload_label_download_csv_action_text()}</div>
-        <div><span class='action' on:click={downloadToml} on:keydown={downloadToml} role="button" tabindex="0">{m.upload_label_download_toml_action()}</span> {m.upload_label_download_toml_action_text()}</div>
+        <div><span class='action' onclick={downloadCsv} onkeydown={downloadCsv} role="button" tabindex="0">{m.upload_label_download_csv_action()}</span> {m.upload_label_download_csv_action_text()}</div>
+        <div><span class='action' onclick={downloadToml} onkeydown={downloadToml} role="button" tabindex="0">{m.upload_label_download_toml_action()}</span> {m.upload_label_download_toml_action_text()}</div>
     </form>
 </ShadowBox>
 <Toast bind:this={toastComponent}/>

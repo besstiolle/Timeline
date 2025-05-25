@@ -110,18 +110,18 @@
 <div class="rightButtons">
     {#key $store}
     <div class="rightButtonDisabled" class:hidden={!$store.rights.hasWriter() || ($store.lastUpdatedLocally - $store.lastCommitedRemotely > 5000 )} title="There is nothing to save"><i class='saveCloud'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.hasWriter() || $store.commitInProgress || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 5000)} on:click={onlineComponent.commit} on:keydown={onlineComponent.commit} title="Save your modifications remotly" role="button" tabindex="0"><i class='saveCloud'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.hasWriter() || $store.commitInProgress || ($store.lastUpdatedLocally - $store.lastCommitedRemotely < 5000)} onclick={onlineComponent.commit} onkeydown={onlineComponent.commit} title="Save your modifications remotly" role="button" tabindex="0"><i class='saveCloud'></i></div>
 
-    <div class="rightButton" class:hidden={!$store.rights.isNone()} on:click={onlineComponent.openShadowBox} on:keydown={onlineComponent.openShadowBox} title="Share & save your chart online" role="button" tabindex="0"><i class='online'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.isOwner()} on:click={onlineComponent.openShadowBox} on:keydown={onlineComponent.openShadowBox} title="Save your chart on your computer only" role="button" tabindex="0"><i class='offline'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone()} onclick={onlineComponent.openShadowBox} onkeydown={onlineComponent.openShadowBox} title="Share & save your chart online" role="button" tabindex="0"><i class='online'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isOwner()} onclick={onlineComponent.openShadowBox} onkeydown={onlineComponent.openShadowBox} title="Save your chart on your computer only" role="button" tabindex="0"><i class='offline'></i></div>
 
     
-    <div class="rightButton" class:hidden={!$store.currentTimeline.showAll} on:click={toggleShowHide}  on:keydown={toggleShowHide} title="Show regular tasks" role="button" tabindex="0"><i class='hide'></i></div>
-    <div class="rightButton" class:hidden={$store.currentTimeline.showAll} on:click={toggleShowHide} on:keydown={toggleShowHide} title="Show all tasks even if they're hidden" role="button" tabindex="0"><i class='show'></i></div>
+    <div class="rightButton" class:hidden={!$store.currentTimeline.showAll} onclick={toggleShowHide}  onkeydown={toggleShowHide} title="Show regular tasks" role="button" tabindex="0"><i class='hide'></i></div>
+    <div class="rightButton" class:hidden={$store.currentTimeline.showAll} onclick={toggleShowHide} onkeydown={toggleShowHide} title="Show all tasks even if they're hidden" role="button" tabindex="0"><i class='show'></i></div>
     {/key}
-    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={uploadComponent.openShadowBox} on:keydown={uploadComponent.openShadowBox} title='Import/Export your data' role="button" tabindex="0"><i class='io'></i></div>
-    <div class="rightButton" on:click={takeshot} on:keydown={takeshot} title='Take a screenshot' role="button" tabindex="0"><i class='photo'></i></div>
-    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} on:click={liveComponent.openShadowBox} on:keydown={liveComponent.openShadowBox} title='Edit your milestones' role="button" tabindex="0"><i class='edit'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} onclick={uploadComponent.openShadowBox} onkeydown={uploadComponent.openShadowBox} title='Import/Export your data' role="button" tabindex="0"><i class='io'></i></div>
+    <div class="rightButton" onclick={takeshot} onkeydown={takeshot} title='Take a screenshot' role="button" tabindex="0"><i class='photo'></i></div>
+    <div class="rightButton" class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()} onclick={liveComponent.openShadowBox} onkeydown={liveComponent.openShadowBox} title='Edit your milestones' role="button" tabindex="0"><i class='edit'></i></div>
 </div>
 
 <Upload bind:this={uploadComponent} download={download}/>

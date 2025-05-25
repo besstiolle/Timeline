@@ -70,7 +70,7 @@ function purge(event:Event){
 {/if}
 </div>
 <h2>Reset your localstorage</h2>
-<div><button on:click={purge}>click me if you dare</button></div>
+<div><button onclick={purge}>click me if you dare</button></div>
 <style>
     :global(body){
         padding:5px;

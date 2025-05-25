@@ -59,7 +59,7 @@
 		<p class="p-2 text-justify indent-5">{m.landing_we_are()}</p>
 	</div>
 	<button class="mx-auto mt-10 flex gap-2 rounded-full shadow-xl/15 bg-linear-to-r/srgb from-cyan-600 to-emerald-500 hover:bg-linear-to-r/hsl hover:to-cyan-600 hover:from-emerald-500 p-3 cursor-pointer" 
-		on:click={gotoNew}>
+		onclick={gotoNew}>
 		<svg viewBox="0 0 64 64" class='size-6 fill-gray-800 dark:fill-blue-50'>
 			<use x="0" y="0" href="#ico_plus"/>
 		</svg>

@@ -32,7 +32,7 @@
     </div>
     <div class='flex items-center space-x-4'>
         <button
-            on:click={toggleTheme}
+            onclick={toggleTheme}
             class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition"
             title="Toggles light & dark" 
             aria-label="auto"
@@ -61,7 +61,7 @@
                 {#if locale == currentLocale}
                     <button type="button" class='font-bold'>{locale}</button>{#if locales_ln !== index}|{/if}
                 {:else}
-                    <button type="button"  on:click={()=>setLocale(locale)} class='cursor-pointer'>{locale}</button>{#if locales_ln !== index}|{/if}
+                    <button type="button" onclick={()=>setLocale(locale)} class='cursor-pointer'>{locale}</button>{#if locales_ln !== index}|{/if}
                 {/if}
             {/each}
         </langs>

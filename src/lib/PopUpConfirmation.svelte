@@ -43,8 +43,8 @@
 <div id='background'></div>
 <div id='popup'>
   <div class="content">{_message}</div>
-  <button class="validation" on:click={doValidation}>{_validationText}</button>
-  <button class="cancelation" on:click={doCancelation}>{_cancelationText}</button>
+  <button class="validation" onclick={doValidation}>{_validationText}</button>
+  <button class="cancelation" onclick={doCancelation}>{_cancelationText}</button>
 </div>
 <style>
 

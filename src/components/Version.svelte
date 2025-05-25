@@ -65,7 +65,7 @@
 </script>
 {#if (hasMajor || hasMinor || hasFix)}
     <div use:myaction class="{className} cursor-pointer" 
-        on:click={() => shadowBox.openComponent()} on:keydown={() => shadowBox.openComponent()} role="button" tabindex="0">
+        onclick={() => shadowBox.openComponent()} onkeydown={() => shadowBox.openComponent()} role="button" tabindex="0">
 
         TimeChart v{toString(localVersion)}<span class='notification'>◉</span>
     </div>

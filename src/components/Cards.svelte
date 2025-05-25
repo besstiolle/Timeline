@@ -155,7 +155,7 @@
 	<!-- One card-->
 	<div class="basis-1/3">
 		<div class="max-w-95/100 m-auto mt-5 flex shadow-xl/30 bg-blue-100 dark:bg-slate-800 cursor-pointer" 
-				on:click={() => goto(null, card.key)} on:keydown={() => goto(null, card.key)} role="button" tabindex="0">
+				onclick={() => goto(null, card.key)} onkeydown={() => goto(null, card.key)} role="button" tabindex="0">
 			
 			<div class="flex-1/3 p-2">
 				<div class="h-20 bg-no-repeat bg-center" 
@@ -168,7 +168,7 @@
 					
 					<!-- Contextual menu-->
 					<div id="menu-toggle-{index}" class='float-right relative' 
-							on:keydown={(event)=>{show(event, index)}} on:click={(event)=>{show(event, index)}} on:mouseleave={hide} role="button" tabindex=0>
+							onkeydown={(event)=>{show(event, index)}} onclick={(event)=>{show(event, index)}} onmouseleave={hide} role="button" tabindex=0>
 						<svg viewBox="0 0 32 32" class='size-6 fill-gray-800 dark:fill-blue-50'><use x="0" y="0" href="#ico_menu"/></svg>
 						
 						<div id="menu-{index}" class="menus hidden absolute -top-5 w-50 z-10 bg-blue-100 dark:bg-slate-800 shadow-xl/30">
@@ -178,7 +178,7 @@
 										hover:text-shadow-lg  hover:text-shadow-white
 										dark:hover:text-shadow-lg  dark:hover:text-shadow-slate-700
 										"
-										on:click={(event) => duplicate(event, card.key)} on:keydown={(event) => duplicate(event, card.key)} role="button" tabindex="0" >
+										onclick={(event) => duplicate(event, card.key)} onkeydown={(event) => duplicate(event, card.key)} role="button" tabindex="0" >
 								<svg viewBox="0 0 32 32" class='float-left size-6 fill-gray-800 dark:fill-blue-50'><use x="5" y="8" href="#b_duplicate"/></svg>
 								{m.landing_action_duplicate()}
 							</div>
@@ -189,7 +189,7 @@
 										hover:text-shadow-lg  hover:text-shadow-white
 										dark:hover:text-shadow-lg  dark:hover:text-shadow-slate-700
 										"
-										on:click={(event) => askDelete(event, card.key)} on:keydown={(event) => askDelete(event, card.key)} role="button" tabindex="0">
+										onclick={(event) => askDelete(event, card.key)} onkeydown={(event) => askDelete(event, card.key)} role="button" tabindex="0">
 								<svg viewBox="0 0 40 40" class='float-left size-6 fill-gray-800 dark:fill-blue-50'><use x="5" y="8" href="#ico_delete"/></svg>
 								{m.landing_action_delete()}
 							</div>
