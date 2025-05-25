@@ -9,7 +9,7 @@
     import Banner from './Banner.svelte';
     import Milestones from './Milestones.svelte';
     import Today from './Today.svelte';
-    import Upload from './Upload.svelte';
+    import Upload from '../components/Upload/Upload.svelte';
     import Live from './Live.svelte';
     import SwimAndTasks from './SwimAndTasks.svelte';
     import Online from './Online.svelte';

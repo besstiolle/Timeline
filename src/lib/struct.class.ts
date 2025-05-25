@@ -207,21 +207,13 @@ export module Struct {
 	}
 }
 
-/**
- * Allow a proper typing in ts 
- * TODELETE ?
- */
-/*export interface HTMLInputEvent extends Event {
-    target: HTMLInputElement & EventTarget;
-}*/
-
 export interface abstractTimelineInterface{
 	title:string
 	version:string
-	tasks:abstratTaskInterface[]
+	tasks:abstractTaskInterface[]
 	milestones:abstractMilestoneInterface[]
 }
-export interface abstratTaskInterface{
+export interface abstractTaskInterface{
 	swimline:string
 	label:string
     start:string
