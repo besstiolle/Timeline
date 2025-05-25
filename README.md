@@ -57,7 +57,7 @@ npm run test:watch
 You can also ask for coverage 
 
 ```bash
-npm run test --coverage
+npm run coverage
 ```
 
 Or checking for Svelte warning
