@@ -1,9 +1,9 @@
 <script lang="ts">
 	import type { AboutInterface, Version } from "$lib/struct.class";
     import type { Action } from 'svelte/action';
-	import { getCurrentVersion, getDistantVersion, toString, toVersion, versionCompare } from "$lib/version";
+	import { getCurrentVersion, getDistantVersion, toString, toVersion, versionCompare } from "./Version";
 	import ShadowBox from "$lib/ShadowBox.svelte";
-	import { m } from "../paraglide/messages";
+	import { m } from "../../paraglide/messages";
 
     let shadowBox:ShadowBox
 

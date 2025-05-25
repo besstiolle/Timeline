@@ -1,7 +1,8 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { Rights } from "$lib/rights.class";
-import { toString, toVersion, versionCompare } from '$lib/version';
+import { toString, toVersion, versionCompare } from '../components/Version/Version';
+
 
 beforeEach(() => {
   //Mock console.error() to avoid vi console pollution

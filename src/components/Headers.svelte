@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from "$app/environment";
 	import { getLocale, locales, setLocale } from "../paraglide/runtime";
-	import Version from "./Version.svelte";
+	import Version from "./Version/Version.svelte";
 
     const locales_ln =  locales.length - 1
     const currentLocale = getLocale()
