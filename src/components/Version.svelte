@@ -48,7 +48,6 @@
                 hasMinor = hasMajor || localVersion.y < distantVersion.y
                 hasFix = hasMinor || localVersion.z < distantVersion.z
             }
-
             if(hasMajor){
                 className = 'major'
             } else if(hasMinor){
@@ -86,7 +85,7 @@
     {#if hasFix}
         <p>{m.version_fix()}🔥</p>
     {/if}
-    <p class="underline"><a href='https://github.com/besstiolle/Timeline/releases/tag/v{toString(distantVersion)}'>{m.version_link_to_release()} {toString(distantVersion)}</a></p>
+    <p><a href='https://github.com/besstiolle/Timeline/releases/tag/v{toString(distantVersion)}'>{m.version_link_to_release()} {toString(distantVersion)}</a></p>
 </ShadowBox>
 <style>
     .major .notification{

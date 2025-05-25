@@ -46,7 +46,8 @@
         position: fixed;
         top:0;
         left:0;
-        backdrop-filter: blur(0.5rem);
+        backdrop-filter: blur(0.3rem);
+        z-index: 1;
     }
     .ShadowBox{
         width: 40vw;
@@ -58,11 +59,12 @@
         outline: 2px dashed #92b0b3 !important;
         outline-offset: -10px !important;
         position: fixed;
+        z-index: 2;
     }
     .ShadowContent, .ShadowClosing{
-        margin: 2vh auto;
+        padding: 1vh;
         overflow: scroll;
-        max-height: 70vh;
+        max-height: 80vh;
     }
     :global(.lock){
         overflow-y: hidden;
