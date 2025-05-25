@@ -8,7 +8,8 @@ import { LIVE_PREFIX } from './constantes';
 import { FactoryMilestone } from './factoryMilestone';
 	import { m } from '../paraglide/messages';
 
-export let updateStore:Function
+    const props = $props();
+    const updateStore = props.updateStore as Function
 
 function m_delete(index:number){
     if(index < 0 || index > $store.currentTimeline.milestones.length -1){

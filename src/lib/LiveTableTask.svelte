@@ -8,7 +8,8 @@ import { LIVE_PREFIX } from './constantes';
 import { FactoryTask } from './factoryTask';
 	import { m } from '../paraglide/messages';
 
-export let updateStore:Function
+const props = $props();
+const updateStore = props as Function
 
 function updateProgression(position:number){
     let elm = document.getElementById(LIVE_PREFIX.PR + position) as HTMLInputElement
@@ -22,7 +23,6 @@ function updateProgression(position:number){
     } 
     
     $store.currentTimeline.tasks[position].progress = value
-    //$store.currentTimeline.tasks = $store.currentTimeline.tasks
         
 }
 
@@ -126,7 +126,7 @@ function b_add(){
         <input type="date" id="{LIVE_PREFIX.TS}{i}" value="{task.dateStart}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore(LIVE_PREFIX.TS, i)} on:blur={() => updateStore(LIVE_PREFIX.TS, i)}>
         <input type="date" id="{LIVE_PREFIX.TE}{i}" value="{task.dateEnd}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore(LIVE_PREFIX.TE, i)} on:blur={() => updateStore(LIVE_PREFIX.TE, i)}>
         <input type="text" bind:value="{task.swimline}" class="label"/>
-        <input type="number" id={LIVE_PREFIX.PR}{i} value="{task.progress}" min="0" max="100" class="progress" on:change={() => updateProgression(i)} on:blur={() => updateProgression(i)}/>
+        <input type="number" id="{LIVE_PREFIX.PR}{i}" value="{task.progress}" min="0" max="100" class="progress" on:change={() => updateProgression(i)} on:blur={() => updateProgression(i)}/>
         <progress max="100" value="{task.progress}"> {task.progress}% </progress>
         <label for="hasProgress{i}">{m.live_task_editor_show_progress()} : </label><input type="checkbox" bind:checked="{task.hasProgress}"  name="hasProgress{i}" id="hasProgress{i}" />
     </div>

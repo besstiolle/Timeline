@@ -6,13 +6,14 @@
     import { store } from './stores';
     import type { Struct } from './struct.class';
 
-    export let i: number
-    export let currentTask: Struct.Task
-    export let showActionBar = (event:Event) => {}
-    export let hideActionBar = (event:Event) => {}
-    export let downLeft = (event:Event) => {}
-    export let downRight = (event:Event) => {}
-    export let downProgress = (event:Event) => {}
+    const props = $props();
+    const i = props.i as number
+    const currentTask = props.currentTask as Struct.Task
+    const showActionBar = props.showActionBar as (event:Event) => {}
+    const hideActionBar = props.hideActionBar as (event:Event) => {}
+    const downLeft = props.downLeft as (event:Event) => {}
+    const downRight = props.downRight as (event:Event) => {}
+    const downProgress = props.downProgress as (event:Event) => {}
     
     
     const green = "#16A085";
@@ -27,7 +28,7 @@
     //const dottedLine = "#44546A";
 
 
-    let styleColor = {fill : green, stroke: greenStroke} //default : full
+    let styleColor = $state({fill : green, stroke: greenStroke}) //default : full
     if(currentTask.hasProgress && currentTask.progress < 100){
         styleColor = {fill : blue, stroke: blueStroke}
     }
@@ -48,8 +49,8 @@
     let widthGray = x2GrayPosition - xGrayPosition 
     let widthProgress = currentTask.progress * widthGray / 100
     
-    let xPercentPosition = xGrayPosition + widthProgress - 5
-    let percentTextAnchor = "end"
+    let xPercentPosition = $state(xGrayPosition + widthProgress - 5)
+    let percentTextAnchor = $state("end")
     if(currentTask.progress < 50){
         xPercentPosition = xGrayPosition + widthProgress + 5
         percentTextAnchor = "start"

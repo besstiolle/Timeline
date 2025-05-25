@@ -12,8 +12,8 @@
 	import { m } from '../paraglide/messages';
 	import type { Action } from 'svelte/action';
 
-
-    export let download = (blob:Blob, extension:string) => {}
+    const props = $props();
+    const download = props.download as Function
     const BOM = new Uint8Array([0xEF,0xBB,0xBF])
 
     let shadowBox:ShadowBox
