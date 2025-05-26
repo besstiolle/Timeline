@@ -1,10 +1,10 @@
 import { FactorySwimline } from "$lib/factorySwimline";
 import { FactoryTimeline } from "$lib/factoryTimeline";
-import { Struct, type abstractTimelineInterface } from "$lib/struct.class";
+import { Milestone, Task, Timeline, type abstractTimelineInterface } from "$lib/struct.class";
 
 
 
-export function parseAbstractTimeline(newTimeline:Struct.Timeline, abstractTimeline:abstractTimelineInterface):Struct.Timeline{
+export function parseAbstractTimeline(newTimeline:Timeline, abstractTimeline:abstractTimelineInterface):Timeline{
 
     if(abstractTimeline.title){
         newTimeline.title = abstractTimeline['title']
@@ -31,7 +31,7 @@ export function parseAbstractTimeline(newTimeline:Struct.Timeline, abstractTimel
             }
 
             FactoryTimeline.addTask(newTimeline, 
-                new Struct.Task(newTimeline.getNextId(), 
+                new Task(newTimeline.getNextId(), 
                                 abstractTask.label, 
                                 abstractTask.start, 
                                 abstractTask.end, 
@@ -48,7 +48,7 @@ export function parseAbstractTimeline(newTimeline:Struct.Timeline, abstractTimel
     if(abstractTimeline['milestones']){
         abstractTimeline['milestones'].forEach(abstractMilestone => {
             FactoryTimeline.addMilestone(newTimeline, 
-                new Struct.Milestone(newTimeline.getNextId(), 
+                new Milestone(newTimeline.getNextId(), 
                                     abstractMilestone.label, 
                                     abstractMilestone.date, 
                                     abstractMilestone.isShow === false?abstractMilestone.isShow:true, 

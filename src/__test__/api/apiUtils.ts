@@ -1,5 +1,5 @@
 import { JsonParser } from "$lib/jsonParser";
-import type { Struct } from "$lib/struct.class";
+import type { Timeline } from "$lib/struct.class";
 import type { RequestEvent } from "@sveltejs/kit";
 import type {Database} from "better-sqlite3";
 
@@ -34,7 +34,7 @@ export function toRequestEvent(request:RequestEventStub):RequestEvent{
   return request as unknown as RequestEvent
 }
 
-export const VALID_DUMMY_TIMELINE:Struct.Timeline = JSON.parse(`{
+export const VALID_DUMMY_TIMELINE:Timeline = JSON.parse(`{
   "key": "64CarForKey00000000000000000000000000000000000000000000000000000",
   "title": "My new Project",
   "tasks": [

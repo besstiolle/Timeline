@@ -2,10 +2,10 @@ import { describe, expect, it, vi } from 'vitest'
 import { render } from "@testing-library/svelte";
 
 import Banner from '$lib/Banner.svelte'
-import { Struct } from '$lib/struct.class';
 import { store } from '$lib/stores';
 import { DIFF, MONTHS } from '$lib/constantes';
 import { Rights } from '$lib/rights.class';
+import { Timeline, TimelineStore, type Card } from '$lib/struct.class';
 
 
 vi.mock('$app/environment', () => ({
@@ -18,8 +18,8 @@ vi.mock('$lib/stores', () => {return vi.importActual('./mockedStores')})
 
 describe('test Rendering', () => {
 
-    const timelineStore = new Struct.TimelineStore(new Array<Struct.Card>(), new Struct.Timeline(), new Rights())
-    timelineStore.currentTimeline = new Struct.Timeline("key", "title")
+    const timelineStore = new TimelineStore(new Array<Card>(), new Timeline(), new Rights())
+    timelineStore.currentTimeline = new Timeline("key", "title")
     timelineStore.currentTimeline.start = "2019-12-01"
     timelineStore.currentTimeline.end = "2021-12-01"
     timelineStore.currentTimeline.viewbox = "0 0 10 20"

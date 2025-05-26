@@ -3,25 +3,24 @@
 
 import { store } from "./stores";
 
-import type { Struct } from "./struct.class";
 import { COLORS, GRID, MONTHS } from "./constantes";
 import { Helpers } from "./helpers";
-
-import Task from "./Task.svelte";
 import { FactoryTask } from "./factoryTask";
+	import type { Swimline, Task } from "./struct.class";
+	import TaskComponent from "./Task.svelte";
 
 interface swimlinesToShowInterface{
-    swimline:Struct.Swimline
+    swimline:Swimline
     position:number
     height:number
 }
 
-let tasksToShow: Struct.Task[] = []
+let tasksToShow: Task[] = []
 let swimlinesToShow: Map<number, swimlinesToShowInterface> = new Map<number, swimlinesToShowInterface>()
 let previousSwimlineId:number = -1
 let height: number
 let position: number = 0
-$store.currentTimeline.tasks.forEach((task:Struct.Task) => {
+$store.currentTimeline.tasks.forEach((task:Task) => {
     if(task.isShow || $store.currentTimeline.showAll){
         tasksToShow.push(task)
 
@@ -343,7 +342,7 @@ function hideActionBar(event:Event){
 function toggleSwimlineVisibility(event:Event){
     let id = Number((event.currentTarget as HTMLElement).id.substring(1))
     let value = !$store.currentTimeline.swimlines[id].isShow
-    $store.currentTimeline.tasks.forEach((task:Struct.Task) => {
+    $store.currentTimeline.tasks.forEach((task:Task) => {
         if(task.swimlineId == id) {
             task.isShow = value
         }
@@ -396,7 +395,7 @@ function showToggle(event:Event){
 </svg>
 
 {#each tasksToShow as task, index (index)}
-    <Task currentTask={task} i={index} showActionBar={showActionBar} hideActionBar={hideActionBar} downRight={downRight} downLeft={downLeft} downProgress={downProgress}/>
+    <TaskComponent currentTask={task} i={index} showActionBar={showActionBar} hideActionBar={hideActionBar} downRight={downRight} downLeft={downLeft} downProgress={downProgress}/>
 {/each}
 <tspan id='ghost' x='-1000'/>
 

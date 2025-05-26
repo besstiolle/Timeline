@@ -1,5 +1,5 @@
 import type { ResponseWithMeta } from "../routes/api/timeline/types";
-import type { Struct } from "./struct.class";
+import type { Timeline } from "./struct.class";
 import { NotFoundOnlineException } from "./timelineException.class";
 
 //const endpoint = import.meta.env.VITE_API_ENDPOINT_BASE_URL + '.netlify/functions/timeline?'
@@ -8,7 +8,7 @@ const headers = {
     'content-type':'application/json'
 }
 
-export async function create(timeline : Struct.Timeline): Promise<ResponseWithMeta>{
+export async function create(timeline : Timeline): Promise<ResponseWithMeta>{
     //console.info("POST on endpoint : " + endpoint)
     if(!timeline.ownerKey && !timeline.writeKey){
         throw new Error("at least you must provide one of theses : ownerKey or writeKey in timeline object")

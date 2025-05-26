@@ -1,12 +1,12 @@
 <script lang="ts">
 
-import { store } from './stores';
-import { Helpers } from './helpers';
-import { Struct } from './struct.class';
-import { FactoryTimeline } from './factoryTimeline';
-import { LIVE_PREFIX } from './constantes';
-import { FactoryTask } from './factoryTask';
+    import { store } from './stores';
+    import { Helpers } from './helpers';
+    import { FactoryTimeline } from './factoryTimeline';
+    import { LIVE_PREFIX } from './constantes';
+    import { FactoryTask } from './factoryTask';
 	import { m } from '../paraglide/messages';
+	import { Task } from './struct.class';
 
 const props = $props();
 const updateStore = props.updateStore as (prefix: string, position:number ) => void
@@ -39,7 +39,7 @@ function b_up(index:number){
         console.warn("index was abnormal", index)
         return;
     }
-    let tmpTask: Struct.Task = $store.currentTimeline.tasks[index]
+    let tmpTask: Task = $store.currentTimeline.tasks[index]
     $store.currentTimeline.tasks[index] = $store.currentTimeline.tasks[index - 1]
     $store.currentTimeline.tasks[index - 1] = tmpTask
     $store.currentTimeline.tasks = $store.currentTimeline.tasks
@@ -49,7 +49,7 @@ function b_down(index:number){
         console.warn("index was abnormal", index)
         return;
     }
-    let tmpTask: Struct.Task = $store.currentTimeline.tasks[index]
+    let tmpTask: Task = $store.currentTimeline.tasks[index]
     $store.currentTimeline.tasks[index] = $store.currentTimeline.tasks[index + 1]
     $store.currentTimeline.tasks[index + 1] = tmpTask
     $store.currentTimeline.tasks = $store.currentTimeline.tasks
@@ -66,7 +66,7 @@ function b_duplicate(index:number){
         console.warn("index was abnormal", index)
         return;
     }
-    let tmpTasks : Array<Struct.Task> = $store.currentTimeline.tasks.splice(index+1, $store.currentTimeline.tasks.length)
+    let tmpTasks : Array<Task> = $store.currentTimeline.tasks.splice(index+1, $store.currentTimeline.tasks.length)
 
     FactoryTimeline.addTask($store.currentTimeline, 
                             FactoryTask.clone($store.currentTimeline.tasks[index],
@@ -79,7 +79,7 @@ function b_duplicate(index:number){
 }
 function b_add(){
     let diffSec : number = $store.currentTimeline.getEndTime() - $store.currentTimeline.getStartTime()
-    FactoryTimeline.addTask($store.currentTimeline, new Struct.Task(
+    FactoryTimeline.addTask($store.currentTimeline, new Task(
             $store.currentTimeline.getNextId(),
             "Some task", 
             Helpers.toYYYY_MM_DD(new Date($store.currentTimeline.getStartTime() + (0.1 * diffSec))), 

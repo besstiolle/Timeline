@@ -2,11 +2,11 @@
 
 import { store } from './stores';
 import { Helpers } from './helpers';
-import { Struct } from './struct.class';
 import { FactoryTimeline } from './factoryTimeline';
 import { LIVE_PREFIX } from './constantes';
 import { FactoryMilestone } from './factoryMilestone';
 	import { m } from '../paraglide/messages';
+	import { Milestone } from './struct.class';
 
     const props = $props();
     const updateStore = props.updateStore as (prefix: string, position:number ) => void
@@ -24,7 +24,7 @@ function m_up(index:number){
         console.warn("index was abnormal", index)
         return;
     }
-    let tmpMilestone: Struct.Milestone = $store.currentTimeline.milestones[index]
+    let tmpMilestone: Milestone = $store.currentTimeline.milestones[index]
     $store.currentTimeline.milestones[index] = $store.currentTimeline.milestones[index - 1]
     $store.currentTimeline.milestones[index - 1] = tmpMilestone
     $store.currentTimeline.milestones = $store.currentTimeline.milestones
@@ -34,7 +34,7 @@ function m_down(index:number){
         console.warn("index was abnormal", index)
         return;
     }
-    let tmpMilestone: Struct.Milestone = $store.currentTimeline.milestones[index]
+    let tmpMilestone: Milestone = $store.currentTimeline.milestones[index]
     $store.currentTimeline.milestones[index] = $store.currentTimeline.milestones[index + 1]
     $store.currentTimeline.milestones[index + 1] = tmpMilestone
     $store.currentTimeline.milestones = $store.currentTimeline.milestones
@@ -53,7 +53,7 @@ function m_duplicate(index:number){
         console.warn("index was abnormal", index)
         return;
     }
-    let tmpMilestones : Array<Struct.Milestone> = $store.currentTimeline.milestones.splice(index+1, $store.currentTimeline.milestones.length)
+    let tmpMilestones : Array<Milestone> = $store.currentTimeline.milestones.splice(index+1, $store.currentTimeline.milestones.length)
 
     FactoryTimeline.addMilestone($store.currentTimeline, 
                                 FactoryMilestone.clone($store.currentTimeline.milestones[index],
@@ -66,7 +66,7 @@ function m_duplicate(index:number){
 }
 function m_add(){
     let diffSec : number = $store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()
-    FactoryTimeline.addMilestone($store.currentTimeline, new Struct.Milestone(
+    FactoryTimeline.addMilestone($store.currentTimeline, new Milestone(
             $store.currentTimeline.getNextId(),
             "My Milestone", 
             Helpers.toYYYY_MM_DD(new Date($store.currentTimeline.getStart().getTime() + (0.5 * diffSec))),

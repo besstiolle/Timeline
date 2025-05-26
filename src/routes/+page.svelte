@@ -3,12 +3,12 @@
 	import { Helpers } from "$lib/helpers";
 	import { Rights } from "$lib/rights.class";
 	import { store } from "$lib/stores";
-	import { Struct } from "$lib/struct.class";
+	import { Timeline } from "$lib/struct.class";
 	import Cards from "../components/Cards.svelte";
 	import { m } from "../paraglide/messages";
 
 	//Reset store currentTimeline information when we are here
-	$store.currentTimeline=new Struct.Timeline()
+	$store.currentTimeline=new Timeline()
 	$store.lastCommitedRemotely=-1
 	$store.lastUpdatedLocally=-1
 	$store.rights=new Rights(null)

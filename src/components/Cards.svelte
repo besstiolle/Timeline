@@ -4,11 +4,11 @@
 	import { FactoryCards } from "$lib/factoryCards";
 	import { FactoryPicto } from "$lib/factoryPicto";
 	import { Helpers } from "$lib/helpers";
-	import { Struct } from "$lib/struct.class";
 	import { m } from "../paraglide/messages";
 	import { store } from "$lib/stores";
 	import PopUpConfirmation from "$lib/PopUpConfirmation.svelte";
 	import Toast from "$lib/Toast.svelte";
+	import { Card, Timeline } from "$lib/struct.class";
 	
 	let popUpComponent:PopUpConfirmation
 	let toastComponent:Toast
@@ -38,7 +38,7 @@
 	 */
 	function duplicate(event:Event, key:string):void {
 		event.stopPropagation();
-		let clone:Struct.Timeline = structuredClone(CustomLocalStorage.getTimeline(key))
+		let clone:Timeline = structuredClone(CustomLocalStorage.getTimeline(key))
 		clone.ownerKey=null
 		clone.writeKey=null
 		clone.readKey=null
@@ -46,11 +46,11 @@
 		clone.title = generateTitle(clone['title'])
 		clone.key = Helpers.randomeString(64)
 
-		let newCard = new Struct.Card(clone['key'], clone['title'])
+		let newCard = new Card(clone['key'], clone['title'])
 		$store.cards.push(newCard)
 		CustomLocalStorage.save(clone['key'], clone)
 		//refresh store
-		$store.currentTimeline=new Struct.Timeline('','')
+		$store.currentTimeline=new Timeline('','')
 	}
 
 	/**
@@ -76,7 +76,7 @@
 	 */
 	function askDelete(event:Event, key:string):void{
 		event.stopPropagation();
-		let timelineToDelete: Struct.Timeline = CustomLocalStorage.getTimeline(key)
+		let timelineToDelete: Timeline = CustomLocalStorage.getTimeline(key)
 		if(timelineToDelete && timelineToDelete.isOnline){
 			console.warn(m.landing_toast_remote_timeline_cant_be_deleted({title:timelineToDelete.title}))
 			toastComponent.show(m.landing_toast_remote_timeline_cant_be_deleted({title:timelineToDelete.title}),false, 5)
@@ -112,7 +112,7 @@
 	function doDelete(args:string[]):void{
 		let key=args[0]
 
-		let timelineToDelete: Struct.Timeline = CustomLocalStorage.getTimeline(key)
+		let timelineToDelete: Timeline = CustomLocalStorage.getTimeline(key)
 		if(timelineToDelete && timelineToDelete.isOnline){
 			console.warn(`this chart "${timelineToDelete.title}" is online and can't be deleted`)
 			toastComponent.show(`this chart "${timelineToDelete.title}" is online and can't be deleted`,false, 5)
@@ -126,7 +126,7 @@
 		
 		CustomLocalStorage.remove(LOCAL_STORAGE.KEY_PICTO + key)
 		//refresh store
-		$store.currentTimeline=new Struct.Timeline('','')
+		$store.currentTimeline=new Timeline('','')
 	}
 
 

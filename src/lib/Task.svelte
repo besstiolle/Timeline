@@ -4,11 +4,11 @@
 
     import { Helpers } from './helpers';
     import { store } from './stores';
-    import type { Struct } from './struct.class';
+	import type { Task } from './struct.class';
 
     const props = $props();
     const i = props.i as number
-    const currentTask = props.currentTask as Struct.Task
+    const currentTask = props.currentTask as Task
     const showActionBar = props.showActionBar as (event:Event) => object
     const hideActionBar = props.hideActionBar as (event:Event) => object
     const downLeft = props.downLeft as (event:Event) => object

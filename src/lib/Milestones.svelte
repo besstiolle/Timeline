@@ -3,18 +3,18 @@
     import { store } from './stores';
 
 
-    import type { Struct } from './struct.class';
     import { FactoryMilestone } from './factoryMilestone';
     import { GRID, MONTHS } from './constantes';
+	import type { Milestone } from "./struct.class";
 
-    function compareMilestone(a : Struct.Milestone, b : Struct.Milestone){
+    function compareMilestone(a : Milestone, b : Milestone){
         if(a.date > b.date){return 1}
         if(a.date < b.date){return -1}
         return 0
     }
 
-    let milestones: Struct.Milestone[] = []
-    $store.currentTimeline.milestones.forEach((milestone:Struct.Milestone) => { 
+    let milestones: Milestone[] = []
+    $store.currentTimeline.milestones.forEach((milestone:Milestone) => { 
         if(milestone.isShow || $store.currentTimeline.showAll){
             milestones.push(milestone)
         }

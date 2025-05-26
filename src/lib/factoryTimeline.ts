@@ -2,19 +2,19 @@
 import { browser } from "$app/environment"
 import { Helpers } from "./helpers"
 import { FactorySwimline } from "./factorySwimline";
-import { Struct } from "./struct.class";
+import { Milestone, Swimline, Task, Timeline } from "./struct.class";
 import { DIFF, GRID } from "./constantes";
 import { DuplicateEntityException } from "./timelineException.class";
 
-export namespace FactoryTimeline {
+export class FactoryTimeline {
 
     /**
      * Return the min date of all tasks & all minestones.
      *   If there is no tasks/milestones it return the date of the system
-     * @param timeline the Struct.Timeline to investigate
-     * @returns <Date> the min date of milestones & tasks in the Struct.Timeline 
+     * @param timeline the Timeline to investigate
+     * @returns <Date> the min date of milestones & tasks in the Timeline 
      */
-	export function getMin(timeline : Struct.Timeline): Date{
+	static getMin(timeline : Timeline): Date{
         if(timeline.tasks.length === 0 && timeline.milestones.length === 0){
             return new Date()
         }
@@ -38,10 +38,10 @@ export namespace FactoryTimeline {
     /**
      * Return the max date of all tasks & all minestones.
      *   If there is no tasks/milestones it return the date of the system
-     * @param timeline the Struct.Timeline to investigate
-     * @returns <Date> the max date of milestones & tasks in the Struct.Timeline
+     * @param timeline the Timeline to investigate
+     * @returns <Date> the max date of milestones & tasks in the Timeline
      */
-    export function getMax(timeline : Struct.Timeline): Date{
+    static getMax(timeline : Timeline): Date{
         
         if(timeline.tasks.length === 0 && timeline.milestones.length === 0){
             return new Date()
@@ -62,14 +62,14 @@ export namespace FactoryTimeline {
     }   
 
     /**
-     * Add a Struct.Task into the Struct.Timeline
-     * @param timeline the Struct.Timeline to investigate
-     * @param task the Struct.Task to add
+     * Add a Task into the Timeline
+     * @param timeline the Timeline to investigate
+     * @param task the Task to add
      */
-	export function addTask(timeline : Struct.Timeline, task: Struct.Task) : void{
+	static addTask(timeline : Timeline, task: Task) : void{
         timeline.tasks.forEach(element => {
             if(element.id === task.id){
-                throw new DuplicateEntityException('Struct.Task', task.id)
+                throw new DuplicateEntityException('Task', task.id)
             }
         });
         
@@ -78,14 +78,14 @@ export namespace FactoryTimeline {
     }
 
     /**
-     * Add a Struct.Milestone into the Struct.Timeline
-     * @param timeline the Struct.Milestone to investigate
-     * @param milestone the Struct.Milestone to add
+     * Add a Milestone into the Timeline
+     * @param timeline the Milestone to investigate
+     * @param milestone the Milestone to add
      */
-    export function addMilestone(timeline : Struct.Timeline,milestone: Struct.Milestone) : void{
+    static addMilestone(timeline : Timeline,milestone: Milestone) : void{
         timeline.milestones.forEach(element => {
             if(element.id === milestone.id){
-                throw new DuplicateEntityException('Struct.Milestone', milestone.id)
+                throw new DuplicateEntityException('Milestone', milestone.id)
             }
         });
         
@@ -94,13 +94,13 @@ export namespace FactoryTimeline {
     }
 
     /**
-     * Remove all data from the Struct.Milestone excepted the user choices like "showAll" options
-     * @param timeline the Struct.Milestone to purge
+     * Remove all data from the Milestone excepted the user choices like "showAll" options
+     * @param timeline the Milestone to purge
      */
-    export function purge(timeline : Struct.Timeline) : void{
-        timeline.tasks = new Array<Struct.Task>()
-        timeline.milestones = new Array<Struct.Milestone>()
-        timeline.swimlines = new Array<Struct.Swimline>()
+    static purge(timeline : Timeline) : void{
+        timeline.tasks = new Array<Task>()
+        timeline.milestones = new Array<Milestone>()
+        timeline.swimlines = new Array<Swimline>()
         timeline.isInitiate = false
 		timeline.start = null
 		timeline.end = null
@@ -115,14 +115,14 @@ export namespace FactoryTimeline {
         //timeline.key = null //Don't reset this parameter
     }
 
-    export function refresh(timeline : Struct.Timeline) : void{
-        _refreshSwimlines(timeline)
-        _processLimites(timeline)
-        _processViewboxResizing(timeline)
+    static refresh(timeline : Timeline) : void{
+        this._refreshSwimlines(timeline)
+        this._processLimites(timeline)
+        this._processViewboxResizing(timeline)
     }
 
-    function _refreshSwimlines(timeline : Struct.Timeline) : void{
-        timeline.swimlines = new Array<Struct.Swimline>()
+    protected static _refreshSwimlines(timeline : Timeline) : void{
+        timeline.swimlines = new Array<Swimline>()
         
         let swimlineLabel: string
         let previousSwimlineLabel = ''
@@ -160,7 +160,7 @@ export namespace FactoryTimeline {
         }
     }
 
-    function _processLimites(timeline : Struct.Timeline) : void{
+    protected static _processLimites(timeline : Timeline) : void{
         const start = FactoryTimeline.getMin(timeline)
         const end = FactoryTimeline.getMax(timeline)
 
@@ -203,7 +203,7 @@ export namespace FactoryTimeline {
         timeline.setEnd(end)
     }
 
-    function _processViewboxResizing(timeline: Struct.Timeline) : void{
+    protected static _processViewboxResizing(timeline: Timeline) : void{
         //Reprocess viewbox sizing
         let len = timeline.tasks.length
         if(!timeline.showAll){
@@ -213,24 +213,24 @@ export namespace FactoryTimeline {
         
     }
 
-    export function initiate(timeline : Struct.Timeline) : Struct.Timeline{
+    static initiate(timeline : Timeline) : Timeline{
         if(browser){
             
             const swim1Id = FactorySwimline.create(timeline,"Swimline1")
             const swim2Id = FactorySwimline.create(timeline,"Swimline2")
 
-            addTask(timeline, new Struct.Task(0, "Random Task 0", "2021-01-15", "2021-04-01", true, 100, true, "", -1))
-            addTask(timeline, new Struct.Task(1, "Random Task 1", "2021-12-01", "2022-04-01", false, 0, true, "", -1))
-            addTask(timeline, new Struct.Task(2, "Random Task 2", "2021-02-01", "2021-03-05", true, 15, true, "Swimline1", swim1Id))
-            addTask(timeline, new Struct.Task(3, "Random Task 3", "2021-03-10", "2021-03-30", true, 0, true, "Swimline1", swim1Id))
-            addTask(timeline, new Struct.Task(4, "Random Task 4", "2021-02-01", "2021-05-01", true, 30, false, "", -1))
-            addTask(timeline, new Struct.Task(5, "Random Task 5", "2021-01-31", "2021-03-01", true, 100, true, "", -1))
-            addTask(timeline, new Struct.Task(6, "Random Task 6", "2021-05-01", "2021-05-05", true, 25, true, "Swimline2", swim2Id))
-            addTask(timeline, new Struct.Task(7, "Random Task 7", "2021-12-01", "2022-04-01", true, 75, true, "", -1))
+            this.addTask(timeline, new Task(0, "Random Task 0", "2021-01-15", "2021-04-01", true, 100, true, "", -1))
+            this.addTask(timeline, new Task(1, "Random Task 1", "2021-12-01", "2022-04-01", false, 0, true, "", -1))
+            this.addTask(timeline, new Task(2, "Random Task 2", "2021-02-01", "2021-03-05", true, 15, true, "Swimline1", swim1Id))
+            this.addTask(timeline, new Task(3, "Random Task 3", "2021-03-10", "2021-03-30", true, 0, true, "Swimline1", swim1Id))
+            this.addTask(timeline, new Task(4, "Random Task 4", "2021-02-01", "2021-05-01", true, 30, false, "", -1))
+            this.addTask(timeline, new Task(5, "Random Task 5", "2021-01-31", "2021-03-01", true, 100, true, "", -1))
+            this.addTask(timeline, new Task(6, "Random Task 6", "2021-05-01", "2021-05-05", true, 25, true, "Swimline2", swim2Id))
+            this.addTask(timeline, new Task(7, "Random Task 7", "2021-12-01", "2022-04-01", true, 75, true, "", -1))
     
-            addMilestone(timeline, new Struct.Milestone(8, "Milestone 1", "2020-12-01", true))
-            addMilestone(timeline, new Struct.Milestone(9, "Milestone 2", "2021-03-20", true))
-            addMilestone(timeline, new Struct.Milestone(10, "Milestone 3", "2022-08-15", false))
+            this.addMilestone(timeline, new Milestone(8, "Milestone 1", "2020-12-01", true))
+            this.addMilestone(timeline, new Milestone(9, "Milestone 2", "2021-03-20", true))
+            this.addMilestone(timeline, new Milestone(10, "Milestone 3", "2022-08-15", false))
 
             timeline.maxId=11     
         }

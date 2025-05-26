@@ -1,16 +1,16 @@
-import { Struct } from "./struct.class";
+import { Card, Milestone, Task, Timeline } from "./struct.class";
 import { JsonParserException } from "./timelineException.class";
 
-export namespace JsonParser {
+export class JsonParser {
 
     /**
-     * Reviver used for JSON.parse(Struct.Timeline)
+     * Reviver used for JSON.parse(Timeline)
      * @param key the key for reviver
      * @param value the value for reviver
      * @returns the same value of the value processed
      */
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	export function timelineReviver(key : string, value : any) {
+	static timelineReviver(key : string, value : any) {
         
         const COMMONS: string[] = ['isInitiate', 'maxId', 'viewbox', 'showAll', // Primitive type field of Timeline
                                  'position','isShow','label', 'id', 'swimline', 'hasProgress', 'progress',
@@ -33,15 +33,15 @@ export namespace JsonParser {
 
         //Case of object Timeline
         if(key === ''){
-            const structTimeline: Struct.Timeline = Object.assign(new Struct.Timeline(value.key, value.title), value)
+            const structTimeline: Timeline = Object.assign(new Timeline(value.key, value.title), value)
             return structTimeline
         }
 
         if(typeof value === 'object' && value !== null && (value.label || value.label === '')) { //Un object contenant un label => nos objects Task & Milestone
             if(value.date){
-                return new Struct.Milestone((value.id as number), value.label,value.date, (value.isShow as boolean))
+                return new Milestone((value.id as number), value.label,value.date, (value.isShow as boolean))
             } else if (value.dateStart) {
-                return new Struct.Task(value.id, value.label,value.dateStart, value.dateEnd, 
+                return new Task(value.id, value.label,value.dateStart, value.dateEnd, 
                                 value.hasProgress, value.progress, value.isShow, value.swimline, value.swimlineId)
             } else {
                 //This is a re-processed value, we don't need to reprocessing it right now
@@ -65,13 +65,13 @@ export namespace JsonParser {
 	}
 
     /**
-     * Reviver used for JSON.parse(Struct.Cards)
+     * Reviver used for JSON.parse(Cards)
      * @param key the key for reviver
      * @param value the value for reviver
      * @returns the same value of the value processed
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-	export function cardsReviver(key : string, value : any) {
+	static cardsReviver(key : string, value : any) {
         
         const COMMONS: string[] = ['key', 'title', 'isOnline'// Primitive type field of Timeline
                                   ]
@@ -94,8 +94,8 @@ export namespace JsonParser {
 
         if(typeof value === 'object' && value !== null && value.key) { //Un object contenant un key => notre object Card
                 // Because of Date we can't do 
-                //  > Object.assign(new Struct.Card, value) 
-                const structCard: Struct.Card = Object.assign(new Struct.Card(value.key, value.title), value)
+                //  > Object.assign(new Card, value) 
+                const structCard: Card = Object.assign(new Card(value.key, value.title), value)
                 return structCard   
         }
 

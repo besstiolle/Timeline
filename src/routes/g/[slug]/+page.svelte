@@ -4,7 +4,6 @@
     import { store } from '$lib/stores';
 
     import { CustomLocalStorage } from '$lib/customLocalStorage';
-    import { Struct } from '$lib/struct.class';
     import { Rights } from '$lib/rights.class';
     import { JsonParser } from '$lib/jsonParser';
     import { FactoryTimeline } from '$lib/factoryTimeline';
@@ -15,6 +14,7 @@
     import { NotFoundOnlineException } from '$lib/timelineException.class';
 	import type { ResponseWithMeta } from "../../api/timeline/types";
 	import { m } from "../../../paraglide/messages";
+	import { Timeline } from "$lib/struct.class";
 
     
     let toastComponent:Toast
@@ -42,7 +42,7 @@
         }
     }
     
-    let currentTimeline: Struct.Timeline = CustomLocalStorage.getTimeline(slug)
+    let currentTimeline: Timeline = CustomLocalStorage.getTimeline(slug)
 
     //If the local copie of Timeline has bigger rights than current url query parameter 
     //  We refresh the window.location with the higher rights
@@ -60,7 +60,7 @@
 
     if($store.rights.isNone()){
         if(!currentTimeline && browser){
-            currentTimeline = new Struct.Timeline(slug, m.slug_default_timeline_title())
+            currentTimeline = new Timeline(slug, m.slug_default_timeline_title())
             currentTimeline = FactoryTimeline.initiate(currentTimeline)
         }
         $store.currentTimeline = currentTimeline

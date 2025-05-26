@@ -3,10 +3,10 @@ import { RequestEventStub, toRequestEvent, VALID_DUMMY_TIMELINE } from '../apiUt
 import { OPTIONS } from '../../../routes/api/timeline/+server';
 import * as handlers from '../../../routes/api/timeline/+server';
 import { initDatabase } from '$lib/database/initdatabase';
-import type { ResponseWithMeta } from '../../../routes/api/timeline/types';
-import { Struct } from '$lib/struct.class';
+import type { ResponseWithMeta } from '../../../routes/api/timeline/types'
 import { countTimelineByKey } from '../../../routes/api/timeline/repository';
 import Database from 'better-sqlite3';
+import type { Timeline } from '$lib/struct.class';
 
 const ENTRYPOINT = 'https://dummyEntrypoint.io/api/timeline'
 const HEADER_ACCESS_CONTROL_ALLOW_METHOD = 'Access-Control-Allow-Methods'
@@ -210,7 +210,7 @@ it('POST /api/timeline should return a ResponseWithMeta object if success', asyn
   expect(json?.meta?.ts).toBeGreaterThan(1745841400000)
   expect(json?.meta?.ts).toBeLessThanOrEqual(Date.now())
 
-  const returnedTimeline = json?.data as Struct.Timeline
+  const returnedTimeline = json?.data as Timeline
   expect(returnedTimeline).toStrictEqual(clone)
 
 })

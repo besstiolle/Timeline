@@ -2,11 +2,11 @@ import { beforeEach, describe, expect, it, vi} from 'vitest'
 
 import { initDatabase } from '$lib/database/initdatabase';
 import Database from 'better-sqlite3';
-import { Struct } from '$lib/struct.class';
 import { RequestEventStub } from '../../apiUtils';
 import * as handlers from '../../../../routes/api/timeline/[slug]/+server';
 import { insertTimeline } from '../../../../routes/api/timeline/repository';
 import type { RequestEvent } from '../../../../routes/api/timeline/[slug]/$types';
+import { Timeline } from '$lib/struct.class';
 
 const ENTRYPOINT = 'https://dummyEntrypoint.io/api/timeline/'
 const HEADER_ACCESS_CONTROL_ALLOW_METHOD = 'Access-Control-Allow-Methods'
@@ -42,7 +42,7 @@ const HEADER_CONTENT_TYPE_APPPBJSON = 'application/problem+json'
 
 function insert(){
   //Insert directly in database a timeline
-  const timeline = new Struct.Timeline()
+  const timeline = new Timeline()
   timeline.key = SLUG_OK
   timeline.ownerKey = OWNER_OK
   timeline.writeKey = WRITE_OK
@@ -115,7 +115,7 @@ it('DELETE /api/timeline/slug should return 404 if slug dont exist', async () =>
 it('DELETE /api/timeline/slug should return 401 if ownerKey differ from database', async () => {
 
   //Insert directly in database a timeline
-  const timeline = new Struct.Timeline()
+  const timeline = new Timeline()
   timeline.key = SLUG_OK
   timeline.ownerKey = OWNER_OK
   timeline.writeKey = ''

@@ -1,6 +1,6 @@
-import type { Struct } from "$lib/struct.class";
 import type { Database, RunResult } from "better-sqlite3";
 import type { StructTimelineInDbInterface } from "./types";
+import type { Timeline } from "$lib/struct.class";
 
 /**
  * return the number of instance of StructTimelineInDbInterface by key
@@ -33,10 +33,10 @@ export function findLastTimelineByKey(db:Database, key:string):StructTimelineInD
 /**
  * Insert a new Timeline
  * @param db the Database
- * @param timeline an instance of Struct.Timeline object
+ * @param timeline an instance of Timeline object
  * @returns a RunResult of the operations
  */
-export function insertTimeline(db:Database, timeline:Struct.Timeline):RunResult{
+export function insertTimeline(db:Database, timeline:Timeline):RunResult{
   const stmtInsertion = db.prepare(`INSERT INTO timelines 
     (key, ownerkey, writekey, readKey, createdDateTime, json)
     values

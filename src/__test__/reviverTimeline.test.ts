@@ -2,21 +2,21 @@
 
 import { describe, expect, it, vi } from 'vitest'
 import { JsonParser } from "$lib/jsonParser"
-import { Struct } from "$lib/struct.class"
 import { JsonParserException } from "$lib/timelineException.class"
 import reviverTimeline_withAllvalues from './json/reviverTimeline_withAllvalues.json'
 import reviverTimeline_withMetaTimelines from './json/reviverTimeline_withMetaTimelines.json'
 import reviverTimeline_withTask from './json/reviverTimeline_withTask.json'
 import reviverTimeline_withMilestone from './json/reviverTimeline_withMilestone.json'
+import { Milestone, Task, Timeline } from '$lib/struct.class'
 //import x from 
 
 //Mock console.error() to avoid vi console pollution
 vi.spyOn(console, 'error').mockImplementation(() => {});
 
 describe('test factoryCards', () => {
-    const timeline = new Struct.Timeline("key", "title")
-    timeline.tasks = new Array<Struct.Task>()
-    timeline.tasks.push(new Struct.Task(1,"label 1", "2022-01-01", "2022-02-01", false, 100, true, "Swimline 1", 5))
+    const timeline = new Timeline("key", "title")
+    timeline.tasks = new Array<Task>()
+    timeline.tasks.push(new Task(1,"label 1", "2022-01-01", "2022-02-01", false, 100, true, "Swimline 1", 5))
     
     const jsonResult = JSON.stringify(timeline)
     const jsonExpected = JSON.stringify(reviverTimeline_withTask)
@@ -32,9 +32,9 @@ describe('test factoryCards', () => {
 })
 
 describe('test factoryCards', () => {
-    const timeline = new Struct.Timeline("key", "title")
-    timeline.milestones = new Array<Struct.Milestone>()
-    timeline.milestones.push(new Struct.Milestone(1,"label 1", "2022-01-01",true))
+    const timeline = new Timeline("key", "title")
+    timeline.milestones = new Array<Milestone>()
+    timeline.milestones.push(new Milestone(1,"label 1", "2022-01-01",true))
     
     const jsonResult = JSON.stringify(timeline)
     const jsonExpected = JSON.stringify(reviverTimeline_withMilestone)
@@ -50,7 +50,7 @@ describe('test factoryCards', () => {
 })
 
 describe('test factoryCards', () => {
-    const timeline = new Struct.Timeline("key", "title")
+    const timeline = new Timeline("key", "title")
     timeline.start = "2022-01-01"
     timeline.end = "2022-12-31"
     timeline.isInitiate = true
@@ -71,11 +71,11 @@ describe('test factoryCards', () => {
 })
 
 describe('test factoryCards', () => {
-    const timeline = new Struct.Timeline("key", "title")
-    timeline.tasks = new Array<Struct.Task>()
-    timeline.tasks.push(new Struct.Task(1,"label 1", "2022-01-01", "2022-02-01", true, 100, true, "Swimline 1", 5))
-    timeline.milestones = new Array<Struct.Milestone>()
-    timeline.milestones.push(new Struct.Milestone(1,"label 1","2022-01-01",true))
+    const timeline = new Timeline("key", "title")
+    timeline.tasks = new Array<Task>()
+    timeline.tasks.push(new Task(1,"label 1", "2022-01-01", "2022-02-01", true, 100, true, "Swimline 1", 5))
+    timeline.milestones = new Array<Milestone>()
+    timeline.milestones.push(new Milestone(1,"label 1","2022-01-01",true))
     timeline.start = "2022-01-01"
     timeline.end = "2022-12-31"
     timeline.isInitiate = true
@@ -97,7 +97,7 @@ describe('test factoryCards', () => {
 })
 
 describe('test factoryCards', () => {
-    const timeline = new Struct.Timeline("key", "title")
+    const timeline = new Timeline("key", "title")
     // @ts-expect-error forcing error for testing porpose
     timeline['unknowKey'] = 'bar'
 

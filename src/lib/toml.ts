@@ -1,6 +1,7 @@
-import type { Struct } from "./struct.class"
+import type { Milestone, Task, Timeline } from "./struct.class";
 
-export function timelineToObject(timeline: Struct.Timeline):object{
+
+export function timelineToObject(timeline: Timeline):object{
     return {
         version:VERSION,
         title:timeline.title,
@@ -9,7 +10,7 @@ export function timelineToObject(timeline: Struct.Timeline):object{
     }
 }
 
-function purgeTasksToToml(tasks:Array<Struct.Task>){
+function purgeTasksToToml(tasks:Array<Task>){
     const res:object[] = []
     tasks.forEach(task => {
         res.push({
@@ -24,7 +25,7 @@ function purgeTasksToToml(tasks:Array<Struct.Task>){
     });
     return res
 }
-function purgeMilestoneToToml(milestones:Array<Struct.Milestone>){
+function purgeMilestoneToToml(milestones:Array<Milestone>){
     const res:object[] = []
     milestones.forEach(milestone => {
         res.push({

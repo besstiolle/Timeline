@@ -1,14 +1,14 @@
 
 <script lang="ts">
     import { CustomLocalStorage } from "$lib/customLocalStorage";
-    import type { Struct } from "$lib/struct.class";
+	import type { Card, Timeline } from "$lib/struct.class";
 	import { JsonParserException } from "$lib/timelineException.class";
 
 
 	
-let timelines: Array<Struct.Timeline> = new Array<Struct.Timeline>()
+let timelines: Array<Timeline> = new Array<Timeline>()
 let errors: Array<string> = new Array<string>()
-let cards:Struct.Card[]
+let cards:Card[]
 try{
     cards = CustomLocalStorage.getCards()
     cards.forEach(card => {

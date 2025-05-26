@@ -1,9 +1,9 @@
 import { browser } from "$app/environment"
 import { LOCAL_STORAGE } from "./constantes"
 import { JsonParser } from "./jsonParser"
-import type { Struct } from "./struct.class"
+import type { Card, Timeline } from "./struct.class"
 
-export namespace CustomLocalStorage{
+export class CustomLocalStorage{
 
     
     /**
@@ -11,7 +11,7 @@ export namespace CustomLocalStorage{
      * @param key the key of mapping   
      * @param replacer the JSON replacer.
      */
-    export function save(key:string, value:string|Struct.Timeline|Array<Struct.Card>, replacer?: (this: string|Struct.Timeline|Array<Struct.Card>, key: string, value: string|Struct.Timeline|Array<Struct.Card>) => unknown): void {
+    static save(key:string, value:string|Timeline|Array<Card>, replacer?: (this: string|Timeline|Array<Card>, key: string, value: unknown) => unknown): void {
         if(!browser){
             return
         }
@@ -19,16 +19,16 @@ export namespace CustomLocalStorage{
         localStorage.setItem(key, JSON.stringify(value, replacer))
     }
 
-    export function getCards() : Array<Struct.Card>{
-        return get(LOCAL_STORAGE.KEY_CARDS, JsonParser.cardsReviver) as Array<Struct.Card>
+    static getCards() : Array<Card>{
+        return this.get(LOCAL_STORAGE.KEY_CARDS, JsonParser.cardsReviver) as Array<Card>
     }
 
-    export function getTimeline(key:string):Struct.Timeline{
-        return get(key, JsonParser.timelineReviver) as Struct.Timeline
+    static getTimeline(key:string):Timeline{
+        return this.get(key, JsonParser.timelineReviver) as Timeline
     }
 
-    export function getPicto(key:string):string{
-        return get(LOCAL_STORAGE.KEY_PICTO + key) as string
+    static getPicto(key:string):string{
+        return this.get(LOCAL_STORAGE.KEY_PICTO + key) as string
     }
 
     
@@ -39,7 +39,7 @@ export namespace CustomLocalStorage{
      * @param reviver the JSON reviver
      * @returns the object.
      */
-    function get(key:string, reviver?: (this: unknown, key: string, value: unknown) => unknown): string|Struct.Timeline|Array<Struct.Card>|null{
+    protected static get(key:string, reviver?: (this: unknown, key: string, value: unknown) => unknown): string|Timeline|Array<Card>|null{
         if(!browser){
             return null
         }
@@ -56,14 +56,14 @@ export namespace CustomLocalStorage{
      * a short-function to purge all the localstorage
      * @param key the key of mapping     
      */
-    export function remove(key: string): void{
+    static remove(key: string): void{
         localStorage.removeItem(key)
     }
     
     /**
      * a short-function to purge all the localstorage
      */
-    export function clear(): void{
+    static clear(): void{
         localStorage.clear()
     }
 }

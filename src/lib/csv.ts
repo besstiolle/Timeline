@@ -1,12 +1,12 @@
 import { FactoryMilestone } from "./factoryMilestone";
 import { FactoryTask } from "./factoryTask";
-import type { abstractMilestoneInterface, abstractTaskInterface, abstractTimelineInterface, Struct } from "./struct.class";
+import type { abstractMilestoneInterface, abstractTaskInterface, abstractTimelineInterface, Timeline } from "./struct.class";
 
 const RC:string = '\r\n'
 const SEPARATOR:string = ';'
 const VERSION:string = '1.1'
 
-export function goCsv(currentTimeline: Struct.Timeline):string{
+export function goCsv(currentTimeline: Timeline):string{
     let buffer = ''
     
     buffer += 'version' + SEPARATOR + VERSION + RC
