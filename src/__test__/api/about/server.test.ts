@@ -1,8 +1,7 @@
-import { afterEach, beforeEach, expectTypeOf, beforeAll, describe, expect, it, vi, test as base } from 'vitest'
-import { RequestEventStub, VALID_DUMMY_TIMELINE } from '../apiUtils';
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { RequestEventStub, toRequestEvent } from '../apiUtils';
 import { OPTIONS } from '../../../routes/api/about/+server';
 import * as handlers from '../../../routes/api/about/+server';
-import type { ResponseWithMeta } from '../../../routes/api/timeline/types';
 import { GET } from '../../../routes/api/about/+server';
 
 const ENTRYPOINT = 'https://dummyEntrypoint.io/api/about'
@@ -23,7 +22,7 @@ describe('API /api/about with OPTIONS & denied method', () => {
 
   it('OPTIONS should return 204', async () => {
     const event = new RequestEventStub('OPTIONS', ENTRYPOINT);
-    const response = await OPTIONS(event as any);
+    const response = await OPTIONS(toRequestEvent(event));
 
     expect(response.status).toBe(204);
     expect(response.headers.get(HEADER_CONTENT_TYPE)).toContain(HEADER_CONTENT_TYPE_APPJSON);
@@ -38,7 +37,7 @@ describe('API /api/about with OPTIONS & denied method', () => {
 
   it('fallback should return 405', async () => {
     const event = new RequestEventStub('POST', ENTRYPOINT);
-    const response = await handlers.fallback(event as any);
+    const response = await handlers.fallback(toRequestEvent(event));
 
     expect(response.status).toBe(405);
     expect(response.headers.get(HEADER_CONTENT_TYPE)).toContain(HEADER_CONTENT_TYPE_APPPBJSON);
@@ -51,11 +50,11 @@ describe('API /api/about with OPTIONS & denied method', () => {
 
 it('POST /api/about should return a ResponseWithMeta JSON ', async () => {
   const event = new RequestEventStub('GET', ENTRYPOINT);
-  const response = await GET(event as any);
+  const response = await GET(toRequestEvent(event));
 
   expect(response.status).toBe(200);
   expect(response.headers.get(HEADER_CONTENT_TYPE)).toContain(HEADER_CONTENT_TYPE_APPJSON);
-  let json = await response.json()
+  const json = await response.json()
   expect(json.data).not.toBeFalsy()
   expect(json.meta).not.toBeFalsy()
   expect(json.meta.ts).not.toBeFalsy()

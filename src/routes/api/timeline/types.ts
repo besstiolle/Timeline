@@ -17,5 +17,5 @@ export interface ResponseWithMeta{
     meta:{
         ts:number
     },
-    data:Object
+    data:object
 }

@@ -37,7 +37,7 @@ try{
 }
 
     
-function purge(event:Event){
+function purge(){
     CustomLocalStorage.clear()
     alert("your localstorage is purged ✅")
     location.reload()
@@ -54,14 +54,14 @@ function purge(event:Event){
 <h2>Dump from your localstorage : </h2>
 <div class='codeW'>
 {#if errors}
-    {#each errors as error}
+    {#each errors as error, index (index)}
         <div style="color:red">{error}</div>
     {/each}
 {/if}
 {#if cards}
 <h3>Storage "Cards"</h3>
     <textarea rows=20>{JSON.stringify(cards, undefined, 2)}</textarea> 
-    {#each timelines as timeline}
+    {#each timelines as timeline (timeline.key)}
     <h3>Storage Timeline "{timeline.key} : {timeline.title}"</h3>
         <textarea rows=20>{JSON.stringify(timeline, undefined, 2)}</textarea> 
     {/each}

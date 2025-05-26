@@ -15,7 +15,7 @@
     let hasFix:boolean = false
     let className = ''
     
-    const myaction: Action = (node) => {
+    const myaction: Action = () => {
 
         const promiseLocalVersion = getCurrentVersion()
         const promiseDistantVersion = getDistantVersion()

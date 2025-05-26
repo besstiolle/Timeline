@@ -56,7 +56,7 @@ let defaultProgressBarWidth: number = -1
 let hoverGroup: boolean = false
 let recBox: DOMRect
 const ACTION = {LEFT:"L", RIGHT:"R", PROGRESS:"P"}
-let realAction:String = ''
+let realAction:string = ''
 let rec:HTMLElement, left:HTMLElement, right:HTMLElement , progress:HTMLElement
 let TActionBarCoord = {REC_X:0, REC_X2:0, L_X:0, R_X:0, P_X:0}
 let TActionBarCoordDefault = {REC_X:0, REC_X2:0, L_X:0, R_X:0, P_X:0}
@@ -163,6 +163,7 @@ function up(event:MouseEvent){
             $store.currentTimeline.tasks = $store.currentTimeline.tasks
         } catch (NotFoundException){
             //Nothing to do, the rest of the function will clean everything
+            console.debug("catch a NotFoundExeption but everything is normal", NotFoundException)
         }
     }
     if(isDragging){
@@ -260,9 +261,7 @@ function moveProgress(event:MouseEvent, viewportX:number){
         progressBarLabel.setAttribute("text-anchor", percentTextAnchor)
         progressBarLabel.innerHTML = Math.round(progressValue).toString() + "%"
 
-    } else {
-
-    }
+    } 
 }
 function moveResizing(event:MouseEvent, viewportX:number){
     //Security : we can't manipulate data if we are a simple Reader
@@ -363,41 +362,41 @@ function showToggle(event:Event){
     x="0" y="{GRID.MILESTONE_H + GRID.ANNUAL_H - 5}"
     id='svgSwimlineAndTasks'>
     
-{#each tasksToShow as task, i}
+{#each tasksToShow as task, index (index)}
 
 {#if swimlinesToShow.has(task.id)}
     {@const localSwimline = swimlinesToShow.get(task.id)}
     {#if localSwimline}
-        <rect x="0" y="{i * GRID.ONE_TASK_H}" 
+        <rect x="0" y="{index * GRID.ONE_TASK_H}" 
             width="{GRID.ALL_WIDTH}" height="{localSwimline?.height}"  
             fill="{COLORS[localSwimline.position % COLORS.length][0]}" id="c{task.swimlineId}" 
             onmouseover={showToggle} onfocus={showToggle} onmouseout={showToggle} onblur={showToggle}
             role="none"/>
 
-        <rect x="0" y="{i * GRID.ONE_TASK_H}" 
+        <rect x="0" y="{index * GRID.ONE_TASK_H}" 
             width="{GRID.LEFT_WIDTH}" height="{localSwimline.height}" fill="{COLORS[localSwimline.position % COLORS.length][1]}" id="d{task.swimlineId}" 
             onmouseover={showToggle} onfocus={showToggle} onmouseout={showToggle} onblur={showToggle}
             role="none"/>
         
-        <text text-anchor="middle" x="{GRID.LEFT_WIDTH / 2}" y="{i * GRID.ONE_TASK_H + 5 + localSwimline.height / 2}" 
+        <text text-anchor="middle" x="{GRID.LEFT_WIDTH / 2}" y="{index * GRID.ONE_TASK_H + 5 + localSwimline.height / 2}" 
             font-size="10" fill="{localSwimline.swimline.isShow?"#ffffff":"#888888"}">{localSwimline.swimline.label}</text>
 
-        <image xlink:href="{localSwimline.swimline.isShow?"/hide.png":"/see.png"}" x="0" y="{i * GRID.ONE_TASK_H}" height="24" width="24" 
+        <image xlink:href="{localSwimline.swimline.isShow?"/hide.png":"/see.png"}" x="0" y="{index * GRID.ONE_TASK_H}" height="24" width="24" 
             data-html2canvas-ignore="true" 
             onclick={toggleSwimlineVisibility} onkeydown={toggleSwimlineVisibility} id="s{task.swimlineId}" class='toggleVisibility hidden'
             onmouseover={showToggle} onfocus={showToggle} onmouseout={showToggle} onblur={showToggle}
             role="button" tabindex="0" />
     {/if}
 {:else}
-    <rect x="0" y="{i * GRID.ONE_TASK_H}" 
+    <rect x="0" y="{index * GRID.ONE_TASK_H}" 
         width="{GRID.ALL_WIDTH}" height="{GRID.ONE_TASK_H - 0.5}" fill="transparent"/>
 {/if}
 {/each}
 
 </svg>
 
-{#each tasksToShow as task, i}
-    <Task currentTask={task} i={i} showActionBar={showActionBar} hideActionBar={hideActionBar} downRight={downRight} downLeft={downLeft} downProgress={downProgress}/>
+{#each tasksToShow as task, index (index)}
+    <Task currentTask={task} i={index} showActionBar={showActionBar} hideActionBar={hideActionBar} downRight={downRight} downLeft={downLeft} downProgress={downProgress}/>
 {/each}
 <tspan id='ghost' x='-1000'/>
 

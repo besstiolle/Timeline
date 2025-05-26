@@ -13,10 +13,10 @@ let cards = CustomLocalStorage.getCards()
 if(!cards){
     cards = new Array<Struct.Card>()
 }
-let timeline = new Struct.Timeline()
-let rights = new Rights(null)
+const timeline = new Struct.Timeline()
+const rights = new Rights(null)
 
-let timelineStore = new Struct.TimelineStore(cards, timeline, rights)
+const timelineStore = new Struct.TimelineStore(cards, timeline, rights)
 export const store = writable(timelineStore);
 
 store.subscribe(val => updateLocalStorage(val))
@@ -24,8 +24,8 @@ store.subscribe(val => updateLocalStorage(val))
 
 function updateLocalStorage(timelineStore: Struct.TimelineStore){
     //console.info("updateLocalStorage(val) with key %o", (timelineStore&&timelineStore.currentTimeline&&timelineStore.currentTimeline.key)?timelineStore.currentTimeline.key:"N/A")
-    let currentTimeline = timelineStore.currentTimeline
-    let cards = timelineStore.cards
+    const currentTimeline = timelineStore.currentTimeline
+    const cards = timelineStore.cards
     if(!timelineStore._cancelRefreshLastUpdatedLocally){
         timelineStore.lastUpdatedLocally = new Date().getTime()
     } else {

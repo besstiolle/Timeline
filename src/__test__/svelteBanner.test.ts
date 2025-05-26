@@ -18,7 +18,7 @@ vi.mock('$lib/stores', () => {return vi.importActual('./mockedStores')})
 
 describe('test Rendering', () => {
 
-    let timelineStore = new Struct.TimelineStore(new Array<Struct.Card>(), new Struct.Timeline(), new Rights())
+    const timelineStore = new Struct.TimelineStore(new Array<Struct.Card>(), new Struct.Timeline(), new Rights())
     timelineStore.currentTimeline = new Struct.Timeline("key", "title")
     timelineStore.currentTimeline.start = "2019-12-01"
     timelineStore.currentTimeline.end = "2021-12-01"
@@ -28,13 +28,13 @@ describe('test Rendering', () => {
     store.set(timelineStore) 
 
     it('viexbox must be 0 0 10 20', () => {
-      const { container, debug }  = render(Banner/*, {name: 'World'}*/)
+      const { container }  = render(Banner/*, {name: 'World'}*/)
       const resultsSvelte = container.querySelector('[data-testid="Banner.svelte"]'); 
       expect((resultsSvelte as SVGSVGElement).getAttribute('viewBox')).toBe('0 0 10 20');
     })
 
     it('must be October on Jalon#0', () => {
-      const { container, debug }  = render(Banner/*, {name: 'World'}*/)
+      const { container }  = render(Banner/*, {name: 'World'}*/)
       const resultsJalonTextStart = container.querySelector('[data-testid="jalonText_0"]'); 
       expect(resultsJalonTextStart).toBeDefined()
       expect(resultsJalonTextStart).not.toBeNull()
@@ -42,7 +42,7 @@ describe('test Rendering', () => {
     })
 
     it('must be October on Jalon#1', () => {
-      const { container, debug }  = render(Banner/*, {name: 'World'}*/) 
+      const { container }  = render(Banner/*, {name: 'World'}*/) 
       const resultsJalonTextNewYear = container.querySelector('[data-testid="jalonText_1"]'); 
       expect(resultsJalonTextNewYear).toBeDefined()
       expect(resultsJalonTextNewYear).not.toBeNull()      
@@ -50,7 +50,7 @@ describe('test Rendering', () => {
     })
 
     it('must be October on Jalon#12', () => {
-      const { container, debug }  = render(Banner/*, {name: 'World'}*/)
+      const { container }  = render(Banner/*, {name: 'World'}*/)
       const resultsJalonTextEnd = container.querySelector('[data-testid="jalonText_12"]'); 
       expect(resultsJalonTextEnd).toBeDefined()
       expect(resultsJalonTextEnd).not.toBeNull()

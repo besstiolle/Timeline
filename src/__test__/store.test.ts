@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { Struct } from '$lib/struct.class';
 import { store } from '$lib/stores';
@@ -17,7 +17,7 @@ describe('test Mocked Store', () => {
   
 
     it('Updating store should return udated values', () => {
-      let timelineStore = new Struct.TimelineStore(new Array<Struct.Card>(), new Struct.Timeline(), new Rights())
+      const timelineStore = new Struct.TimelineStore(new Array<Struct.Card>(), new Struct.Timeline(), new Rights())
       timelineStore.currentTimeline = new Struct.Timeline("key", "title")
       timelineStore.currentTimeline.start = "2020-01-01"
       timelineStore.currentTimeline.end = "2020-12-31"

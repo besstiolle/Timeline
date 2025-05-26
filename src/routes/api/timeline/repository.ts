@@ -11,7 +11,7 @@ import type { StructTimelineInDbInterface } from "./types";
 export function countTimelineByKey(db:Database, key:string):number{
 
   const stmtFindExistingTimeline = db.prepare('SELECT count(*) as count FROM timelines WHERE key = ?');
-  const countDb = (stmtFindExistingTimeline.get(key) as any).count as number
+  const countDb = (stmtFindExistingTimeline.get(key) as {count:number}).count
 
   return countDb
 }

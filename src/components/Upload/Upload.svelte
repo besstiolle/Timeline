@@ -12,7 +12,7 @@
 	import { parseAbstractTimeline } from './Upload';
 
     const props = $props();
-    const download = props.download as Function
+    const download = props.download as (blob: Blob, extensionName:string) => void
     const BOM = new Uint8Array([0xEF,0xBB,0xBF])
 
     let shadowBox:ShadowBox
@@ -22,14 +22,12 @@
         shadowBox.openComponent()
     }
 
-    function downloadCsv (event:MouseEvent|KeyboardEvent) {
-        //event.preventDefault();
+    function downloadCsv () {
         const blob = new Blob([BOM, goCsv($store.currentTimeline)], {type:"data:text/csv;charset=utf-8"});
         download(blob, ".csv") 
     }
 
-    function downloadToml (event:MouseEvent|KeyboardEvent) {
-        //event.preventDefault();
+    function downloadToml () {
         const blob = new Blob([BOM, goToml(timelineToObject($store.currentTimeline))], {type:"application/toml;charset=utf-8"})
         download(blob, ".toml") 
     }
@@ -46,7 +44,7 @@
     /**
      * https://svelte.dev/docs/svelte/use
      **/
-    const svelteAction: Action = (node) => {
+    const svelteAction: Action = () => {
         const formElement = document.getElementById('droppable') as HTMLElement
         if (formElement && isAdvancedUpload()) {
             formElement.classList.add('has-advanced-upload');
@@ -55,10 +53,10 @@
                     e.preventDefault();
                     e.stopPropagation();
                 }
-                let funcDragOver = function(e:Event) {
+                let funcDragOver = function() {
                     formElement.classList.add('is-dragover');
                 }
-                let funcDragLeave = function(e:Event) {
+                let funcDragLeave = function() {
                     formElement.classList.remove('is-dragover');
                 }
 

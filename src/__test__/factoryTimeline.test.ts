@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import {  describe, expect, it, vi } from 'vitest'
 
 import { FactoryTimeline } from "$lib/factoryTimeline"
 import { Struct } from "$lib/struct.class";
@@ -16,15 +16,15 @@ vi.spyOn(console, 'error').mockImplementation(() => {});
 
 describe('test FactoryTimeline.getMin', () => {
 
-    let timeline1 = new Struct.Timeline("key", "title")
-    let timeline2 = new Struct.Timeline("key", "title")
+    const timeline1 = new Struct.Timeline("key", "title")
+    const timeline2 = new Struct.Timeline("key", "title")
 
-    let date1: string = "2020-01-01"
-    let date2: string = "2021-12-31"
-    let date3: string = "2019-12-31"
-    let date4: string = "2021-02-15"
-    let date5: string = "2000-01-00"
-    let date6: string = "2018-02-15"
+    const date1: string = "2020-01-01"
+    const date2: string = "2021-12-31"
+    const date3: string = "2019-12-31"
+    const date4: string = "2021-02-15"
+    const date5: string = "2000-01-00"
+    const date6: string = "2018-02-15"
     
     timeline1.tasks.push(new Struct.Task(1,"label 1", date1, date4, true, 100, true, "Swimline 1", 5))
     timeline1.tasks.push(new Struct.Task(2,"label 2", date2, date1, true, 100, true, "Swimline 1", 5))
@@ -61,15 +61,15 @@ describe('test FactoryTimeline.getMin', () => {
 
 describe('test FactoryTimeline.getMax', () => {
 
-    let timeline1 = new Struct.Timeline("key", "title")
-    let timeline2 = new Struct.Timeline("key", "title")
+    const timeline1 = new Struct.Timeline("key", "title")
+    const timeline2 = new Struct.Timeline("key", "title")
 
-    let date1: string = "2020-01-01"
-    let date2: string = "2021-12-31"
-    let date3: string = "2019-12-31"
-    let date4: string = "2021-02-15"
-    let date5: string = "2000-01-00"
-    let date6: string = "2030-02-15"
+    const date1: string = "2020-01-01"
+    const date2: string = "2021-12-31"
+    const date3: string = "2019-12-31"
+    const date4: string = "2021-02-15"
+    const date5: string = "2000-01-00"
+    const date6: string = "2030-02-15"
     
     timeline1.tasks.push(new Struct.Task(1,"label 1", date1, date4, true, 100, true, "Swimline 1", 5))
     timeline1.tasks.push(new Struct.Task(2,"label 2", date6, date1, true, 100, true, "Swimline 1", 5))
@@ -105,9 +105,9 @@ describe('test FactoryTimeline.getMax', () => {
 })
 
 describe('test FactoryTimeline.addTask', () => {
-    let timeline = new Struct.Timeline("key", "title")
-    let date1: string = "2020-01-01"
-    let date2: string = "2021-12-31"
+    const timeline = new Struct.Timeline("key", "title")
+    const date1: string = "2020-01-01"
+    const date2: string = "2021-12-31"
 
     FactoryTimeline.addTask(timeline, new Struct.Task(1,"label 1", date1, date2, true, 100, true, "Swimline 1", 5))
     FactoryTimeline.addTask(timeline, new Struct.Task(2,"label 2", date1, date2, true, 100, true, "Swimline 1", 5))
@@ -126,8 +126,8 @@ describe('test FactoryTimeline.addTask', () => {
 })
 
 describe('test FactoryTimeline with duplicate creation', () => {
-    let timeline = new Struct.Timeline("key", "title")
-    let date1: string = "2020-01-01"
+    const timeline = new Struct.Timeline("key", "title")
+    const date1: string = "2020-01-01"
 
     FactoryTimeline.addMilestone(timeline, new Struct.Milestone(1,"label 1",date1, true))
     FactoryTimeline.addMilestone(timeline, new Struct.Milestone(2,"label 2",date1, true))
@@ -147,12 +147,12 @@ describe('test FactoryTimeline with duplicate creation', () => {
 
 
 describe('test FactoryTimeline.purge', () => {
-    let timeline = new Struct.Timeline("key", "title")
+    const timeline = new Struct.Timeline("key", "title")
     timeline.showAll = true
-    let timelinePurged = new Struct.Timeline("key", "title")
+    const timelinePurged = new Struct.Timeline("key", "title")
     timelinePurged.showAll = true
 
-    let date: string = "2020-01-01"
+    const date: string = "2020-01-01"
 
     timeline.tasks.push(new Struct.Task(1,"label 1", date, date, true, 100, true, "Swimline 1", 5))
     timeline.milestones.push(new Struct.Milestone(1,"label 1", date, true))
@@ -172,7 +172,7 @@ describe('test FactoryTimeline.purge', () => {
 })
 
 describe('test FactoryTimeline.refresh with differents dates', () => {
-    let timeline1 = new Struct.Timeline("key", "title")
+    const timeline1 = new Struct.Timeline("key", "title")
     timeline1.tasks.push(new Struct.Task(1,"label 1", "2020-01-01", "2020-01-31", true, 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline1)
@@ -181,7 +181,7 @@ describe('test FactoryTimeline.refresh with differents dates', () => {
         expect(timeline1.end).toEqual("2020-02-02")
     })
 
-    let timeline2 = new Struct.Timeline("key", "title")
+    const timeline2 = new Struct.Timeline("key", "title")
     timeline2.tasks.push(new Struct.Task(1,"label 1", "2020-01-15", "2020-03-01", true, 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline2)
@@ -190,7 +190,7 @@ describe('test FactoryTimeline.refresh with differents dates', () => {
         expect(timeline2.end).toEqual("2020-03-06")
     })
 
-    let timeline3a = new Struct.Timeline("key", "title")
+    const timeline3a = new Struct.Timeline("key", "title")
     timeline3a.tasks.push(new Struct.Task(1,"label 1", "2020-02-07", "2022-02-07", true, 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline3a)
@@ -199,7 +199,7 @@ describe('test FactoryTimeline.refresh with differents dates', () => {
         expect(timeline3a.end).toEqual("2022-03-01")
     })
     
-    let timeline3b = new Struct.Timeline("key", "title")
+    const timeline3b = new Struct.Timeline("key", "title")
     timeline3b.tasks.push(new Struct.Task(1,"label 1", "2020-02-17", "2022-02-17", true, 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline3b)
@@ -208,7 +208,7 @@ describe('test FactoryTimeline.refresh with differents dates', () => {
         expect(timeline3b.end).toEqual("2022-04-01")
     })
 
-    let timeline4 = new Struct.Timeline("key", "title")
+    const timeline4 = new Struct.Timeline("key", "title")
     timeline4.tasks.push(new Struct.Task(1,"label 1", "2020-01-15", "2040-02-01", true, 100, true, "Swimline 1", 5))
 
     FactoryTimeline.refresh(timeline4)
@@ -220,10 +220,10 @@ describe('test FactoryTimeline.refresh with differents dates', () => {
 
 describe('test FactoryTimeline.refresh with show/add & viewbox', () => {
 
-    let date1: string = "2020-01-01"
-    let taskVisible = new Struct.Task(1,"label 1", date1, date1, true, 100, true, "Swimline 1", 5)
-    let taskHidden = new Struct.Task(1,"label 1", date1, date1, true, 100, false, "Swimline 1", 5)
-    let timeline1 = new Struct.Timeline("key", "title")
+    const date1: string = "2020-01-01"
+    const taskVisible = new Struct.Task(1,"label 1", date1, date1, true, 100, true, "Swimline 1", 5)
+    const taskHidden = new Struct.Task(1,"label 1", date1, date1, true, 100, false, "Swimline 1", 5)
+    const timeline1 = new Struct.Timeline("key", "title")
     timeline1.showAll = false
     timeline1.tasks.push(taskVisible)
     timeline1.tasks.push(taskVisible)
@@ -241,7 +241,7 @@ describe('test FactoryTimeline.refresh with show/add & viewbox', () => {
         expect(timeline1.viewbox).toBe("0 0 1000 265")
     })
 
-    let timeline2 = new Struct.Timeline("key", "title")
+    const timeline2 = new Struct.Timeline("key", "title")
     timeline2.showAll = true
     FactoryTimeline.refresh(timeline2)
 
@@ -249,7 +249,7 @@ describe('test FactoryTimeline.refresh with show/add & viewbox', () => {
         expect(timeline2.viewbox).toBe("0 0 1000 115")
     })
 
-    let timeline3 = new Struct.Timeline("key", "title")
+    const timeline3 = new Struct.Timeline("key", "title")
     timeline3.showAll = true
     timeline3.tasks.push(taskVisible)
     timeline3.tasks.push(taskVisible)
@@ -264,14 +264,14 @@ describe('test FactoryTimeline.refresh with show/add & viewbox', () => {
 })
 
 describe('test FactoryTimeline.refresh with swimline', () => {
-    let timeline1 = new Struct.Timeline("key", "title")
-    let date1: string = "2020-01-01"
+    const timeline1 = new Struct.Timeline("key", "title")
+    const date1: string = "2020-01-01"
     timeline1.tasks.push(new Struct.Task(1,"label 1", date1, date1, true, 100, true, "Swimline 1", 0))
     timeline1.tasks.push(new Struct.Task(2,"label 2", date1, date1, true, 100, false, "Swimline 2", 0))
     timeline1.tasks.push(new Struct.Task(3,"label 3", date1, date1, true, 100, false, "Swimline 2", 0))
     timeline1.tasks.push(new Struct.Task(4,"label 4", date1, date1, true, 100, false, "Swimline 1", 0))
 
-    let timeline2 = new Struct.Timeline("key", "title")
+    const timeline2 = new Struct.Timeline("key", "title")
     timeline2.tasks.push(new Struct.Task(1,"label 1", date1, date1, true, 100, true, "", -1))
     timeline2.tasks.push(new Struct.Task(2,"label 2", date1, date1, true, 100, true, "", -1))
     timeline2.tasks.push(new Struct.Task(3,"label 3", date1, date1, true, 100, false, "", -1))

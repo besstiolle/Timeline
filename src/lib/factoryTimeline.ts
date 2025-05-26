@@ -161,8 +161,8 @@ export namespace FactoryTimeline {
     }
 
     function _processLimites(timeline : Struct.Timeline) : void{
-        let start = FactoryTimeline.getMin(timeline)
-        let end = FactoryTimeline.getMax(timeline)
+        const start = FactoryTimeline.getMin(timeline)
+        const end = FactoryTimeline.getMax(timeline)
 
         timeline.differencial = Helpers.getEstimationOfDiff(start, end)
 
@@ -216,8 +216,8 @@ export namespace FactoryTimeline {
     export function initiate(timeline : Struct.Timeline) : Struct.Timeline{
         if(browser){
             
-            let swim1Id = FactorySwimline.create(timeline,"Swimline1")
-            let swim2Id = FactorySwimline.create(timeline,"Swimline2")
+            const swim1Id = FactorySwimline.create(timeline,"Swimline1")
+            const swim2Id = FactorySwimline.create(timeline,"Swimline2")
 
             addTask(timeline, new Struct.Task(0, "Random Task 0", "2021-01-15", "2021-04-01", true, 100, true, "", -1))
             addTask(timeline, new Struct.Task(1, "Random Task 1", "2021-12-01", "2022-04-01", false, 0, true, "", -1))

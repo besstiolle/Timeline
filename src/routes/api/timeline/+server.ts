@@ -37,13 +37,14 @@ export const POST: RequestHandler = async (requestEvent: RequestEvent<Partial<Re
       }
       timelineFromParam = <Struct.Timeline> JSON.parse(rawData, JsonParser.timelineReviver)
   } catch (error){
+    console.error(error)
     return new INVALID_PAYLOAD_ProblemJsonResponse(instance)
   }
   
   const timelineHash = timelineFromParam.key
   let timelineOwnerKey:string|null = timelineFromParam.ownerKey
-  let timelinewriteKey:string|null = timelineFromParam.writeKey
-  let timelineReadKey:string|null = timelineFromParam.readKey
+  const timelinewriteKey:string|null = timelineFromParam.writeKey
+  const timelineReadKey:string|null = timelineFromParam.readKey
 
   if(timelineOwnerKey == undefined || timelineOwnerKey.trim() == ''){
     timelineOwnerKey = null
@@ -72,7 +73,7 @@ export const POST: RequestHandler = async (requestEvent: RequestEvent<Partial<Re
   }
 
   //Prepare a clone for insertion
-  let timelineForInsertion = structuredClone(timelineFromParam)
+  const timelineForInsertion = structuredClone(timelineFromParam)
 
   //We can retrive ownerKey from db if existing (case : a write push a Timeline)
   if(timelineFromDb !== undefined && timelineOwnerKey == null){
@@ -97,7 +98,7 @@ export const POST: RequestHandler = async (requestEvent: RequestEvent<Partial<Re
  * default OPTIONS method 
  * @returns a 204 Response
  */
-export const OPTIONS: RequestHandler = async (requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>) => {
+export const OPTIONS: RequestHandler = async () => {
   return _OPTIONS(['POST'])
 }
 /**

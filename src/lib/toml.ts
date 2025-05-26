@@ -10,7 +10,7 @@ export function timelineToObject(timeline: Struct.Timeline):object{
 }
 
 function purgeTasksToToml(tasks:Array<Struct.Task>){
-    let res:Object[] = []
+    const res:object[] = []
     tasks.forEach(task => {
         res.push({
             label: task.label,
@@ -25,7 +25,7 @@ function purgeTasksToToml(tasks:Array<Struct.Task>){
     return res
 }
 function purgeMilestoneToToml(milestones:Array<Struct.Milestone>){
-    let res:Object[] = []
+    const res:object[] = []
     milestones.forEach(milestone => {
         res.push({
             label: milestone.label,
@@ -62,15 +62,14 @@ function __goTomlObject(objectKey:string|null = null, o: object, previousKeys:st
         buffer += `[${previousKeys}${objectKey}]` + RC
     }
 
-    let anyValue:any
+    let anyValue:number|string|boolean|object
     Object.keys(o).map((key) => {
-        //Obviously, it's exist...
-        //@ts-ignore
+        // @ts-expect-error Obviously, it's exist... TODO : finding a better way to implement this part ?
         anyValue = o[key]
         type = getType(anyValue)
         switch (type){
             case TYPE.ARRAY: 
-                buffer += __goTomlArray(key, (<Array<any>>anyValue)) + RC
+                buffer += __goTomlArray(key, (<Array<number|string|boolean|object>>anyValue)) + RC
                 break
             case TYPE.NUMBER:  
                 buffer += __goTomlNumber(key, (<string>anyValue)) + RC
@@ -99,11 +98,11 @@ function __goTomlObject(objectKey:string|null = null, o: object, previousKeys:st
     return buffer + buffer2
 }
 
-function __goTomlArray(key: string, o: Array<any>):string{
+function __goTomlArray(key: string, o: Array<number|string|boolean|object>):string{
     let first = true
     let type = null
     let buffer = ''
-    o.forEach((item:any) =>{
+    o.forEach((item:number|string|boolean|object) =>{
         if(!first){
             buffer +=  ' , ' 
         }
@@ -115,13 +114,13 @@ function __goTomlArray(key: string, o: Array<any>):string{
                 buffer += item
                 break
             case TYPE.STRING:  
-                buffer += QUOTES + item.replace(REGEX_QUOTES, '\\"') + QUOTES
+                buffer += QUOTES + (item as string).replace(REGEX_QUOTES, '\\"') + QUOTES
                 break 
             case TYPE.DATE: 
-                buffer += QUOTES + new Date(item).toISOString() + QUOTES 
+                buffer += QUOTES + new Date(item as string).toISOString() + QUOTES 
                 break
             case TYPE.ARRAY:  
-                buffer += __goTomlArray('', <Array<any>>item)
+                buffer += __goTomlArray('', <Array<number|string|boolean|object>>item)
                 break 
             default:
                 console.error('type %o wasn\'t expected in a simple Array', type)
@@ -173,15 +172,15 @@ const TYPE = {
     NULL:'NULL'
 }
 
-function getType(o:any):string{
+function getType(o:number|string|boolean|object|Array<number|string|boolean|object>):string{
     if(o === null){
         return TYPE.NULL
-    } else if( Array.isArray(o) && (<Array<any>>o).length && getType(<Array<any>>o[0]) === TYPE.OBJECT){
+    } else if( Array.isArray(o) && (<Array<number|string|boolean|object>>o).length && getType(<Array<number|string|boolean|object>>o[0]) === TYPE.OBJECT){
         return TYPE.ARRAY_OF_OBJECTS
     } else if( Array.isArray(o)){
         return TYPE.ARRAY
     } else {
-        let type = typeof o
+        const type = typeof o
         switch (type){
             case "number":
                 return TYPE.NUMBER

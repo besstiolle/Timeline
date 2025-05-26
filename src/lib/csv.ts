@@ -22,9 +22,9 @@ export function parseCsv(csvContent:string):abstractTimelineInterface{
     let elmts : string[]
 
     //TODO add more controls
-    let abstractTasks:abstractTaskInterface[] = []
-    let abstractMilestones:abstractMilestoneInterface[] = []
-    let abstractTimeline:abstractTimelineInterface = {tasks:abstractTasks, milestones:abstractMilestones,title:'', version:''};
+    const abstractTasks:abstractTaskInterface[] = []
+    const abstractMilestones:abstractMilestoneInterface[] = []
+    const abstractTimeline:abstractTimelineInterface = {tasks:abstractTasks, milestones:abstractMilestones,title:'', version:''};
 
     csvContent.split(/\r?\n/).forEach((line: string) => {                    
         elmts = line.split(";")
@@ -60,7 +60,7 @@ export function parseCsv(csvContent:string):abstractTimelineInterface{
             }
         }
         if ("milestone" == elmts[0]) {
-            let abstractMilestone:abstractMilestoneInterface = {
+            const abstractMilestone:abstractMilestoneInterface = {
                 label:elmts[1],
                 isShow:(elmts[2] === "TRUE" || elmts[2] === "true"),
                 date:elmts[3],

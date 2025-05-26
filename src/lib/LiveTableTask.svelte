@@ -9,7 +9,7 @@ import { FactoryTask } from './factoryTask';
 	import { m } from '../paraglide/messages';
 
 const props = $props();
-const updateStore = props as Function
+const updateStore = props.updateStore as (prefix: string, position:number ) => void
 
 function updateProgression(position:number){
     let elm = document.getElementById(LIVE_PREFIX.PR + position) as HTMLInputElement
@@ -94,41 +94,41 @@ function b_add(){
 
 </script>
 
-{#each $store.currentTimeline.tasks as task, i}
+{#each $store.currentTimeline.tasks as task, index (index)}
 <div class="live__line show_{task.isShow}">
     <div class='live__input_top'>
-        <div class="live_cmd" onclick="{e =>{b_show(i)}}" onkeydown="{e =>{b_show(i)}}" title={m.live_task_editor_toggle()} role="button" tabindex="0">
+        <div class="live_cmd" onclick="{() => {b_show(index)}}" onkeydown="{() => {b_show(index)}}" title={m.live_task_editor_toggle()} role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_show"/>
             </svg>
         </div>
-        <div class="live_cmd" onclick="{e =>{b_up(i)}}" onkeydown="{e =>{b_up(i)}}" title={m.live_task_editor_down()} role="button" tabindex="0">
+        <div class="live_cmd" onclick="{() => {b_up(index)}}" onkeydown="{() => {b_up(index)}}" title={m.live_task_editor_down()} role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_up"/>
             </svg>
         </div>
-        <div class="live_cmd" onclick="{e =>{b_down(i)}}" onkeydown="{e =>{b_down(i)}}" title={m.live_task_editor_up()} role="button" tabindex="0">
+        <div class="live_cmd" onclick="{() => {b_down(index)}}" onkeydown="{() => {b_down(index)}}" title={m.live_task_editor_up()} role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_down"/>
             </svg>
         </div>
-        <div class="live_cmd" onclick="{e =>{b_duplicate(i)}}" onkeydown="{e =>{b_duplicate(i)}}" title={m.live_task_editor_clone()} role="button" tabindex="0">
+        <div class="live_cmd" onclick="{() => {b_duplicate(index)}}" onkeydown="{() => {b_duplicate(index)}}" title={m.live_task_editor_clone()} role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_duplicate"/>
             </svg>
         </div>
-        <div class="live_cmd live_cmd_red" onclick="{e =>{b_delete(i)}}" onkeydown="{e =>{b_delete(i)}}" title={m.live_task_editor_delete()} role="button" tabindex="0">
+        <div class="live_cmd live_cmd_red" onclick="{() => {b_delete(index)}}" onkeydown="{() => {b_delete(index)}}" title={m.live_task_editor_delete()} role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_delete"/>
             </svg>
         </div>
         <input type="text" bind:value="{task.label}" class="label"/>
-        <input type="date" id="{LIVE_PREFIX.TS}{i}" value="{task.dateStart}" min="1900-01-01" max="2999-12-31" onchange={() => updateStore(LIVE_PREFIX.TS, i)} onblur={() => updateStore(LIVE_PREFIX.TS, i)}>
-        <input type="date" id="{LIVE_PREFIX.TE}{i}" value="{task.dateEnd}" min="1900-01-01" max="2999-12-31" onchange={() => updateStore(LIVE_PREFIX.TE, i)} onblur={() => updateStore(LIVE_PREFIX.TE, i)}>
+        <input type="date" id="{LIVE_PREFIX.TS}{index}" value="{task.dateStart}" min="1900-01-01" max="2999-12-31" onchange={() => updateStore(LIVE_PREFIX.TS, index)} onblur={() => updateStore(LIVE_PREFIX.TS, index)}>
+        <input type="date" id="{LIVE_PREFIX.TE}{index}" value="{task.dateEnd}" min="1900-01-01" max="2999-12-31" onchange={() => updateStore(LIVE_PREFIX.TE, index)} onblur={() => updateStore(LIVE_PREFIX.TE, index)}>
         <input type="text" bind:value="{task.swimline}" class="label"/>
-        <input type="number" id="{LIVE_PREFIX.PR}{i}" value="{task.progress}" min="0" max="100" class="progress" onchange={() => updateProgression(i)} onblur={() => updateProgression(i)}/>
+        <input type="number" id="{LIVE_PREFIX.PR}{index}" value="{task.progress}" min="0" max="100" class="progress" onchange={() => updateProgression(index)} onblur={() => updateProgression(index)}/>
         <progress max="100" value="{task.progress}"> {task.progress}% </progress>
-        <label for="hasProgress{i}">{m.live_task_editor_show_progress()} : </label><input type="checkbox" bind:checked="{task.hasProgress}"  name="hasProgress{i}" id="hasProgress{i}" />
+        <label for="hasProgress{index}">{m.live_task_editor_show_progress()} : </label><input type="checkbox" bind:checked="{task.hasProgress}"  name="hasProgress{index}" id="hasProgress{index}" />
     </div>
 </div>
 {/each}

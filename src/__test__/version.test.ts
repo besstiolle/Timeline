@@ -1,6 +1,5 @@
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { Rights } from "$lib/rights.class";
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { toString, toVersion, versionCompare } from '../components/Version/Version';
 
 

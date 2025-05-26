@@ -57,7 +57,7 @@
         <nav><Version/></nav>
 
         <langs>
-            {#each locales as locale , index}
+            {#each locales as locale, index (index)}
                 {#if locale == currentLocale}
                     <button type="button" class='font-bold'>{locale}</button>{#if locales_ln !== index}|{/if}
                 {:else}

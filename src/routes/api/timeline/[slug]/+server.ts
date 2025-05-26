@@ -120,7 +120,7 @@ export const DELETE: RequestHandler = (requestEvent: RequestEvent<Partial<Record
   const responseAccessControl = accessControl(instance, timelineFromDb,ownerKey,null,null)
   if(responseAccessControl !== null){return responseAccessControl}
  
-  const info = deleteTimelineByKey(requestEvent.locals.db, slug)
+  deleteTimelineByKey(requestEvent.locals.db, slug)
 
   return json(undefined, { status: 204 });
 } 
@@ -130,7 +130,7 @@ export const DELETE: RequestHandler = (requestEvent: RequestEvent<Partial<Record
  * default OPTIONS method 
  * @returns a 204 Response
  */
-export const OPTIONS: RequestHandler = async (requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>) => {
+export const OPTIONS: RequestHandler = async () => {
   return _OPTIONS(['GET', 'DELETE'])
 }
 

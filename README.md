@@ -60,10 +60,11 @@ You can also ask for coverage
 npm run coverage
 ```
 
-Or checking for Svelte warning
+### Check code & linter
 
 ```bash
 npx sv check
+npx eslint
 ```
 
 ## Demo

@@ -16,8 +16,8 @@
 	import type { ResponseWithMeta } from "../../api/timeline/types";
 	import { m } from "../../../paraglide/messages";
 
-    // @ts-ignore
-    let toastComponent:Toast = null
+    
+    let toastComponent:Toast
 
     $store.rights = new Rights(page.url.searchParams)
 
@@ -33,14 +33,15 @@
     //TODO : displaying link & qrcode ?
     // https://medium.com/geekculture/few-ways-to-generate-qr-code-using-javascript-54b6b5220c4f
 
-
     const slug = page.params.slug
     if(!slug.match('^[a-zA-Z0-9]{64}$')){
         console.error(m.slug_toast_image_misconfigurated(), slug)
+        // @ts-expect-error will be initiate by Svelte
         if(browser && toastComponent != null){
             toastComponent.show(m.slug_toast_image_misconfigurated(), false, 0)
         }
     }
+    
     let currentTimeline: Struct.Timeline = CustomLocalStorage.getTimeline(slug)
 
     //If the local copie of Timeline has bigger rights than current url query parameter 

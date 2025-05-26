@@ -10,7 +10,7 @@ export namespace FactoryCards {
 	export function updateCardsWithTimeline(cards:Array<Struct.Card>, timeline:Struct.Timeline):void{
 		
 		//Retrive the index of the good card or -1 if it doesn't exist
-		let positionInCards:number|null = FactoryCards.getIndexByKey(cards, timeline.key)
+		const positionInCards:number|null = FactoryCards.getIndexByKey(cards, timeline.key)
 
 		//If it doesn't exist, we create it
 		if(positionInCards === null){

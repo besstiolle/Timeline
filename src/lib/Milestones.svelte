@@ -76,6 +76,7 @@
                 $store.currentTimeline.milestones = $store.currentTimeline.milestones 
             } catch (NotFoundException){
                 //Nothing to do, the rest of the function will clean everything
+                console.debug("catch a NotFoundExeption but everything is normal", NotFoundException)
             }
         }
 
@@ -134,15 +135,15 @@
 <svelte:window on:mouseup={up} on:mousemove="{move}"/>
 <rect id="milestonesSection" x="{GRID.MIDDLE_X}" y="0" width="{GRID.MIDDLE_WIDTH}" height="{GRID.MILESTONE_H}" 
     stroke-dasharray="0.5 2" fill="transparent" class:onhover={ghostSVGNode && hoverGroup && !$store.rights.isReader()} />
-{#each milestones as milestone, i}
+{#each milestones as milestone, index (index)}
     <svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
-        x="{GRID.MIDDLE_X + (milestone.getDate().getTime() - $store.currentTimeline.getStart().getTime()) / ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()) * GRID.MIDDLE_WIDTH - 10}" y="{i%2 * 25}" 
+        x="{GRID.MIDDLE_X + (milestone.getDate().getTime() - $store.currentTimeline.getStart().getTime()) / ($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime()) * GRID.MIDDLE_WIDTH - 10}" y="{index%2 * 25}" 
         class:milestoneSVGSection={!$store.rights.isReader()} class:shouldBeHidden={!milestone.isShow} on:mousedown={down} id="M{milestone.id}" 
         role="presentation">
         
         <use x="0" y="0" href="#mapfiller" class="fill-transparent stroke-transparent toExcludeFromSnapshot"/>
         <use x="0" y="0" href="#map" class="svgWithFiller primaryFill"/>
-        {#if i%2 == 0}
+        {#if index%2 == 0}
         <line stroke-dasharray="1" x1="10" y1="20" x2="10" y2="50" class="primaryStroke" />
         {:else}
         <line stroke-dasharray="1" x1="10" y1="20" x2="10" y2="25" class="primaryStroke" />

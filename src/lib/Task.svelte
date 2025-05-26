@@ -9,11 +9,11 @@
     const props = $props();
     const i = props.i as number
     const currentTask = props.currentTask as Struct.Task
-    const showActionBar = props.showActionBar as (event:Event) => {}
-    const hideActionBar = props.hideActionBar as (event:Event) => {}
-    const downLeft = props.downLeft as (event:Event) => {}
-    const downRight = props.downRight as (event:Event) => {}
-    const downProgress = props.downProgress as (event:Event) => {}
+    const showActionBar = props.showActionBar as (event:Event) => object
+    const hideActionBar = props.hideActionBar as (event:Event) => object
+    const downLeft = props.downLeft as (event:Event) => object
+    const downRight = props.downRight as (event:Event) => object
+    const downProgress = props.downProgress as (event:Event) => object
     
     
     const green = "#16A085";

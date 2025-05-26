@@ -51,7 +51,7 @@ import { FactoryCards } from './factoryCards';
         let ownerKey = $store.currentTimeline.ownerKey
         if(ownerKey == null) {ownerKey = ''}
         let seachParams = new URLSearchParams([['key', $store.currentTimeline.key], ['ownerKey', ownerKey]])
-        remove(seachParams).then((json) => {
+        remove(seachParams).then(() => {
 
             $store.currentTimeline.isOnline = false
             $store.currentTimeline.ownerKey = null

@@ -11,7 +11,7 @@ export namespace CustomLocalStorage{
      * @param key the key of mapping   
      * @param replacer the JSON replacer.
      */
-    export function save(key:string, value:any, replacer?: (this: any, key: string, value: any) => any): void {
+    export function save(key:string, value:string|Struct.Timeline|Array<Struct.Card>, replacer?: (this: string|Struct.Timeline|Array<Struct.Card>, key: string, value: string|Struct.Timeline|Array<Struct.Card>) => unknown): void {
         if(!browser){
             return
         }
@@ -20,15 +20,15 @@ export namespace CustomLocalStorage{
     }
 
     export function getCards() : Array<Struct.Card>{
-        return get(LOCAL_STORAGE.KEY_CARDS, JsonParser.cardsReviver)
+        return get(LOCAL_STORAGE.KEY_CARDS, JsonParser.cardsReviver) as Array<Struct.Card>
     }
 
     export function getTimeline(key:string):Struct.Timeline{
-        return get(key, JsonParser.timelineReviver)
+        return get(key, JsonParser.timelineReviver) as Struct.Timeline
     }
 
     export function getPicto(key:string):string{
-        return get(LOCAL_STORAGE.KEY_PICTO + key)
+        return get(LOCAL_STORAGE.KEY_PICTO + key) as string
     }
 
     
@@ -39,7 +39,7 @@ export namespace CustomLocalStorage{
      * @param reviver the JSON reviver
      * @returns the object.
      */
-    function get(key:string, reviver?: (this: any, key: string, value: any) => any): any{
+    function get(key:string, reviver?: (this: unknown, key: string, value: unknown) => unknown): string|Struct.Timeline|Array<Struct.Card>|null{
         if(!browser){
             return null
         }

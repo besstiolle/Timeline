@@ -82,7 +82,13 @@
 			toastComponent.show(m.landing_toast_remote_timeline_cant_be_deleted({title:timelineToDelete.title}),false, 5)
 			return
 		}
-		popUpComponent.show(m.landing_popup_confirmation_before_deletion_text(), doDelete , m.landing_popup_confirmation_before_deletion_continue(), [key], doNotDelete, m.landing_popup_confirmation_before_deletion_cancel(), [])
+		popUpComponent.show(m.landing_popup_confirmation_before_deletion_text(), 
+							doDelete , 
+							m.landing_popup_confirmation_before_deletion_continue(), 
+							[key], 
+							doNotDelete, 
+							m.landing_popup_confirmation_before_deletion_cancel(), 
+							[])
 		
 	}
 
@@ -91,8 +97,9 @@
 	 *  Nothing will happen
 	 * @param args
 	 */
-	function doNotDelete(args:any[]){
+	function doNotDelete(args:string[]):void{
 		//Nothing more to do
+		console.debug("args : ", args)
 	}
 
 	/**
@@ -102,7 +109,7 @@
 	 *  The picto will be deleted
 	 * @param args
 	 */
-	function doDelete(args:any[]):void{
+	function doDelete(args:string[]):void{
 		let key=args[0]
 
 		let timelineToDelete: Struct.Timeline = CustomLocalStorage.getTimeline(key)
@@ -150,7 +157,7 @@
 </script>
 
 <div class="w-6xl m-auto mt-10 flex flex-wrap">
-	{#key $store.cards}{#each $store.cards as card, index}
+	{#key $store.cards}{#each $store.cards as card, index (index)}
 	
 	<!-- One card-->
 	<div class="basis-1/3">

@@ -58,7 +58,7 @@ export namespace Helpers {
         }
 
         //Ceil value of x to avoid miscalculation
-        let date = new Date(((Math.ceil(x)  - GRID.MIDDLE_X) * (dmax.getTime() - dmin.getTime()) / GRID.MIDDLE_WIDTH) + dmin.getTime())
+        const date = new Date(((Math.ceil(x)  - GRID.MIDDLE_X) * (dmax.getTime() - dmin.getTime()) / GRID.MIDDLE_WIDTH) + dmin.getTime())
         //Remove hours & co for the same reason
         //date.setHours(0, 0, 0, 0)
         return date
@@ -72,7 +72,7 @@ export namespace Helpers {
      * @returns the x value equivalent
      **/
     export function getViewportXFromDate(date: Date, dmin: Date, dmax: Date) : number{
-        let x = ((date.getTime() - dmin.getTime())  * GRID.MIDDLE_WIDTH / (dmax.getTime() - dmin.getTime()))
+        const x = ((date.getTime() - dmin.getTime())  * GRID.MIDDLE_WIDTH / (dmax.getTime() - dmin.getTime()))
                 + GRID.MIDDLE_X
         
         //Ceil value of x to avoid miscalculation
@@ -100,10 +100,10 @@ export namespace Helpers {
      * @param args a simple list of parameters
      * @returns a string formated like the unix printf
      */
-    export function printf(str:string, args:any[]) {
+    export function printf(str:string, args:(string|number)[]) {
         return str.replace(/{(\d+)}/g, function(match, number) { 
             return typeof args[number] != 'undefined'
-                ? args[number]
+                ? args[number] as string
                 : match
         })
     }

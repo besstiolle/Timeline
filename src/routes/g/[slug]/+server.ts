@@ -1,10 +1,8 @@
 
-import { json, type RequestEvent, type RequestHandler } from '@sveltejs/kit';
+import { json, type RequestHandler } from '@sveltejs/kit';
 import { _FALLBACK, _OPTIONS } from '$lib/api/apiUtils';
 import type { ResponseWithMeta } from '../../api/timeline/types';
 
-
-const ALPHANUM64 = new RegExp("^[A-Z0-9a-z]{64}$");
 
 /**
  * POST /g/[slug]
@@ -14,7 +12,7 @@ const ALPHANUM64 = new RegExp("^[A-Z0-9a-z]{64}$");
  *  a 400 Response if there is a malformed body
  *  a 401 Response if security keys don't match
  */
-export const POST: RequestHandler = async (requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>) => {
+export const POST: RequestHandler = async () => {
 
   
   //Prepare the standard response with data & meta
@@ -32,7 +30,7 @@ export const POST: RequestHandler = async (requestEvent: RequestEvent<Partial<Re
  * default OPTIONS method 
  * @returns a 204 Response
  */
-export const OPTIONS: RequestHandler = async (requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>) => {
+export const OPTIONS: RequestHandler = async () => {
   return _OPTIONS(['POST'])
 }
 /**

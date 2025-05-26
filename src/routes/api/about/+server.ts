@@ -1,6 +1,6 @@
 
 
-import { json, type RequestEvent, type RequestHandler } from '@sveltejs/kit';
+import { json, type RequestHandler } from '@sveltejs/kit';
 import pkg from './../../../../package.json' with { type: 'json' };
 import { _FALLBACK, _OPTIONS } from '$lib/api/apiUtils';
 import type { ResponseWithMeta } from '../timeline/types';
@@ -11,7 +11,7 @@ import type { ResponseWithMeta } from '../timeline/types';
  * @returns 
  *  a 200 Response with the information about this instance of TimeChart
  */
-export const GET: RequestHandler = (requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>) => {
+export const GET: RequestHandler = () => {
 
   const objToReturn = {
     "version" : pkg.version
@@ -33,7 +33,7 @@ export const GET: RequestHandler = (requestEvent: RequestEvent<Partial<Record<st
  * default OPTIONS method 
  * @returns a 204 Response
  */
-export const OPTIONS: RequestHandler = async (requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>) => {
+export const OPTIONS: RequestHandler = async () => {
   return _OPTIONS(['GET'])
 }
 /**

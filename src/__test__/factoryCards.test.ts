@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { FactoryCards } from "$lib/factoryCards"
 import { Struct } from "$lib/struct.class";
@@ -14,13 +14,13 @@ describe('test factoryCards', () => {
 
     it('FactoryCards.updateCardsWithTimeline with an existing key', () => {
 
-        let cards = new Array<Struct.Card>()
+        const cards = new Array<Struct.Card>()
         cards.push(new Struct.Card("key1", "title1"))
         cards.push(new Struct.Card("key2", "title2"))
         cards.push(new Struct.Card("key3", "title3"))
 
 
-        let timeline:Struct.Timeline = new Struct.Timeline("key2","new title2")
+        const timeline:Struct.Timeline = new Struct.Timeline("key2","new title2")
 
         FactoryCards.updateCardsWithTimeline(cards, timeline)
         
@@ -31,13 +31,13 @@ describe('test factoryCards', () => {
 
     it('FactoryCards.updateCardsWithTimeline with an new key', () => {
 
-        let cards = new Array<Struct.Card>()
+        const cards = new Array<Struct.Card>()
         cards.push(new Struct.Card("key1", "title1"))
         cards.push(new Struct.Card("key2", "title2"))
         cards.push(new Struct.Card("key3", "title3"))
 
 
-        let timeline:Struct.Timeline = new Struct.Timeline("key4","new title4")
+        const timeline:Struct.Timeline = new Struct.Timeline("key4","new title4")
 
         FactoryCards.updateCardsWithTimeline(cards, timeline)
 
@@ -50,7 +50,7 @@ describe('test factoryCards', () => {
 
     it('FactoryCards.getIndexByKey with various parameters', () => {
 
-        let cards = new Array<Struct.Card>()
+        const cards = new Array<Struct.Card>()
         cards.push(new Struct.Card("key1", "title1"))
         cards.push(new Struct.Card("key2", "title2"))
         cards.push(new Struct.Card("key3", "title3"))
@@ -63,7 +63,7 @@ describe('test factoryCards', () => {
     it('FactoryCards.getFirstIndexByTitle with various parameters', () => {
 
         
-        let cards1 = new Array<Struct.Card>()
+        const cards1 = new Array<Struct.Card>()
         cards1.push(new Struct.Card("key1", "title1"))
         cards1.push(new Struct.Card("key2", "title2"))
         cards1.push(new Struct.Card("key3", "title3"))

@@ -4,7 +4,7 @@ import type { ResponseWithMeta } from "../../routes/api/timeline/types";
 
 
 
-const REGEX_SEMVER = new RegExp('^[vV]?([0-9])+\.([0-9])+\.([0-9])+$', "");
+const REGEX_SEMVER = new RegExp('^[vV]?([0-9])+.([0-9])+.([0-9])+$', "");
 
 export async function getDistantVersion(): Promise<GitVersions> {
     const url = "https://raw.githubusercontent.com/besstiolle/Timeline/refs/heads/main/version.json"
