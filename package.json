@@ -1,5 +1,5 @@
 {
-  "name": "timeline-charts",
+  "name": "timechart",
   "version": "0.3.0",
   "scripts": {
     "dev": "vite dev",

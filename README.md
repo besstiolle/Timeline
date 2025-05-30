@@ -1,7 +1,7 @@
 # Timeline
 A free and public tool to organise your timeline charts entirely made with [Svelte](https://svelte.dev/), [Typescript](https://www.typescriptlang.org/) & 💖.
 
-Take a look on [our website](https://timeline-chart.dev/) and give your feedback [here](https://github.com/besstiolle/Timeline/issues).
+Take a look on [our demo](https://timechart.dev/) and give your feedback [here](https://github.com/besstiolle/Timeline/issues).
 
 ## Roadmap
 
@@ -69,7 +69,7 @@ npx eslint
 
 ## Demo
 
-If you'd like to try out TimeChart, or if you don't have the knowledge (or inclination) to host the application yourself, we suggest you use the official [TimeChart](https://timeline-chart.dev/) server.
+If you'd like to try out TimeChart, or if you don't have the knowledge (or inclination) to host the application yourself, we suggest you use the official [TimeChart](https://timechart.dev/) server.
 
 Advantages :
 
@@ -80,14 +80,6 @@ Keep in mind that the data you enter are stored with me.
 
 
 ## Installation
-
-If you'd like to try out TimeChart, or if you don't have the knowledge (or inclination) to host the application yourself, we suggest you use the official [TimeChart] server (https://timeline-chart.dev/).
-
-Advantages: 
- * ✅ Free (as long as I can pay the bills)
- * ✅ You don't have to worry about maintenance (version upgrades, server support, backup).
-
-Keep in mind that the data you enter is stored with me.
 
 ### Docker Compose [Recommended]
 
@@ -118,9 +110,30 @@ If you wish to download the files via your web browser, remember to rename examp
 
 # The location where your database is stored
 DB_LOCATION=/your/own/directory/to/db
+
+# The data-website-id code from umami
+#TIMECHART_ANALYTICS_UMAMI_CODE=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+#TIMECHART_ANALYTICS_UMAMI_SCRIPT=https://cloud.umami.is/script.js
+
+# The data-domain code from plausible
+#TIMECHART_ANALYTICS_PLAUSIBLE_CODE=timechart.dev
+#TIMECHART_ANALYTICS_PLAUSIBLE_SCRIPT=https://plausible.io/js/script.js
+
+# Do we need to show the version of the install 
+TIMECHART_SHOW_VERSION=TRUE
 ```
 
-Fill in the **`DB_LOCATION`** value with the location of your future database. Now think about how you're going to save it.
+#### Explanations of environmental variables
+
+| KEY         | Value         | Explanations                      |
+| :----------- | :-------------- | ------------------------- |
+| DB_LOCATION | /your/own/directory/to/db | The directory containing the database. By default, the docker configuration relies on the use of docker volumes to enable you to back up your database efficiently from the host machine. You can choose another method if you feel comfortable enough with this paradigm.  |
+| TIMECHART_ANALYTICS_UMAMI_CODE    | string   | The data-website-id code from umami. [More informations here](https://umami.is/)|
+| TIMECHART_ANALYTICS_UMAMI_SCRIPT    | https://cloud.umami.is/script.js   | The umami script url. [More informations here](https://umami.is/)|
+| TIMECHART_ANALYTICS_PLAUSIBLE_CODE    | string   | The data-domain code from plausible. [More informations here](https://plausible.io) 🇪🇺|
+| TIMECHART_ANALYTICS_PLAUSIBLE_SCRIPT    | https://plausible.io/js/script.js   | The plausible script url. [More informations here](https://plausible.io) 🇪🇺|
+| TIMECHART_SHOW_VERSION    | boolean   | Display the installed version and provide a visual notification when an update is available|
+
 
 #### Step 3: Start the container.
 

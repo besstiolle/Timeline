@@ -7,3 +7,10 @@ services:
     restart: unless-stopped
     volumes:
       - ${DB_LOCATION}:/app/db
+    # Find out more about Timechart's environment variables here: https://github.com/besstiolle/Timeline/?tab=readme-ov-file#
+    environment:
+      #- ANALYTICS_UMAMI_CODE=${TIMECHART_ANALYTICS_UMAMI_CODE}
+      #- ANALYTICS_UMAMI_SCRIPT=${TIMECHART_ANALYTICS_UMAMI_SCRIPT|https://cloud.umami.is/script.js}
+      #- ANALYTICS_PLAUSIBLE_CODE=${TIMECHART_ANALYTICS_PLAUSIBLE_CODE}
+      #- ANALYTICS_PLAUSIBLE_SCRIPT=${TIMECHART_ANALYTICS_PLAUSIBLE_SCRIPT|https://plausible.io/js/script.js}
+      - SHOW_VERSION=${TIMECHART_SHOW_VERSION|TRUE}
