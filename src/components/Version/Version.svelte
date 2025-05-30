@@ -4,7 +4,8 @@
 	import { getCurrentVersion, getDistantVersion, toString, toVersion, versionCompare } from "./Version";
 	import ShadowBox from "$lib/ShadowBox.svelte";
 	import { m } from "../../paraglide/messages";
-	import { PUBLIC_SHOW_VERSION } from "$env/static/public";
+	import { page } from "$app/state";
+    
 
     let shadowBox:ShadowBox
 
@@ -16,9 +17,14 @@
     let hasFix:boolean = false
     let className = ''
 
-    const showVersion = PUBLIC_SHOW_VERSION.toLowerCase() === 'true'
+
+    const showVersion = (page.data.SHOW_VERSION !== undefined && page.data.SHOW_VERSION.toLowerCase() === 'true')
     
     const myaction: Action = () => {
+
+        if(!showVersion){
+            return
+        }
 
         const promiseLocalVersion = getCurrentVersion()
         const promiseDistantVersion = getDistantVersion()

@@ -1,9 +1,12 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import ScriptLoader from './ScriptLoader.svelte';
-	import { PUBLIC_ANALYTICS_PLAUSIBLE_CODE } from '$env/static/public';
-	import { PUBLIC_ANALYTICS_PLAUSIBLE_SCRIPT } from '$env/static/public';
+
+	const code = page.data.ANALYTICS_PLAUSIBLE_CODE !== undefined ? page.data.ANALYTICS_PLAUSIBLE_CODE : ''
+	const script = page.data.ANALYTICS_PLAUSIBLE_SCRIPT !== undefined ? page.data.ANALYTICS_PLAUSIBLE_SCRIPT : ''
+
 </script>
 
-{#if PUBLIC_ANALYTICS_PLAUSIBLE_CODE !== '' && PUBLIC_ANALYTICS_PLAUSIBLE_SCRIPT !== ''}
-  <ScriptLoader src={PUBLIC_ANALYTICS_PLAUSIBLE_SCRIPT} attributes={{"data-domain":PUBLIC_ANALYTICS_PLAUSIBLE_CODE}} />
+{#if script !== '' && code !== ''}
+  <ScriptLoader src={script} attributes={{"data-domain":code}} />
 {/if}

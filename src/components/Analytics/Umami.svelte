@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import ScriptLoader from './ScriptLoader.svelte';
-	import { PUBLIC_ANALYTICS_UMAMI_CODE } from '$env/static/public';
-	import { PUBLIC_ANALYTICS_UMAMI_SCRIPT } from '$env/static/public';
+
+	const code = page.data.ANALYTICS_UMAMI_CODE !== undefined ? page.data.ANALYTICS_UMAMI_CODE : ''
+	const script = page.data.ANALYTICS_UMAMI_SCRIPT !== undefined ? page.data.ANALYTICS_UMAMI_SCRIPT : ''
 </script>
 
-{#if PUBLIC_ANALYTICS_UMAMI_CODE !== '' && PUBLIC_ANALYTICS_UMAMI_SCRIPT !== ''}
-  <ScriptLoader src={PUBLIC_ANALYTICS_UMAMI_SCRIPT} attributes={{"data-website-id":PUBLIC_ANALYTICS_UMAMI_CODE}} />
+{#if script !== '' && code !== ''}
+  <ScriptLoader src={script} attributes={{"data-website-id":code}} />
 {/if}

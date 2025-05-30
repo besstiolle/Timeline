@@ -1,4 +1,6 @@
-<script lang="ts">	
+<script lang="ts">
+	import { page } from "$app/state";
+
     
 </script>
 
@@ -6,6 +8,12 @@
 	<title>Test Image</title>
 </svelte:head>
 <div>
+
+	<p>ANALYTICS_UMAMI_CODE : {page.data.ANALYTICS_UMAMI_CODE}</p>
+	<p>ANALYTICS_UMAMI_CODE : {page.data.ANALYTICS_UMAMI_SCRIPT}</p>
+	<p>ANALYTICS_PLAUSIBLE_CODE : {page.data.ANALYTICS_PLAUSIBLE_CODE}</p>
+	<p>ANALYTICS_PLAUSIBLE_SCRIPT : {page.data.ANALYTICS_PLAUSIBLE_SCRIPT}</p>
+	<p>SHOW_VERSION : {page.data.SHOW_VERSION}</p>
 
     <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="presentation">
 		
