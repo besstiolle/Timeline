@@ -132,7 +132,7 @@ TIMECHART_SHOW_VERSION=TRUE
 | TIMECHART_ANALYTICS_UMAMI_SCRIPT    | https://cloud.umami.is/script.js   | The umami script url. [More informations here](https://umami.is/)|
 | TIMECHART_ANALYTICS_PLAUSIBLE_CODE    | string   | The data-domain code from plausible. [More informations here](https://plausible.io) 🇪🇺|
 | TIMECHART_ANALYTICS_PLAUSIBLE_SCRIPT    | https://plausible.io/js/script.js   | The plausible script url. [More informations here](https://plausible.io) 🇪🇺|
-| TIMECHART_SHOW_VERSION    | boolean   | Display the installed version and provide a visual notification when an update is available|
+| TIMECHART_SHOW_VERSION    | boolean (default = TRUE)   | Display the installed version and provide a visual notification when an update is available|
 
 
 #### Step 3: Start the container.
@@ -153,6 +153,8 @@ docker run \
   --rm --name timechart_latest \
   -p 3000:3000 \
   -v /your/own/directory/to/db:/app/db \
+  -e TIMECHART_ANALYTICS_UMAMI_CODE=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa \
+  -e TIMECHART_SHOW_VERSION=TRUE \
   besstiolle/timechart:latest
 ```
 
@@ -161,6 +163,7 @@ Explanations:
  * **`--rm --name timechart_latest`** *Optional* : sets a clear name for the container and deletes it once the container has been switched off. (No data loss is expected if you use the option `-v /your/own/directory/to/db:/app/db`)
  * **`-p 3000:3000`** *Optional* : Used to expose port 3000. You can configure to expose another port. For example, exposing port 8080 would give: `-p 8080:3000`
  * **`-v /your/own/directory/to/db:/app/db`** : Defines the location of your database on the host disk.
+ * **`-e VAR_NAME=VAR_VALUE`** : Used to initialise the value of an environment variable. Please refer to the dedicated explanation table.
 
 ## Translation
 
