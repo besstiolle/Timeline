@@ -4,11 +4,11 @@
 	import { FactoryCards } from "$lib/factoryCards";
 	import { FactoryPicto } from "$lib/factoryPicto";
 	import { Helpers } from "$lib/helpers";
-	import { Struct } from "$lib/struct.class";
 	import { m } from "../paraglide/messages";
 	import { store } from "$lib/stores";
 	import PopUpConfirmation from "$lib/PopUpConfirmation.svelte";
 	import Toast from "$lib/Toast.svelte";
+	import { Card, Timeline } from "$lib/struct.class";
 	
 	let popUpComponent:PopUpConfirmation
 	let toastComponent:Toast
@@ -38,7 +38,7 @@
 	 */
 	function duplicate(event:Event, key:string):void {
 		event.stopPropagation();
-		let clone:Struct.Timeline = structuredClone(CustomLocalStorage.getTimeline(key))
+		let clone:Timeline = structuredClone(CustomLocalStorage.getTimeline(key))
 		clone.ownerKey=null
 		clone.writeKey=null
 		clone.readKey=null
@@ -46,11 +46,11 @@
 		clone.title = generateTitle(clone['title'])
 		clone.key = Helpers.randomeString(64)
 
-		let newCard = new Struct.Card(clone['key'], clone['title'])
+		let newCard = new Card(clone['key'], clone['title'])
 		$store.cards.push(newCard)
 		CustomLocalStorage.save(clone['key'], clone)
 		//refresh store
-		$store.currentTimeline=new Struct.Timeline('','')
+		$store.currentTimeline=new Timeline('','')
 	}
 
 	/**
@@ -76,13 +76,19 @@
 	 */
 	function askDelete(event:Event, key:string):void{
 		event.stopPropagation();
-		let timelineToDelete: Struct.Timeline = CustomLocalStorage.getTimeline(key)
+		let timelineToDelete: Timeline = CustomLocalStorage.getTimeline(key)
 		if(timelineToDelete && timelineToDelete.isOnline){
 			console.warn(m.landing_toast_remote_timeline_cant_be_deleted({title:timelineToDelete.title}))
 			toastComponent.show(m.landing_toast_remote_timeline_cant_be_deleted({title:timelineToDelete.title}),false, 5)
 			return
 		}
-		popUpComponent.show(m.landing_popup_confirmation_before_deletion_text(), doDelete , m.landing_popup_confirmation_before_deletion_continue(), [key], doNotDelete, m.landing_popup_confirmation_before_deletion_cancel(), [])
+		popUpComponent.show(m.landing_popup_confirmation_before_deletion_text(), 
+							doDelete , 
+							m.landing_popup_confirmation_before_deletion_continue(), 
+							[key], 
+							doNotDelete, 
+							m.landing_popup_confirmation_before_deletion_cancel(), 
+							[])
 		
 	}
 
@@ -91,8 +97,9 @@
 	 *  Nothing will happen
 	 * @param args
 	 */
-	function doNotDelete(args:any[]){
+	function doNotDelete(args:string[]):void{
 		//Nothing more to do
+		console.debug("args : ", args)
 	}
 
 	/**
@@ -102,10 +109,10 @@
 	 *  The picto will be deleted
 	 * @param args
 	 */
-	function doDelete(args:any[]):void{
+	function doDelete(args:string[]):void{
 		let key=args[0]
 
-		let timelineToDelete: Struct.Timeline = CustomLocalStorage.getTimeline(key)
+		let timelineToDelete: Timeline = CustomLocalStorage.getTimeline(key)
 		if(timelineToDelete && timelineToDelete.isOnline){
 			console.warn(`this chart "${timelineToDelete.title}" is online and can't be deleted`)
 			toastComponent.show(`this chart "${timelineToDelete.title}" is online and can't be deleted`,false, 5)
@@ -119,7 +126,7 @@
 		
 		CustomLocalStorage.remove(LOCAL_STORAGE.KEY_PICTO + key)
 		//refresh store
-		$store.currentTimeline=new Struct.Timeline('','')
+		$store.currentTimeline=new Timeline('','')
 	}
 
 
@@ -150,12 +157,12 @@
 </script>
 
 <div class="w-6xl m-auto mt-10 flex flex-wrap">
-	{#key $store.cards}{#each $store.cards as card, index}
+	{#key $store.cards}{#each $store.cards as card, index (index)}
 	
 	<!-- One card-->
 	<div class="basis-1/3">
 		<div class="max-w-95/100 m-auto mt-5 flex shadow-xl/30 bg-blue-100 dark:bg-slate-800 cursor-pointer" 
-				on:click={() => goto(null, card.key)} on:keydown={() => goto(null, card.key)} role="button" tabindex="0">
+				onclick={() => goto(null, card.key)} onkeydown={() => goto(null, card.key)} role="button" tabindex="0">
 			
 			<div class="flex-1/3 p-2">
 				<div class="h-20 bg-no-repeat bg-center" 
@@ -168,7 +175,7 @@
 					
 					<!-- Contextual menu-->
 					<div id="menu-toggle-{index}" class='float-right relative' 
-							on:keydown={(event)=>{show(event, index)}} on:click={(event)=>{show(event, index)}} on:mouseleave={hide} role="button" tabindex=0>
+							onkeydown={(event)=>{show(event, index)}} onclick={(event)=>{show(event, index)}} onmouseleave={hide} role="button" tabindex=0>
 						<svg viewBox="0 0 32 32" class='size-6 fill-gray-800 dark:fill-blue-50'><use x="0" y="0" href="#ico_menu"/></svg>
 						
 						<div id="menu-{index}" class="menus hidden absolute -top-5 w-50 z-10 bg-blue-100 dark:bg-slate-800 shadow-xl/30">
@@ -178,7 +185,7 @@
 										hover:text-shadow-lg  hover:text-shadow-white
 										dark:hover:text-shadow-lg  dark:hover:text-shadow-slate-700
 										"
-										on:click={(event) => duplicate(event, card.key)} on:keydown={(event) => duplicate(event, card.key)} role="button" tabindex="0" >
+										onclick={(event) => duplicate(event, card.key)} onkeydown={(event) => duplicate(event, card.key)} role="button" tabindex="0" >
 								<svg viewBox="0 0 32 32" class='float-left size-6 fill-gray-800 dark:fill-blue-50'><use x="5" y="8" href="#b_duplicate"/></svg>
 								{m.landing_action_duplicate()}
 							</div>
@@ -189,7 +196,7 @@
 										hover:text-shadow-lg  hover:text-shadow-white
 										dark:hover:text-shadow-lg  dark:hover:text-shadow-slate-700
 										"
-										on:click={(event) => askDelete(event, card.key)} on:keydown={(event) => askDelete(event, card.key)} role="button" tabindex="0">
+										onclick={(event) => askDelete(event, card.key)} onkeydown={(event) => askDelete(event, card.key)} role="button" tabindex="0">
 								<svg viewBox="0 0 40 40" class='float-left size-6 fill-gray-800 dark:fill-blue-50'><use x="5" y="8" href="#ico_delete"/></svg>
 								{m.landing_action_delete()}
 							</div>

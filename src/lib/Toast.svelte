@@ -1,10 +1,11 @@
 <script lang="ts">
 
-    let timeout:any
+    let timeout:NodeJS.Timeout | string | number | undefined
     let toast:HTMLElement
+    let content:string = ''
 
 
-    export function show(content: string, success:boolean = true, timer:number = 3) {
+    export function show(newContent: string, success:boolean = true, timer:number = 3) {
         clearTimeout(timeout)
         
         if(success){
@@ -12,7 +13,7 @@
         } else {
             toast.classList.add("error")
         }
-        toast.innerHTML = content
+        content = newContent
         if(timer > 0){
             toast.classList.add("show")
             timeout = setTimeout(function(){ hide() }, timer * 1000)
@@ -27,12 +28,12 @@
         toast.classList.remove("showAndPersist")
         toast.classList.remove("success")
         toast.classList.remove("error")
-        toast.innerHTML = 'N/A'
+        content = 'N/A'
     }
 
 </script>
 
-<div bind:this={toast} on:click={hide} on:keydown={hide} role="button" tabindex="0"></div>
+<div bind:this={toast} onclick={hide} onkeydown={hide} role="button" tabindex="0">{content}</div>
 
 <style>
 

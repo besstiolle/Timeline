@@ -1,31 +1,31 @@
 import { writable } from 'svelte/store'
-import { Struct } from './struct.class';
 
 import { CustomLocalStorage } from './customLocalStorage';
 import { FactoryCards } from './factoryCards';
 import { FactoryTimeline } from './factoryTimeline';
 import { LOCAL_STORAGE } from './constantes';
 import { Rights } from './rights.class';
+import { Timeline, TimelineStore, type Card } from './struct.class';
 
 
 
 let cards = CustomLocalStorage.getCards()
 if(!cards){
-    cards = new Array<Struct.Card>()
+    cards = new Array<Card>()
 }
-let timeline = new Struct.Timeline()
-let rights = new Rights(null)
+const timeline = new Timeline()
+const rights = new Rights(null)
 
-let timelineStore = new Struct.TimelineStore(cards, timeline, rights)
+const timelineStore = new TimelineStore(cards, timeline, rights)
 export const store = writable(timelineStore);
 
 store.subscribe(val => updateLocalStorage(val))
 
 
-function updateLocalStorage(timelineStore: Struct.TimelineStore){
+function updateLocalStorage(timelineStore: TimelineStore){
     //console.info("updateLocalStorage(val) with key %o", (timelineStore&&timelineStore.currentTimeline&&timelineStore.currentTimeline.key)?timelineStore.currentTimeline.key:"N/A")
-    let currentTimeline = timelineStore.currentTimeline
-    let cards = timelineStore.cards
+    const currentTimeline = timelineStore.currentTimeline
+    const cards = timelineStore.cards
     if(!timelineStore._cancelRefreshLastUpdatedLocally){
         timelineStore.lastUpdatedLocally = new Date().getTime()
     } else {

@@ -1,7 +1,7 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { FactoryCards } from "$lib/factoryCards"
-import { Struct } from "$lib/struct.class";
+import { Card, Timeline } from '$lib/struct.class'
 
 
 describe('test factoryCards', () => {
@@ -14,13 +14,13 @@ describe('test factoryCards', () => {
 
     it('FactoryCards.updateCardsWithTimeline with an existing key', () => {
 
-        let cards = new Array<Struct.Card>()
-        cards.push(new Struct.Card("key1", "title1"))
-        cards.push(new Struct.Card("key2", "title2"))
-        cards.push(new Struct.Card("key3", "title3"))
+        const cards = new Array<Card>()
+        cards.push(new Card("key1", "title1"))
+        cards.push(new Card("key2", "title2"))
+        cards.push(new Card("key3", "title3"))
 
 
-        let timeline:Struct.Timeline = new Struct.Timeline("key2","new title2")
+        const timeline:Timeline = new Timeline("key2","new title2")
 
         FactoryCards.updateCardsWithTimeline(cards, timeline)
         
@@ -31,13 +31,13 @@ describe('test factoryCards', () => {
 
     it('FactoryCards.updateCardsWithTimeline with an new key', () => {
 
-        let cards = new Array<Struct.Card>()
-        cards.push(new Struct.Card("key1", "title1"))
-        cards.push(new Struct.Card("key2", "title2"))
-        cards.push(new Struct.Card("key3", "title3"))
+        const cards = new Array<Card>()
+        cards.push(new Card("key1", "title1"))
+        cards.push(new Card("key2", "title2"))
+        cards.push(new Card("key3", "title3"))
 
 
-        let timeline:Struct.Timeline = new Struct.Timeline("key4","new title4")
+        const timeline:Timeline = new Timeline("key4","new title4")
 
         FactoryCards.updateCardsWithTimeline(cards, timeline)
 
@@ -50,10 +50,10 @@ describe('test factoryCards', () => {
 
     it('FactoryCards.getIndexByKey with various parameters', () => {
 
-        let cards = new Array<Struct.Card>()
-        cards.push(new Struct.Card("key1", "title1"))
-        cards.push(new Struct.Card("key2", "title2"))
-        cards.push(new Struct.Card("key3", "title3"))
+        const cards = new Array<Card>()
+        cards.push(new Card("key1", "title1"))
+        cards.push(new Card("key2", "title2"))
+        cards.push(new Card("key3", "title3"))
 
         expect(FactoryCards.getIndexByKey(cards, "")).toBeNull()
         expect(FactoryCards.getIndexByKey(cards, "unknow")).toBeNull()
@@ -63,11 +63,11 @@ describe('test factoryCards', () => {
     it('FactoryCards.getFirstIndexByTitle with various parameters', () => {
 
         
-        let cards1 = new Array<Struct.Card>()
-        cards1.push(new Struct.Card("key1", "title1"))
-        cards1.push(new Struct.Card("key2", "title2"))
-        cards1.push(new Struct.Card("key3", "title3"))
-        cards1.push(new Struct.Card("key4", "title2"))
+        const cards1 = new Array<Card>()
+        cards1.push(new Card("key1", "title1"))
+        cards1.push(new Card("key2", "title2"))
+        cards1.push(new Card("key3", "title3"))
+        cards1.push(new Card("key4", "title2"))
 
         expect(FactoryCards.getFirstIndexByTitle(cards1, "")).toBeNull()
         expect(FactoryCards.getFirstIndexByTitle(cards1, "unknow")).toBeNull()

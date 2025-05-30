@@ -3,19 +3,19 @@ import type { RequestHandler } from './$types';
 import { accessControl } from '../keyValidator';
 import { deleteTimelineByKey, findLastTimelineByKey } from '../repository';
 import type { ResponseWithMeta } from '../types';
-import type { Struct } from '$lib/struct.class';
 import { TIMELINE_NOT_FOUND_ProblemJsonResponse } from '$lib/api/problemJson';
 import { _FALLBACK, _OPTIONS, requestToInstance } from '$lib/api/apiUtils';
 import { REGEX_FAILED_ProblemJsonResponse } from '$lib/api/problemJson';
 import { EMPTY_KEYS_ProblemJsonResponse } from '$lib/api/problemJson';
 import type { RequestEvent } from '@sveltejs/kit';
+import type { Timeline } from '$lib/struct.class';
 
 const ALPHANUM64 = new RegExp("^[A-Z0-9a-z]{64}$");
 /**
  * GET /api/timeline/xxxx?o|w|r=xxxxx
- * Retrive an instance of Struct.Timeline
+ * Retrive an instance of Timeline
  * @returns 
- *  a 200 Response with the instance of Struct.Timeline 
+ *  a 200 Response with the instance of Timeline 
  *  a 400 Response if there is a malformed parameter
  *  a 401 Response if security keys don't match
  *  a 404 Response if instance is not found
@@ -52,7 +52,7 @@ export const GET: RequestHandler = (requestEvent: RequestEvent<Partial<Record<st
   let timelineFromDb;
 
   if(structDb !== undefined){
-    timelineFromDb = JSON.parse(structDb.json) as Struct.Timeline
+    timelineFromDb = JSON.parse(structDb.json) as Timeline
   }
   
   if(structDb == undefined || timelineFromDb == undefined){
@@ -84,9 +84,9 @@ export const GET: RequestHandler = (requestEvent: RequestEvent<Partial<Record<st
 
 /**
  * DELETE /api/timeline/xxxx?o=xxxxx
- * Delete a collection of Struct.Timeline based on key
+ * Delete a collection of Timeline based on key
  * @returns 
- *  a 200 Response with the instance of Struct.Timeline 
+ *  a 200 Response with the instance of Timeline 
  *  a 400 Response if there is a malformed parameter
  *  a 401 Response if security keys don't match
  *  a 404 Response if instance is not found
@@ -109,7 +109,7 @@ export const DELETE: RequestHandler = (requestEvent: RequestEvent<Partial<Record
   let timelineFromDb;
 
   if(structDb !== undefined){
-    timelineFromDb = JSON.parse(structDb.json) as Struct.Timeline
+    timelineFromDb = JSON.parse(structDb.json) as Timeline
   }
   
   if(structDb == undefined || timelineFromDb == undefined){
@@ -120,7 +120,7 @@ export const DELETE: RequestHandler = (requestEvent: RequestEvent<Partial<Record
   const responseAccessControl = accessControl(instance, timelineFromDb,ownerKey,null,null)
   if(responseAccessControl !== null){return responseAccessControl}
  
-  const info = deleteTimelineByKey(requestEvent.locals.db, slug)
+  deleteTimelineByKey(requestEvent.locals.db, slug)
 
   return json(undefined, { status: 204 });
 } 
@@ -130,7 +130,7 @@ export const DELETE: RequestHandler = (requestEvent: RequestEvent<Partial<Record
  * default OPTIONS method 
  * @returns a 204 Response
  */
-export const OPTIONS: RequestHandler = async (requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>) => {
+export const OPTIONS: RequestHandler = async () => {
   return _OPTIONS(['GET', 'DELETE'])
 }
 

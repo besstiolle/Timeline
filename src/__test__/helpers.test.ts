@@ -1,23 +1,23 @@
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { Struct } from "$lib/struct.class";
+import { describe, expect, it } from 'vitest'
 import { Helpers } from "$lib/helpers";
 import { DIFF, GRID } from "$lib/constantes";
+import { Task } from '$lib/struct.class';
 
 describe('Helpers File DateConvertor testing', () => {
 
     it('Helpers.toYYYYMMDD_hhmm with nominal values', () => {
 
-        let date1 = new Date("2020-01-01T03:24:00")
-        let date2 = new Date("2020-01-01T13:00:01")
+        const date1 = new Date("2020-01-01T03:24:00")
+        const date2 = new Date("2020-01-01T13:00:01")
         expect(Helpers.toYYYYMMDD_hhmm(date1)).toBe("20200101_0324")
         expect(Helpers.toYYYYMMDD_hhmm(date2)).toBe("20200101_1300")
     })
 
     it('Helpers.toYYYY_MM_DD with nominal values', () => {
 
-        let date1 = new Date("2020-01-01")
-        let date2 = new Date("2020-01-01T10:20:30")
+        const date1 = new Date("2020-01-01")
+        const date2 = new Date("2020-01-01T10:20:30")
         expect(Helpers.toYYYY_MM_DD(date1)).toBe("2020-01-01")
         expect(Helpers.toYYYY_MM_DD(date2)).toBe("2020-01-01")
     })
@@ -28,18 +28,18 @@ describe('Helpers File DateConvertor testing', () => {
 /************************************* */
 
 describe('Helpers.countVisibleTasksInList', () => {
-    const task1 = new Struct.Task(1,"label 1", "2020-01-01", "2020-01-01", true, 100, true, "Swimline 1", 5)
-    const task2 = new Struct.Task(2,"label 2", "2020-01-01", "2020-01-01", true, 100, true, "Swimline 1", 4)
-    // @ts-ignore
-    const task3 = new Struct.Task(3,"label 3", "2020-01-01", "2020-01-01", true, 100, true, null, 3)
-    const task4 = new Struct.Task(4,"label 4", "2020-01-01", "2020-01-01", true, 100, false, "Swimline 2", 2)
-    // @ts-ignore
-    const task5 = new Struct.Task(5,"label 5", "2020-01-01", "2020-01-01", true, 100, false, null, 1)
+    const task1 = new Task(1,"label 1", "2020-01-01", "2020-01-01", true, 100, true, "Swimline 1", 5)
+    const task2 = new Task(2,"label 2", "2020-01-01", "2020-01-01", true, 100, true, "Swimline 1", 4)
 
-    let mapAllVisible = new Array<Struct.Task>()
-    let mapAllHidden = new Array<Struct.Task>()
-    let mapAllMixed = new Array<Struct.Task>()
-    let mapEmpty = new Array<Struct.Task>()
+    const task3 = new Task(3,"label 3", "2020-01-01", "2020-01-01", true, 100, true, "", 3)
+    const task4 = new Task(4,"label 4", "2020-01-01", "2020-01-01", true, 100, false, "Swimline 2", 2)
+
+    const task5 = new Task(5,"label 5", "2020-01-01", "2020-01-01", true, 100, false, "", 1)
+
+    const mapAllVisible = new Array<Task>()
+    const mapAllHidden = new Array<Task>()
+    const mapAllMixed = new Array<Task>()
+    const mapEmpty = new Array<Task>()
     mapAllVisible[task1.id] = task1
     mapAllVisible[task2.id] = task2
     mapAllVisible[task3.id] = task3
@@ -68,10 +68,10 @@ describe('Helpers.countVisibleTasksInList', () => {
 
 /************************************* */
 describe('Helpers.getDateFromViewportX', () => {
-    let dateMin: Date = new Date("2021-01-01")
-    let dateMax: Date = new Date("2021-01-30")
-    let viewportX = (GRID.MIDDLE_WIDTH - GRID.MIDDLE_X) / 30
-    let expectedDate = new Date("2021-01-2")
+    const dateMin: Date = new Date("2021-01-01")
+    const dateMax: Date = new Date("2021-01-30")
+    //const viewportX = (GRID.MIDDLE_WIDTH - GRID.MIDDLE_X) / 30
+    //const expectedDate = new Date("2021-01-2")
     it("Helpers.getDateFromViewportX with out-of bound value", ()=> {
         expect(Helpers.getDateFromViewportX(0, dateMin, dateMax)).toEqual(dateMin)
         expect(Helpers.getDateFromViewportX(99999, dateMin, dateMax)).toEqual(dateMax)
@@ -102,10 +102,10 @@ describe('Helpers.getDateFromViewportX', () => {
 /************************************* */
 
 describe('Helpers.getViewportXFromDate', () => {
-    let dateMin2: Date = new Date("2021-01-01")
-    let dateMax2: Date = new Date("2021-01-30")
-    let dateToTest1: Date = new Date("2021-01-15")
-    let dateToTest2: Date = new Date("2021-01-10")
+    const dateMin2: Date = new Date("2021-01-01")
+    const dateMax2: Date = new Date("2021-01-30")
+    //const dateToTest1: Date = new Date("2021-01-15")
+    //const dateToTest2: Date = new Date("2021-01-10")
 
     it("Helpers.getViewportXFromDate with min value", ()=> {
         expect(Helpers.getViewportXFromDate(dateMin2, dateMin2, dateMax2)).toBe(GRID.MIDDLE_X)
@@ -121,17 +121,17 @@ describe('Helpers.getViewportXFromDate', () => {
 /************************************* */
 
 describe('Helpers.getViewportXFromDate', () => {
-    let dateMin3: Date = new Date("2020-01-01")
-    let dateMax3: Date = new Date("2021-12-31")
+    const dateMin3: Date = new Date("2020-01-01")
+    const dateMax3: Date = new Date("2021-12-31")
 
-    let dateInput = new Date("2020-01-15")/*
+    /*const dateInput = new Date("2020-01-15")
     let dateResult = Helpers.getDateFromViewportX(Helpers.getViewportXFromDate(dateInput, dateMin3, dateMax3), dateMin3, dateMax3)
     it("Helpers.getViewportXFromDate & getDateFromViewportX", ()=> {
         expect(dateResult).toBe(dateInput)
     })*/
 
-    let viewportXInput = (GRID.MIDDLE_WIDTH / 5) +  GRID.MIDDLE_X
-    let viewportXResult = Helpers.getViewportXFromDate(Helpers.getDateFromViewportX(viewportXInput, dateMin3, dateMax3), dateMin3, dateMax3)
+    const viewportXInput = (GRID.MIDDLE_WIDTH / 5) +  GRID.MIDDLE_X
+    const viewportXResult = Helpers.getViewportXFromDate(Helpers.getDateFromViewportX(viewportXInput, dateMin3, dateMax3), dateMin3, dateMax3)
     it("Helpers.getDateFromViewportX & getViewportXFromDate", ()=> {
         expect(viewportXInput).toBe(viewportXResult)
     })
@@ -163,7 +163,7 @@ describe('Helpers.printf', () => {
 
 describe('Helpers.getEstimationOfDiff', () => {
 
-    let start: Date = new Date("2000-01-01")
+    const start: Date = new Date("2000-01-01")
     let end: Date
 
     it("Helpers.getEstimationOfDiff with nominal value at date J", ()=> {

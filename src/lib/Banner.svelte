@@ -12,7 +12,9 @@ import { store } from './stores';
 
     let i=0
     let jalons:jalonInterface[]=[]
-    let innerClassCss: string, innerLabel: any, left: number
+    let innerClassCss: string
+    let innerLabel: number|string = ''
+    let left: number
     while (i < 100 && $store.currentTimeline.getEndTime() >= dateInc.getTime()) {
         i++
         left = (dateInc.getTime() - $store.currentTimeline.getStartTime()) / ($store.currentTimeline.getEndTime() - $store.currentTimeline.getStartTime()) * GRID.MIDDLE_WIDTH
@@ -58,7 +60,7 @@ import { store } from './stores';
 
         jalons.push({
             left: left,
-            label: innerLabel,
+            label: innerLabel as string,
             classCss: innerClassCss
         })
     }
@@ -84,9 +86,9 @@ import { store } from './stores';
     
     <rect x="-10" y="0" width="{GRID.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient1)"/>
     <rect x="-10" y="30" width="{GRID.MIDDLE_WIDTH + 50}" height="25" fill="url(#Gradient2)"/>
-    {#each jalons as { left, label, classCss}, i}
+    {#each jalons as { left, label, classCss}, index (index)}
         <path d="M{left} 6 v 14" fill="transparent" stroke="#818C9C"/>
-        <text data-testid='jalonText_{i}' x="{left + 5}" y="17" font-size="12" fill="#818C9C" class="{classCss}">{label}</text>
+        <text data-testid='jalonText_{index}' x="{left + 5}" y="17" font-size="12" fill="#818C9C" class="{classCss}">{label}</text>
     {/each}
 </svg>
 

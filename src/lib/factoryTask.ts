@@ -1,7 +1,7 @@
-import { Struct } from "./struct.class";
+import { Task, type Timeline } from "./struct.class";
 import { NotFoundException } from "./timelineException.class";
 
-export module FactoryTask {
+export class FactoryTask {
 
     
     /**
@@ -10,7 +10,7 @@ export module FactoryTask {
      * @param car the separator
      * @returns a string with values concatenated for CSV
      */
-    export function join(task: Struct.Task, car : string){
+    static join(task: Task, car : string){
 		
         return "task"
             + car + task.label
@@ -24,11 +24,11 @@ export module FactoryTask {
 
     /**
      * Return the Task given by its own id
-     * @param timeline the Struct.Timeline to look inside
+     * @param timeline the Timeline to look inside
      * @param id the id of the Task
      * @returns the Task found or an exception
      */
-    export function getById(timeline : Struct.Timeline, id : number) : Struct.Task{
+    static getById(timeline : Timeline, id : number) : Task{
         //A simple loop to reach for the good item because it's cheaper
         // than trying to maintain a map with id => index of array each time 
         // we change something into the $store
@@ -43,18 +43,18 @@ export module FactoryTask {
         if(found){
             return found
         }
-        throw new NotFoundException('Struct.Task', id)
+        throw new NotFoundException('Task', id)
     }
 
     /**
-     * Clone properly a <Struct.Task> with all its function.
+     * Clone properly a <Task> with all its function.
      * @param task the task to clone
      * @param nextId the id to apply of the current task.id will be used
      * @param suffix the optionnal suffix for label of the cloned object
      * @returns the new task cloned
      */
-    export function clone(task: Struct.Task, nextId?: number , suffix:string=""): Struct.Task{
-        return new Struct.Task(nextId?nextId:task.id, 
+    static clone(task: Task, nextId?: number , suffix:string=""): Task{
+        return new Task(nextId?nextId:task.id, 
                                 task.label + suffix,
                                 task.dateStart,
                                 task.dateEnd,

@@ -1,5 +1,4 @@
 
-import type { Struct } from '$lib/struct.class';
 import { JsonParser } from '$lib/jsonParser';
 import { accessControl } from './keyValidator';
 import { findLastTimelineByKey } from './repository';
@@ -9,13 +8,14 @@ import { json, type RequestEvent, type RequestHandler } from '@sveltejs/kit';
 import { EMPTY_KEYS_ProblemJsonResponse, EMPTY_OWNERKEY_ProblemJsonResponse, INVALID_PAYLOAD_ProblemJsonResponse, REGEX_FAILED_ProblemJsonResponse } from '$lib/api/problemJson';
 import { requestToInstance as requestToInstance } from '$lib/api/apiUtils';
 import { _FALLBACK, _OPTIONS } from '$lib/api/apiUtils';
+import type { Timeline } from '$lib/struct.class';
 
 
 const ALPHANUM64 = new RegExp("^[A-Z0-9a-z]{64}$");
 
 /**
  * POST /api/timeline
- * Create a new instance of Struct.Timeline in database
+ * Create a new instance of Timeline in database
  * @returns 
  *  a 201 Response if everything is ok
  *  a 400 Response if there is a malformed body
@@ -26,7 +26,7 @@ export const POST: RequestHandler = async (requestEvent: RequestEvent<Partial<Re
   const instance = requestToInstance(requestEvent.request)
   const db = requestEvent.locals.db;
 
-  let timelineFromParam: Struct.Timeline
+  let timelineFromParam: Timeline
 
   //Sanitize object
   try{
@@ -35,15 +35,16 @@ export const POST: RequestHandler = async (requestEvent: RequestEvent<Partial<Re
       if(rawData =='{}' || rawData.trim() == '' || rawData.trim() == '""'){
         return new INVALID_PAYLOAD_ProblemJsonResponse(instance)
       }
-      timelineFromParam = <Struct.Timeline> JSON.parse(rawData, JsonParser.timelineReviver)
+      timelineFromParam = <Timeline> JSON.parse(rawData, JsonParser.timelineReviver)
   } catch (error){
+    console.error(error)
     return new INVALID_PAYLOAD_ProblemJsonResponse(instance)
   }
   
   const timelineHash = timelineFromParam.key
   let timelineOwnerKey:string|null = timelineFromParam.ownerKey
-  let timelinewriteKey:string|null = timelineFromParam.writeKey
-  let timelineReadKey:string|null = timelineFromParam.readKey
+  const timelinewriteKey:string|null = timelineFromParam.writeKey
+  const timelineReadKey:string|null = timelineFromParam.readKey
 
   if(timelineOwnerKey == undefined || timelineOwnerKey.trim() == ''){
     timelineOwnerKey = null
@@ -57,7 +58,7 @@ export const POST: RequestHandler = async (requestEvent: RequestEvent<Partial<Re
   let timelineFromDb;
 
   if(structDb !== undefined){
-    timelineFromDb = JSON.parse(structDb.json) as Struct.Timeline
+    timelineFromDb = JSON.parse(structDb.json) as Timeline
   }
   
   // Verification with hash + ownerkey ou hash + writekey ou hash + readkey
@@ -72,7 +73,7 @@ export const POST: RequestHandler = async (requestEvent: RequestEvent<Partial<Re
   }
 
   //Prepare a clone for insertion
-  let timelineForInsertion = structuredClone(timelineFromParam)
+  const timelineForInsertion = structuredClone(timelineFromParam)
 
   //We can retrive ownerKey from db if existing (case : a write push a Timeline)
   if(timelineFromDb !== undefined && timelineOwnerKey == null){
@@ -97,7 +98,7 @@ export const POST: RequestHandler = async (requestEvent: RequestEvent<Partial<Re
  * default OPTIONS method 
  * @returns a 204 Response
  */
-export const OPTIONS: RequestHandler = async (requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>) => {
+export const OPTIONS: RequestHandler = async () => {
   return _OPTIONS(['POST'])
 }
 /**
@@ -106,12 +107,12 @@ export const OPTIONS: RequestHandler = async (requestEvent: RequestEvent<Partial
  */
 export const fallback: RequestHandler = async ({ request: requestEvent }) => {
   return _FALLBACK(requestEvent)
-};
+}
 
 /**
  * Integrity's control of slug & the 3 keys.
  * @param instance the url of the Request
- * @param slug the key of the Struct.Timeline
+ * @param slug the key of the Timeline
  * @param ownerKey the key of the owner Right
  * @param writeKey the key of the write Right
  * @param readKey the key of the read Right

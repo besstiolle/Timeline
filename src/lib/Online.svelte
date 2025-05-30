@@ -51,7 +51,7 @@ import { FactoryCards } from './factoryCards';
         let ownerKey = $store.currentTimeline.ownerKey
         if(ownerKey == null) {ownerKey = ''}
         let seachParams = new URLSearchParams([['key', $store.currentTimeline.key], ['ownerKey', ownerKey]])
-        remove(seachParams).then((json) => {
+        remove(seachParams).then(() => {
 
             $store.currentTimeline.isOnline = false
             $store.currentTimeline.ownerKey = null
@@ -124,26 +124,26 @@ import { FactoryCards } from './factoryCards';
         <!--Action-->
         <button class="mx-auto mt-10 flex gap-2 rounded-full shadow-xl/15  p-3 cursor-pointer 
                 bg-linear-to-r/srgb from-cyan-600 to-emerald-500 hover:bg-linear-to-r/hsl hover:to-cyan-600 hover:from-emerald-500 " 
-                on:click={doOffline}>
+                onclick={doOffline}>
             <svg viewBox="0 0 600 600" class='size-6 fill-gray-800 dark:fill-blue-50'>
                 <use x="5" y="75" href="#ico_cloud"/>
             </svg>
             {m.online_action_offline()}
         </button>
 
-        <div class="text-left ml-30 mt-5">
+        <div class="text-left mx-30 mt-5">
             <label class="block" for='readOnly'>{m.online_readonly()} : </label>
-            <input class="block w-125" id='readOnly' readonly type='text' on:click={select}
+            <input class="block w-full" id='readOnly' readonly type='text' onclick={select}
                 value='{base_url + "/g/" + $store.currentTimeline.key + "?r=" + $store.currentTimeline.readKey}'>
         </div>
-        <div class="text-left ml-30 mt-5">
+        <div class="text-left mx-30 mt-5">
             <label class="block" for='writer'>{m.online_writer()} : </label>
-            <input class="block w-125" id='writer' readonly type='text' on:click={select}
+            <input class="block w-full" id='writer' readonly type='text' onclick={select}
                 value='{base_url + "/g/" + $store.currentTimeline.key + "?w=" + $store.currentTimeline.writeKey}'>
         </div>
-        <div class="text-left ml-30 mt-5">
+        <div class="text-left mx-30 mt-5">
             <label class="block" for='owner'>{m.online_owner()} : </label>
-            <input class="block w-125" id='owner' readonly type='text' on:click={select}
+            <input class="block w-full" id='owner' readonly type='text' onclick={select}
                 value='{base_url + "/g/" + $store.currentTimeline.key + "?o=" + $store.currentTimeline.ownerKey}'>
         </div>
     {:else}
@@ -152,7 +152,7 @@ import { FactoryCards } from './factoryCards';
         <!--Action-->
         <button class="mx-auto mt-10 flex gap-2 rounded-full shadow-xl/15  p-3 cursor-pointer 
                 bg-linear-to-r/srgb from-cyan-600 to-emerald-500 hover:bg-linear-to-r/hsl hover:to-cyan-600 hover:from-emerald-500 " 
-                on:click={doOnline}>
+                onclick={doOnline}>
             <svg viewBox="0 0 600 600" class='size-6 fill-gray-800 dark:fill-blue-50'>
                 <use x="5" y="75" href="#ico_cloud"/>
             </svg>

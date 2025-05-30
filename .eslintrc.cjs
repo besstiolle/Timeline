@@ -6,6 +6,7 @@ module.exports = {
 	ignorePatterns: ['*.cjs'],
 	overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
 	settings: {
+		// eslint-disable-next-line @typescript-eslint/no-require-imports
 		'svelte3/typescript': () => require('typescript')
 	},
 	parserOptions: {

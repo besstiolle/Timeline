@@ -4,15 +4,15 @@
     let background:HTMLElement
 
     let _message:string
-    let _validation:Function
+    let _validation:(args:string[])=>void
     let _validationText:string
-    let _validationArgs:any[]
-    let _cancelation:Function
+    let _validationArgs:string[]
+    let _cancelation:(args:string[])=>void
     let _cancelationText:string
-    let _cancelationArgs:any[]
+    let _cancelationArgs:string[]
 
 
-    export function show(message: string, validation:Function, validationText:string, validationArgs:any[], cancelation:Function, cancelationText:string, cancelationArgs:any[]) {
+    export function show(message: string, validation:(args:string[])=>void, validationText:string, validationArgs:string[], cancelation:(args:string[])=>void, cancelationText:string, cancelationArgs:string[]) {
       popup = document.getElementById("popup") as HTMLElement
       background = document.getElementById("background") as HTMLElement
       popup.classList.add("show")
@@ -43,8 +43,8 @@
 <div id='background'></div>
 <div id='popup'>
   <div class="content">{_message}</div>
-  <button class="validation" on:click={doValidation}>{_validationText}</button>
-  <button class="cancelation" on:click={doCancelation}>{_cancelationText}</button>
+  <button class="validation" onclick={doValidation}>{_validationText}</button>
+  <button class="cancelation" onclick={doCancelation}>{_cancelationText}</button>
 </div>
 <style>
 

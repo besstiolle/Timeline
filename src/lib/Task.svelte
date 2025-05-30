@@ -4,15 +4,16 @@
 
     import { Helpers } from './helpers';
     import { store } from './stores';
-    import type { Struct } from './struct.class';
+	import type { Task } from './struct.class';
 
-    export let i: number
-    export let currentTask: Struct.Task
-    export let showActionBar = (event:Event) => {}
-    export let hideActionBar = (event:Event) => {}
-    export let downLeft = (event:Event) => {}
-    export let downRight = (event:Event) => {}
-    export let downProgress = (event:Event) => {}
+    const props = $props();
+    const i = props.i as number
+    const currentTask = props.currentTask as Task
+    const showActionBar = props.showActionBar as (event:Event) => object
+    const hideActionBar = props.hideActionBar as (event:Event) => object
+    const downLeft = props.downLeft as (event:Event) => object
+    const downRight = props.downRight as (event:Event) => object
+    const downProgress = props.downProgress as (event:Event) => object
     
     
     const green = "#16A085";
@@ -27,7 +28,7 @@
     //const dottedLine = "#44546A";
 
 
-    let styleColor = {fill : green, stroke: greenStroke} //default : full
+    let styleColor = $state({fill : green, stroke: greenStroke}) //default : full
     if(currentTask.hasProgress && currentTask.progress < 100){
         styleColor = {fill : blue, stroke: blueStroke}
     }
@@ -48,8 +49,8 @@
     let widthGray = x2GrayPosition - xGrayPosition 
     let widthProgress = currentTask.progress * widthGray / 100
     
-    let xPercentPosition = xGrayPosition + widthProgress - 5
-    let percentTextAnchor = "end"
+    let xPercentPosition = $state(xGrayPosition + widthProgress - 5)
+    let percentTextAnchor = $state("end")
     if(currentTask.progress < 50){
         xPercentPosition = xGrayPosition + widthProgress + 5
         percentTextAnchor = "start"
@@ -61,7 +62,7 @@
 </script>
 <svg viewBox="{$store.currentTimeline.viewbox}" xmlns="http://www.w3.org/2000/svg" 
     x="0" y="{i * GRID.ONE_TASK_H + GRID.MILESTONE_H + GRID.ANNUAL_H}"
-    class="taskSVGSection" id="T{currentTask.id}" on:mouseover={showActionBar} on:focus={showActionBar} on:mouseout={hideActionBar} on:blur={hideActionBar} class:shouldBeHidden={!currentTask.isShow} 
+    class="taskSVGSection" id="T{currentTask.id}" onmouseover={showActionBar} onfocus={showActionBar} onmouseout={hideActionBar} onblur={hideActionBar} class:shouldBeHidden={!currentTask.isShow} 
     role="none">
     
         {#if hasSwimline}
@@ -87,17 +88,17 @@
         <rect id="T{currentTask.id}_rec" x="{xGrayPosition}" y="0" width="{widthGray}" class="showable hidden" height="15" rx="5" ry="5" fill="url(#pattern_A)"/> 
 
         <svg  id="T{currentTask.id}_l" x="{xGrayPosition - 5}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class:grabbable={!$store.rights.isReader()} class="showable hidden">
-            <use href="#filler" on:mousedown={downLeft} role="presentation"/>
-            <use href="#drag_left" class="secondaryFill" on:mousedown={downLeft} role="presentation"/>
+            <use href="#filler" onmousedown={downLeft} role="presentation"/>
+            <use href="#drag_left" class="secondaryFill" onmousedown={downLeft} role="presentation"/>
         </svg>
         <svg  id="T{currentTask.id}_r" x="{x2GrayPosition - 10}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class:grabbable={!$store.rights.isReader()} class="showable hidden">
-            <use href="#filler" on:mousedown={downRight}  role="presentation"/>
-            <use href="#drag_right" class="secondaryFill" on:mousedown={downRight} role="presentation"/>    
+            <use href="#filler" onmousedown={downRight}  role="presentation"/>
+            <use href="#drag_right" class="secondaryFill" onmousedown={downRight} role="presentation"/>    
         </svg>
         {#if currentTask.hasProgress}
         <svg  id="T{currentTask.id}_p" x="{xGrayPosition + ((x2GrayPosition - xGrayPosition) / 2) - 10}" y="10" width="15px" height="15px" viewBox="0 0 20 20" class:grabbable={!$store.rights.isReader()} class="showable hidden">
-            <use href="#filler"  on:mousedown={downProgress}  role="presentation"/>
-            <use href="#drag_progress" class="secondaryFill" on:mousedown={downProgress} role="presentation"/>    
+            <use href="#filler"  onmousedown={downProgress}  role="presentation"/>
+            <use href="#drag_progress" class="secondaryFill" onmousedown={downProgress} role="presentation"/>    
         </svg>
         {/if}
         <!-- END overlay-->

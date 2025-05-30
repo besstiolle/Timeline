@@ -1,5 +1,5 @@
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import {describe, expect, it } from 'vitest'
 import { Rights } from "$lib/rights.class";
 
 
@@ -8,7 +8,7 @@ import { Rights } from "$lib/rights.class";
 describe('test Right.class functions', () => {
 
     it('Test Rights() with fakes values', () => {
-        let rights = new Rights(new URLSearchParams([['foo','bar'],['bar','foo']]))
+        const rights = new Rights(new URLSearchParams([['foo','bar'],['bar','foo']]))
 
         expect(rights.hasOwner()).toBe(false)
         expect(rights.hasWriter()).toBe(false)
@@ -22,7 +22,7 @@ describe('test Right.class functions', () => {
         expect(rights.getSlugParamKeyValue()).toBe(null)
     })
     it('Test Rights() with reader values', () => {
-        let rights = new Rights(new URLSearchParams([['foo','bar'],['r','foo']]))
+        const rights = new Rights(new URLSearchParams([['foo','bar'],['r','foo']]))
 
         expect(rights.hasOwner()).toBe(false)
         expect(rights.hasWriter()).toBe(false)
@@ -36,7 +36,7 @@ describe('test Right.class functions', () => {
         expect(rights.getSlugParamKeyValue()).toBe('foo')
     })
     it('Test Rights() with writer values', () => {
-        let rights = new Rights(new URLSearchParams([['foo','bar'],['w','foo']]))
+        const rights = new Rights(new URLSearchParams([['foo','bar'],['w','foo']]))
 
         expect(rights.hasOwner()).toBe(false)
         expect(rights.hasWriter()).toBe(true)
@@ -50,7 +50,7 @@ describe('test Right.class functions', () => {
         expect(rights.getSlugParamKeyValue()).toBe('foo')
     })
     it('Test Rights() with owner values', () => {
-        let rights = new Rights(new URLSearchParams([['foo','bar'],['o','foo']]))
+        const rights = new Rights(new URLSearchParams([['foo','bar'],['o','foo']]))
 
         expect(rights.hasOwner()).toBe(true)
         expect(rights.hasWriter()).toBe(true)
@@ -64,7 +64,7 @@ describe('test Right.class functions', () => {
         expect(rights.getSlugParamKeyValue()).toBe('foo')
     })
     it("Test Rights() with multiples / reader values", () => {
-        let rights_R = new Rights(new URLSearchParams([['w','bar'],['o','foo'],['r','zoo']]))
+        const rights_R = new Rights(new URLSearchParams([['w','bar'],['o','foo'],['r','zoo']]))
 
         expect(rights_R.hasOwner()).toBe(false)
         expect(rights_R.hasWriter()).toBe(false)
@@ -79,7 +79,7 @@ describe('test Right.class functions', () => {
     })
 
     it('Test Rights() with multiples / writer values', () => {
-        let rights = new Rights(new URLSearchParams([['w','bar'],['o','foo']]))
+        const rights = new Rights(new URLSearchParams([['w','bar'],['o','foo']]))
     
         expect(rights.hasOwner()).toBe(false)
         expect(rights.hasWriter()).toBe(true)
@@ -94,7 +94,7 @@ describe('test Right.class functions', () => {
     })
 
     it('testConstructorWithString', () => {
-        let rights = new Rights("foo")
+        const rights = new Rights("foo")
     
         expect(rights.hasOwner()).toBe(true)
         expect(rights.hasWriter()).toBe(true)

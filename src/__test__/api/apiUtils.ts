@@ -1,5 +1,6 @@
 import { JsonParser } from "$lib/jsonParser";
-import type { Struct } from "$lib/struct.class";
+import type { Timeline } from "$lib/struct.class";
+import type { RequestEvent } from "@sveltejs/kit";
 import type {Database} from "better-sqlite3";
 
 export class RequestEventStub {
@@ -7,9 +8,10 @@ export class RequestEventStub {
     params: Record<string, unknown> = {};
     locals: Record<string, unknown> = {};
     url: URL;
+    slug:string
 
     constructor(method: string, url: string, body?: string|null,db?:Database, slug?:string|null) {
-      let inner_url = new URL(url)
+      const inner_url = new URL(url)
      // console.info(method, inner_url.toString(),inner_url.searchParams.get('ownerKey'))
       this.request = new Request(new URL(url), 
         { method: method,
@@ -19,10 +21,20 @@ export class RequestEventStub {
       this.params.slug = slug
       this.locals.db = db
       this.url = inner_url
+      this.slug = 'no_slug'
     }
 }
 
-export const VALID_DUMMY_TIMELINE:Struct.Timeline = JSON.parse(`{
+/**
+ * An utils function to avoid hugly code in test files
+ * @param request the RequestEventStub
+ * @returns the RequestEvent for testing only
+ */
+export function toRequestEvent(request:RequestEventStub):RequestEvent{
+  return request as unknown as RequestEvent
+}
+
+export const VALID_DUMMY_TIMELINE:Timeline = JSON.parse(`{
   "key": "64CarForKey00000000000000000000000000000000000000000000000000000",
   "title": "My new Project",
   "tasks": [

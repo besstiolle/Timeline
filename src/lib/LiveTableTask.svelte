@@ -1,14 +1,15 @@
 <script lang="ts">
 
-import { store } from './stores';
-import { Helpers } from './helpers';
-import { Struct } from './struct.class';
-import { FactoryTimeline } from './factoryTimeline';
-import { LIVE_PREFIX } from './constantes';
-import { FactoryTask } from './factoryTask';
+    import { store } from './stores';
+    import { Helpers } from './helpers';
+    import { FactoryTimeline } from './factoryTimeline';
+    import { LIVE_PREFIX } from './constantes';
+    import { FactoryTask } from './factoryTask';
 	import { m } from '../paraglide/messages';
+	import { Task } from './struct.class';
 
-export let updateStore:Function
+const props = $props();
+const updateStore = props.updateStore as (prefix: string, position:number ) => void
 
 function updateProgression(position:number){
     let elm = document.getElementById(LIVE_PREFIX.PR + position) as HTMLInputElement
@@ -22,7 +23,6 @@ function updateProgression(position:number){
     } 
     
     $store.currentTimeline.tasks[position].progress = value
-    //$store.currentTimeline.tasks = $store.currentTimeline.tasks
         
 }
 
@@ -39,7 +39,7 @@ function b_up(index:number){
         console.warn("index was abnormal", index)
         return;
     }
-    let tmpTask: Struct.Task = $store.currentTimeline.tasks[index]
+    let tmpTask: Task = $store.currentTimeline.tasks[index]
     $store.currentTimeline.tasks[index] = $store.currentTimeline.tasks[index - 1]
     $store.currentTimeline.tasks[index - 1] = tmpTask
     $store.currentTimeline.tasks = $store.currentTimeline.tasks
@@ -49,7 +49,7 @@ function b_down(index:number){
         console.warn("index was abnormal", index)
         return;
     }
-    let tmpTask: Struct.Task = $store.currentTimeline.tasks[index]
+    let tmpTask: Task = $store.currentTimeline.tasks[index]
     $store.currentTimeline.tasks[index] = $store.currentTimeline.tasks[index + 1]
     $store.currentTimeline.tasks[index + 1] = tmpTask
     $store.currentTimeline.tasks = $store.currentTimeline.tasks
@@ -66,7 +66,7 @@ function b_duplicate(index:number){
         console.warn("index was abnormal", index)
         return;
     }
-    let tmpTasks : Array<Struct.Task> = $store.currentTimeline.tasks.splice(index+1, $store.currentTimeline.tasks.length)
+    let tmpTasks : Array<Task> = $store.currentTimeline.tasks.splice(index+1, $store.currentTimeline.tasks.length)
 
     FactoryTimeline.addTask($store.currentTimeline, 
                             FactoryTask.clone($store.currentTimeline.tasks[index],
@@ -79,7 +79,7 @@ function b_duplicate(index:number){
 }
 function b_add(){
     let diffSec : number = $store.currentTimeline.getEndTime() - $store.currentTimeline.getStartTime()
-    FactoryTimeline.addTask($store.currentTimeline, new Struct.Task(
+    FactoryTimeline.addTask($store.currentTimeline, new Task(
             $store.currentTimeline.getNextId(),
             "Some task", 
             Helpers.toYYYY_MM_DD(new Date($store.currentTimeline.getStartTime() + (0.1 * diffSec))), 
@@ -94,46 +94,46 @@ function b_add(){
 
 </script>
 
-{#each $store.currentTimeline.tasks as task, i}
+{#each $store.currentTimeline.tasks as task, index (index)}
 <div class="live__line show_{task.isShow}">
     <div class='live__input_top'>
-        <div class="live_cmd" on:click="{e =>{b_show(i)}}" on:keydown="{e =>{b_show(i)}}" title={m.live_task_editor_toggle()} role="button" tabindex="0">
+        <div class="live_cmd" onclick="{() => {b_show(index)}}" onkeydown="{() => {b_show(index)}}" title={m.live_task_editor_toggle()} role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_show"/>
             </svg>
         </div>
-        <div class="live_cmd" on:click="{e =>{b_up(i)}}" on:keydown="{e =>{b_up(i)}}" title={m.live_task_editor_down()} role="button" tabindex="0">
+        <div class="live_cmd" onclick="{() => {b_up(index)}}" onkeydown="{() => {b_up(index)}}" title={m.live_task_editor_down()} role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_up"/>
             </svg>
         </div>
-        <div class="live_cmd" on:click="{e =>{b_down(i)}}" on:keydown="{e =>{b_down(i)}}" title={m.live_task_editor_up()} role="button" tabindex="0">
+        <div class="live_cmd" onclick="{() => {b_down(index)}}" onkeydown="{() => {b_down(index)}}" title={m.live_task_editor_up()} role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_down"/>
             </svg>
         </div>
-        <div class="live_cmd" on:click="{e =>{b_duplicate(i)}}" on:keydown="{e =>{b_duplicate(i)}}" title={m.live_task_editor_clone()} role="button" tabindex="0">
+        <div class="live_cmd" onclick="{() => {b_duplicate(index)}}" onkeydown="{() => {b_duplicate(index)}}" title={m.live_task_editor_clone()} role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_duplicate"/>
             </svg>
         </div>
-        <div class="live_cmd live_cmd_red" on:click="{e =>{b_delete(i)}}" on:keydown="{e =>{b_delete(i)}}" title={m.live_task_editor_delete()} role="button" tabindex="0">
+        <div class="live_cmd live_cmd_red" onclick="{() => {b_delete(index)}}" onkeydown="{() => {b_delete(index)}}" title={m.live_task_editor_delete()} role="button" tabindex="0">
             <svg viewBox="0 0 20 20">
                 <use x="0" y="0" href="#b_delete"/>
             </svg>
         </div>
         <input type="text" bind:value="{task.label}" class="label"/>
-        <input type="date" id="{LIVE_PREFIX.TS}{i}" value="{task.dateStart}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore(LIVE_PREFIX.TS, i)} on:blur={() => updateStore(LIVE_PREFIX.TS, i)}>
-        <input type="date" id="{LIVE_PREFIX.TE}{i}" value="{task.dateEnd}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore(LIVE_PREFIX.TE, i)} on:blur={() => updateStore(LIVE_PREFIX.TE, i)}>
+        <input type="date" id="{LIVE_PREFIX.TS}{index}" value="{task.dateStart}" min="1900-01-01" max="2999-12-31" onchange={() => updateStore(LIVE_PREFIX.TS, index)} onblur={() => updateStore(LIVE_PREFIX.TS, index)}>
+        <input type="date" id="{LIVE_PREFIX.TE}{index}" value="{task.dateEnd}" min="1900-01-01" max="2999-12-31" onchange={() => updateStore(LIVE_PREFIX.TE, index)} onblur={() => updateStore(LIVE_PREFIX.TE, index)}>
         <input type="text" bind:value="{task.swimline}" class="label"/>
-        <input type="number" id={LIVE_PREFIX.PR}{i} value="{task.progress}" min="0" max="100" class="progress" on:change={() => updateProgression(i)} on:blur={() => updateProgression(i)}/>
+        <input type="number" id="{LIVE_PREFIX.PR}{index}" value="{task.progress}" min="0" max="100" class="progress" onchange={() => updateProgression(index)} onblur={() => updateProgression(index)}/>
         <progress max="100" value="{task.progress}"> {task.progress}% </progress>
-        <label for="hasProgress{i}">{m.live_task_editor_show_progress()} : </label><input type="checkbox" bind:checked="{task.hasProgress}"  name="hasProgress{i}" id="hasProgress{i}" />
+        <label for="hasProgress{index}">{m.live_task_editor_show_progress()} : </label><input type="checkbox" bind:checked="{task.hasProgress}"  name="hasProgress{index}" id="hasProgress{index}" />
     </div>
 </div>
 {/each}
 <div class="live__action">
-    <div class="live__action__button" on:click="{b_add}" on:keydown="{b_add}"  role="button" tabindex="0">
+    <div class="live__action__button" onclick="{b_add}" onkeydown="{b_add}"  role="button" tabindex="0">
         <svg class="svg-icon" viewBox="0 0 20 20">
             <use x="0" y="0" href="#b_add"/>
         </svg>

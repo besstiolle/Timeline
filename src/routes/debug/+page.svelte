@@ -1,14 +1,14 @@
 
 <script lang="ts">
     import { CustomLocalStorage } from "$lib/customLocalStorage";
-    import type { Struct } from "$lib/struct.class";
+	import type { Card, Timeline } from "$lib/struct.class";
 	import { JsonParserException } from "$lib/timelineException.class";
 
 
 	
-let timelines: Array<Struct.Timeline> = new Array<Struct.Timeline>()
+let timelines: Array<Timeline> = new Array<Timeline>()
 let errors: Array<string> = new Array<string>()
-let cards:Struct.Card[]
+let cards:Card[]
 try{
     cards = CustomLocalStorage.getCards()
     cards.forEach(card => {
@@ -37,7 +37,7 @@ try{
 }
 
     
-function purge(event:Event){
+function purge(){
     CustomLocalStorage.clear()
     alert("your localstorage is purged ✅")
     location.reload()
@@ -54,14 +54,14 @@ function purge(event:Event){
 <h2>Dump from your localstorage : </h2>
 <div class='codeW'>
 {#if errors}
-    {#each errors as error}
+    {#each errors as error, index (index)}
         <div style="color:red">{error}</div>
     {/each}
 {/if}
 {#if cards}
 <h3>Storage "Cards"</h3>
     <textarea rows=20>{JSON.stringify(cards, undefined, 2)}</textarea> 
-    {#each timelines as timeline}
+    {#each timelines as timeline (timeline.key)}
     <h3>Storage Timeline "{timeline.key} : {timeline.title}"</h3>
         <textarea rows=20>{JSON.stringify(timeline, undefined, 2)}</textarea> 
     {/each}
@@ -70,7 +70,7 @@ function purge(event:Event){
 {/if}
 </div>
 <h2>Reset your localstorage</h2>
-<div><button on:click={purge}>click me if you dare</button></div>
+<div><button onclick={purge}>click me if you dare</button></div>
 <style>
     :global(body){
         padding:5px;
