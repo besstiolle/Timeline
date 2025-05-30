@@ -5,11 +5,13 @@ import globals from 'globals';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript-eslint';
 import svelteConfig from './svelte.config.js';
+import { globalIgnores } from "eslint/config";
 
 const gitignorePath = fileURLToPath(new URL('./.gitignore', import.meta.url));
 
 export default ts.config(
 	includeIgnoreFile(gitignorePath),
+	globalIgnores(["./static/analytics/*"]),
 	js.configs.recommended,
 	...ts.configs.recommended,
 	...svelte.configs.recommended,
@@ -38,3 +40,4 @@ export default ts.config(
 		}
 	}
 );
+
