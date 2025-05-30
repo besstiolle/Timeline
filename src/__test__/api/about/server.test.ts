@@ -4,6 +4,7 @@ import { OPTIONS } from '../../../routes/api/about/+server';
 import * as handlers from '../../../routes/api/about/+server';
 import { GET } from '../../../routes/api/about/+server';
 
+
 const ENTRYPOINT = 'https://dummyEntrypoint.io/api/about'
 const HEADER_ACCESS_CONTROL_ALLOW_METHOD = 'Access-Control-Allow-Methods'
 const HEADER_CONTENT_TYPE_APPPBJSON = 'application/problem+json'
@@ -48,7 +49,7 @@ describe('API /api/about with OPTIONS & denied method', () => {
   });
 });
 
-it('POST /api/about should return a ResponseWithMeta JSON ', async () => {
+it('GET /api/about should return a ResponseWithMeta JSON ', async () => {
   const event = new RequestEventStub('GET', ENTRYPOINT);
   const response = await GET(toRequestEvent(event));
 
@@ -62,3 +63,36 @@ it('POST /api/about should return a ResponseWithMeta JSON ', async () => {
   // Test AboutVersion fields
   expect(json.data.version).not.toBeFalsy()
 })
+
+
+// @ignore
+/*
+it('GET /api/about should return a ResponseWithMeta JSON with no version if we change ENV VAR', async () => {
+  
+  vi.doMock('$env/static/public', () => ({
+    PUBLIC_SHOW_VERSION: 'false', 
+  }));
+
+  const { PUBLIC_SHOW_VERSION } = await import ('$env/static/public')
+
+  expect(PUBLIC_SHOW_VERSION).toBe('false');
+
+  const {GET} = await import('../../../routes/api/about/+server')
+
+  const event = new RequestEventStub('GET', ENTRYPOINT);
+  const response = await GET(toRequestEvent(event));
+
+  expect(response.status).toBe(200);
+  expect(response.headers.get(HEADER_CONTENT_TYPE)).toContain(HEADER_CONTENT_TYPE_APPJSON);
+  const json = await response.json()
+  expect(json.data).not.toBeFalsy()
+  expect(json.meta).not.toBeFalsy()
+  expect(json.meta.ts).not.toBeFalsy()
+
+  // Test AboutVersion fields
+  expect(json.data.version).toBe('')
+
+
+  vi.resetModules(); // nettoie les effets du mock pour les autres tests
+})
+*/

@@ -4,6 +4,7 @@ import { json, type RequestHandler } from '@sveltejs/kit';
 import pkg from './../../../../package.json' with { type: 'json' };
 import { _FALLBACK, _OPTIONS } from '$lib/api/apiUtils';
 import type { ResponseWithMeta } from '../timeline/types';
+import { PUBLIC_SHOW_VERSION } from '$env/static/public';
 
 /**
  * GET /api/about
@@ -13,8 +14,16 @@ import type { ResponseWithMeta } from '../timeline/types';
  */
 export const GET: RequestHandler = () => {
 
+  let version=''
+
+  //console.info("PUBLIC_SHOW_VERSION : ", PUBLIC_SHOW_VERSION)
+
+  if(PUBLIC_SHOW_VERSION.toLowerCase() === 'true'){
+    version = pkg.version
+  }
+
   const objToReturn = {
-    "version" : pkg.version
+    "version" : version
   }
 
   //Prepare the standard response with data & meta

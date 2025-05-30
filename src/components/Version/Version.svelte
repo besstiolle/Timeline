@@ -4,6 +4,7 @@
 	import { getCurrentVersion, getDistantVersion, toString, toVersion, versionCompare } from "./Version";
 	import ShadowBox from "$lib/ShadowBox.svelte";
 	import { m } from "../../paraglide/messages";
+	import { PUBLIC_SHOW_VERSION } from "$env/static/public";
 
     let shadowBox:ShadowBox
 
@@ -14,6 +15,8 @@
     let hasMinor:boolean = false
     let hasFix:boolean = false
     let className = ''
+
+    const showVersion = PUBLIC_SHOW_VERSION.toLowerCase() === 'true'
     
     const myaction: Action = () => {
 
@@ -62,31 +65,35 @@
 
 
 </script>
-{#if (hasMajor || hasMinor || hasFix)}
-    <div use:myaction class="{className} cursor-pointer" 
-        onclick={() => shadowBox.openComponent()} onkeydown={() => shadowBox.openComponent()} role="button" tabindex="0">
+{#if showVersion}
+    
+    {#if (hasMajor || hasMinor || hasFix)}
+        <div use:myaction class="{className} cursor-pointer" 
+            onclick={() => shadowBox.openComponent()} onkeydown={() => shadowBox.openComponent()} role="button" tabindex="0">
 
-        TimeChart v{toString(localVersion)}<span class='notification'>◉</span>
-    </div>
-{:else}
-    <div use:myaction class="{className}">
-        TimeChart v{toString(localVersion)}
-    </div>
+            TimeChart v{toString(localVersion)}<span class='notification'>◉</span>
+        </div>
+    {:else}
+        <div use:myaction class="{className}">
+            TimeChart v{toString(localVersion)}
+        </div>
+    {/if}
+
+    <ShadowBox bind:this={shadowBox}>
+        <p>🎉 {m.version_update_available()} 🎉</p>
+        {#if hasMajor}
+            <p>{m.version_major()}⚠️</p>
+        {/if}
+        {#if hasMinor}
+            <p>{m.version_minor()}🫶</p>
+        {/if}
+        {#if hasFix}
+            <p>{m.version_fix()}🔥</p>
+        {/if}
+        <p><a href='https://github.com/besstiolle/Timeline/releases/tag/v{toString(distantVersion)}'>{m.version_link_to_release()} {toString(distantVersion)}</a></p>
+    </ShadowBox>
 {/if}
 
-<ShadowBox bind:this={shadowBox}>
-    <p>🎉 {m.version_update_available()} 🎉</p>
-    {#if hasMajor}
-        <p>{m.version_major()}⚠️</p>
-    {/if}
-    {#if hasMinor}
-        <p>{m.version_minor()}🫶</p>
-    {/if}
-    {#if hasFix}
-        <p>{m.version_fix()}🔥</p>
-    {/if}
-    <p><a href='https://github.com/besstiolle/Timeline/releases/tag/v{toString(distantVersion)}'>{m.version_link_to_release()} {toString(distantVersion)}</a></p>
-</ShadowBox>
 <style>
     .major .notification{
         color:var(--color-red-500);
