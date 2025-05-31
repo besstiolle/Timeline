@@ -1,5 +1,5 @@
 # Step 1 : Build with Node 
-FROM node:23-slim AS builder
+FROM node:24 AS builder
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ RUN npm run build
 RUN npm prune --production
 
 # Step 2 : build a node app
-FROM node:23-slim AS runner
+FROM node:24-slim AS runner
     
 WORKDIR /app
 COPY --from=builder /app/build build/
