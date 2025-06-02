@@ -16,7 +16,3 @@ services:
       SHOW_VERSION: ${TIMECHART_SHOW_VERSION}
     env_file:
       - .env
-
-
-
-

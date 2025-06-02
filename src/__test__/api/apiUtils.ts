@@ -1,28 +1,31 @@
-import { JsonParser } from "$lib/jsonParser";
-import type { Timeline } from "$lib/struct.class";
-import type { RequestEvent } from "@sveltejs/kit";
-import type {Database} from "better-sqlite3";
+import { JsonParser } from '$lib/jsonParser';
+import type { Timeline } from '$lib/struct.class';
+import type { RequestEvent } from '@sveltejs/kit';
+import type { Database } from 'better-sqlite3';
 
 export class RequestEventStub {
-    request: Request;
-    params: Record<string, unknown> = {};
-    locals: Record<string, unknown> = {};
-    url: URL;
-    slug:string
+	request: Request;
+	params: Record<string, unknown> = {};
+	locals: Record<string, unknown> = {};
+	url: URL;
+	slug: string;
 
-    constructor(method: string, url: string, body?: string|null,db?:Database, slug?:string|null) {
-      const inner_url = new URL(url)
-     // console.info(method, inner_url.toString(),inner_url.searchParams.get('ownerKey'))
-      this.request = new Request(new URL(url), 
-        { method: method,
-          body: body
-        });
+	constructor(
+		method: string,
+		url: string,
+		body?: string | null,
+		db?: Database,
+		slug?: string | null
+	) {
+		const inner_url = new URL(url);
+		// console.info(method, inner_url.toString(),inner_url.searchParams.get('ownerKey'))
+		this.request = new Request(new URL(url), { method: method, body: body });
 
-      this.params.slug = slug
-      this.locals.db = db
-      this.url = inner_url
-      this.slug = 'no_slug'
-    }
+		this.params.slug = slug;
+		this.locals.db = db;
+		this.url = inner_url;
+		this.slug = 'no_slug';
+	}
 }
 
 /**
@@ -30,11 +33,12 @@ export class RequestEventStub {
  * @param request the RequestEventStub
  * @returns the RequestEvent for testing only
  */
-export function toRequestEvent(request:RequestEventStub):RequestEvent{
-  return request as unknown as RequestEvent
+export function toRequestEvent(request: RequestEventStub): RequestEvent {
+	return request as unknown as RequestEvent;
 }
 
-export const VALID_DUMMY_TIMELINE:Timeline = JSON.parse(`{
+export const VALID_DUMMY_TIMELINE: Timeline = JSON.parse(
+	`{
   "key": "64CarForKey00000000000000000000000000000000000000000000000000000",
   "title": "My new Project",
   "tasks": [
@@ -176,4 +180,6 @@ export const VALID_DUMMY_TIMELINE:Timeline = JSON.parse(`{
   "showOutOfBounds": true,
   "dateStartFocus": null,
   "dateEndFocus": null
-}`,JsonParser.timelineReviver)
+}`,
+	JsonParser.timelineReviver
+);

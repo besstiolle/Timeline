@@ -1,33 +1,29 @@
 {
-    "key":"key",
-    "title":"title",
-    "tasks":[
-       
-    ],
-    "milestones":[
-       {
-          "id":1,
-          "label":"label 1",
-          "date":"2022-01-01",
-          "isShow":true
-       }
-    ],
-    "swimlines":[
-       
-    ],
-    "isInitiate":false,
-    "start":null,
-    "end":null,
-    "differencial":null,
-    "maxId":0,
-    "viewbox":"0 0 0 0",
-    "showAll":false,
-    "isOnline":false,
-    "ownerKey":null,
-    "writeKey":null,
-    "readKey":null,
-    "showToday":true,
-    "showOutOfBounds":true,
-    "dateStartFocus":null,
-    "dateEndFocus":null
- }
+	"key": "key",
+	"title": "title",
+	"tasks": [],
+	"milestones": [
+		{
+			"id": 1,
+			"label": "label 1",
+			"date": "2022-01-01",
+			"isShow": true
+		}
+	],
+	"swimlines": [],
+	"isInitiate": false,
+	"start": null,
+	"end": null,
+	"differencial": null,
+	"maxId": 0,
+	"viewbox": "0 0 0 0",
+	"showAll": false,
+	"isOnline": false,
+	"ownerKey": null,
+	"writeKey": null,
+	"readKey": null,
+	"showToday": true,
+	"showOutOfBounds": true,
+	"dateStartFocus": null,
+	"dateEndFocus": null
+}

@@ -1,38 +1,34 @@
 {
-    "key":"key",
-    "title":"title",
-    "tasks":[
-       {
-          "id":1,
-          "label":"label 1",
-          "dateStart":"2022-01-01",
-          "dateEnd":"2022-02-01",
-          "hasProgress":false,
-          "progress":100,
-          "isShow":true,
-          "swimline":"Swimline 1",
-          "swimlineId":5
-       }
-    ],
-    "milestones":[
-       
-    ],
-    "swimlines":[
-       
-    ],
-    "isInitiate":false,
-    "start":null,
-    "end":null,
-    "differencial":null,
-    "maxId":0,
-    "viewbox":"0 0 0 0",
-    "showAll":false,
-    "isOnline":false,
-    "ownerKey":null,
-    "writeKey":null,
-    "readKey":null,
-    "showToday":true,
-    "showOutOfBounds":true,
-    "dateStartFocus":null,
-    "dateEndFocus":null
- }
+	"key": "key",
+	"title": "title",
+	"tasks": [
+		{
+			"id": 1,
+			"label": "label 1",
+			"dateStart": "2022-01-01",
+			"dateEnd": "2022-02-01",
+			"hasProgress": false,
+			"progress": 100,
+			"isShow": true,
+			"swimline": "Swimline 1",
+			"swimlineId": 5
+		}
+	],
+	"milestones": [],
+	"swimlines": [],
+	"isInitiate": false,
+	"start": null,
+	"end": null,
+	"differencial": null,
+	"maxId": 0,
+	"viewbox": "0 0 0 0",
+	"showAll": false,
+	"isOnline": false,
+	"ownerKey": null,
+	"writeKey": null,
+	"readKey": null,
+	"showToday": true,
+	"showOutOfBounds": true,
+	"dateStartFocus": null,
+	"dateEndFocus": null
+}

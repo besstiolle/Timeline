@@ -5,7 +5,7 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			db: Database;
-		   }
+		}
 		// interface PageData {}
 		// interface Platform {}
 	}

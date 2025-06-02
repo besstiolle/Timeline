@@ -1,113 +1,133 @@
-
 import { JsonParser } from '$lib/jsonParser';
 import { accessControl } from './keyValidator';
 import { findLastTimelineByKey } from './repository';
 import type { ResponseWithMeta } from './types';
 import { insertTimeline } from './repository';
 import { json, type RequestEvent, type RequestHandler } from '@sveltejs/kit';
-import { EMPTY_KEYS_ProblemJsonResponse, EMPTY_OWNERKEY_ProblemJsonResponse, INVALID_PAYLOAD_ProblemJsonResponse, REGEX_FAILED_ProblemJsonResponse } from '$lib/api/problemJson';
+import {
+	EMPTY_KEYS_ProblemJsonResponse,
+	EMPTY_OWNERKEY_ProblemJsonResponse,
+	INVALID_PAYLOAD_ProblemJsonResponse,
+	REGEX_FAILED_ProblemJsonResponse
+} from '$lib/api/problemJson';
 import { requestToInstance as requestToInstance } from '$lib/api/apiUtils';
 import { _FALLBACK, _OPTIONS } from '$lib/api/apiUtils';
 import type { Timeline } from '$lib/struct.class';
 
-
-const ALPHANUM64 = new RegExp("^[A-Z0-9a-z]{64}$");
+const ALPHANUM64 = new RegExp('^[A-Z0-9a-z]{64}$');
 
 /**
  * POST /api/timeline
  * Create a new instance of Timeline in database
- * @returns 
+ * @returns
  *  a 201 Response if everything is ok
  *  a 400 Response if there is a malformed body
  *  a 401 Response if security keys don't match
  */
-export const POST: RequestHandler = async (requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>) => {
+export const POST: RequestHandler = async (
+	requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>
+) => {
+	const instance = requestToInstance(requestEvent.request);
+	const db = requestEvent.locals.db;
 
-  const instance = requestToInstance(requestEvent.request)
-  const db = requestEvent.locals.db;
+	let timelineFromParam: Timeline;
 
-  let timelineFromParam: Timeline
+	//Sanitize object
+	try {
+		const rawData = await requestEvent.request.text();
+		//console.info(`rawData = ${rawData}`)
+		if (rawData == '{}' || rawData.trim() == '' || rawData.trim() == '""') {
+			return new INVALID_PAYLOAD_ProblemJsonResponse(instance);
+		}
+		timelineFromParam = <Timeline>JSON.parse(rawData, JsonParser.timelineReviver);
+	} catch (error) {
+		console.error(error);
+		return new INVALID_PAYLOAD_ProblemJsonResponse(instance);
+	}
 
-  //Sanitize object
-  try{
-      const rawData = await requestEvent.request.text();
-      //console.info(`rawData = ${rawData}`)
-      if(rawData =='{}' || rawData.trim() == '' || rawData.trim() == '""'){
-        return new INVALID_PAYLOAD_ProblemJsonResponse(instance)
-      }
-      timelineFromParam = <Timeline> JSON.parse(rawData, JsonParser.timelineReviver)
-  } catch (error){
-    console.error(error)
-    return new INVALID_PAYLOAD_ProblemJsonResponse(instance)
-  }
-  
-  const timelineHash = timelineFromParam.key
-  let timelineOwnerKey:string|null = timelineFromParam.ownerKey
-  const timelinewriteKey:string|null = timelineFromParam.writeKey
-  const timelineReadKey:string|null = timelineFromParam.readKey
+	const timelineHash = timelineFromParam.key;
+	let timelineOwnerKey: string | null = timelineFromParam.ownerKey;
+	const timelinewriteKey: string | null = timelineFromParam.writeKey;
+	const timelineReadKey: string | null = timelineFromParam.readKey;
 
-  if(timelineOwnerKey == undefined || timelineOwnerKey.trim() == ''){
-    timelineOwnerKey = null
-  }
+	if (timelineOwnerKey == undefined || timelineOwnerKey.trim() == '') {
+		timelineOwnerKey = null;
+	}
 
-  const responseControlSlugAndKeys = controlSlugAndKeys(instance, timelineHash, timelineOwnerKey, timelinewriteKey, timelineReadKey)
-  if(responseControlSlugAndKeys != null){return responseControlSlugAndKeys}
-  
-  //Loading the timeline from db
-  const structDb = findLastTimelineByKey(requestEvent.locals.db, timelineHash)
-  let timelineFromDb;
+	const responseControlSlugAndKeys = controlSlugAndKeys(
+		instance,
+		timelineHash,
+		timelineOwnerKey,
+		timelinewriteKey,
+		timelineReadKey
+	);
+	if (responseControlSlugAndKeys != null) {
+		return responseControlSlugAndKeys;
+	}
 
-  if(structDb !== undefined){
-    timelineFromDb = JSON.parse(structDb.json) as Timeline
-  }
-  
-  // Verification with hash + ownerkey ou hash + writekey ou hash + readkey
-  if(timelineFromDb !== undefined){
-      const response = accessControl(instance, timelineFromDb,timelineOwnerKey,timelinewriteKey,timelineReadKey)
-      if(response !== null){return response}
-  } else {
-    //With no previous existing timeline, we should not have a timeline without ownerkey.
-    if(timelineOwnerKey == null){
-      return new EMPTY_OWNERKEY_ProblemJsonResponse(instance)
-    }
-  }
+	//Loading the timeline from db
+	const structDb = findLastTimelineByKey(requestEvent.locals.db, timelineHash);
+	let timelineFromDb;
 
-  //Prepare a clone for insertion
-  const timelineForInsertion = structuredClone(timelineFromParam)
+	if (structDb !== undefined) {
+		timelineFromDb = JSON.parse(structDb.json) as Timeline;
+	}
 
-  //We can retrive ownerKey from db if existing (case : a write push a Timeline)
-  if(timelineFromDb !== undefined && timelineOwnerKey == null){
-    timelineForInsertion.ownerKey = timelineFromDb.ownerKey
-  }
+	// Verification with hash + ownerkey ou hash + writekey ou hash + readkey
+	if (timelineFromDb !== undefined) {
+		const response = accessControl(
+			instance,
+			timelineFromDb,
+			timelineOwnerKey,
+			timelinewriteKey,
+			timelineReadKey
+		);
+		if (response !== null) {
+			return response;
+		}
+	} else {
+		//With no previous existing timeline, we should not have a timeline without ownerkey.
+		if (timelineOwnerKey == null) {
+			return new EMPTY_OWNERKEY_ProblemJsonResponse(instance);
+		}
+	}
 
-  //Insert only
-  insertTimeline(db, timelineForInsertion)
-  
-  //Prepare the standard response with data & meta
-  const responseWithMeta:ResponseWithMeta = {
-    meta: {
-      ts:Date.now()
-    },
-    data : timelineFromParam
-  }
+	//Prepare a clone for insertion
+	const timelineForInsertion = structuredClone(timelineFromParam);
 
-  return json(responseWithMeta, { status: 201 })
-}
+	//We can retrive ownerKey from db if existing (case : a write push a Timeline)
+	if (timelineFromDb !== undefined && timelineOwnerKey == null) {
+		timelineForInsertion.ownerKey = timelineFromDb.ownerKey;
+	}
+
+	//Insert only
+	insertTimeline(db, timelineForInsertion);
+
+	//Prepare the standard response with data & meta
+	const responseWithMeta: ResponseWithMeta = {
+		meta: {
+			ts: Date.now()
+		},
+		data: timelineFromParam
+	};
+
+	return json(responseWithMeta, { status: 201 });
+};
 
 /**
- * default OPTIONS method 
+ * default OPTIONS method
  * @returns a 204 Response
  */
 export const OPTIONS: RequestHandler = async () => {
-  return _OPTIONS(['POST'])
-}
+	return _OPTIONS(['POST']);
+};
 /**
  * Fallback method : we refuse the connexion
  * @returns a 405 Response
  */
 export const fallback: RequestHandler = async ({ request: requestEvent }) => {
-  return _FALLBACK(requestEvent)
-}
+	return _FALLBACK(requestEvent);
+};
 
 /**
  * Integrity's control of slug & the 3 keys.
@@ -116,29 +136,34 @@ export const fallback: RequestHandler = async ({ request: requestEvent }) => {
  * @param ownerKey the key of the owner Right
  * @param writeKey the key of the write Right
  * @param readKey the key of the read Right
- * @returns 
+ * @returns
  *  null if everything is ok
  *  a 422 Response if a control is not ok
  */
-function controlSlugAndKeys(instance:string,slug:string, ownerKey:string|null, writeKey:string|null, readKey:string|null):Response|null{
-
-  if(slug==null || !slug.match(ALPHANUM64)){
-      return new REGEX_FAILED_ProblemJsonResponse(instance,'slug',slug,ALPHANUM64.source)
-  }
-  if(ownerKey!==null && !ownerKey.match(ALPHANUM64)){
-      const value = (ownerKey==null?ownerKey='':ownerKey)
-      return new REGEX_FAILED_ProblemJsonResponse(instance,'ownerKey',value,ALPHANUM64.source)
-  }
-  if(writeKey==null || !writeKey.match(ALPHANUM64)){
-      const value = (writeKey==null?writeKey='':writeKey)
-      return new REGEX_FAILED_ProblemJsonResponse(instance,'writeKey',value,ALPHANUM64.source)
-  }
-  if(readKey==null || !readKey.match(ALPHANUM64)){
-      const value = (readKey==null?readKey='':readKey)
-      return new REGEX_FAILED_ProblemJsonResponse(instance,'readKey',value,ALPHANUM64.source)
-  }
-  if(ownerKey == null && writeKey == null && readKey == null){
-      return new EMPTY_KEYS_ProblemJsonResponse(instance)
-  }
-  return null
+function controlSlugAndKeys(
+	instance: string,
+	slug: string,
+	ownerKey: string | null,
+	writeKey: string | null,
+	readKey: string | null
+): Response | null {
+	if (slug == null || !slug.match(ALPHANUM64)) {
+		return new REGEX_FAILED_ProblemJsonResponse(instance, 'slug', slug, ALPHANUM64.source);
+	}
+	if (ownerKey !== null && !ownerKey.match(ALPHANUM64)) {
+		const value = ownerKey == null ? (ownerKey = '') : ownerKey;
+		return new REGEX_FAILED_ProblemJsonResponse(instance, 'ownerKey', value, ALPHANUM64.source);
+	}
+	if (writeKey == null || !writeKey.match(ALPHANUM64)) {
+		const value = writeKey == null ? (writeKey = '') : writeKey;
+		return new REGEX_FAILED_ProblemJsonResponse(instance, 'writeKey', value, ALPHANUM64.source);
+	}
+	if (readKey == null || !readKey.match(ALPHANUM64)) {
+		const value = readKey == null ? (readKey = '') : readKey;
+		return new REGEX_FAILED_ProblemJsonResponse(instance, 'readKey', value, ALPHANUM64.source);
+	}
+	if (ownerKey == null && writeKey == null && readKey == null) {
+		return new EMPTY_KEYS_ProblemJsonResponse(instance);
+	}
+	return null;
 }

@@ -1,43 +1,41 @@
 {
-    "key":"key",
-    "title":"title",
-    "tasks":[
-       {
-          "id":1,
-          "label":"label 1",
-          "dateStart":"2022-01-01",
-          "dateEnd":"2022-02-01",
-          "hasProgress":true,
-          "progress":100,
-          "isShow":true,
-          "swimline":"Swimline 1",
-          "swimlineId":5
-       }
-    ],
-    "milestones":[
-       {
-          "id":1,
-          "label":"label 1",
-          "date":"2022-01-01",
-          "isShow":true
-       }
-    ],
-    "swimlines":[
-       
-    ],
-    "isInitiate":true,
-    "start":"2022-01-01",
-    "end":"2022-12-31",
-    "differencial":null,
-    "maxId":99,
-    "viewbox":"viewbox",
-    "showAll":true,
-    "isOnline":false,
-    "ownerKey":null,
-    "writeKey":null,
-    "readKey":null,
-    "showToday":true,
-    "showOutOfBounds":true,
-    "dateStartFocus":null,
-    "dateEndFocus":null
- }
+	"key": "key",
+	"title": "title",
+	"tasks": [
+		{
+			"id": 1,
+			"label": "label 1",
+			"dateStart": "2022-01-01",
+			"dateEnd": "2022-02-01",
+			"hasProgress": true,
+			"progress": 100,
+			"isShow": true,
+			"swimline": "Swimline 1",
+			"swimlineId": 5
+		}
+	],
+	"milestones": [
+		{
+			"id": 1,
+			"label": "label 1",
+			"date": "2022-01-01",
+			"isShow": true
+		}
+	],
+	"swimlines": [],
+	"isInitiate": true,
+	"start": "2022-01-01",
+	"end": "2022-12-31",
+	"differencial": null,
+	"maxId": 99,
+	"viewbox": "viewbox",
+	"showAll": true,
+	"isOnline": false,
+	"ownerKey": null,
+	"writeKey": null,
+	"readKey": null,
+	"showToday": true,
+	"showOutOfBounds": true,
+	"dateStartFocus": null,
+	"dateEndFocus": null
+}
