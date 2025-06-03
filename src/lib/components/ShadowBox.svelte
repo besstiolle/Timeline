@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { m } from '../paraglide/messages';
+	import { m } from '../../paraglide/messages';
 
 	let hidden = $state(true);
 	//children is a native SvelteKit property, get the content from parent to slot (@render)

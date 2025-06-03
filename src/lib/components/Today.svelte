@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { m } from '../paraglide/messages';
-	import { GRID } from './constantes';
-	import { store } from './stores';
+	import { m } from '../../paraglide/messages';
+	import { GRID } from '$lib/constantes';
+	import { store } from '$lib/stores';
 
 	let toDisplay: boolean =
 		$store.currentTimeline.getStart() <= new Date() &&

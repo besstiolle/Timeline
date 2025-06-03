@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { GRID } from './constantes';
-	import { store } from './stores';
+	import { GRID } from '$lib/constantes';
+	import { store } from '$lib/stores';
 
 	let startString = $store.currentTimeline.start;
 	let endString = $store.currentTimeline.end;

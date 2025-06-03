@@ -1,9 +1,9 @@
 <script>
 	let { children } = $props();
 	import '../app.css';
-	import Plausible from '../components/Analytics/Plausible.svelte';
-	import Umami from '../components/Analytics/Umami.svelte';
-	import Headers from '../components/Headers.svelte';
+	import Plausible from '$lib/components/Analytics/Plausible.svelte';
+	import Umami from '$lib/components/Analytics/Umami.svelte';
+	import Headers from '$lib/components/Headers.svelte';
 </script>
 
 <svelte:head></svelte:head>

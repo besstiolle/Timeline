@@ -8,9 +8,9 @@
 		toVersion,
 		versionCompare
 	} from './Version';
-	import ShadowBox from '$lib/ShadowBox.svelte';
-	import { m } from '../../paraglide/messages';
+	import ShadowBox from '$lib/components/ShadowBox.svelte';
 	import { page } from '$app/state';
+	import { m } from '../../../paraglide/messages';
 
 	let shadowBox: ShadowBox;
 

@@ -4,11 +4,11 @@
 	import { FactoryCards } from '$lib/factoryCards';
 	import { FactoryPicto } from '$lib/factoryPicto';
 	import { Helpers } from '$lib/helpers';
-	import { m } from '../paraglide/messages';
 	import { store } from '$lib/stores';
-	import PopUpConfirmation from '$lib/PopUpConfirmation.svelte';
-	import Toast from '$lib/Toast.svelte';
+	import PopUpConfirmation from '$lib/components/PopUpConfirmation.svelte';
+	import Toast from '$lib/components/Toast.svelte';
 	import { Card, Timeline } from '$lib/struct.class';
+	import { m } from '../../paraglide/messages';
 
 	let popUpComponent: PopUpConfirmation;
 	let toastComponent: Toast;

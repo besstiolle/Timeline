@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { store } from './stores';
+	import { store } from '$lib/stores';
 
-	import { FactoryMilestone } from './factoryMilestone';
-	import { GRID, MONTHS } from './constantes';
-	import type { Milestone } from './struct.class';
+	import { FactoryMilestone } from '$lib/factoryMilestone';
+	import { GRID, MONTHS } from '$lib/constantes';
+	import type { Milestone } from '$lib/struct.class';
 
 	function compareMilestone(a: Milestone, b: Milestone) {
 		if (a.date > b.date) {

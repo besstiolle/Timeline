@@ -9,10 +9,10 @@
 	import { FactoryTimeline } from '$lib/factoryTimeline';
 	import { get } from '$lib/timelineRepository';
 
-	import Draw from '$lib/Draw.svelte';
-	import Toast from '$lib/Toast.svelte';
+	import Draw from '$lib/components/Draw.svelte';
+	import Toast from '$lib/components/Toast.svelte';
 	import { NotFoundOnlineException } from '$lib/timelineException.class';
-	import type { ResponseWithMeta } from '../../api/timeline/types';
+	import type { ResponseWithMeta } from '$lib/server/types';
 	import { m } from '../../../paraglide/messages';
 	import { Timeline } from '$lib/struct.class';
 

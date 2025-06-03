@@ -3,8 +3,8 @@ import { RequestEventStub, toRequestEvent, VALID_DUMMY_TIMELINE } from '../apiUt
 import { OPTIONS } from '../../../routes/api/timeline/+server';
 import * as handlers from '../../../routes/api/timeline/+server';
 import { initDatabase } from '$lib/database/initdatabase';
-import type { ResponseWithMeta } from '../../../routes/api/timeline/types';
-import { countTimelineByKey } from '../../../routes/api/timeline/repository';
+import type { ResponseWithMeta } from '$lib/server/types';
+import { countTimelineByKey } from '$lib/server/repository';
 import Database from 'better-sqlite3';
 import type { Timeline } from '$lib/struct.class';
 

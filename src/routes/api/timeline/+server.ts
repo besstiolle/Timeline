@@ -1,8 +1,8 @@
 import { JsonParser } from '$lib/jsonParser';
-import { accessControl } from './keyValidator';
-import { findLastTimelineByKey } from './repository';
-import type { ResponseWithMeta } from './types';
-import { insertTimeline } from './repository';
+import { accessControl } from '$lib/server/keyValidator';
+import { findLastTimelineByKey } from '$lib/server/repository';
+import type { ResponseWithMeta } from '$lib/server/types';
+import { insertTimeline } from '$lib/server/repository';
 import { json, type RequestEvent, type RequestHandler } from '@sveltejs/kit';
 import {
 	EMPTY_KEYS_ProblemJsonResponse,

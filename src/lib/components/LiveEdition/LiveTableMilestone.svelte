@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { store } from './stores';
-	import { Helpers } from './helpers';
-	import { FactoryTimeline } from './factoryTimeline';
-	import { LIVE_PREFIX } from './constantes';
-	import { FactoryMilestone } from './factoryMilestone';
-	import { m } from '../paraglide/messages';
-	import { Milestone } from './struct.class';
+	import { store } from '$lib/stores';
+	import { Helpers } from '$lib/helpers';
+	import { FactoryTimeline } from '$lib/factoryTimeline';
+	import { LIVE_PREFIX } from '$lib/constantes';
+	import { FactoryMilestone } from '$lib/factoryMilestone';
+	import { m } from '../../../paraglide/messages';
+	import { Milestone } from '$lib/struct.class';
 
 	const props = $props();
 	const updateStore = props.updateStore as (prefix: string, position: number) => void;

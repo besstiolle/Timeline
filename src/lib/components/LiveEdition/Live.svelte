@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { store } from './stores';
-	import { LIVE_PREFIX } from './constantes';
+	import { store } from '$lib/stores';
+	import { LIVE_PREFIX } from '$lib/constantes';
 
 	import LiveTableTask from './LiveTableTask.svelte';
 	import LiveTableMilestone from './LiveTableMilestone.svelte';
-	import ShadowBox from './ShadowBox.svelte';
-	import { m } from '../paraglide/messages';
+	import ShadowBox from '$lib/components/ShadowBox.svelte';
+	import { m } from '../../../paraglide/messages';
 
 	let shadowBox: ShadowBox;
 

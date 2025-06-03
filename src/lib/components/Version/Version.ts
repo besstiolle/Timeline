@@ -1,6 +1,6 @@
 import { get } from '$lib/aboutRepository';
 import type { GitVersions, Version } from '$lib/struct.class';
-import type { ResponseWithMeta } from '../../routes/api/timeline/types';
+import type { ResponseWithMeta } from '$lib/server/types';
 
 const REGEX_SEMVER = new RegExp('^[vV]?([0-9])+.([0-9])+.([0-9])+$', '');
 

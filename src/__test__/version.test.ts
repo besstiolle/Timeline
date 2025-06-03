@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { toString, toVersion, versionCompare } from '../components/Version/Version';
+import { toString, toVersion, versionCompare } from '$lib/components/Version/Version';
 
 beforeEach(() => {
 	//Mock console.error() to avoid vi console pollution

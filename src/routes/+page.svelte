@@ -3,7 +3,7 @@
 	import { Rights } from '$lib/rights.class';
 	import { store } from '$lib/stores';
 	import { Timeline } from '$lib/struct.class';
-	import Cards from '../components/Cards.svelte';
+	import Cards from '$lib/components/Cards.svelte';
 	import { m } from '../paraglide/messages';
 
 	//Reset store currentTimeline information when we are here

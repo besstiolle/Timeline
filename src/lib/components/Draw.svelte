@@ -1,20 +1,21 @@
 <script lang="ts">
 	import html2canvas from 'html2canvas-pro';
 
-	import { store } from './stores';
+	import { store } from '$lib/stores';
 	import { browser } from '$app/environment';
 
-	import { Helpers } from './helpers';
+	import { Helpers } from '$lib/helpers';
 
+	
+	import Milestones from '$lib/components/Milestones.svelte';
+	import Today from '$lib/components/Today.svelte';
+	import Live from '$lib/components/LiveEdition/Live.svelte';
+	import SwimAndTasks from '$lib/components/SwimAndTasks/SwimAndTasks.svelte';
+	import Online from '$lib/components/Online.svelte';
+	import Toast from '$lib/components/Toast.svelte';
+	import { FactoryPicto } from '$lib/factoryPicto';
+	import Upload from '$lib/components/Upload/Upload.svelte';
 	import Banner from './Banner.svelte';
-	import Milestones from './Milestones.svelte';
-	import Today from './Today.svelte';
-	import Upload from '../components/Upload/Upload.svelte';
-	import Live from './Live.svelte';
-	import SwimAndTasks from './SwimAndTasks.svelte';
-	import Online from './Online.svelte';
-	import Toast from './Toast.svelte';
-	import { FactoryPicto } from './factoryPicto';
 
 	let toastComponent: Toast;
 	let uploadComponent: Upload;

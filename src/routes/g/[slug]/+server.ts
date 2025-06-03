@@ -1,6 +1,6 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { _FALLBACK, _OPTIONS } from '$lib/api/apiUtils';
-import type { ResponseWithMeta } from '../../api/timeline/types';
+import type { ResponseWithMeta } from '$lib/server/types';
 
 /**
  * POST /g/[slug]

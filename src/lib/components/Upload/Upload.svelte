@@ -1,15 +1,15 @@
 <script lang="ts">
 	import toml from 'toml';
 
-	import { store } from '../../lib/stores';
-	import { FactoryTimeline } from '../../lib/factoryTimeline';
-	import { goToml, timelineToObject } from '../../lib/toml';
-	import { goCsv, parseCsv } from '../../lib/csv';
-	import ShadowBox from '../../lib/ShadowBox.svelte';
-	import Toast from '../../lib/Toast.svelte';
-	import { m } from '../../paraglide/messages';
 	import type { Action } from 'svelte/action';
 	import { parseAbstractTimeline } from './Upload';
+	import ShadowBox from '$lib/components/ShadowBox.svelte';
+	import Toast from '$lib/components/Toast.svelte';
+	import { goCsv, parseCsv } from '$lib/csv';
+	import { goToml, timelineToObject } from '$lib/toml';
+	import { FactoryTimeline } from '$lib/factoryTimeline';
+	import { store } from './../../stores';
+	import { m } from '../../../paraglide/messages';
 
 	const props = $props();
 	const download = props.download as (blob: Blob, extensionName: string) => void;

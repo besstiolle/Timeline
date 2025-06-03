@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { DAYS, DIFF, GRID, MONTHS } from './constantes';
-	import { store } from './stores';
+	import { DAYS, DIFF, GRID, MONTHS } from '$lib/constantes';
+	import { store } from '$lib/stores';
 
 	interface jalonInterface {
 		left: number;

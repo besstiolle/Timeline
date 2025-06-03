@@ -4,7 +4,7 @@ import { initDatabase } from '$lib/database/initdatabase';
 import Database from 'better-sqlite3';
 import { RequestEventStub } from '../../apiUtils';
 import * as handlers from '../../../../routes/api/timeline/[slug]/+server';
-import { insertTimeline } from '../../../../routes/api/timeline/repository';
+import { insertTimeline } from '$lib/server/repository';
 import type { RequestEvent } from '../../../../routes/api/timeline/[slug]/$types';
 import { Timeline } from '$lib/struct.class';
 

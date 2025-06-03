@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { GRID, MONTHS } from './constantes';
+	import { GRID, MONTHS } from '$lib/constantes';
 
-	import { Helpers } from './helpers';
-	import { store } from './stores';
-	import type { Task } from './struct.class';
+	import { Helpers } from '$lib/helpers';
+	import { store } from '$lib/stores';
+	import type { Task } from '$lib/struct.class';
 
 	const props = $props();
 	const i = props.i as number;

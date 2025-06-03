@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { store } from './stores';
+	import { store } from '$lib/stores';
 
-	import { COLORS, GRID, MONTHS } from './constantes';
-	import { Helpers } from './helpers';
-	import { FactoryTask } from './factoryTask';
-	import type { Swimline, Task } from './struct.class';
+	import { COLORS, GRID, MONTHS } from '$lib/constantes';
+	import { Helpers } from '$lib/helpers';
+	import { FactoryTask } from '$lib/factoryTask';
+	import type { Swimline, Task } from '$lib/struct.class';
 	import TaskComponent from './Task.svelte';
 
 	interface swimlinesToShowInterface {

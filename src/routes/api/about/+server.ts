@@ -1,7 +1,7 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 import pkg from './../../../../package.json' with { type: 'json' };
 import { _FALLBACK, _OPTIONS } from '$lib/api/apiUtils';
-import type { ResponseWithMeta } from '../timeline/types';
+import type { ResponseWithMeta } from '$lib/server/types';
 import { env } from '$env/dynamic/private';
 
 /**

@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { store } from './stores';
+	import { store } from '$lib/stores';
 
-	import { Helpers } from './helpers';
-	import { remove, create } from './timelineRepository';
-	import ShadowBox from './ShadowBox.svelte';
-	import Toast from './Toast.svelte';
-	import { Rights } from './rights.class';
-	import { FactoryCards } from './factoryCards';
-	import type { ResponseWithMeta } from '../routes/api/timeline/types';
-	import { m } from '../paraglide/messages';
+	import { Helpers } from '$lib/helpers';
+	import { remove, create } from '$lib/timelineRepository';
+	import ShadowBox from '$lib/components/ShadowBox.svelte';
+	import Toast from '$lib/components/Toast.svelte';
+	import { Rights } from '$lib/rights.class';
+	import { FactoryCards } from '$lib/factoryCards';
+	import type { ResponseWithMeta } from '$lib/server/types';
+	import { m } from '../../paraglide/messages';
 
 	let toastComponent: Toast;
 	let shadowBox: ShadowBox;
