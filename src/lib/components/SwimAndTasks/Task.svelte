@@ -24,7 +24,6 @@
 	//const rightLabel = "#44546A";
 	//const leftLabel = "#000000";
 	//const dottedLine = "#44546A";
-
 	let styleColor = $state({ fill: green, stroke: greenStroke }); //default : full
 	if (currentTask.hasProgress && currentTask.progress < 100) {
 		styleColor = { fill: blue, stroke: blueStroke };

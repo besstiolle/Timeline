@@ -22,13 +22,14 @@ export function parseAbstractTimeline(
 				//reuse id of previous swimline
 			} else if (abstractTask.swimline !== '' && previousSwimline != abstractTask.swimline) {
 				// create new swimline and save its id
-				previousSwimlineId = FactorySwimline.create(newTimeline, abstractTask.swimline);
+				newTimeline = FactorySwimline.create(newTimeline, abstractTask.swimline);
+				previousSwimlineId = newTimeline.swimlines.length - 1;
 			} else {
 				//reset previous Swimline id
 				previousSwimlineId = -1;
 			}
 
-			FactoryTimeline.addTask(
+			newTimeline = FactoryTimeline.addTask(
 				newTimeline,
 				new Task(
 					newTimeline.getNextId(),
@@ -48,7 +49,7 @@ export function parseAbstractTimeline(
 	}
 	if (abstractTimeline['milestones']) {
 		abstractTimeline['milestones'].forEach((abstractMilestone) => {
-			FactoryTimeline.addMilestone(
+			newTimeline = FactoryTimeline.addMilestone(
 				newTimeline,
 				new Milestone(
 					newTimeline.getNextId(),

@@ -4,26 +4,7 @@
 
 	import { FactoryMilestone } from '$lib/factoryMilestone';
 	import { GRID, MONTHS } from '$lib/constantes';
-	import type { Milestone } from '$lib/struct.class';
-
-	function compareMilestone(a: Milestone, b: Milestone) {
-		if (a.date > b.date) {
-			return 1;
-		}
-		if (a.date < b.date) {
-			return -1;
-		}
-		return 0;
-	}
-
-	let milestones: Milestone[] = [];
-	$store.currentTimeline.milestones.forEach((milestone: Milestone) => {
-		if (milestone.isShow || $store.currentTimeline.showAll) {
-			milestones.push(milestone);
-		}
-	});
-	//Sort by date ASC
-	milestones = milestones.sort(compareMilestone);
+	import { displayableMilestones } from '$lib/derivedStore';
 
 	let ghostSVGNode: HTMLElement | null = null;
 	let currentTarget: HTMLElement | null = null;
@@ -75,11 +56,21 @@
 			let newX = (event.clientX / window.innerWidth) * GRID.ALL_WIDTH;
 			let date = processNewDate(newX - GRID.MIDDLE_X);
 			let idMilestone = (currentTarget.getAttribute('id') as string).substring(1); // M999 => 999
-			let milestones = null;
+
 			try {
-				milestones = FactoryMilestone.getById($store.currentTimeline, parseInt(idMilestone));
-				milestones.setDate(date);
-				$store.currentTimeline.milestones = $store.currentTimeline.milestones;
+				const milestoneToUpdate = FactoryMilestone.getById(
+					$store.currentTimeline,
+					parseInt(idMilestone)
+				);
+				milestoneToUpdate.setDate(date);
+				store.update((s) => {
+					s.currentTimeline = FactoryMilestone.updateById(
+						s.currentTimeline,
+						parseInt(idMilestone),
+						milestoneToUpdate
+					);
+					return { ...s };
+				});
 			} catch (NotFoundException) {
 				//Nothing to do, the rest of the function will clean everything
 				console.debug('catch a NotFoundExeption but everything is normal', NotFoundException);
@@ -165,7 +156,7 @@
 	fill="transparent"
 	class:onhover={ghostSVGNode && hoverGroup && !$store.rights.isReader()}
 />
-{#each milestones as milestone, index (index)}
+{#each $displayableMilestones as milestone, index (milestone.id)}
 	<svg
 		viewBox={$store.currentTimeline.viewbox}
 		xmlns="http://www.w3.org/2000/svg"

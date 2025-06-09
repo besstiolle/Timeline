@@ -21,8 +21,8 @@ store.subscribe((val) => updateLocalStorage(val));
 
 function updateLocalStorage(timelineStore: TimelineStore) {
 	//console.info("updateLocalStorage(val) with key %o", (timelineStore&&timelineStore.currentTimeline&&timelineStore.currentTimeline.key)?timelineStore.currentTimeline.key:"N/A")
-	const currentTimeline = timelineStore.currentTimeline;
-	const cards = timelineStore.cards;
+	let currentTimeline = timelineStore.currentTimeline;
+	let cards = timelineStore.cards;
 	if (!timelineStore._cancelRefreshLastUpdatedLocally) {
 		timelineStore.lastUpdatedLocally = new Date().getTime();
 	} else {
@@ -31,10 +31,10 @@ function updateLocalStorage(timelineStore: TimelineStore) {
 
 	if (currentTimeline && currentTimeline.isInitiate) {
 		//Inserting/Updating information of current Timline into the good card
-		FactoryCards.updateCardsWithTimeline(cards, currentTimeline);
+		cards = FactoryCards.updateCardsWithTimeline(cards, currentTimeline);
 
 		//Refresh datemin / max and other compiled data
-		FactoryTimeline.refresh(currentTimeline);
+		currentTimeline = FactoryTimeline.refresh(currentTimeline);
 
 		//Persist both current timeline & cards in localstorage
 		CustomLocalStorage.save(currentTimeline.key, currentTimeline);

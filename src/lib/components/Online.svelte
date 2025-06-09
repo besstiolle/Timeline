@@ -24,7 +24,6 @@
 			$store.lastUpdatedLocally - $store.lastCommitedRemotely > 5000
 		) {
 			$store.commitInProgress = true;
-			console.info($store.lastUpdatedLocally, $store.lastCommitedRemotely);
 			console.debug('gap > 5000 ms : %o', $store.lastUpdatedLocally - $store.lastCommitedRemotely);
 			create($store.currentTimeline)
 				.then((responseWithMeta: ResponseWithMeta) => {
@@ -60,11 +59,14 @@
 		]);
 		remove(seachParams)
 			.then(() => {
-				$store.currentTimeline.isOnline = false;
-				$store.currentTimeline.ownerKey = null;
-				$store.currentTimeline.writeKey = null;
-				$store.currentTimeline.readKey = null;
-				$store.lastCommitedRemotely = -1;
+				store.update((s) => {
+					s.currentTimeline.isOnline = false;
+					s.currentTimeline.ownerKey = null;
+					s.currentTimeline.writeKey = null;
+					s.currentTimeline.readKey = null;
+					s.lastCommitedRemotely = -1;
+					return { ...s };
+				});
 
 				//Rewrite URL
 				window.location.href = base_url + '/g/' + $store.currentTimeline.key;
@@ -78,13 +80,20 @@
 			.finally(() => {});
 
 		//update cards with the online/offline information
-		FactoryCards.updateCardsWithTimeline($store.cards, $store.currentTimeline);
+		//TODO : vérifier pertinence de cet update vs update réalisé dans l'obs du store
+		store.update((s) => {
+			s.cards = FactoryCards.updateCardsWithTimeline($store.cards, $store.currentTimeline);
+			return { ...s };
+		});
 	}
 	function doOnline() {
-		$store.currentTimeline.isOnline = true;
-		$store.currentTimeline.ownerKey = Helpers.randomeString(64);
-		$store.currentTimeline.writeKey = Helpers.randomeString(64);
-		$store.currentTimeline.readKey = Helpers.randomeString(64);
+		store.update((s) => {
+			s.currentTimeline.isOnline = true;
+			s.currentTimeline.ownerKey = Helpers.randomeString(64);
+			s.currentTimeline.writeKey = Helpers.randomeString(64);
+			s.currentTimeline.readKey = Helpers.randomeString(64);
+			return { ...s };
+		});
 
 		create($store.currentTimeline)
 			.then((responseWithMeta: ResponseWithMeta) => {
@@ -93,23 +102,32 @@
 					toastComponent.show(m.online_toast_saved_success());
 				}
 				//Refresh internal Rights value
-				$store.rights = new Rights($store.currentTimeline.ownerKey);
+				store.update((s) => {
+					s.rights = new Rights($store.currentTimeline.ownerKey);
+					return { ...s };
+				});
 			})
 			.catch((err) => {
 				console.error('Error where calling create() in Online.doOnline() : %o', err);
 				if (toastComponent) {
 					toastComponent.show(m.online_toast_remote_offline(), false, 0);
 				}
-
-				$store.currentTimeline.isOnline = false;
-				$store.currentTimeline.ownerKey = null;
-				$store.currentTimeline.writeKey = null;
-				$store.currentTimeline.readKey = null;
+				store.update((s) => {
+					s.currentTimeline.isOnline = false;
+					s.currentTimeline.ownerKey = null;
+					s.currentTimeline.writeKey = null;
+					s.currentTimeline.readKey = null;
+					return { ...s };
+				});
 			})
 			.finally(() => {});
 
 		//update cards with the online/offline information
-		FactoryCards.updateCardsWithTimeline($store.cards, $store.currentTimeline);
+		//TODO : vérifier pertinence de cet update vs update réalisé dans l'obs du store
+		store.update((s) => {
+			s.cards = FactoryCards.updateCardsWithTimeline(s.cards, s.currentTimeline);
+			return { ...s };
+		});
 	}
 
 	function select(event: MouseEvent) {

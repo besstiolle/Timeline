@@ -8,7 +8,7 @@ export class FactoryMilestone {
 	 * @param car the separator
 	 * @returns a string with values concatenated for CSV
 	 */
-	static join(milestone: Milestone, car: string) {
+	static join(milestone: Milestone, car: string): string {
 		return 'milestone' + car + milestone.label + car + milestone.isShow + car + milestone.date;
 	}
 
@@ -36,6 +36,26 @@ export class FactoryMilestone {
 		throw new NotFoundException('Milestone', id);
 	}
 
+	//TODO : tester cette fonction
+	static updateById(timeline: Timeline, id: number, milestoneToUpdate: Milestone): Timeline {
+		//A simple loop to reach for the good item because it's cheaper
+		// than trying to maintain a map with id => index of array each time
+		// we change something into the $store
+
+		let isFound = false;
+		timeline.milestones.forEach((milestone) => {
+			if (milestone.id == id) {
+				isFound = true;
+				milestone = milestoneToUpdate;
+			}
+		});
+
+		if (isFound) {
+			return timeline;
+		}
+		throw new NotFoundException('Milestone', id);
+	}
+
 	/**
 	 * Clone properly a <Milestone> with all its function.
 	 * @param task the milestone to clone
@@ -50,5 +70,16 @@ export class FactoryMilestone {
 			milestone.date,
 			milestone.isShow
 		);
+	}
+
+	//TODO : test
+	static compare(a: Milestone, b: Milestone) {
+		if (a.date > b.date) {
+			return 1;
+		}
+		if (a.date < b.date) {
+			return -1;
+		}
+		return 0;
 	}
 }

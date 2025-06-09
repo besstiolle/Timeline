@@ -1,52 +1,12 @@
 <script lang="ts">
 	import { store } from '$lib/stores';
 
-	import { COLORS, GRID, MONTHS } from '$lib/constantes';
+	import { GRID, MONTHS } from '$lib/constantes';
 	import { Helpers } from '$lib/helpers';
 	import { FactoryTask } from '$lib/factoryTask';
-	import type { Swimline, Task } from '$lib/struct.class';
 	import TaskComponent from './Task.svelte';
-
-	interface swimlinesToShowInterface {
-		swimline: Swimline;
-		position: number;
-		height: number;
-	}
-
-	let tasksToShow: Task[] = [];
-	let swimlinesToShow: Map<number, swimlinesToShowInterface> = new Map<
-		number,
-		swimlinesToShowInterface
-	>();
-	let previousSwimlineId: number = -1;
-	let height: number;
-	let position: number = 0;
-	$store.currentTimeline.tasks.forEach((task: Task) => {
-		if (task.isShow || $store.currentTimeline.showAll) {
-			tasksToShow.push(task);
-
-			if (task.swimlineId != -1 && previousSwimlineId != task.swimlineId) {
-				if (task.isShow && !$store.currentTimeline.showAll) {
-					height =
-						$store.currentTimeline.swimlines[task.swimlineId].countVisibleTasks * GRID.ONE_TASK_H -
-						0.5;
-				} else {
-					height =
-						$store.currentTimeline.swimlines[task.swimlineId].countAllTasks * GRID.ONE_TASK_H - 0.5;
-				}
-
-				swimlinesToShow.set(task.id, {
-					swimline: $store.currentTimeline.swimlines[task.swimlineId],
-					position: position,
-					height: height
-				});
-
-				position++;
-			}
-
-			previousSwimlineId = task.swimlineId;
-		}
-	});
+	import { displayableTasks } from '$lib/derivedStore';
+	import Swimlines from './Swimlines.svelte';
 
 	let taskId: string = '';
 	let rightLabel: HTMLElement;
@@ -152,7 +112,10 @@
 
 		if (isDragging && hoverGroup) {
 			try {
-				let task = FactoryTask.getById($store.currentTimeline, parseInt(taskId.substring(1))); //html id = T999 => 999
+				const taskToUpdate = FactoryTask.getById(
+					$store.currentTimeline,
+					parseInt(taskId.substring(1))
+				); //html id = T999 => 999
 				if (realAction == ACTION.LEFT || realAction == ACTION.RIGHT) {
 					let dateStart = Helpers.getDateFromViewportX(
 						TActionBarCoord.REC_X,
@@ -168,8 +131,8 @@
 					dateStart.setHours(0, 0, 0, 0);
 					dateEnd.setHours(0, 0, 0, 0);
 
-					task.setStart(dateStart);
-					task.setEnd(dateEnd);
+					taskToUpdate.setStart(dateStart);
+					taskToUpdate.setEnd(dateEnd);
 				} else if (realAction == ACTION.PROGRESS) {
 					let viewportX: number = (event.clientX / window.innerWidth) * GRID.ALL_WIDTH;
 
@@ -185,10 +148,16 @@
 						((viewportX - TActionBarCoord.REC_X) /
 							(TActionBarCoord.REC_X2 - TActionBarCoord.REC_X)) *
 						100;
-					task.progress = Math.round(progressValue);
+					taskToUpdate.progress = Math.round(progressValue);
 				}
-
-				$store.currentTimeline.tasks = $store.currentTimeline.tasks;
+				store.update((s) => {
+					s.currentTimeline = FactoryTask.updateById(
+						s.currentTimeline,
+						parseInt(taskId.substring(1)),
+						taskToUpdate
+					);
+					return { ...s };
+				});
 			} catch (NotFoundException) {
 				//Nothing to do, the rest of the function will clean everything
 				console.debug('catch a NotFoundExeption but everything is normal', NotFoundException);
@@ -402,118 +371,22 @@
 			element.classList.add('hidden');
 		});
 	}
-
-	function toggleSwimlineVisibility(event: Event) {
-		let id = Number((event.currentTarget as HTMLElement).id.substring(1));
-		let value = !$store.currentTimeline.swimlines[id].isShow;
-		$store.currentTimeline.tasks.forEach((task: Task) => {
-			if (task.swimlineId == id) {
-				task.isShow = value;
-			}
-		});
-		$store.currentTimeline.tasks = $store.currentTimeline.tasks;
-	}
-	function showToggle(event: Event) {
-		let id = Number((event.currentTarget as HTMLElement).id.substring(1));
-		(document.getElementById('s' + id) as HTMLElement).classList.toggle('hidden');
-	}
 </script>
 
 <svelte:window onmouseup={up} onmousemove={move} />
-<svg
-	viewBox={$store.currentTimeline.viewbox}
-	xmlns="http://www.w3.org/2000/svg"
-	x="0"
-	y={GRID.MILESTONE_H + GRID.ANNUAL_H - 5}
-	id="svgSwimlineAndTasks"
->
-	{#each tasksToShow as task, index (index)}
-		{#if swimlinesToShow.has(task.id)}
-			{@const localSwimline = swimlinesToShow.get(task.id)}
-			{#if localSwimline}
-				<rect
-					x="0"
-					y={index * GRID.ONE_TASK_H}
-					width={GRID.ALL_WIDTH}
-					height={localSwimline?.height}
-					fill={COLORS[localSwimline.position % COLORS.length][0]}
-					id="c{task.swimlineId}"
-					onmouseover={showToggle}
-					onfocus={showToggle}
-					onmouseout={showToggle}
-					onblur={showToggle}
-					role="none"
-				/>
+<Swimlines />
 
-				<rect
-					x="0"
-					y={index * GRID.ONE_TASK_H}
-					width={GRID.LEFT_WIDTH}
-					height={localSwimline.height}
-					fill={COLORS[localSwimline.position % COLORS.length][1]}
-					id="d{task.swimlineId}"
-					onmouseover={showToggle}
-					onfocus={showToggle}
-					onmouseout={showToggle}
-					onblur={showToggle}
-					role="none"
-				/>
-
-				<text
-					text-anchor="middle"
-					x={GRID.LEFT_WIDTH / 2}
-					y={index * GRID.ONE_TASK_H + 5 + localSwimline.height / 2}
-					font-size="10"
-					fill={localSwimline.swimline.isShow ? '#ffffff' : '#888888'}
-					>{localSwimline.swimline.label}</text
-				>
-
-				<image
-					xlink:href={localSwimline.swimline.isShow ? '/hide.png' : '/see.png'}
-					x="0"
-					y={index * GRID.ONE_TASK_H}
-					height="24"
-					width="24"
-					data-html2canvas-ignore="true"
-					onclick={toggleSwimlineVisibility}
-					onkeydown={toggleSwimlineVisibility}
-					id="s{task.swimlineId}"
-					class="toggleVisibility hidden"
-					onmouseover={showToggle}
-					onfocus={showToggle}
-					onmouseout={showToggle}
-					onblur={showToggle}
-					role="button"
-					tabindex="0"
-				/>
-			{/if}
-		{:else}
-			<rect
-				x="0"
-				y={index * GRID.ONE_TASK_H}
-				width={GRID.ALL_WIDTH}
-				height={GRID.ONE_TASK_H - 0.5}
-				fill="transparent"
-			/>
-		{/if}
+{#key $displayableTasks}
+	{#each $displayableTasks as task, index (task.id)}
+		<TaskComponent
+			currentTask={task}
+			i={index}
+			{showActionBar}
+			{hideActionBar}
+			{downRight}
+			{downLeft}
+			{downProgress}
+		/>
 	{/each}
-</svg>
-
-{#each tasksToShow as task, index (index)}
-	<TaskComponent
-		currentTask={task}
-		i={index}
-		{showActionBar}
-		{hideActionBar}
-		{downRight}
-		{downLeft}
-		{downProgress}
-	/>
-{/each}
+{/key}
 <tspan id="ghost" x="-1000" />
-
-<style>
-	.toggleVisibility {
-		cursor: pointer;
-	}
-</style>

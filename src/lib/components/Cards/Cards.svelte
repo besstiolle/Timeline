@@ -8,7 +8,7 @@
 	import PopUpConfirmation from '$lib/components/PopUpConfirmation.svelte';
 	import Toast from '$lib/components/Toast.svelte';
 	import { Card, Timeline } from '$lib/struct.class';
-	import { m } from '../../paraglide/messages';
+	import { m } from '../../../paraglide/messages';
 
 	let popUpComponent: PopUpConfirmation;
 	let toastComponent: Toast;
@@ -46,10 +46,8 @@
 		clone.key = Helpers.randomeString(64);
 
 		let newCard = new Card(clone['key'], clone['title']);
-		$store.cards.push(newCard);
+		$store.cards = [...$store.cards, newCard];
 		CustomLocalStorage.save(clone['key'], clone);
-		//refresh store
-		$store.currentTimeline = new Timeline('', '');
 	}
 
 	/**
@@ -131,12 +129,10 @@
 		CustomLocalStorage.remove(key);
 		let index = FactoryCards.getIndexByKey($store.cards, key);
 		if (index !== null) {
-			$store.cards.splice(index, 1);
+			$store.cards = $store.cards.toSpliced(index, 1);
 		}
 
 		CustomLocalStorage.remove(LOCAL_STORAGE.KEY_PICTO + key);
-		//refresh store
-		$store.currentTimeline = new Timeline('', '');
 	}
 
 	/**
@@ -170,117 +166,111 @@
 </script>
 
 <div class="w-6xl m-auto mt-10 flex flex-wrap">
-	{#key $store.cards}{#each $store.cards as card, index (index)}
-			<!-- One card-->
-			<div class="basis-1/3">
-				<div
-					class="max-w-95/100 m-auto mt-5 flex shadow-xl/30 bg-blue-100 dark:bg-slate-800 cursor-pointer"
-					onclick={() => goto(null, card.key)}
-					onkeydown={() => goto(null, card.key)}
-					role="button"
-					tabindex="0"
-				>
-					<div class="flex-1/3 p-2">
+	{#each $store.cards as card, index (card.key)}
+		<!-- One card-->
+		<div class="basis-1/3">
+			<div
+				class="max-w-95/100 m-auto mt-5 flex shadow-xl/30 bg-blue-100 dark:bg-slate-800 cursor-pointer"
+				onclick={() => goto(null, card.key)}
+				onkeydown={() => goto(null, card.key)}
+				role="button"
+				tabindex="0"
+			>
+				<div class="flex-1/3 p-2">
+					<div
+						class="h-20 bg-no-repeat bg-center"
+						style="background-image: url('{getThumbnail(card.key)}');"
+					></div>
+				</div>
+
+				<div class="flex-2/3 p-2">
+					<div class="relative">
+						<!-- Contextual menu-->
 						<div
-							class="h-20 bg-no-repeat bg-center"
-							style="background-image: url('{getThumbnail(card.key)}');"
-						></div>
-					</div>
-
-					<div class="flex-2/3 p-2">
-						<div class="relative">
-							<!-- Contextual menu-->
-							<div
-								id="menu-toggle-{index}"
-								class="float-right relative"
-								onkeydown={(event) => {
-									show(event, index);
-								}}
-								onclick={(event) => {
-									show(event, index);
-								}}
-								onmouseleave={hide}
-								role="button"
-								tabindex="0"
+							id="menu-toggle-{index}"
+							class="float-right relative"
+							onkeydown={(event) => {
+								show(event, index);
+							}}
+							onclick={(event) => {
+								show(event, index);
+							}}
+							onmouseleave={hide}
+							role="button"
+							tabindex="0"
+						>
+							<svg viewBox="0 0 32 32" class="size-6 fill-gray-800 dark:fill-blue-50"
+								><use x="0" y="0" href="#ico_menu" /></svg
 							>
-								<svg viewBox="0 0 32 32" class="size-6 fill-gray-800 dark:fill-blue-50"
-									><use x="0" y="0" href="#ico_menu" /></svg
-								>
 
+							<div
+								id="menu-{index}"
+								class="menus hidden absolute -top-5 w-50 z-10 bg-blue-100 dark:bg-slate-800 shadow-xl/30"
+							>
+								<!-- Button Dupplicate -->
 								<div
-									id="menu-{index}"
-									class="menus hidden absolute -top-5 w-50 z-10 bg-blue-100 dark:bg-slate-800 shadow-xl/30"
+									class="p-2
+										hover:text-shadow-lg hover:text-shadow-white
+										dark:hover:text-shadow-lg dark:hover:text-shadow-slate-700
+										"
+									onclick={(event) => duplicate(event, card.key)}
+									onkeydown={(event) => duplicate(event, card.key)}
+									role="button"
+									tabindex="0"
 								>
-									<!-- Button Dupplicate -->
-									<div
-										class="p-2
-										hover:text-shadow-lg hover:text-shadow-white
-										dark:hover:text-shadow-lg dark:hover:text-shadow-slate-700
-										"
-										onclick={(event) => duplicate(event, card.key)}
-										onkeydown={(event) => duplicate(event, card.key)}
-										role="button"
-										tabindex="0"
+									<svg viewBox="0 0 32 32" class="float-left size-6 fill-gray-800 dark:fill-blue-50"
+										><use x="5" y="8" href="#b_duplicate" /></svg
 									>
-										<svg
-											viewBox="0 0 32 32"
-											class="float-left size-6 fill-gray-800 dark:fill-blue-50"
-											><use x="5" y="8" href="#b_duplicate" /></svg
-										>
-										{m.landing_action_duplicate()}
-									</div>
+									{m.landing_action_duplicate()}
+								</div>
 
-									<!-- Button delete-->
-									<div
-										class:hidden={card.isOnline}
-										class="p-2
+								<!-- Button delete-->
+								<div
+									class:hidden={card.isOnline}
+									class="p-2
 										border-t-1 border-blue-300 dark:border-slate-900
 										hover:text-shadow-lg hover:text-shadow-white
 										dark:hover:text-shadow-lg dark:hover:text-shadow-slate-700
 										"
-										onclick={(event) => askDelete(event, card.key)}
-										onkeydown={(event) => askDelete(event, card.key)}
-										role="button"
-										tabindex="0"
+									onclick={(event) => askDelete(event, card.key)}
+									onkeydown={(event) => askDelete(event, card.key)}
+									role="button"
+									tabindex="0"
+								>
+									<svg viewBox="0 0 40 40" class="float-left size-6 fill-gray-800 dark:fill-blue-50"
+										><use x="5" y="8" href="#ico_delete" /></svg
 									>
-										<svg
-											viewBox="0 0 40 40"
-											class="float-left size-6 fill-gray-800 dark:fill-blue-50"
-											><use x="5" y="8" href="#ico_delete" /></svg
-										>
-										{m.landing_action_delete()}
-									</div>
+									{m.landing_action_delete()}
+								</div>
 
-									<!-- Button delete-->
-									<div
-										class:hidden={!card.isOnline}
-										class="p-2
+								<!-- Button delete-->
+								<div
+									class:hidden={!card.isOnline}
+									class="p-2
 										border-t-1 border-blue-300 dark:border-slate-900
 										"
+								>
+									<svg
+										viewBox="0 0 600 600"
+										class="float-left size-6 fill-gray-800 dark:fill-blue-50"
+										><use x="5" y="75" href="#ico_cloud" /></svg
 									>
-										<svg
-											viewBox="0 0 600 600"
-											class="float-left size-6 fill-gray-800 dark:fill-blue-50"
-											><use x="5" y="75" href="#ico_cloud" /></svg
-										>
-										{m.landing_action_cloud()}
-									</div>
+									{m.landing_action_cloud()}
 								</div>
 							</div>
-							<!-- /END Contextual menu-->
-
-							<h3>{card.title}</h3>
 						</div>
-						<p class="text-xs">
-							{m.landing_updated_text()} : {#if card.lastUpdated}{toStringDate(
-									card.lastUpdated
-								)}{/if}
-						</p>
-						<div class=""></div>
+						<!-- /END Contextual menu-->
+
+						<h3>{card.title}</h3>
 					</div>
+					<p class="text-xs">
+						{m.landing_updated_text()} : {#if card.lastUpdated}{toStringDate(card.lastUpdated)}{/if}
+					</p>
+					<div class=""></div>
 				</div>
 			</div>
-		{/each}{/key}
+		</div>
+	{/each}
 </div>
 
 <PopUpConfirmation bind:this={popUpComponent} />

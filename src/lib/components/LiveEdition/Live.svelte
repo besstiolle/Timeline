@@ -62,18 +62,20 @@
 
 		elm.classList.remove(css_class_warn);
 
-		if (prefix === LIVE_PREFIX.TS) {
-			$store.currentTimeline.tasks[position].dateStart = val;
-		}
+		store.update((s) => {
+			if (prefix === LIVE_PREFIX.TS) {
+				s.currentTimeline.tasks[position].dateStart = val;
+			}
 
-		if (prefix === LIVE_PREFIX.TE) {
-			$store.currentTimeline.tasks[position].dateEnd = val;
-		}
+			if (prefix === LIVE_PREFIX.TE) {
+				s.currentTimeline.tasks[position].dateEnd = val;
+			}
 
-		if (prefix === LIVE_PREFIX.MD) {
-			$store.currentTimeline.milestones[position].date = val;
-		}
-		$store.currentTimeline.tasks = $store.currentTimeline.tasks;
+			if (prefix === LIVE_PREFIX.MD) {
+				s.currentTimeline.milestones[position].date = val;
+			}
+			return { ...s };
+		});
 	}
 </script>
 

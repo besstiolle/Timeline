@@ -61,8 +61,9 @@ export class FactoryTimeline {
 	 * Add a Task into the Timeline
 	 * @param timeline the Timeline to investigate
 	 * @param task the Task to add
+	 * @return Timeline updated
 	 */
-	static addTask(timeline: Timeline, task: Task): void {
+	static addTask(timeline: Timeline, task: Task): Timeline {
 		timeline.tasks.forEach((element) => {
 			if (element.id === task.id) {
 				throw new DuplicateEntityException('Task', task.id);
@@ -71,14 +72,17 @@ export class FactoryTimeline {
 
 		timeline.tasks.push(task);
 		timeline.isInitiate = true;
+
+		return timeline;
 	}
 
 	/**
 	 * Add a Milestone into the Timeline
 	 * @param timeline the Milestone to investigate
 	 * @param milestone the Milestone to add
+	 * @return Timeline updated
 	 */
-	static addMilestone(timeline: Timeline, milestone: Milestone): void {
+	static addMilestone(timeline: Timeline, milestone: Milestone): Timeline {
 		timeline.milestones.forEach((element) => {
 			if (element.id === milestone.id) {
 				throw new DuplicateEntityException('Milestone', milestone.id);
@@ -87,13 +91,16 @@ export class FactoryTimeline {
 
 		timeline.milestones.push(milestone);
 		timeline.isInitiate = true;
+
+		return timeline;
 	}
 
 	/**
 	 * Remove all data from the Milestone excepted the user choices like "showAll" options
 	 * @param timeline the Milestone to purge
+	 * @return Timeline updated
 	 */
-	static purge(timeline: Timeline): void {
+	static purge(timeline: Timeline): Timeline {
 		timeline.tasks = new Array<Task>();
 		timeline.milestones = new Array<Milestone>();
 		timeline.swimlines = new Array<Swimline>();
@@ -109,15 +116,18 @@ export class FactoryTimeline {
 		//timeline.writeKey = null //Don't reset this parameter
 		//timeline.readKey = null //Don't reset this parameter
 		//timeline.key = null //Don't reset this parameter
+
+		return timeline;
 	}
 
-	static refresh(timeline: Timeline): void {
-		this._refreshSwimlines(timeline);
-		this._processLimites(timeline);
-		this._processViewboxResizing(timeline);
+	static refresh(timeline: Timeline): Timeline {
+		timeline = this._refreshSwimlines(timeline);
+		timeline = this._processLimites(timeline);
+		timeline = this._processViewboxResizing(timeline);
+		return timeline;
 	}
 
-	protected static _refreshSwimlines(timeline: Timeline): void {
+	protected static _refreshSwimlines(timeline: Timeline): Timeline {
 		timeline.swimlines = new Array<Swimline>();
 
 		let swimlineLabel: string;
@@ -131,7 +141,8 @@ export class FactoryTimeline {
 				//reuse id of previous swimline
 			} else if (swimlineLabel !== '' && previousSwimlineLabel != swimlineLabel) {
 				// create new swimline and save its id
-				previousSwimlineId = FactorySwimline.create(timeline, swimlineLabel);
+				timeline = FactorySwimline.create(timeline, swimlineLabel);
+				previousSwimlineId = timeline.swimlines.length - 1;
 			} else {
 				//reset previous Swimline id
 				previousSwimlineId = -1;
@@ -154,9 +165,11 @@ export class FactoryTimeline {
 				timeline.swimlines[i].isShow = false;
 			}
 		}
+
+		return timeline;
 	}
 
-	protected static _processLimites(timeline: Timeline): void {
+	protected static _processLimites(timeline: Timeline): Timeline {
 		const start = FactoryTimeline.getMin(timeline);
 		const end = FactoryTimeline.getMax(timeline);
 
@@ -197,21 +210,28 @@ export class FactoryTimeline {
 
 		timeline.setStart(start);
 		timeline.setEnd(end);
+
+		return timeline;
 	}
 
-	protected static _processViewboxResizing(timeline: Timeline): void {
+	protected static _processViewboxResizing(timeline: Timeline): Timeline {
 		//Reprocess viewbox sizing
 		let len = timeline.tasks.length;
 		if (!timeline.showAll) {
 			len = Helpers.countVisibleTasksInList(timeline.tasks);
 		}
 		timeline.viewbox = `0 0 ${GRID.ALL_WIDTH} ${GRID.MILESTONE_H + GRID.ANNUAL_H + GRID.ONE_TASK_H * len + GRID.TODAY_H}`;
+
+		return timeline;
 	}
 
+	//TODO add more intelligence here
 	static initiate(timeline: Timeline): Timeline {
 		if (browser) {
-			const swim1Id = FactorySwimline.create(timeline, 'Swimline1');
-			const swim2Id = FactorySwimline.create(timeline, 'Swimline2');
+			timeline = FactorySwimline.create(timeline, 'Swimline1');
+			const swim1Id = timeline.swimlines.length - 1;
+			timeline = FactorySwimline.create(timeline, 'Swimline2');
+			const swim2Id = timeline.swimlines.length - 1;
 
 			this.addTask(
 				timeline,

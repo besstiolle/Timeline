@@ -126,9 +126,16 @@
 	}
 
 	function onReaderLoadToml(reader: FileReader) {
-		FactoryTimeline.purge($store.currentTimeline);
+		store.update((s) => {
+			s.currentTimeline = FactoryTimeline.purge(s.currentTimeline);
+			return { ...s };
+		});
+
 		let abstractTimeline = toml.parse(reader.result as string);
-		$store.currentTimeline = parseAbstractTimeline($store.currentTimeline, abstractTimeline);
+		store.update((s) => {
+			s.currentTimeline = parseAbstractTimeline(s.currentTimeline, abstractTimeline);
+			return { ...s };
+		});
 		toastComponent.show(
 			m.upload_toast_upload_success({
 				countTasks: abstractTimeline.tasks.length,
@@ -141,9 +148,15 @@
 	}
 
 	function onReaderLoadCsv(reader: FileReader) {
-		FactoryTimeline.purge($store.currentTimeline);
+		store.update((s) => {
+			s.currentTimeline = FactoryTimeline.purge(s.currentTimeline);
+			return { ...s };
+		});
 		let abstractTimeline = parseCsv(reader.result as string);
-		$store.currentTimeline = parseAbstractTimeline($store.currentTimeline, abstractTimeline);
+		store.update((s) => {
+			s.currentTimeline = parseAbstractTimeline(s.currentTimeline, abstractTimeline);
+			return { ...s };
+		});
 		toastComponent.show(
 			m.upload_toast_upload_success({
 				countTasks: abstractTimeline.tasks.length,

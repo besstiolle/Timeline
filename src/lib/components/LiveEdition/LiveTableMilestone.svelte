@@ -15,18 +15,24 @@
 			console.warn('index was abnormal', index);
 			return;
 		}
-		$store.currentTimeline.milestones.splice(index, 1);
-		$store.currentTimeline.milestones = $store.currentTimeline.milestones;
+		store.update((s) => {
+			s.currentTimeline.milestones.splice(index, 1);
+			return { ...s };
+		});
 	}
+
+	//TODO : Factorisation up / down ?
 	function m_up(index: number) {
 		if (index <= 0 || index > $store.currentTimeline.milestones.length - 1) {
 			console.warn('index was abnormal', index);
 			return;
 		}
 		let tmpMilestone: Milestone = $store.currentTimeline.milestones[index];
-		$store.currentTimeline.milestones[index] = $store.currentTimeline.milestones[index - 1];
-		$store.currentTimeline.milestones[index - 1] = tmpMilestone;
-		$store.currentTimeline.milestones = $store.currentTimeline.milestones;
+		store.update((s) => {
+			s.currentTimeline.milestones[index] = s.currentTimeline.milestones[index - 1];
+			s.currentTimeline.milestones[index - 1] = tmpMilestone;
+			return { ...s };
+		});
 	}
 	function m_down(index: number) {
 		if (index < 0 || index >= $store.currentTimeline.milestones.length - 1) {
@@ -34,17 +40,21 @@
 			return;
 		}
 		let tmpMilestone: Milestone = $store.currentTimeline.milestones[index];
-		$store.currentTimeline.milestones[index] = $store.currentTimeline.milestones[index + 1];
-		$store.currentTimeline.milestones[index + 1] = tmpMilestone;
-		$store.currentTimeline.milestones = $store.currentTimeline.milestones;
+		store.update((s) => {
+			s.currentTimeline.milestones[index] = s.currentTimeline.milestones[index + 1];
+			s.currentTimeline.milestones[index + 1] = tmpMilestone;
+			return { ...s };
+		});
 	}
 	function m_show(index: number) {
 		if (index < 0 || index > $store.currentTimeline.milestones.length - 1) {
 			console.warn('index was abnormal', index);
 			return;
 		}
-		$store.currentTimeline.milestones[index].isShow =
-			!$store.currentTimeline.milestones[index].isShow;
+		store.update((s) => {
+			s.currentTimeline.milestones[index].isShow = !s.currentTimeline.milestones[index].isShow;
+			return { ...s };
+		});
 	}
 	function m_duplicate(index: number) {
 		if (index < 0 || index > $store.currentTimeline.milestones.length - 1) {
@@ -56,7 +66,7 @@
 			$store.currentTimeline.milestones.length
 		);
 
-		FactoryTimeline.addMilestone(
+		let timelineUpdated = FactoryTimeline.addMilestone(
 			$store.currentTimeline,
 			FactoryMilestone.clone(
 				$store.currentTimeline.milestones[index],
@@ -65,14 +75,19 @@
 			)
 		);
 		tmpMilestones.forEach((tmpMilestone) => {
-			FactoryTimeline.addMilestone($store.currentTimeline, tmpMilestone);
+			timelineUpdated = FactoryTimeline.addMilestone(timelineUpdated, tmpMilestone);
 		});
-		$store.currentTimeline.milestones = $store.currentTimeline.milestones;
+
+		store.update((s) => {
+			s.currentTimeline = timelineUpdated;
+			return { ...s };
+		});
 	}
 	function m_add() {
 		let diffSec: number =
 			$store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime();
-		FactoryTimeline.addMilestone(
+
+		const timelineUpdated = FactoryTimeline.addMilestone(
 			$store.currentTimeline,
 			new Milestone(
 				$store.currentTimeline.getNextId(),
@@ -81,11 +96,14 @@
 				true
 			)
 		);
-		$store.currentTimeline.milestones = $store.currentTimeline.milestones;
+		store.update((s) => {
+			s.currentTimeline = timelineUpdated;
+			return { ...s };
+		});
 	}
 </script>
 
-{#each $store.currentTimeline.milestones as milestone, index (index)}
+{#each $store.currentTimeline.milestones as milestone, index (milestone.id)}
 	<div class="live__line show_{milestone.isShow}">
 		<div
 			data-name="M{index}"

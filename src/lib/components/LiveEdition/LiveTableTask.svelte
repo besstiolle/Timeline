@@ -21,7 +21,10 @@
 			value = 100;
 		}
 
-		$store.currentTimeline.tasks[position].progress = value;
+		store.update((s) => {
+			s.currentTimeline.tasks[position].progress = value;
+			return { ...s };
+		});
 	}
 
 	function b_delete(index: number) {
@@ -29,18 +32,23 @@
 			console.warn('index was abnormal', index);
 			return;
 		}
-		$store.currentTimeline.tasks.splice(index, 1);
-		$store.currentTimeline.tasks = $store.currentTimeline.tasks;
+		store.update((s) => {
+			s.currentTimeline.tasks.splice(index, 1);
+			return { ...s };
+		});
 	}
+	//TODO factoriser up / down ?
 	function b_up(index: number) {
 		if (index <= 0 || index > $store.currentTimeline.tasks.length - 1) {
 			console.warn('index was abnormal', index);
 			return;
 		}
 		let tmpTask: Task = $store.currentTimeline.tasks[index];
-		$store.currentTimeline.tasks[index] = $store.currentTimeline.tasks[index - 1];
-		$store.currentTimeline.tasks[index - 1] = tmpTask;
-		$store.currentTimeline.tasks = $store.currentTimeline.tasks;
+		store.update((s) => {
+			s.currentTimeline.tasks[index] = s.currentTimeline.tasks[index - 1];
+			s.currentTimeline.tasks[index - 1] = tmpTask;
+			return { ...s };
+		});
 	}
 	function b_down(index: number) {
 		if (index < 0 || index >= $store.currentTimeline.tasks.length - 1) {
@@ -48,16 +56,22 @@
 			return;
 		}
 		let tmpTask: Task = $store.currentTimeline.tasks[index];
-		$store.currentTimeline.tasks[index] = $store.currentTimeline.tasks[index + 1];
-		$store.currentTimeline.tasks[index + 1] = tmpTask;
-		$store.currentTimeline.tasks = $store.currentTimeline.tasks;
+
+		store.update((s) => {
+			s.currentTimeline.tasks[index] = s.currentTimeline.tasks[index + 1];
+			s.currentTimeline.tasks[index + 1] = tmpTask;
+			return { ...s };
+		});
 	}
 	function b_show(index: number) {
 		if (index < 0 || index > $store.currentTimeline.tasks.length - 1) {
 			console.warn('index was abnormal', index);
 			return;
 		}
-		$store.currentTimeline.tasks[index].isShow = !$store.currentTimeline.tasks[index].isShow;
+		store.update((s) => {
+			s.currentTimeline.tasks[index].isShow = !s.currentTimeline.tasks[index].isShow;
+			return { ...s };
+		});
 	}
 	function b_duplicate(index: number) {
 		if (index < 0 || index > $store.currentTimeline.tasks.length - 1) {
@@ -69,7 +83,7 @@
 			$store.currentTimeline.tasks.length
 		);
 
-		FactoryTimeline.addTask(
+		let timelineUpdated = FactoryTimeline.addTask(
 			$store.currentTimeline,
 			FactoryTask.clone(
 				$store.currentTimeline.tasks[index],
@@ -77,15 +91,21 @@
 				' (copy)'
 			)
 		);
+
 		tmpTasks.forEach((tmpTask) => {
-			FactoryTimeline.addTask($store.currentTimeline, tmpTask);
+			timelineUpdated = FactoryTimeline.addTask(timelineUpdated, tmpTask);
 		});
-		$store.currentTimeline.tasks = $store.currentTimeline.tasks;
+
+		store.update((s) => {
+			s.currentTimeline = timelineUpdated;
+			return { ...s };
+		});
 	}
+
 	function b_add() {
 		let diffSec: number =
 			$store.currentTimeline.getEndTime() - $store.currentTimeline.getStartTime();
-		FactoryTimeline.addTask(
+		const timelineUpdated = FactoryTimeline.addTask(
 			$store.currentTimeline,
 			new Task(
 				$store.currentTimeline.getNextId(),
@@ -99,11 +119,15 @@
 				-1
 			)
 		);
-		$store.currentTimeline.tasks = $store.currentTimeline.tasks;
+
+		store.update((s) => {
+			s.currentTimeline = timelineUpdated;
+			return { ...s };
+		});
 	}
 </script>
 
-{#each $store.currentTimeline.tasks as task, index (index)}
+{#each $store.currentTimeline.tasks as task, index (task.id)}
 	<div class="live__line show_{task.isShow}">
 		<div class="live__input_top">
 			<div

@@ -15,6 +15,7 @@
 	let innerClassCss: string;
 	let innerLabel: number | string = '';
 	let left: number;
+	//TODO : sortir dans une fonction externe testable.
 	while (i < 100 && $store.currentTimeline.getEndTime() >= dateInc.getTime()) {
 		i++;
 		left =

@@ -18,7 +18,10 @@
 
 	let toastComponent: Toast;
 
-	$store.rights = new Rights(page.url.searchParams);
+	store.update((s) => {
+		s.rights = new Rights(page.url.searchParams);
+		return { ...s };
+	});
 
 	//TODO : disabling SSR or not on this page ?
 	// OR
@@ -61,7 +64,10 @@
 			currentTimeline = new Timeline(slug, m.slug_default_timeline_title());
 			currentTimeline = FactoryTimeline.initiate(currentTimeline);
 		}
-		$store.currentTimeline = currentTimeline;
+		store.update((s) => {
+			s.currentTimeline = currentTimeline;
+			return { ...s };
+		});
 	} else if (browser) {
 		let keyUrl = $store.rights.getTimelineField();
 		if (keyUrl == null) {
@@ -106,7 +112,10 @@
 						toastComponent.show(m.slug_toast_remote_offline(), false, 0);
 					}
 				}
-				$store.currentTimeline = currentTimeline;
+				store.update((s) => {
+					s.currentTimeline = currentTimeline;
+					return { ...s };
+				});
 			})
 			.finally(() => {});
 	}
@@ -118,7 +127,7 @@
 	>
 </svelte:head>
 
-{#if $store.currentTimeline}
+{#if $store.currentTimeline?.isInitiate}
 	<Draw />
 {/if}
 

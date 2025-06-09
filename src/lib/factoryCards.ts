@@ -5,8 +5,9 @@ export class FactoryCards {
 	 * copy information from timline (title/key) and copy them into the (new?) card.
 	 * @param cards the Array<Card> to update
 	 * @param timeline the Timeline to use to updating cards
+	 * @returns Array<Cards> updated
 	 */
-	static updateCardsWithTimeline(cards: Array<Card>, timeline: Timeline): void {
+	static updateCardsWithTimeline(cards: Array<Card>, timeline: Timeline): Array<Card> {
 		//Retrive the index of the good card or -1 if it doesn't exist
 		const positionInCards: number | null = FactoryCards.getIndexByKey(cards, timeline.key);
 
@@ -18,6 +19,8 @@ export class FactoryCards {
 			cards[positionInCards].lastUpdated = new Date();
 			cards[positionInCards].isOnline = timeline.isOnline;
 		}
+
+		return cards;
 	}
 
 	/**

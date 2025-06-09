@@ -18,10 +18,10 @@ describe('test factoryCards', () => {
 
 		const timeline: Timeline = new Timeline('key2', 'new title2');
 
-		FactoryCards.updateCardsWithTimeline(cards, timeline);
+		const cardsResult = FactoryCards.updateCardsWithTimeline(cards, timeline);
 
-		expect(cards.length).toEqual(3);
-		expect(cards[1].title).toEqual(timeline.title);
+		expect(cardsResult.length).toEqual(3);
+		expect(cardsResult[1].title).toEqual(timeline.title);
 	});
 
 	it('FactoryCards.updateCardsWithTimeline with an new key', () => {
@@ -32,12 +32,12 @@ describe('test factoryCards', () => {
 
 		const timeline: Timeline = new Timeline('key4', 'new title4');
 
-		FactoryCards.updateCardsWithTimeline(cards, timeline);
+		const cardsResult = FactoryCards.updateCardsWithTimeline(cards, timeline);
 
-		expect(cards.length).toEqual(4);
-		expect(cards[3].key).toEqual(timeline.key);
-		expect(cards[3].title).toEqual(timeline.title);
-		expect(cards[3].lastUpdated).toBeDefined();
+		expect(cardsResult.length).toEqual(4);
+		expect(cardsResult[3].key).toEqual(timeline.key);
+		expect(cardsResult[3].title).toEqual(timeline.title);
+		expect(cardsResult[3].lastUpdated).toBeDefined();
 	});
 
 	it('FactoryCards.getIndexByKey with various parameters', () => {

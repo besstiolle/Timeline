@@ -3,14 +3,17 @@
 	import { Rights } from '$lib/rights.class';
 	import { store } from '$lib/stores';
 	import { Timeline } from '$lib/struct.class';
-	import Cards from '$lib/components/Cards.svelte';
+	import Cards from '$lib/components/Cards/Cards.svelte';
 	import { m } from '../paraglide/messages';
 
 	//Reset store currentTimeline information when we are here
-	$store.currentTimeline = new Timeline();
-	$store.lastCommitedRemotely = -1;
-	$store.lastUpdatedLocally = -1;
-	$store.rights = new Rights(null);
+	store.update((s) => {
+		s.currentTimeline = new Timeline();
+		s.lastCommitedRemotely = -1;
+		s.lastUpdatedLocally = -1;
+		s.rights = new Rights(null);
+		return { ...s };
+	});
 
 	function gotoNew() {
 		window.location.href = '/g/' + Helpers.randomeString(64);

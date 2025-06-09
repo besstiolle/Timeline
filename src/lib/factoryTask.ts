@@ -8,7 +8,7 @@ export class FactoryTask {
 	 * @param car the separator
 	 * @returns a string with values concatenated for CSV
 	 */
-	static join(task: Task, car: string) {
+	static join(task: Task, car: string): string {
 		return (
 			'task' +
 			car +
@@ -48,6 +48,26 @@ export class FactoryTask {
 
 		if (found) {
 			return found;
+		}
+		throw new NotFoundException('Task', id);
+	}
+
+	//TODO : tester cette fonction
+	static updateById(timeline: Timeline, id: number, taskToUpdate: Task): Timeline {
+		//A simple loop to reach for the good item because it's cheaper
+		// than trying to maintain a map with id => index of array each time
+		// we change something into the $store
+
+		let isFound = false;
+		timeline.tasks.forEach((task) => {
+			if (task.id == id) {
+				isFound = true;
+				task = taskToUpdate;
+			}
+		});
+
+		if (isFound) {
+			return timeline;
 		}
 		throw new NotFoundException('Task', id);
 	}
