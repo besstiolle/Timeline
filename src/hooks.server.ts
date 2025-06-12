@@ -1,28 +1,23 @@
-import { initDatabase } from '$lib/database/initdatabase';
 import type { Handle } from '@sveltejs/kit';
-import Database from 'better-sqlite3';
-import fs from 'fs';
+
 import { paraglideMiddleware } from './paraglide/server';
+import { db } from '$lib/server/db';
+import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
+import path from 'path';
 
-const directory = 'db';
 export const handle: Handle = async ({ event, resolve }) => {
-	//Create database
+	//Initiate internal timer
+	event.locals.startTimer = Date.now();
+
+	//Passing database
 	if (!event.locals.db) {
-		//Create directory
-		if (!fs.existsSync(directory)) {
-			fs.mkdirSync(directory);
-		}
+		//Apply Drizzle migration
+		migrate(db, {
+			migrationsFolder: path.resolve('./drizzle')
+		});
 
-		// This will create the database within the `db.sqlite` file.
-		const db = new Database(`${directory}/db.sqlite`);
-
-		db.pragma('journal_mode = WAL');
-
-		// Set the db as our events.db variable.
+		//Apply the db to the request
 		event.locals.db = db;
-
-		//Initiate the internal structur of database
-		initDatabase(db);
 	}
 	// --- Middleware Paraglide ---
 	const response = await paraglideMiddleware(

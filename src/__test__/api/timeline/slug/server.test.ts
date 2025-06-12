@@ -1,12 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { initDatabase } from '$lib/database/initdatabase';
-import Database from 'better-sqlite3';
 import { RequestEventStub } from '../../apiUtils';
-import * as handlers from '../../../../routes/api/timeline/[slug]/+server';
-import { insertTimeline } from '$lib/server/repository';
+import { insertTimeline, truncateTimeline } from '$lib/server/timelineCRUD';
 import type { RequestEvent } from '../../../../routes/api/timeline/[slug]/$types';
 import { Timeline } from '$lib/struct.class';
+import { createTestDb } from '../../dbUtilsTest';
 
 const ENTRYPOINT = 'https://dummyEntrypoint.io/api/timeline/';
 const HEADER_ACCESS_CONTROL_ALLOW_METHOD = 'Access-Control-Allow-Methods';
@@ -23,16 +21,26 @@ function toRequestEventWithSlug(request: RequestEventStub) {
 	return request as unknown as RequestEvent;
 }
 
-// @ts-expect-error TODO find a workaround as Database is a namespace
-let db: Database;
+//Mock db before importing
+vi.mock('$lib/server/db', async () => {
+	return { db: await createTestDb() };
+});
+import * as handlers from '../../../../routes/api/timeline/[slug]/+server';
+import { db } from '$lib/server/db';
 
-beforeEach(() => {
-	db = new Database(':memory:');
-	//Initiate the internal structur of database
-	initDatabase(db);
+beforeEach(async () => {
+	//truncate tables in db
+	//TODO prospecting in Drizzle seed
+	truncateTimeline(db);
 
 	//Mock console.error() to avoid vi console pollution
 	vi.spyOn(console, 'error').mockImplementation(() => {});
+});
+
+describe('fake test ', () => {
+	it('test', async () => {
+		expect(1).toBe(1);
+	});
 });
 
 const HEADER_CONTENT_TYPE = 'Content-Type';

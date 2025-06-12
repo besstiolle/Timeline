@@ -1,0 +1,82 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "6",
+  "dialect": "sqlite",
+  "tables": {
+    "timelines": {
+      "name": "timelines",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": false
+        },
+        "key": {
+          "autoincrement": false,
+          "name": "key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ownerKey": {
+          "autoincrement": false,
+          "name": "ownerKey",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "writeKey": {
+          "autoincrement": false,
+          "name": "writeKey",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "readKey": {
+          "autoincrement": false,
+          "name": "readKey",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdDateTime": {
+          "autoincrement": false,
+          "name": "createdDateTime",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "json": {
+          "autoincrement": false,
+          "name": "json",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {
+        "index_timeline_key": {
+          "name": "index_timeline_key",
+          "columns": [
+            "key"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { accessControl } from '$lib/server/keyValidator';
-import { deleteTimelineByKey, findLastTimelineByKey } from '$lib/server/repository';
+import { deleteTimelineByKey, findLastTimelineByKey } from '$lib/server/timelineCRUD';
 import type { ResponseWithMeta } from '$lib/server/types';
 import { TIMELINE_NOT_FOUND_ProblemJsonResponse } from '$lib/api/problemJson';
 import { _FALLBACK, _OPTIONS, requestToInstance } from '$lib/api/apiUtils';
@@ -9,6 +9,7 @@ import { REGEX_FAILED_ProblemJsonResponse } from '$lib/api/problemJson';
 import { EMPTY_KEYS_ProblemJsonResponse } from '$lib/api/problemJson';
 import type { RequestEvent } from '@sveltejs/kit';
 import type { Timeline } from '$lib/struct.class';
+//import { db } from '$lib/server/db';
 
 const ALPHANUM64 = new RegExp('^[A-Z0-9a-z]{64}$');
 /**
@@ -23,6 +24,7 @@ const ALPHANUM64 = new RegExp('^[A-Z0-9a-z]{64}$');
 export const GET: RequestHandler = (
 	requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>
 ) => {
+	const db = requestEvent.locals.db;
 	const instance = requestToInstance(requestEvent.request);
 	const slug = requestEvent.params.slug;
 	const ownerKey: string | null = requestEvent.url.searchParams.get('ownerKey');
@@ -54,7 +56,7 @@ export const GET: RequestHandler = (
 		return new EMPTY_KEYS_ProblemJsonResponse(instance);
 	}
 
-	const structDb = findLastTimelineByKey(requestEvent.locals.db, slug);
+	const structDb = findLastTimelineByKey(db, slug);
 	let timelineFromDb;
 
 	if (structDb !== undefined) {
@@ -88,7 +90,8 @@ export const GET: RequestHandler = (
 	//Prepare the standard response with data & meta
 	const responseWithMeta: ResponseWithMeta = {
 		meta: {
-			ts: structDb.createdDateTime
+			ts: structDb.createdDateTime,
+			duration: Date.now() - requestEvent.locals.startTimer
 		},
 		data: timelineFromDb
 	};
@@ -108,6 +111,7 @@ export const GET: RequestHandler = (
 export const DELETE: RequestHandler = (
 	requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>
 ): Response => {
+	const db = requestEvent.locals.db;
 	const instance = requestToInstance(requestEvent.request);
 	const slug = requestEvent.params.slug;
 	const ownerKey: string | null = requestEvent.url?.searchParams?.get('ownerKey');
@@ -126,7 +130,7 @@ export const DELETE: RequestHandler = (
 		return new REGEX_FAILED_ProblemJsonResponse(instance, 'ownerKey', value, ALPHANUM64.source);
 	}
 
-	const structDb = findLastTimelineByKey(requestEvent.locals.db, slug);
+	const structDb = findLastTimelineByKey(db, slug);
 	let timelineFromDb;
 
 	if (structDb !== undefined) {
@@ -143,7 +147,7 @@ export const DELETE: RequestHandler = (
 		return responseAccessControl;
 	}
 
-	deleteTimelineByKey(requestEvent.locals.db, slug);
+	deleteTimelineByKey(db, slug);
 
 	return json(undefined, { status: 204 });
 };

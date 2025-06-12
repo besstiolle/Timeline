@@ -5,6 +5,7 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			db: Database;
+			startTimer: number; //Used for internal timer (for speed analytics)
 		}
 		// interface PageData {}
 		// interface Platform {}

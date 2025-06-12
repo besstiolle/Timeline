@@ -3,16 +3,18 @@ FROM node:24 AS builder
 
 WORKDIR /app
 
-COPY src ./src
-COPY static ./static
+COPY src ./
+COPY static ./
 COPY .env ./
 COPY package-lock.json ./
 COPY package.json ./
 COPY svelte.config.js ./
 COPY tsconfig.json ./
 COPY vite.config.ts ./
-COPY messages ./messages
-COPY project.inlang ./project.inlang
+COPY messages ./
+COPY project.inlang ./
+COPY drizzle.config.js ./
+COPY drizzle ./
 
 # Installing dependancies, building
 RUN npm ci

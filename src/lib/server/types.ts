@@ -16,6 +16,7 @@ export interface StructTimelineInDbInterface {
 export interface ResponseWithMeta {
 	meta: {
 		ts: number;
+		duration: number; //duration of execution on the server side in milliseconds
 	};
 	data: object;
 }

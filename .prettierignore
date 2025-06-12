@@ -4,9 +4,21 @@ pnpm-lock.yaml
 yarn.lock
 bun.lock
 bun.lockb
-# Auto-generated files
+
+# Paraglide Auto-generated files
 /messages/*
 /src/paraglide/*
+
+# CICD Auto-generated files
 version.json
+
+# Drizzle Auto-generated files
+drizzle/*
+/src/lib/server/db/index.ts
+/src/lib/server/db/schema.ts
+
 # External & minified lib
 /static/analytics/*
+
+# Self Documentation
+*.md

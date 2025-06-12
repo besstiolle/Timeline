@@ -1,15 +1,25 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { RequestEventStub, toRequestEvent } from '../apiUtils';
-import { OPTIONS } from '../../../routes/api/about/+server';
-import * as handlers from '../../../routes/api/about/+server';
-import { GET } from '../../../routes/api/about/+server';
+import { createTestDb } from '../dbUtilsTest';
+import { truncateTimeline } from '$lib/server/timelineCRUD';
 
 const ENTRYPOINT = 'https://dummyEntrypoint.io/api/about';
 const HEADER_ACCESS_CONTROL_ALLOW_METHOD = 'Access-Control-Allow-Methods';
 const HEADER_CONTENT_TYPE_APPPBJSON = 'application/problem+json';
 const HEADER_ALLOW = 'allow';
 
-beforeEach(() => {
+//Mock db before importing
+vi.mock('$lib/server/db', async () => {
+	return { db: await createTestDb() };
+});
+import * as handlers from '../../../routes/api/about/+server';
+import { db } from '$lib/server/db';
+
+beforeEach(async () => {
+	//truncate tables in db
+	//TODO prospecting in Drizzle seed
+	truncateTimeline(db);
+
 	//Mock console.error() to avoid vi console pollution
 	vi.spyOn(console, 'error').mockImplementation(() => {});
 });
@@ -19,8 +29,8 @@ const HEADER_CONTENT_TYPE_APPJSON = 'application/json';
 
 describe('API /api/about with OPTIONS & denied method', () => {
 	it('OPTIONS should return 204', async () => {
-		const event = new RequestEventStub('OPTIONS', ENTRYPOINT);
-		const response = await OPTIONS(toRequestEvent(event));
+		const event = new RequestEventStub('OPTIONS', ENTRYPOINT, null, db);
+		const response = await handlers.OPTIONS(toRequestEvent(event));
 
 		expect(response.status).toBe(204);
 		expect(response.headers.get(HEADER_CONTENT_TYPE)).toContain(HEADER_CONTENT_TYPE_APPJSON);
@@ -33,7 +43,7 @@ describe('API /api/about with OPTIONS & denied method', () => {
 	});
 
 	it('fallback should return 405', async () => {
-		const event = new RequestEventStub('POST', ENTRYPOINT);
+		const event = new RequestEventStub('POST', ENTRYPOINT, null, db);
 		const response = await handlers.fallback(toRequestEvent(event));
 
 		expect(response.status).toBe(405);
@@ -45,8 +55,8 @@ describe('API /api/about with OPTIONS & denied method', () => {
 });
 
 it('GET /api/about should return a ResponseWithMeta JSON ', async () => {
-	const event = new RequestEventStub('GET', ENTRYPOINT);
-	const response = await GET(toRequestEvent(event));
+	const event = new RequestEventStub('GET', ENTRYPOINT, null, db);
+	const response = await handlers.GET(toRequestEvent(event));
 
 	expect(response.status).toBe(200);
 	expect(response.headers.get(HEADER_CONTENT_TYPE)).toContain(HEADER_CONTENT_TYPE_APPJSON);
@@ -54,6 +64,8 @@ it('GET /api/about should return a ResponseWithMeta JSON ', async () => {
 	expect(json.data).not.toBeFalsy();
 	expect(json.meta).not.toBeFalsy();
 	expect(json.meta.ts).not.toBeFalsy();
+	expect(json.meta.duration).greaterThanOrEqual(0);
+	expect(json.meta.duration).lessThan(200);
 
 	// Test AboutVersion fields
 	expect(json.data.version).not.toBeFalsy();

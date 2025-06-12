@@ -6,8 +6,6 @@ const headers = {
 };
 
 export async function get(): Promise<ResponseWithMeta> {
-	//console.info("POST on endpoint : " + endpoint)
-
 	const res = await fetch(endpoint, {
 		method: 'GET',
 		headers: headers

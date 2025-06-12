@@ -1,7 +1,7 @@
 import { JsonParser } from '$lib/jsonParser';
 import type { Timeline } from '$lib/struct.class';
 import type { RequestEvent } from '@sveltejs/kit';
-import type { Database } from 'better-sqlite3';
+import type { drizzle } from 'drizzle-orm/better-sqlite3';
 
 export class RequestEventStub {
 	request: Request;
@@ -14,7 +14,7 @@ export class RequestEventStub {
 		method: string,
 		url: string,
 		body?: string | null,
-		db?: Database,
+		db?: ReturnType<typeof drizzle>,
 		slug?: string | null
 	) {
 		const inner_url = new URL(url);
@@ -23,6 +23,7 @@ export class RequestEventStub {
 
 		this.params.slug = slug;
 		this.locals.db = db;
+		this.locals.startTimer = Date.now();
 		this.url = inner_url;
 		this.slug = 'no_slug';
 	}

@@ -1,9 +1,22 @@
 import { beforeEach, expect, it, vi } from 'vitest';
 import { RequestEventStub, toRequestEvent } from '../apiUtils';
+import { truncateTimeline } from '$lib/server/timelineCRUD';
+import { createTestDb } from '../dbUtilsTest';
 
 const ENTRYPOINT = 'https://dummyEntrypoint.io/api/about';
 
-beforeEach(() => {
+//Mock db before importing
+vi.mock('$lib/server/db', async () => {
+	return { db: await createTestDb() };
+});
+
+import { db } from '$lib/server/db';
+
+beforeEach(async () => {
+	//truncate tables in db
+	//TODO prospecting in Drizzle seed
+	truncateTimeline(db);
+
 	//Mock console.error() to avoid vi console pollution
 	vi.spyOn(console, 'error').mockImplementation(() => {});
 });
@@ -15,14 +28,13 @@ it('GET /api/about should return a ResponseWithMeta JSON with no version if we c
 	vi.doMock('$env/dynamic/private', () => ({
 		env: { SHOW_VERSION: 'false' }
 	}));
+	const { GET } = await import('../../../routes/api/about/+server');
 
 	const { env } = await import('$env/dynamic/private');
 
 	expect(env.SHOW_VERSION).toBe('false');
 
-	const { GET } = await import('../../../routes/api/about/+server');
-
-	const event = new RequestEventStub('GET', ENTRYPOINT);
+	const event = new RequestEventStub('GET', ENTRYPOINT, null, db);
 	const response = await GET(toRequestEvent(event));
 
 	expect(response.status).toBe(200);
@@ -42,14 +54,12 @@ it('GET /api/about should return a ResponseWithMeta JSON with no version if we c
 	vi.doMock('$env/dynamic/private', () => ({
 		env: { SHOW_VERSION: undefined }
 	}));
-
-	const { env } = await import('$env/dynamic/private');
-
-	expect(env.SHOW_VERSION).toBe(undefined);
-
 	const { GET } = await import('../../../routes/api/about/+server');
 
-	const event = new RequestEventStub('GET', ENTRYPOINT);
+	const { env } = await import('$env/dynamic/private');
+	expect(env.SHOW_VERSION).toBe(undefined);
+
+	const event = new RequestEventStub('GET', ENTRYPOINT, null, db);
 	const response = await GET(toRequestEvent(event));
 
 	expect(response.status).toBe(200);
@@ -69,14 +79,12 @@ it('GET /api/about should return a ResponseWithMeta JSON with no version if we c
 	vi.doMock('$env/dynamic/private', () => ({
 		env: {}
 	}));
-
-	const { env } = await import('$env/dynamic/private');
-
-	expect(env.SHOW_VERSION).toBe(undefined);
-
 	const { GET } = await import('../../../routes/api/about/+server');
 
-	const event = new RequestEventStub('GET', ENTRYPOINT);
+	const { env } = await import('$env/dynamic/private');
+	expect(env.SHOW_VERSION).toBe(undefined);
+
+	const event = new RequestEventStub('GET', ENTRYPOINT, null, db);
 	const response = await GET(toRequestEvent(event));
 
 	expect(response.status).toBe(200);

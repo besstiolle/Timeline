@@ -1,8 +1,8 @@
 import { JsonParser } from '$lib/jsonParser';
 import { accessControl } from '$lib/server/keyValidator';
-import { findLastTimelineByKey } from '$lib/server/repository';
+import { findLastTimelineByKey } from '$lib/server/timelineCRUD';
 import type { ResponseWithMeta } from '$lib/server/types';
-import { insertTimeline } from '$lib/server/repository';
+import { insertTimeline } from '$lib/server/timelineCRUD';
 import { json, type RequestEvent, type RequestHandler } from '@sveltejs/kit';
 import {
 	EMPTY_KEYS_ProblemJsonResponse,
@@ -106,7 +106,8 @@ export const POST: RequestHandler = async (
 	//Prepare the standard response with data & meta
 	const responseWithMeta: ResponseWithMeta = {
 		meta: {
-			ts: Date.now()
+			ts: Date.now(),
+			duration: Date.now() - requestEvent.locals.startTimer
 		},
 		data: timelineFromParam
 	};

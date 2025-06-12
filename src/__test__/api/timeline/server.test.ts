@@ -1,25 +1,27 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { RequestEventStub, toRequestEvent, VALID_DUMMY_TIMELINE } from '../apiUtils';
-import { OPTIONS } from '../../../routes/api/timeline/+server';
-import * as handlers from '../../../routes/api/timeline/+server';
-import { initDatabase } from '$lib/database/initdatabase';
+
 import type { ResponseWithMeta } from '$lib/server/types';
-import { countTimelineByKey } from '$lib/server/repository';
-import Database from 'better-sqlite3';
+import { countTimelineByKey, truncateTimeline } from '$lib/server/timelineCRUD';
 import type { Timeline } from '$lib/struct.class';
+import { createTestDb } from '../dbUtilsTest';
 
 const ENTRYPOINT = 'https://dummyEntrypoint.io/api/timeline';
 const HEADER_ACCESS_CONTROL_ALLOW_METHOD = 'Access-Control-Allow-Methods';
 const HEADER_ALLOW = 'allow';
 const FAKE_KEY = 'WrongKey64Car000000000000000000000000000000000000000000000000000';
 
-// @ts-expect-error TODO find a workaround as Database is a namespace
-let db: Database;
+//Mock db before importing
+vi.mock('$lib/server/db', async () => {
+	return { db: await createTestDb() };
+});
+import * as handlers from '../../../routes/api/timeline/+server';
+import { db } from '$lib/server/db';
 
-beforeEach(() => {
-	db = new Database(':memory:');
-	//Initiate the internal structur of database
-	initDatabase(db);
+beforeEach(async () => {
+	//truncate tables in db
+	//TODO prospecting in Drizzle seed
+	truncateTimeline(db);
 
 	//Mock console.error() to avoid vi console pollution
 	vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -43,6 +45,12 @@ const test = base.extend<{testIntegrityOfKey: (clone: any, expectedStatus: numbe
   }
 });*/
 
+describe('Test reseting mocked db between each test ', () => {
+	it('test first call', async () => {
+		truncateTimeline(db);
+	});
+});
+
 async function testIntegrityOfKey(clone: string | object, expectedStatus: number) {
 	const event = new RequestEventStub('POST', ENTRYPOINT, JSON.stringify(clone), db);
 	const response = await handlers.POST(toRequestEvent(event));
@@ -56,7 +64,7 @@ async function testIntegrityOfKey(clone: string | object, expectedStatus: number
 describe('API /api/timeline with OPTIONS & denied method', () => {
 	it('OPTIONS should return 204', async () => {
 		const event = new RequestEventStub('OPTIONS', ENTRYPOINT);
-		const response = await OPTIONS(toRequestEvent(event));
+		const response = await handlers.OPTIONS(toRequestEvent(event));
 
 		expect(response.status).toBe(204);
 		expect(response.headers.get(HEADER_CONTENT_TYPE)).toContain(HEADER_CONTENT_TYPE_APPJSON);
@@ -69,7 +77,7 @@ describe('API /api/timeline with OPTIONS & denied method', () => {
 	});
 
 	it('fallback should return 405', async () => {
-		const event = new RequestEventStub('GET', ENTRYPOINT);
+		const event = new RequestEventStub('GET', ENTRYPOINT, null, db);
 		const response = await handlers.fallback(toRequestEvent(event));
 
 		expect(response.status).toBe(405);
