@@ -14,7 +14,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	//Passing database
 	if (!event.locals.db) {
-
 		//Apply the db to the request
 		event.locals.db = db;
 	}
@@ -37,6 +36,6 @@ export const handle: Handle = async ({ event, resolve }) => {
  * See more : https://svelte.dev/docs/kit/hooks#Shared-hooks-init
  */
 export const init: ServerInit = async () => {
-	//Apply the migration strategy 
-	migrateTimeChart()
+	//Apply the migration strategy
+	migrateTimeChart();
 };

@@ -227,177 +227,241 @@ export class FactoryTimeline {
 
 	/**
 	 * Initiate a brand new mocked Timeline for demo purpose
-	 * @param timeline 
-	 * @returns 
+	 * @param timeline
+	 * @returns
 	 */
 	static initiate(timeline: Timeline): Timeline {
 		if (browser) {
-
 			const swimlines = [
-				{title:'Imagine the story', tasks:[{
-						title:'Find an idea',
-						show:true,
-						start:0,
-						end:10,
-						progress:100
-					},{
-						title:'Define Main characters',
-						show:true,
-						start:5,
-						end:10,
-						progress:75
-					},{
-						title:'Summarise the story',
-						show:true,
-						start:15,
-						end:20,
-						progress:20
-					},{
-						title:'First lines of text',
-						show:true,
-						start:20,
-						end:15,
-						progress:10
-					}]},
-				{title:'Form the team', tasks:[{
-						title:'Allocate roles',
-						show:true,
-						start:35,
-						end:30,
-						progress:0
-					},{
-						title:'Choose who will look after the sets and costumes',
-						show:true,
-						start:45,
-						end:10,
-						progress:0
-					}]},
-				{title:'Prepare the shoot', tasks:[{
-						title:'Find locations',
-						show:true,
-						start:55,
-						end:15,
-						progress:0
-					},{
-						title:'Prepare props and costumes',
-						show:true,
-						start:65,
-						end:10,
-						progress:0
-					}]},
-				{title:'Shoot the film', tasks:[{
-						title:'Shoot the scenes one by one',
-						show:true,
-						start:75,
-						end:55,
-						progress:0
-					},{
-						title:'Check that the sound and image are good',
-						show:true,
-						start:80,
-						end:55,
-						progress:0
-					}]},
-				{title:'Edit the film', tasks:[{
-						title:'Put the scenes in order using simple software',
-						show:true,
-						start:135,
-						end:10,
-						progress:0
-					},{
-						title:'Add music or a funny effect',
-						show:true,
-						start:135,
-						end:15,
-						progress:0
-					},{
-						title:'Write credits with everyone\'s first names',
-						show:true,
-						start:140,
-						end:5,
-						progress:0
-					}]},
-				{title:'Organise the screening', tasks:[{
-						title:'Make a poster of the film',
-						show:true,
-						start:160,
-						end:5,
-						progress:0
-					},{
-						title:'Invite friends and family',
-						show:true,
-						start:160,
-						end:5,
-						progress:0
-					}]},
-				{title:'Panic (a little bit)', tasks:[{
-						title:'Will they really appreciate my work?',
-						show:false,
-						start:170,
-						end:5,
-						progress:0
-					}]},
-				{title:'Celebrate the release', tasks:[{
-						title:'Watch the film together',
-						show:true,
-						start:180,
-						end:3,
-						progress:0
-					},{
-						title:'Applaud the whole team and take a souvenir photo',
-						show:true,
-						start:183,
-						end:3,
-						progress:0
-					}]},
-			]
+				{
+					title: 'Imagine the story',
+					tasks: [
+						{
+							title: 'Find an idea',
+							show: true,
+							start: 0,
+							end: 10,
+							progress: 100
+						},
+						{
+							title: 'Define Main characters',
+							show: true,
+							start: 5,
+							end: 10,
+							progress: 75
+						},
+						{
+							title: 'Summarise the story',
+							show: true,
+							start: 15,
+							end: 20,
+							progress: 20
+						},
+						{
+							title: 'First lines of text',
+							show: true,
+							start: 20,
+							end: 15,
+							progress: 10
+						}
+					]
+				},
+				{
+					title: 'Form the team',
+					tasks: [
+						{
+							title: 'Allocate roles',
+							show: true,
+							start: 35,
+							end: 30,
+							progress: 0
+						},
+						{
+							title: 'Choose who will look after the sets and costumes',
+							show: true,
+							start: 45,
+							end: 10,
+							progress: 0
+						}
+					]
+				},
+				{
+					title: 'Prepare the shoot',
+					tasks: [
+						{
+							title: 'Find locations',
+							show: true,
+							start: 55,
+							end: 15,
+							progress: 0
+						},
+						{
+							title: 'Prepare props and costumes',
+							show: true,
+							start: 65,
+							end: 10,
+							progress: 0
+						}
+					]
+				},
+				{
+					title: 'Shoot the film',
+					tasks: [
+						{
+							title: 'Shoot the scenes one by one',
+							show: true,
+							start: 75,
+							end: 55,
+							progress: 0
+						},
+						{
+							title: 'Check that the sound and image are good',
+							show: true,
+							start: 80,
+							end: 55,
+							progress: 0
+						}
+					]
+				},
+				{
+					title: 'Edit the film',
+					tasks: [
+						{
+							title: 'Put the scenes in order using simple software',
+							show: true,
+							start: 135,
+							end: 10,
+							progress: 0
+						},
+						{
+							title: 'Add music or a funny effect',
+							show: true,
+							start: 135,
+							end: 15,
+							progress: 0
+						},
+						{
+							title: "Write credits with everyone's first names",
+							show: true,
+							start: 140,
+							end: 5,
+							progress: 0
+						}
+					]
+				},
+				{
+					title: 'Organise the screening',
+					tasks: [
+						{
+							title: 'Make a poster of the film',
+							show: true,
+							start: 160,
+							end: 5,
+							progress: 0
+						},
+						{
+							title: 'Invite friends and family',
+							show: true,
+							start: 160,
+							end: 5,
+							progress: 0
+						}
+					]
+				},
+				{
+					title: 'Panic (a little bit)',
+					tasks: [
+						{
+							title: 'Will they really appreciate my work?',
+							show: false,
+							start: 170,
+							end: 5,
+							progress: 0
+						}
+					]
+				},
+				{
+					title: 'Celebrate the release',
+					tasks: [
+						{
+							title: 'Watch the film together',
+							show: true,
+							start: 180,
+							end: 3,
+							progress: 0
+						},
+						{
+							title: 'Applaud the whole team and take a souvenir photo',
+							show: true,
+							start: 183,
+							end: 3,
+							progress: 0
+						}
+					]
+				}
+			];
 
-			const starting = new Date()
+			const starting = new Date();
 			starting.setDate(starting.getDate() - 15);
-			
 
-
-			let idTask = 0
+			let idTask = 0;
 			swimlines.forEach((swimline, index) => {
 				timeline = FactorySwimline.create(timeline, swimline.title);
-				swimline.tasks.forEach((task)=>{
-					const localStart = new Date(starting)
-					localStart.setDate(localStart.getDate() + task.start)
-					const localEnd = new Date(starting)
-					localEnd.setDate(localEnd.getDate() + task.start + task.end)
+				swimline.tasks.forEach((task) => {
+					const localStart = new Date(starting);
+					localStart.setDate(localStart.getDate() + task.start);
+					const localEnd = new Date(starting);
+					localEnd.setDate(localEnd.getDate() + task.start + task.end);
 					this.addTask(
 						timeline,
-						new Task(idTask, task.title, Helpers.toYYYY_MM_DD(localStart), Helpers.toYYYY_MM_DD(localEnd), true, task.progress, task.show, swimline.title, index)
-					)
-					idTask++
-				})
-			})
+						new Task(
+							idTask,
+							task.title,
+							Helpers.toYYYY_MM_DD(localStart),
+							Helpers.toYYYY_MM_DD(localEnd),
+							true,
+							task.progress,
+							task.show,
+							swimline.title,
+							index
+						)
+					);
+					idTask++;
+				});
+			});
 
-
-			const milestones = [{
-					title:'Starting our Movie',
-					start:0,
-					show:true
-				},{
-					title:'One hidden milestones :) ',
-					start:50,
-					show:false
-				},{
-					title:'We\'ve almost finished',
-					start:170,
-					show:true
-				},{
-					title:'Ending our project',
-					start:186,
-					show:true
-				}]
+			const milestones = [
+				{
+					title: 'Starting our Movie',
+					start: 0,
+					show: true
+				},
+				{
+					title: 'One hidden milestones :) ',
+					start: 50,
+					show: false
+				},
+				{
+					title: "We've almost finished",
+					start: 170,
+					show: true
+				},
+				{
+					title: 'Ending our project',
+					start: 186,
+					show: true
+				}
+			];
 
 			milestones.forEach((milestone) => {
-				const localStart = new Date(starting)
-				localStart.setDate(localStart.getDate() + milestone.start)
-				this.addMilestone(timeline, new Milestone(idTask, milestone.title, Helpers.toYYYY_MM_DD(localStart), milestone.show));
-				idTask++
-			})
+				const localStart = new Date(starting);
+				localStart.setDate(localStart.getDate() + milestone.start);
+				this.addMilestone(
+					timeline,
+					new Milestone(idTask, milestone.title, Helpers.toYYYY_MM_DD(localStart), milestone.show)
+				);
+				idTask++;
+			});
 
 			timeline.maxId = idTask;
 		}
