@@ -13,7 +13,7 @@ COPY tsconfig.json ./
 COPY vite.config.ts ./
 COPY messages ./
 COPY project.inlang ./
-COPY drizzle.config.js ./
+COPY drizzle.config.ts ./
 COPY drizzle ./
 
 # Installing dependancies, building
