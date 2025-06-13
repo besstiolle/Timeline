@@ -7,7 +7,7 @@
   "landing_popup_confirmation_before_deletion_continue": "Confirmer la suppression",
   "landing_popup_confirmation_before_deletion_cancel": "Annuler",
   "landing_updated_text": "Mis à jour",
-  "slug_default_timeline_title": "Mon nouveau projet",
+  "slug_default_timeline_title": "Mon projet de film",
   "slug_toast_image_misconfigurated": "Une image semble avoir été mal configurée, exemple de mauvaise config = 'foo.png', bonne configuration = '/foo.png'",
   "slug_toast_distant_timeline_non_existent": "Oups, votre Chronologie ne semble plus exister sur l'application<br/> Veuillez le retirer depuis l'accueil de l'application",
   "slug_toast_remote_offline": "Oups, nous n'avons pas réussit à joindre l'application donc nous utiliserons vos données locales à la place.<br/> Veuillez vérifier la console de votre navigateur web pour plus d'information. Cliquez moi pour fermer cette notification",

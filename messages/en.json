@@ -7,7 +7,7 @@
   "landing_popup_confirmation_before_deletion_continue": "Confirm deletion",
   "landing_popup_confirmation_before_deletion_cancel": "Cancel",
   "landing_updated_text": "Updated",
-  "slug_default_timeline_title": "My new Project",
+  "slug_default_timeline_title": "My film project",
   "slug_toast_image_misconfigurated": "An image may be misconfigurated, eg bad = 'foo.png', good = '/foo.png'",
   "slug_toast_distant_timeline_non_existent": "Oups, your timeline doesn't seems to exist anymore on the remote endpoint.<br/> Please remove it from your local browser in the homepage",
   "slug_toast_remote_offline": "Oups, we couldn't reach the remote endpoint so we'll use your local data instead.<br/> Please check your browser console for more informations. Click me to dismiss the notif",
