@@ -20,7 +20,7 @@ import { db } from '$lib/server/db';
 
 beforeEach(async () => {
 	//truncate tables in db
-	//TODO prospecting in Drizzle seed
+	//See also alternative solution : DrizzleSeed reset https://orm.drizzle.team/docs/seed-overview#reset-database
 	truncateTimeline(db);
 
 	//Mock console.error() to avoid vi console pollution

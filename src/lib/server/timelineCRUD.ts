@@ -14,7 +14,6 @@ export function countTimeline(db: ReturnType<typeof drizzle>): number {
 	return db
 		.select({ count: count() })
 		.from(timelines)
-		.prepare() //TODO : tester en retirant
 		.get()?.count as number;
 }
 
@@ -29,7 +28,6 @@ export function countTimelineByKey(db: ReturnType<typeof drizzle>, key: string):
 		.select({ count: count() })
 		.from(timelines)
 		.where(eq(timelines.key, key))
-		.prepare() //TODO : tester en retirant
 		.get()?.count as number;
 }
 /**
@@ -48,7 +46,6 @@ export function findLastTimelineByKey(
 		.where(eq(timelines.key, key))
 		.orderBy(desc(timelines.id))
 		.limit(1)
-		.prepare() //TODO : vérifier en supprimant ?
 		.get();
 }
 
