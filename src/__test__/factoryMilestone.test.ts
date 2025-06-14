@@ -60,7 +60,7 @@ describe('FactoryMilestone.updateById ', () => {
 	timeline.milestones.push(milestone4);
 
 	it('FactoryMilestone.getById with nominal values', () => {
-		timeline = FactoryMilestone.updateById(timeline, milestone2b)
+		timeline = FactoryMilestone.updateById(timeline, milestone2b);
 		expect(FactoryMilestone.getById(timeline, 2)).toBe(milestone2b);
 	});
 
@@ -76,16 +76,15 @@ describe('FactoryMilestone.compare ', () => {
 	const milestone2: Milestone = new Milestone(2, 'label 2', '2020-01-02', true);
 	const milestone3: Milestone = new Milestone(3, 'label 3', '2020-01-03', true);
 	const milestone4: Milestone = new Milestone(4, 'label 4', '2020-01-04', true);
-	
-	const milestones: Milestone[] = []
+
+	const milestones: Milestone[] = [];
 
 	milestones.push(milestone4);
 	milestones.push(milestone1);
 	milestones.push(milestone3);
 	milestones.push(milestone2);
 
-	const milestonesSorted = milestones.sort(FactoryMilestone.compare)
-
+	const milestonesSorted = milestones.sort(FactoryMilestone.compare);
 
 	it('Sorting Milestones', () => {
 		expect(() => {
@@ -93,6 +92,6 @@ describe('FactoryMilestone.compare ', () => {
 			expect(milestonesSorted[1]).toBe(milestone2);
 			expect(milestonesSorted[2]).toBe(milestone3);
 			expect(milestonesSorted[3]).toBe(milestone4);
-		})
+		});
 	});
 });

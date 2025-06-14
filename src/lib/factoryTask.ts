@@ -63,7 +63,7 @@ export class FactoryTask {
 		// than trying to maintain a map with id => index of array each time
 		// we change something into the $store
 
-		let indexFound = -1
+		let indexFound = -1;
 		timeline.tasks.forEach((task, index) => {
 			if (task.id == taskToUpdate.id) {
 				indexFound = index;
@@ -71,7 +71,7 @@ export class FactoryTask {
 		});
 
 		if (indexFound > -1) {
-			timeline.tasks[indexFound] = taskToUpdate
+			timeline.tasks[indexFound] = taskToUpdate;
 			return timeline;
 		}
 		throw new NotFoundException('Task', taskToUpdate.id);

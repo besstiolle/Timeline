@@ -68,7 +68,7 @@ function __goTomlObject(
 
 	let anyValue: number | string | boolean | object;
 	Object.keys(o).map((key) => {
-		// @ts-expect-error Obviously, it's exist... 
+		// @ts-expect-error Obviously, it's exist...
 		anyValue = o[key];
 		type = getType(anyValue);
 		switch (type) {

@@ -64,10 +64,7 @@
 				);
 				milestoneToUpdate.setDate(date);
 				store.update((s) => {
-					s.currentTimeline = FactoryMilestone.updateById(
-						s.currentTimeline,
-						milestoneToUpdate
-					);
+					s.currentTimeline = FactoryMilestone.updateById(s.currentTimeline, milestoneToUpdate);
 					return { ...s };
 				});
 			} catch (NotFoundException) {

@@ -3,11 +3,9 @@
 	import { GRID } from '$lib/constantes';
 	import { store } from '$lib/stores';
 	import { displayableTodayMarker } from '$lib/derivedStore';
-
 </script>
 
 {#if $displayableTodayMarker.toDisplay}
-	
 	{@const widthToday = $displayableTodayMarker.widthToday}
 	{@const todayColor = $displayableTodayMarker.todayColor}
 
@@ -17,7 +15,6 @@
 		x={GRID.MIDDLE_X}
 		y={GRID.MILESTONE_H}
 	>
-	
 		<rect x="0" y="20" width={widthToday} height="5" fill={todayColor} />
 		<polygon points="{widthToday},25 {widthToday + 5},40 {widthToday - 5},40" fill={todayColor} />
 		<text x={widthToday + 7} y="37" font-size="7" class="secondaryFill">{m.today_text()}</text>

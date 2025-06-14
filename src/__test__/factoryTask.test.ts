@@ -172,7 +172,7 @@ describe('FactoryTask.updateById ', () => {
 	timeline.tasks.push(task4);
 
 	it('FactoryTask.getById with nominal values', () => {
-		timeline = FactoryTask.updateById(timeline, task2b)
+		timeline = FactoryTask.updateById(timeline, task2b);
 		expect(FactoryTask.getById(timeline, 2)).toBe(task2b);
 	});
 

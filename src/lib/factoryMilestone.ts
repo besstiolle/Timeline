@@ -47,18 +47,17 @@ export class FactoryMilestone {
 		// than trying to maintain a map with id => index of array each time
 		// we change something into the $store
 
-		let indexFound = -1
+		let indexFound = -1;
 		timeline.milestones.forEach((milestone, index) => {
 			if (milestone.id == milestoneToUpdate.id) {
-				indexFound = index
+				indexFound = index;
 			}
 		});
 
 		if (indexFound > -1) {
-			timeline.milestones[indexFound] = milestoneToUpdate
+			timeline.milestones[indexFound] = milestoneToUpdate;
 			return timeline;
 		}
-
 
 		throw new NotFoundException('Milestone', milestoneToUpdate.id);
 	}

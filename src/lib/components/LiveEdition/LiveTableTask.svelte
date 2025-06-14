@@ -37,7 +37,7 @@
 			return { ...s };
 		});
 	}
-	
+
 	function b_up(index: number) {
 		if (index <= 0 || index > $store.currentTimeline.tasks.length - 1) {
 			console.warn('index was abnormal', index);

@@ -11,10 +11,7 @@ type StructTimelineInDbInterface = InferSelectModel<typeof timelines>;
  * @returns an number of StructTimelineInDbInterface object if found or 0
  */
 export function countTimeline(db: ReturnType<typeof drizzle>): number {
-	return db
-		.select({ count: count() })
-		.from(timelines)
-		.get()?.count as number;
+	return db.select({ count: count() }).from(timelines).get()?.count as number;
 }
 
 /**
@@ -24,11 +21,8 @@ export function countTimeline(db: ReturnType<typeof drizzle>): number {
  * @returns an number of StructTimelineInDbInterface object if found or 0
  */
 export function countTimelineByKey(db: ReturnType<typeof drizzle>, key: string): number {
-	return db
-		.select({ count: count() })
-		.from(timelines)
-		.where(eq(timelines.key, key))
-		.get()?.count as number;
+	return db.select({ count: count() }).from(timelines).where(eq(timelines.key, key)).get()
+		?.count as number;
 }
 /**
  * return the most recent instance of StructTimelineInDbInterface or undefined if not found

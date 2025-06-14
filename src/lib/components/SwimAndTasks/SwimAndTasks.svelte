@@ -151,10 +151,7 @@
 					taskToUpdate.progress = Math.round(progressValue);
 				}
 				store.update((s) => {
-					s.currentTimeline = FactoryTask.updateById(
-						s.currentTimeline,
-						taskToUpdate
-					);
+					s.currentTimeline = FactoryTask.updateById(s.currentTimeline, taskToUpdate);
 					return { ...s };
 				});
 			} catch (NotFoundException) {
