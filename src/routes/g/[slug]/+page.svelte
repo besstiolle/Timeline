@@ -23,16 +23,6 @@
 		return { ...s };
 	});
 
-	//TODO : disabling SSR or not on this page ?
-	// OR
-	//TODO : using SSR to display loading gif
-	// https://kit.svelte.dev/docs#hooks-handle
-	// OR
-	//TODO : using SSR to retrive information from fauna
-
-	//TODO : displaying link & qrcode ?
-	// https://medium.com/geekculture/few-ways-to-generate-qr-code-using-javascript-54b6b5220c4f
-
 	const slug = page.params.slug;
 	if (!slug.match('^[a-zA-Z0-9]{64}$')) {
 		console.error(m.slug_toast_image_misconfigurated(), slug);

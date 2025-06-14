@@ -26,7 +26,6 @@ export function goCsv(currentTimeline: Timeline): string {
 export function parseCsv(csvContent: string): abstractTimelineInterface {
 	let elmts: string[];
 
-	//TODO add more controls
 	const abstractTasks: abstractTaskInterface[] = [];
 	const abstractMilestones: abstractMilestoneInterface[] = [];
 	const abstractTimeline: abstractTimelineInterface = {

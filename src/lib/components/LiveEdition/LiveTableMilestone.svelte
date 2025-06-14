@@ -21,7 +21,6 @@
 		});
 	}
 
-	//TODO : Factorisation up / down ?
 	function m_up(index: number) {
 		if (index <= 0 || index > $store.currentTimeline.milestones.length - 1) {
 			console.warn('index was abnormal', index);
