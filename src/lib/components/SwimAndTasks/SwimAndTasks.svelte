@@ -153,7 +153,6 @@
 				store.update((s) => {
 					s.currentTimeline = FactoryTask.updateById(
 						s.currentTimeline,
-						parseInt(taskId.substring(1)),
 						taskToUpdate
 					);
 					return { ...s };

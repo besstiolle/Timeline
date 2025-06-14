@@ -36,24 +36,31 @@ export class FactoryMilestone {
 		throw new NotFoundException('Milestone', id);
 	}
 
-	//TODO : tester cette fonction
-	static updateById(timeline: Timeline, id: number, milestoneToUpdate: Milestone): Timeline {
+	/**
+	 * Update the timeline (and return it) with the updated milestone
+	 * @param timeline the timeline to update
+	 * @param milestoneToUpdate the updated minestone
+	 * @returns the timeline updated
+	 */
+	static updateById(timeline: Timeline, milestoneToUpdate: Milestone): Timeline {
 		//A simple loop to reach for the good item because it's cheaper
 		// than trying to maintain a map with id => index of array each time
 		// we change something into the $store
 
-		let isFound = false;
-		timeline.milestones.forEach((milestone) => {
-			if (milestone.id == id) {
-				isFound = true;
-				milestone = milestoneToUpdate;
+		let indexFound = -1
+		timeline.milestones.forEach((milestone, index) => {
+			if (milestone.id == milestoneToUpdate.id) {
+				indexFound = index
 			}
 		});
 
-		if (isFound) {
+		if (indexFound > -1) {
+			timeline.milestones[indexFound] = milestoneToUpdate
 			return timeline;
 		}
-		throw new NotFoundException('Milestone', id);
+
+
+		throw new NotFoundException('Milestone', milestoneToUpdate.id);
 	}
 
 	/**
@@ -72,7 +79,12 @@ export class FactoryMilestone {
 		);
 	}
 
-	//TODO : test
+	/**
+	 * Comparator for Milestone. Order by date ASC
+	 * @param a the first Milestone
+	 * @param b the second Milestone
+	 * @returns the comparaison
+	 */
 	static compare(a: Milestone, b: Milestone) {
 		if (a.date > b.date) {
 			return 1;

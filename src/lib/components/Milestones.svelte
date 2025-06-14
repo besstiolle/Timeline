@@ -66,7 +66,6 @@
 				store.update((s) => {
 					s.currentTimeline = FactoryMilestone.updateById(
 						s.currentTimeline,
-						parseInt(idMilestone),
 						milestoneToUpdate
 					);
 					return { ...s };

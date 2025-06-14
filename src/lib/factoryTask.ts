@@ -52,24 +52,29 @@ export class FactoryTask {
 		throw new NotFoundException('Task', id);
 	}
 
-	//TODO : tester cette fonction
-	static updateById(timeline: Timeline, id: number, taskToUpdate: Task): Timeline {
+	/**
+	 * Update the timeline (and return it) with the updated task
+	 * @param timeline the timeline to update
+	 * @param taskToUpdate the updated task
+	 * @returns the timeline updated
+	 */
+	static updateById(timeline: Timeline, taskToUpdate: Task): Timeline {
 		//A simple loop to reach for the good item because it's cheaper
 		// than trying to maintain a map with id => index of array each time
 		// we change something into the $store
 
-		let isFound = false;
-		timeline.tasks.forEach((task) => {
-			if (task.id == id) {
-				isFound = true;
-				task = taskToUpdate;
+		let indexFound = -1
+		timeline.tasks.forEach((task, index) => {
+			if (task.id == taskToUpdate.id) {
+				indexFound = index;
 			}
 		});
 
-		if (isFound) {
+		if (indexFound > -1) {
+			timeline.tasks[indexFound] = taskToUpdate
 			return timeline;
 		}
-		throw new NotFoundException('Task', id);
+		throw new NotFoundException('Task', taskToUpdate.id);
 	}
 
 	/**
