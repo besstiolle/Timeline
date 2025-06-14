@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/svelte';
 
-import Banner from '$lib/components/Banner.svelte';
+import Banner from '$lib/components/Banner/Banner.svelte';
 import { store } from '$lib/stores';
 import { DIFF, MONTHS } from '$lib/constantes';
 import { Rights } from '$lib/rights.class';

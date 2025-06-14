@@ -8,18 +8,12 @@
 		let id = Number((event.currentTarget as HTMLElement).id.substring(1));
 		let value = !$store.currentTimeline.swimlines[id].isShow;
 		store.update((s) => {
-			//TODO : usage de map ? filter ?
 			s.currentTimeline.tasks.forEach((task: Task) => {
 				if (task.swimlineId == id) {
 					task.isShow = value;
 				}
 			});
 			return { ...s };
-			/*
-            const val = s.currentTimeline.tasks.map((task) => {
-                task.swimlineId == id ? { ...task, isShow: value } : task
-            })
-            */
 		});
 	}
 	function showToggle(event: Event) {

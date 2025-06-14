@@ -3,6 +3,8 @@ import { store } from './stores';
 import { FactoryMilestone } from './factoryMilestone';
 import { GRID } from './constantes';
 import type { Swimline, Task } from './struct.class';
+import { getJalons } from './components/Banner/Banner';
+import { getMarker } from './components/Today/Today';
 
 /**
  * A readonly store with all the Milestones to display
@@ -68,3 +70,17 @@ interface swimlinesToShowInterface {
 	position: number;
 	height: number;
 }
+
+/**
+ * A readonly store with all the Jalons to display
+ **/
+export const displayableStepInCalendar = derived(store, ($store) => {
+	return getJalons($store.currentTimeline);
+});
+
+/**
+ * A readonly store with information about "today marker"
+ **/
+export const displayableTodayMarker = derived(store, ($store) => {
+	return getMarker($store.currentTimeline);
+});
