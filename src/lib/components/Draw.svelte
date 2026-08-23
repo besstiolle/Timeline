@@ -18,9 +18,9 @@
 	import { commitState } from './commitState.svelte';
 
 	let toastComponent: Toast;
-	let uploadComponent: Upload;
-	let liveComponent: Live;
-	let onlineComponent: Online;
+	let uploadComponent = $state<Upload>()!;
+	let liveComponent = $state<Live>()!;
+	let onlineComponent = $state<Online>()!;
 
 	let timerId = $state<NodeJS.Timeout>()
 	let processRunning = false;
