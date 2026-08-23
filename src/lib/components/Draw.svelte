@@ -21,6 +21,7 @@
 	let liveComponent: Live;
 	let onlineComponent: Online;
 
+	let timerId = $state<NodeJS.Timeout>()
 	let processRunning = false;
 
 	/**
@@ -63,7 +64,14 @@
 		}
 	}
 
-	const timerId = setInterval(makeThumbnail, 30000);
+	$effect(() => {
+		if (!browser) return;
+		
+		timerId = setInterval(makeThumbnail, 30000);
+		
+		// clear interval if component is destroyed
+		return () => clearInterval(timerId);
+	});
 
 	/**
 	 * Generate a screenshot from the chart and save it on computer as a png image
