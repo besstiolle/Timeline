@@ -10,7 +10,7 @@
 	import { FactoryCards } from '$lib/factoryCards';
 	import type { ResponseWithMeta } from '$lib/server/types';
 	import { m } from '../../paraglide/messages';
-	import { commitState } from './commitState.svelte';
+	import { commitState } from '../commitState.svelte';
 
 	let toastComponent: Toast;
 	let shadowBox: ShadowBox;

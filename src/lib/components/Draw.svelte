@@ -15,7 +15,7 @@
 	import { FactoryPicto } from '$lib/factoryPicto';
 	import Upload from '$lib/components/Upload/Upload.svelte';
 	import Banner from './Banner/Banner.svelte';
-	import { commitState } from './commitState.svelte';
+	import { commitState } from '../commitState.svelte';
 
 	let toastComponent: Toast;
 	let uploadComponent = $state<Upload>()!;
