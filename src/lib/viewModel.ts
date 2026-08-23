@@ -93,7 +93,7 @@ export class TaskViewModel {
         return `${this.#task.getStart().getDate()} ${MONTHS[this.#task.getStart().getMonth()]} - ${this.#task.getEnd().getDate()} ${MONTHS[this.#task.getEnd().getMonth()]}`
     }
 
-    get fillColors():string{
+    get fillColor():string{
 
         const green = '#16A085';
         const blue = '#2980B9';
@@ -104,7 +104,7 @@ export class TaskViewModel {
             return green
         }
     }
-    get strokeColors():string{
+    get strokeColor():string{
 
         const greenStroke = '#117A65';
         const blueStroke = '#236B99';
@@ -117,10 +117,6 @@ export class TaskViewModel {
     }
 
     get hasSwimline(): boolean{
-        if(this.#task.swimline && this.#task.swimline !== ''){
-            return true
-        } else {
-            return false
-        }
+        return Boolean(this.#task.swimline && this.#task.swimline !== '');
     }
 }

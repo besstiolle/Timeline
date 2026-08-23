@@ -8,9 +8,9 @@
         taskVM: TaskViewModel;
         showActionBar: (event: Event) => void;
         hideActionBar: (event: Event) => void;
-        downLeft: (event: MouseEvent) => void;
-        downRight: (event: MouseEvent) => void;
-        downProgress: (event: MouseEvent) => void;
+        downLeft: (event: MouseEvent, taskId:number) => void;
+        downRight: (event: MouseEvent, taskId:number) => void;
+        downProgress: (event: MouseEvent, taskId:number) => void;
     }
 
 	let {
@@ -85,8 +85,8 @@
 			height="15"
 			rx="5"
 			ry="5"
-			fill={taskVM.fillColors}
-			stroke={taskVM.strokeColors}
+			fill={taskVM.fillColor}
+			stroke={taskVM.strokeColor}
 			stroke-width="0.05em"
 		/>
 		<text
@@ -105,8 +105,8 @@
 			height="15"
 			rx="5"
 			ry="5"
-			fill={taskVM.fillColors}
-			stroke={taskVM.strokeColors}
+			fill={taskVM.fillColor}
+			stroke={taskVM.strokeColor}
 			stroke-width="0.05em"
 		/>
 	{/if}
@@ -137,8 +137,8 @@
 		class:grabbable={!$store.rights.isReader()}
 		class="showable hidden"
 	>
-		<use href="#filler" onmousedown={downLeft} role="presentation" />
-		<use href="#drag_left" class="secondaryFill" onmousedown={downLeft} role="presentation" />
+		<use href="#filler" onmousedown={(e) => downLeft(e, taskVM.id)} role="presentation" />
+		<use href="#drag_left" class="secondaryFill" onmousedown={(e) => downLeft(e, taskVM.id)} role="presentation" />
 	</svg>
 	<svg
 		id="T{taskVM.id}_r"
@@ -150,25 +150,25 @@
 		class:grabbable={!$store.rights.isReader()}
 		class="showable hidden"
 	>
-		<use href="#filler" onmousedown={downRight} role="presentation" />
-		<use href="#drag_right" class="secondaryFill" onmousedown={downRight} role="presentation" />
+		<use href="#filler" onmousedown={(e) => downRight(e, taskVM.id)} role="presentation" />
+		<use href="#drag_right" class="secondaryFill" onmousedown={(e) => downRight(e, taskVM.id)} role="presentation" />
 	</svg>
 	{#if taskVM.hasProgress}
 		<svg
 			id="T{taskVM.id}_p"
-			x={taskVM.leftGrayXPosition + (taskVM.rightGrayXPosition - taskVM.leftGrayXPosition) / 2 - 10}
+			x={taskVM.percentXPosition}
 			y="10"
 			width="15px"
 			height="15px"
 			viewBox="0 0 20 20"
 			class:grabbable={!$store.rights.isReader()}
-			class="showable hidden"
+			class="showable hidden debug_{taskVM.leftGrayXPosition}_{taskVM.rightGrayXPosition}"
 		>
-			<use href="#filler" onmousedown={downProgress} role="presentation" />
+			<use href="#filler" onmousedown={(e) => downProgress(e, taskVM.id)} role="presentation" />
 			<use
 				href="#drag_progress"
 				class="secondaryFill"
-				onmousedown={downProgress}
+				onmousedown={(e) => downProgress(e, taskVM.id)}
 				role="presentation"
 			/>
 		</svg>

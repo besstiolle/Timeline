@@ -11,7 +11,7 @@
 	import type { Task } from '$lib/struct.class';
 
 
-	interface activeDragInterface{
+	interface ActiveDragInterface{
 		taskId: number,
         action: string,
         currentX: number,
@@ -22,38 +22,34 @@
 		initialRightXPosition:number,
 	}
 
-	const ACTION = { LEFT: 'L', RIGHT: 'R', PROGRESS: 'P' };
+	type ACTION = 'L' | 'R' | 'P';
 
-	let isDragging: boolean = false;
-	let activeDrag = $state<activeDragInterface | null>(null)
+	let activeDrag = $state<ActiveDragInterface | null>(null)
 
 	function getSvgX(event: MouseEvent):number{
 		return (event.clientX / window.innerWidth) * GRID.ALL_WIDTH
 	}
 
-	function downLeft(event: MouseEvent): void {
-		down(event, ACTION.LEFT);
+	function downLeft(event: MouseEvent, taskId:number): void {
+		down(event, taskId, 'L');
 	}
-	function downRight(event: MouseEvent): void {
-		down(event, ACTION.RIGHT);
+	function downRight(event: MouseEvent, taskId:number): void {
+		down(event, taskId, 'R');
 	}
-	function downProgress(event: MouseEvent): void {
-		down(event, ACTION.PROGRESS);
+	function downProgress(event: MouseEvent, taskId:number): void {
+		down(event, taskId, 'P');
 	}
-	function down(event: MouseEvent, action: string): void {
+	function down(event: MouseEvent, taskId:number, action: ACTION): void {
 		//Security : we can't manipulate data if we are a simple Reader
 		if ($store.rights.isReader()) {
 			return;
 		}
 
-		//Find the initiale position of our buttons to reset it if necessary
-		let taskId = (event.currentTarget as HTMLElement)?.parentElement?.parentElement?.id as string;
 		let task = null
 		try {
 			task = FactoryTask.getById(
-				$store.currentTimeline,
-				parseInt(taskId.substring(1))
-			); //html id = T999 => 999
+				$store.currentTimeline,taskId
+			); 
 		} catch (NotFoundException) {
 			//Nothing to do, the rest of the function will clean everything
 			console.debug('catch a NotFoundExeption but everything is normal', NotFoundException);
@@ -65,7 +61,7 @@
 
 		//construction of activeDrag
 		activeDrag = {
-			taskId: parseInt(taskId.substring(1)),
+			taskId: taskId,
 			action,
 			currentX: getSvgX(event),
 			initialProgress: viewModel.progress,
@@ -118,7 +114,7 @@
 		}
 
 		//Avoid showing more overlay when we already grabbing something
-		if (isDragging) {
+		if (activeDrag) {
 			return;
 		}
 		let collection: HTMLCollection = (event.currentTarget as HTMLElement).getElementsByClassName(
@@ -135,7 +131,7 @@
 		}
 
 		//Avoid hiding overlay when we already grabbing something
-		if (isDragging) {
+		if (activeDrag) {
 			return;
 		}
 		let collection: HTMLCollection = (event.currentTarget as HTMLElement).getElementsByClassName(
@@ -155,13 +151,13 @@
 
 		const previewTask = task.clone();
 
-		if (activeDrag.action === ACTION.PROGRESS) {
+		if (activeDrag.action === 'P') {
 			const newProgress = calculateProgressFromActiveDrag(activeDrag);
 			previewTask.progress = newProgress;
-		} else if (activeDrag.action === ACTION.RIGHT) {
+		} else if (activeDrag.action === 'R') {
 			const newDate = calculateNewEndDateFromActiveDrag(activeDrag)
 			previewTask.setEnd(newDate)
-		} else if (activeDrag.action === ACTION.LEFT) {
+		} else if (activeDrag.action === 'L') {
 			const newDate = calculateNewStartDateFromActiveDrag(activeDrag)
 			previewTask.setStart(newDate)
 		} else {
@@ -171,7 +167,7 @@
 		return previewTask;
 	}
 
-	function calculateProgressFromActiveDrag(activeDrag: activeDragInterface): number {
+	function calculateProgressFromActiveDrag(activeDrag: ActiveDragInterface): number {
 		
 		let currentX = activeDrag.currentX
 		if(activeDrag.currentX > activeDrag.initialRightXPosition){
@@ -189,7 +185,7 @@
 
 	}
 
-	function calculateNewStartDateFromActiveDrag(activeDrag: activeDragInterface):Date{
+	function calculateNewStartDateFromActiveDrag(activeDrag: ActiveDragInterface):Date{
 		
 		let currentX = activeDrag.currentX
 		if(activeDrag.currentX > activeDrag.initialRightXPosition){
@@ -209,7 +205,7 @@
 		return currentDate
 	}
 
-	function calculateNewEndDateFromActiveDrag(activeDrag: activeDragInterface):Date{
+	function calculateNewEndDateFromActiveDrag(activeDrag: ActiveDragInterface):Date{
 		
 
 		let currentX = activeDrag.currentX
