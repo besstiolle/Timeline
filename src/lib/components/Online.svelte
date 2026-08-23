@@ -141,7 +141,7 @@
 	}
 </script>
 
-<ShadowBox bind:this={shadowBox}>
+<ShadowBox bind:this={shadowBox} id="onlinePopup">
 	{#if $store.currentTimeline.isOnline}
 		<div class="warn">
 			{m.online_warn_before_offline_0()} "<span class="font-bold"

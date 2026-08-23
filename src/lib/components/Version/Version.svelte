@@ -91,7 +91,7 @@
 		</div>
 	{/if}
 
-	<ShadowBox bind:this={shadowBox}>
+	<ShadowBox bind:this={shadowBox} id="versionChecking">
 		<p>🎉 {m.version_update_available()} 🎉</p>
 		{#if hasMajor}
 			<p>{m.version_major()}⚠️</p>
