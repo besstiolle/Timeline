@@ -13,7 +13,7 @@
 
 	interface ActiveDragInterface{
 		taskId: number,
-        action: string,
+        action: ACTION,
         currentX: number,
         initialProgress: number,
         initialStart: Date,
@@ -57,7 +57,7 @@
 		}
 
 		//Using viewModels to calculate X/Y Coord
-		const viewModel = new TaskViewModel(task, $store.currentTimeline)
+		const viewModel = new TaskViewModel(task, $store.currentTimeline, activeDrag?.taskId ?? null)
 
 		//construction of activeDrag
 		activeDrag = {
@@ -102,44 +102,7 @@
 
 		if (!activeDrag) return;
 		activeDrag.currentX = getSvgX(event);
-
 		//console.info("Move", activeDrag.taskId, activeDrag.initialLeftXPosition, activeDrag.initialRightXPosition, activeDrag.currentX)
-
-	}
-
-	function showActionBar(event: Event): void {
-		//Security : we can't manipulate data if we are a simple Reader
-		if ($store.rights.isReader()) {
-			return;
-		}
-
-		//Avoid showing more overlay when we already grabbing something
-		if (activeDrag) {
-			return;
-		}
-		let collection: HTMLCollection = (event.currentTarget as HTMLElement).getElementsByClassName(
-			'showable'
-		);
-		Array.from(collection).forEach((element) => {
-			element.classList.remove('hidden');
-		});
-	}
-	function hideActionBar(event: Event): void {
-		//Security : we can't manipulate data if we are a simple Reader
-		if ($store.rights.isReader()) {
-			return;
-		}
-
-		//Avoid hiding overlay when we already grabbing something
-		if (activeDrag) {
-			return;
-		}
-		let collection: HTMLCollection = (event.currentTarget as HTMLElement).getElementsByClassName(
-			'showable'
-		);
-		Array.from(collection).forEach((element) => {
-			element.classList.add('hidden');
-		});
 	}
 
 	// If task passed is the activeDrag one, we apply the modifications
@@ -235,12 +198,12 @@
 	{#each $displayableTasks as task, index (task.id)}
 		<TaskComponent
 			i={index}
-			taskVM={new TaskViewModel(getDisplayTask(task), $store.currentTimeline)}
-			{showActionBar}
-			{hideActionBar}
+			taskVM={new TaskViewModel(
+				getDisplayTask(task), 
+				$store.currentTimeline, 
+				activeDrag?.taskId ?? null)}
 			{downRight}
 			{downLeft}
 			{downProgress}
 		/>
 	{/each}
-<tspan id="ghost" x="-1000" />

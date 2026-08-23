@@ -4,8 +4,7 @@
 	import { store } from '$lib/stores';
 	import type { Task } from '$lib/struct.class';
 
-	function toggleSwimlineVisibility(event: Event) {
-		let id = Number((event.currentTarget as HTMLElement).id.substring(1));
+	function toggleSwimlineVisibility(event: Event, id:number) {
 		let value = !$store.currentTimeline.swimlines[id].isShow;
 		store.update((s) => {
 			s.currentTimeline.tasks.forEach((task: Task) => {
@@ -15,10 +14,6 @@
 			});
 			return { ...s };
 		});
-	}
-	function showToggle(event: Event) {
-		let id = Number((event.currentTarget as HTMLElement).id.substring(1));
-		(document.getElementById('s' + id) as HTMLElement).classList.toggle('hidden');
 	}
 </script>
 
@@ -33,18 +28,16 @@
 		{#if $displayableSwimlines.has(task.id)}
 			{@const localSwimline = $displayableSwimlines.get(task.id)}
 			{#if localSwimline}
+				<g class="wrapperSwimline">
 				<rect
 					x="0"
 					y={index * GRID.ONE_TASK_H}
 					width={GRID.ALL_WIDTH}
-					height={localSwimline?.height}
+					height={localSwimline.height}
 					fill={COLORS[localSwimline.position % COLORS.length][0]}
 					id="c{task.swimlineId}"
-					onmouseover={showToggle}
-					onfocus={showToggle}
-					onmouseout={showToggle}
-					onblur={showToggle}
 					role="none"
+					class="www"
 				/>
 
 				<rect
@@ -54,10 +47,6 @@
 					height={localSwimline.height}
 					fill={COLORS[localSwimline.position % COLORS.length][1]}
 					id="d{task.swimlineId}"
-					onmouseover={showToggle}
-					onfocus={showToggle}
-					onmouseout={showToggle}
-					onblur={showToggle}
 					role="none"
 				/>
 
@@ -77,17 +66,14 @@
 					height="24"
 					width="24"
 					data-html2canvas-ignore="true"
-					onclick={toggleSwimlineVisibility}
-					onkeydown={toggleSwimlineVisibility}
+					onclick={(e) => toggleSwimlineVisibility(e, task.swimlineId)}
+					onkeydown={(e) => toggleSwimlineVisibility(e, task.swimlineId)}
 					id="s{task.swimlineId}"
-					class="toggleVisibility hidden"
-					onmouseover={showToggle}
-					onfocus={showToggle}
-					onmouseout={showToggle}
-					onblur={showToggle}
+					class="toggleVisibility"
 					role="button"
 					tabindex="0"
 				/>
+				</g>
 			{/if}
 		{:else}
 			<rect
@@ -102,7 +88,14 @@
 </svg>
 
 <style>
-	.toggleVisibility {
-		cursor: pointer;
-	}
+    .toggleVisibility {
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+    }
+    /* Affiche l'icône au survol du groupe ou du rectangle */
+    .wrapperSwimline:hover .toggleVisibility,
+	.wrapperSwimline:focus-within .toggleVisibility {
+        opacity: 1;
+    }
 </style>

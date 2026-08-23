@@ -6,10 +6,12 @@ export class TaskViewModel {
 
     #task: Task;
     #timeline: Timeline;
+    #grabbedId: number|null;
 
-    constructor(task: Task, timeline: Timeline) {
+    constructor(task: Task, timeline: Timeline, grabbedId: number|null) {
         this.#task = task;
         this.#timeline = timeline;
+        this.#grabbedId = grabbedId;
     }
 
     /* Internal values */
@@ -31,6 +33,16 @@ export class TaskViewModel {
     }
 
     /* Calculated values */
+
+    /**
+     * Can the task be grabbed
+     */
+    get isGrabbable(): boolean{
+        return this.#grabbedId === null || this.#grabbedId === this.#task.id
+    }
+    get isGrabbed(): boolean{
+        return this.#grabbedId !== null && this.#grabbedId === this.#task.id
+    }
 
     /**
      * Return the Left X position = StartDate of the task

@@ -6,8 +6,6 @@
 	interface Props {
         i: number;
         taskVM: TaskViewModel;
-        showActionBar: (event: Event) => void;
-        hideActionBar: (event: Event) => void;
         downLeft: (event: MouseEvent, taskId:number) => void;
         downRight: (event: MouseEvent, taskId:number) => void;
         downProgress: (event: MouseEvent, taskId:number) => void;
@@ -16,8 +14,6 @@
 	let {
         i,
         taskVM,
-        showActionBar,
-        hideActionBar,
         downLeft,
         downRight,
         downProgress
@@ -36,11 +32,9 @@
 	x="0"
 	y={i * GRID.ONE_TASK_H + GRID.MILESTONE_H + GRID.ANNUAL_H}
 	class="taskSVGSection"
+	class:isGrabbed={taskVM.isGrabbed}
+	class:canBeGrabbed={taskVM.isGrabbable}
 	id="T{taskVM.id}"
-	onmouseover={showActionBar}
-	onfocus={showActionBar}
-	onmouseout={hideActionBar}
-	onblur={hideActionBar}
 	class:shouldBeHidden={!taskVM.isShow}
 	role="none"
 >
@@ -120,7 +114,7 @@
 		x={taskVM.leftGrayXPosition}
 		y="0"
 		width={taskVM.grayWidth}
-		class="showable hidden"
+		class="draggabledElement"
 		height="15"
 		rx="5"
 		ry="5"
@@ -134,8 +128,8 @@
 		width="15px"
 		height="15px"
 		viewBox="0 0 20 20"
-		class:grabbable={!$store.rights.isReader()}
-		class="showable hidden"
+		class:grabbable={!$store.rights.isReader() && taskVM.isGrabbable}
+		class="draggabledElement"
 	>
 		<use href="#filler" onmousedown={(e) => downLeft(e, taskVM.id)} role="presentation" />
 		<use href="#drag_left" class="secondaryFill" onmousedown={(e) => downLeft(e, taskVM.id)} role="presentation" />
@@ -147,8 +141,8 @@
 		width="15px"
 		height="15px"
 		viewBox="0 0 20 20"
-		class:grabbable={!$store.rights.isReader()}
-		class="showable hidden"
+		class:grabbable={!$store.rights.isReader() && taskVM.isGrabbable}
+		class="draggabledElement"
 	>
 		<use href="#filler" onmousedown={(e) => downRight(e, taskVM.id)} role="presentation" />
 		<use href="#drag_right" class="secondaryFill" onmousedown={(e) => downRight(e, taskVM.id)} role="presentation" />
@@ -161,8 +155,8 @@
 			width="15px"
 			height="15px"
 			viewBox="0 0 20 20"
-			class:grabbable={!$store.rights.isReader()}
-			class="showable hidden debug_{taskVM.leftGrayXPosition}_{taskVM.rightGrayXPosition}"
+			class:grabbable={!$store.rights.isReader() && taskVM.isGrabbable}
+			class="draggabledElement"
 		>
 			<use href="#filler" onmousedown={(e) => downProgress(e, taskVM.id)} role="presentation" />
 			<use
@@ -184,4 +178,17 @@
 	:global(.grabbable.grabbing) {
 		cursor: grabbing;
 	}
+	
+	.draggabledElement {
+		opacity: 0;
+		transition: opacity 0.15s ease;
+	}
+
+	/* Affiche la barre d'action au survol de la section SVG */
+	.taskSVGSection.canBeGrabbed:hover .draggabledElement,
+	.taskSVGSection.canBeGrabbed:focus-within .draggabledElement,
+	.taskSVGSection.isGrabbed .draggabledElement {
+		opacity: 1;
+	}
+
 </style>
