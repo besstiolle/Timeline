@@ -1,10 +1,11 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import { m } from '../../paraglide/messages';
 
 	let hidden = $state(true);
 
 	interface Props {
-        children: any;
+        children: Snippet;
 		id: string;
     }
 
