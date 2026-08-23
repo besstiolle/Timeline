@@ -38,7 +38,7 @@ describe('FactoryMilestone.getById ', () => {
 
 describe('FactoryMilestone.clone ', () => {
 	const milestone1: Milestone = new Milestone(1, 'label 1', '2020-01-01', true);
-	const milestone2 = FactoryMilestone.clone(milestone1);
+	const milestone2 = FactoryMilestone.duplicate(milestone1);
 
 	it('FactoryTask.clone and check memory pointer', () => {
 		expect(milestone1).not.toBe(milestone2);

@@ -63,13 +63,13 @@ export class FactoryMilestone {
 	}
 
 	/**
-	 * Clone properly a <Milestone> with all its function.
-	 * @param task the milestone to clone
+	 * Duplicate properly a <Milestone> with all its function. (not a clone fonction)
+	 * @param task the milestone to duplicate
 	 * @param nextId the id to apply of the current milestone.id will be used
-	 * @param suffix the optionnal suffix for label of the cloned object
-	 * @returns the new milestone cloned
+	 * @param suffix the optionnal suffix for label of the duplicated object
+	 * @returns the new milestone duplicated
 	 */
-	static clone(milestone: Milestone, nextId?: number, suffix: string = ''): Milestone {
+	static duplicate(milestone: Milestone, nextId?: number, suffix: string = ''): Milestone {
 		return new Milestone(
 			nextId ? nextId : milestone.id,
 			milestone.label + suffix,

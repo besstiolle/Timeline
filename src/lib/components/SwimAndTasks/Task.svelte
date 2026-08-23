@@ -1,71 +1,33 @@
 <script lang="ts">
-	import { GRID, MONTHS } from '$lib/constantes';
-
-	import { Helpers } from '$lib/helpers';
+	import { GRID } from '$lib/constantes';
 	import { store } from '$lib/stores';
-	import type { Task } from '$lib/struct.class';
+	import type { TaskViewModel } from '$lib/viewModel';
 
-	const props = $props();
-	const i = props.i as number;
-	const currentTask = props.currentTask as Task;
-	const showActionBar = props.showActionBar as (event: Event) => object;
-	const hideActionBar = props.hideActionBar as (event: Event) => object;
-	const downLeft = props.downLeft as (event: Event) => object;
-	const downRight = props.downRight as (event: Event) => object;
-	const downProgress = props.downProgress as (event: Event) => object;
+	interface Props {
+        i: number;
+        taskVM: TaskViewModel;
+        showActionBar: (event: Event) => void;
+        hideActionBar: (event: Event) => void;
+        downLeft: (event: MouseEvent) => void;
+        downRight: (event: MouseEvent) => void;
+        downProgress: (event: MouseEvent) => void;
+    }
 
-	const green = '#16A085';
-	const greenStroke = '#117A65';
-	const blue = '#2980B9';
-	const blueStroke = '#236B99';
+	let {
+        i,
+        taskVM,
+        showActionBar,
+        hideActionBar,
+        downLeft,
+        downRight,
+        downProgress
+    }: Props = $props();
+
+
 	const grey = '#95A5A6';
 	const greyStroke = '#9B9B9B';
 	const white = '#FFFFFF';
-	//const rightLabel = "#44546A";
-	//const leftLabel = "#000000";
-	//const dottedLine = "#44546A";
-	let styleColor = $state({ fill: green, stroke: greenStroke }); //default : full
-	if (currentTask.hasProgress && currentTask.progress < 100) {
-		styleColor = { fill: blue, stroke: blueStroke };
-	}
-
-	let labelRight: string =
-		currentTask.getStart().getDate() +
-		' ' +
-		MONTHS[currentTask.getStart().getMonth()] +
-		' - ' +
-		currentTask.getEnd().getDate() +
-		' ' +
-		MONTHS[currentTask.getEnd().getMonth()];
-
-	let xGrayPosition = Helpers.getViewportXFromDate(
-		currentTask.getStart(),
-		$store.currentTimeline.getStart(),
-		$store.currentTimeline.getEnd()
-	);
-
-	//A quick fix to alterate visualy the end date
-	// It will 'fill' the day event if date start = date end
-	let fakeEndDate = currentTask.getEnd();
-	fakeEndDate.setDate(fakeEndDate.getDate() + 1);
-
-	let x2GrayPosition = Helpers.getViewportXFromDate(
-		fakeEndDate,
-		$store.currentTimeline.getStart(),
-		$store.currentTimeline.getEnd()
-	);
-
-	let widthGray = x2GrayPosition - xGrayPosition;
-	let widthProgress = (currentTask.progress * widthGray) / 100;
-
-	let xPercentPosition = $state(xGrayPosition + widthProgress - 5);
-	let percentTextAnchor = $state('end');
-	if (currentTask.progress < 50) {
-		xPercentPosition = xGrayPosition + widthProgress + 5;
-		percentTextAnchor = 'start';
-	}
-
-	let hasSwimline = currentTask.swimline && currentTask.swimline !== '';
+	
 </script>
 
 <svg
@@ -74,38 +36,38 @@
 	x="0"
 	y={i * GRID.ONE_TASK_H + GRID.MILESTONE_H + GRID.ANNUAL_H}
 	class="taskSVGSection"
-	id="T{currentTask.id}"
+	id="T{taskVM.id}"
 	onmouseover={showActionBar}
 	onfocus={showActionBar}
 	onmouseout={hideActionBar}
 	onblur={hideActionBar}
-	class:shouldBeHidden={!currentTask.isShow}
+	class:shouldBeHidden={!taskVM.isShow}
 	role="none"
 >
-	{#if hasSwimline}
-		<text text-anchor="end" x={xGrayPosition - 5} y="10.5" font-size="9" class="primaryFill"
-			>{currentTask.label}</text
+	{#if taskVM.hasSwimline}
+		<text text-anchor="end" x={taskVM.leftGrayXPosition - 5} y="10.5" font-size="9" class="primaryFill"
+			>{taskVM.label}</text
 		>
 	{:else}
 		<text text-anchor="end" x={GRID.MIDDLE_X - 5} y="10.5" font-size="9" class="primaryFill"
-			>{currentTask.label}</text
+			>{taskVM.label}</text
 		>
 		<line
 			stroke-dasharray="0.5 2"
 			x1={GRID.MIDDLE_X}
 			y1="8"
-			x2={xGrayPosition - 5}
+			x2={taskVM.leftGrayXPosition - 5}
 			y2="8"
 			class="secondaryStroke"
 		/>
 	{/if}
 
-	{#if currentTask.hasProgress}
-		{#if currentTask.progress < 100}
+	{#if taskVM.hasProgress}
+		{#if taskVM.progress < 100}
 			<rect
-				x={xGrayPosition}
+				x={taskVM.leftGrayXPosition}
 				y="0"
-				width={widthGray}
+				width={taskVM.grayWidth}
 				height="15"
 				rx="5"
 				ry="5"
@@ -116,48 +78,48 @@
 		{/if}
 
 		<rect
-			id="T{currentTask.id}_progressBar"
-			x={xGrayPosition}
+			id="T{taskVM.id}_progressBar"
+			x={taskVM.leftGrayXPosition}
 			y="0"
-			width={widthProgress}
+			width={taskVM.progressWidth}
 			height="15"
 			rx="5"
 			ry="5"
-			fill={styleColor.fill}
-			stroke={styleColor.stroke}
+			fill={taskVM.fillColors}
+			stroke={taskVM.strokeColors}
 			stroke-width="0.05em"
 		/>
 		<text
-			id="T{currentTask.id}_plabel"
-			text-anchor={percentTextAnchor}
-			x={xPercentPosition}
+			id="T{taskVM.id}_plabel"
+			text-anchor={taskVM.percentTextAnchor}
+			x={taskVM.percentXPosition}
 			y="10.5"
-			fill={white}>{currentTask.progress}%</text
+			fill={white}>{taskVM.progress}%</text
 		>
 	{:else}
 		<rect
-			id="T{currentTask.id}_progressBar"
-			x={xGrayPosition}
+			id="T{taskVM.id}_progressBar"
+			x={taskVM.leftGrayXPosition}
 			y="0"
-			width={widthGray}
+			width={taskVM.grayWidth}
 			height="15"
 			rx="5"
 			ry="5"
-			fill={styleColor.fill}
-			stroke={styleColor.stroke}
+			fill={taskVM.fillColors}
+			stroke={taskVM.strokeColors}
 			stroke-width="0.05em"
 		/>
 	{/if}
 
-	<text id="T{currentTask.id}_rlabel" x={x2GrayPosition + 5} y="10.5" class="secondaryFill"
-		>{labelRight}</text
+	<text id="T{taskVM.id}_rlabel" x={taskVM.rightGrayXPosition + 5} y="10.5" class="secondaryFill"
+		>{taskVM.labelRight}</text
 	>
 	<!-- Draggable overlay -->
 	<rect
-		id="T{currentTask.id}_rec"
-		x={xGrayPosition}
+		id="T{taskVM.id}_rec"
+		x={taskVM.leftGrayXPosition}
 		y="0"
-		width={widthGray}
+		width={taskVM.grayWidth}
 		class="showable hidden"
 		height="15"
 		rx="5"
@@ -166,8 +128,8 @@
 	/>
 
 	<svg
-		id="T{currentTask.id}_l"
-		x={xGrayPosition - 5}
+		id="T{taskVM.id}_l"
+		x={taskVM.leftGrayXPosition - 5}
 		y="10"
 		width="15px"
 		height="15px"
@@ -179,8 +141,8 @@
 		<use href="#drag_left" class="secondaryFill" onmousedown={downLeft} role="presentation" />
 	</svg>
 	<svg
-		id="T{currentTask.id}_r"
-		x={x2GrayPosition - 10}
+		id="T{taskVM.id}_r"
+		x={taskVM.rightGrayXPosition - 10}
 		y="10"
 		width="15px"
 		height="15px"
@@ -191,10 +153,10 @@
 		<use href="#filler" onmousedown={downRight} role="presentation" />
 		<use href="#drag_right" class="secondaryFill" onmousedown={downRight} role="presentation" />
 	</svg>
-	{#if currentTask.hasProgress}
+	{#if taskVM.hasProgress}
 		<svg
-			id="T{currentTask.id}_p"
-			x={xGrayPosition + (x2GrayPosition - xGrayPosition) / 2 - 10}
+			id="T{taskVM.id}_p"
+			x={taskVM.leftGrayXPosition + (taskVM.rightGrayXPosition - taskVM.leftGrayXPosition) / 2 - 10}
 			y="10"
 			width="15px"
 			height="15px"

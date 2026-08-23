@@ -181,6 +181,20 @@ export class Task {
 	setEnd(end: Date): void {
 		this.dateEnd = Helpers.toYYYY_MM_DD(end);
 	}
+
+	clone():Task{
+		return new Task(
+			this.id,
+			this.label,
+			this.dateStart,
+			this.dateEnd,
+			this.hasProgress,
+			this.progress,
+			this.isShow,
+			this.swimline,
+			this.swimlineId,
+		)
+	}
 }
 
 export class Milestone {

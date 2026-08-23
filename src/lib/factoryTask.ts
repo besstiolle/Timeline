@@ -78,13 +78,13 @@ export class FactoryTask {
 	}
 
 	/**
-	 * Clone properly a <Task> with all its function.
-	 * @param task the task to clone
+	 * Duplicate properly a <Task> with all its function. (It's not a ref clone)
+	 * @param task the task to duplicate
 	 * @param nextId the id to apply of the current task.id will be used
-	 * @param suffix the optionnal suffix for label of the cloned object
-	 * @returns the new task cloned
+	 * @param suffix the optionnal suffix for label of the duplicated object
+	 * @returns the new task duplicated
 	 */
-	static clone(task: Task, nextId?: number, suffix: string = ''): Task {
+	static duplicate(task: Task, nextId?: number, suffix: string = ''): Task {
 		return new Task(
 			nextId ? nextId : task.id,
 			task.label + suffix,

@@ -85,7 +85,7 @@
 
 		let timelineUpdated = FactoryTimeline.addTask(
 			$store.currentTimeline,
-			FactoryTask.clone(
+			FactoryTask.duplicate(
 				$store.currentTimeline.tasks[index],
 				$store.currentTimeline.getNextId(),
 				' (copy)'

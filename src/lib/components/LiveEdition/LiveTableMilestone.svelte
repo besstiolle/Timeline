@@ -67,7 +67,7 @@
 
 		let timelineUpdated = FactoryTimeline.addMilestone(
 			$store.currentTimeline,
-			FactoryMilestone.clone(
+			FactoryMilestone.duplicate(
 				$store.currentTimeline.milestones[index],
 				$store.currentTimeline.getNextId(),
 				' (copy)'

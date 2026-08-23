@@ -89,7 +89,7 @@ describe('FactoryTask.clone', () => {
 		'Swimline 1',
 		5
 	);
-	const task2 = FactoryTask.clone(task1);
+	const task2 = FactoryTask.duplicate(task1);
 
 	it('FactoryTask.clone and check memory pointer', () => {
 		expect(task1).not.toBe(task2);
