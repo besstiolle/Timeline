@@ -141,7 +141,7 @@
 	}
 </script>
 
-<svelte:window on:mouseup={up} on:mousemove={move} />
+<svelte:window onmouseup={up} onmousemove={move} />
 <rect
 	id="milestonesSection"
 	x={GRID.MIDDLE_X}
@@ -164,7 +164,7 @@
 		y={(index % 2) * 25}
 		class:milestoneSVGSection={!$store.rights.isReader()}
 		class:shouldBeHidden={!milestone.isShow}
-		on:mousedown={down}
+		onmousedown={down}
 		id="M{milestone.id}"
 		role="presentation"
 	>
