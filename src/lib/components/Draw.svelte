@@ -15,6 +15,7 @@
 	import { FactoryPicto } from '$lib/factoryPicto';
 	import Upload from '$lib/components/Upload/Upload.svelte';
 	import Banner from './Banner/Banner.svelte';
+	import { commitState } from './commitState.svelte';
 
 	let toastComponent: Toast;
 	let uploadComponent: Upload;
@@ -139,7 +140,7 @@
 	<div
 		class="rightButton"
 		class:hidden={!$store.rights.hasWriter() ||
-			$store.commitInProgress ||
+			commitState.inProgress ||
 			$store.lastUpdatedLocally - $store.lastCommitedRemotely < 5000}
 		onclick={onlineComponent.commit}
 		onkeydown={onlineComponent.commit}

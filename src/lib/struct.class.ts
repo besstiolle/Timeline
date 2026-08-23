@@ -7,7 +7,6 @@ export interface TimelineStoreInterface {
 	lastUpdatedLocally: number;
 	lastCommitedRemotely: number;
 	_cancelRefreshLastUpdatedLocally: boolean;
-	commitInProgress: boolean;
 	rights: Rights;
 }
 export class TimelineStore implements TimelineStoreInterface {
@@ -16,7 +15,6 @@ export class TimelineStore implements TimelineStoreInterface {
 	lastUpdatedLocally: number = -1;
 	lastCommitedRemotely: number = -1;
 	_cancelRefreshLastUpdatedLocally: boolean = false; // Tricks : Set to true if we don't want to refresh lastUpdatedLocally property
-	commitInProgress: boolean = false;
 	rights: Rights;
 
 	constructor(cards: Array<Card>, currentTimeline: Timeline, rights: Rights) {

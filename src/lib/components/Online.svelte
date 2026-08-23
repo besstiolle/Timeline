@@ -10,6 +10,7 @@
 	import { FactoryCards } from '$lib/factoryCards';
 	import type { ResponseWithMeta } from '$lib/server/types';
 	import { m } from '../../paraglide/messages';
+	import { commitState } from './commitState.svelte';
 
 	let toastComponent: Toast;
 	let shadowBox: ShadowBox;
@@ -23,7 +24,7 @@
 			$store.lastCommitedRemotely !== null &&
 			$store.lastUpdatedLocally - $store.lastCommitedRemotely > 5000
 		) {
-			$store.commitInProgress = true;
+			commitState.inProgress = true;
 			console.debug('gap > 5000 ms : %o', $store.lastUpdatedLocally - $store.lastCommitedRemotely);
 			create($store.currentTimeline)
 				.then((responseWithMeta: ResponseWithMeta) => {
@@ -39,7 +40,7 @@
 					}
 				})
 				.finally(() => {
-					$store.commitInProgress = false;
+					commitState.inProgress = false;
 				});
 		} else {
 			console.debug('gap < 5000 ms : %o', $store.lastUpdatedLocally - $store.lastCommitedRemotely);
