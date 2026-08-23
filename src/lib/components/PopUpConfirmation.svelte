@@ -1,13 +1,12 @@
 <script lang="ts">
-	let popup: HTMLElement;
-	let background: HTMLElement;
+	let showClassName = $state('lock')
 
-	let _message: string;
+	let _message: string = $state('');
 	let _validation: (args: string[]) => void;
-	let _validationText: string;
+	let _validationText: string = $state('');
 	let _validationArgs: string[];
 	let _cancelation: (args: string[]) => void;
-	let _cancelationText: string;
+	let _cancelationText: string = $state('');
 	let _cancelationArgs: string[];
 
 	export function show(
@@ -19,10 +18,7 @@
 		cancelationText: string,
 		cancelationArgs: string[]
 	) {
-		popup = document.getElementById('popup') as HTMLElement;
-		background = document.getElementById('background') as HTMLElement;
-		popup.classList.add('show');
-		background.classList.add('show');
+		showClassName = 'show'
 
 		_message = message;
 		_validation = validation;
@@ -34,20 +30,18 @@
 	}
 
 	function doValidation() {
-		popup.classList.remove('show');
-		background.classList.remove('show');
+		showClassName = ''
 		_validation(_validationArgs);
 	}
 
 	function doCancelation() {
-		popup.classList.remove('show');
-		background.classList.remove('show');
+		showClassName = ''
 		_cancelation(_cancelationArgs);
 	}
 </script>
 
-<div id="background"></div>
-<div id="popup">
+<div id="background" class="{showClassName}"></div>
+<div id="popup" class="{showClassName}">
 	<div class="content">{_message}</div>
 	<button class="validation" onclick={doValidation}>{_validationText}</button>
 	<button class="cancelation" onclick={doCancelation}>{_cancelationText}</button>

@@ -14,13 +14,21 @@
 		id,
     }: Props = $props();
 
+	// Authomatic synchronisation between the lock value and the classe on <body />
+	$effect(() => {
+		document.body.classList.toggle('lock', !hidden);
+
+		// Cleanup in case if component is destroyed during opening
+		return () => {
+			document.body.classList.remove('lock');
+		};
+	});
+	
 	export function closeComponent() {
 		hidden = true;
-		document.body.classList.remove('lock');
 	}
 	export function openComponent() {
 		hidden = false;
-		document.body.classList.add('lock');
 	}
 	function handleKeydown(event: KeyboardEvent) {
 		if (!hidden && event.key === 'Escape') {

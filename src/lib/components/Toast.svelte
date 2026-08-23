@@ -1,38 +1,35 @@
 <script lang="ts">
 	let timeout: NodeJS.Timeout | string | number | undefined;
-	let toast: HTMLElement;
-	let content: string = '';
+	let toastClassName = $state('');
+	let content: string = $state('');
 
 	export function show(newContent: string, success: boolean = true, timer: number = 3) {
 		clearTimeout(timeout);
 
 		if (success) {
-			toast.classList.add('success');
+			toastClassName='success'
 		} else {
-			toast.classList.add('error');
+			toastClassName='error'
 		}
 		content = newContent;
 		if (timer > 0) {
-			toast.classList.add('show');
+			toastClassName+=' show'
 			timeout = setTimeout(function () {
 				hide();
 			}, timer * 1000);
 		} else {
-			toast.classList.add('showAndPersist');
+			toastClassName+=' showAndPersist'
 		}
 	}
 
 	function hide() {
 		clearTimeout(timeout);
-		toast.classList.remove('show');
-		toast.classList.remove('showAndPersist');
-		toast.classList.remove('success');
-		toast.classList.remove('error');
+		toastClassName=''
 		content = 'N/A';
 	}
 </script>
 
-<div bind:this={toast} onclick={hide} onkeydown={hide} role="button" tabindex="0">{content}</div>
+<div onclick={hide} onkeydown={hide} role="button" tabindex="0" class={toastClassName}>{content}</div>
 
 <style>
 	div {
