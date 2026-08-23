@@ -7,8 +7,13 @@
 	import { m } from '../../../paraglide/messages';
 	import { Milestone } from '$lib/struct.class';
 
-	const props = $props();
-	const updateStore = props.updateStore as (prefix: string, position: number) => void;
+	interface Props {
+        updateStore: (prefix: string, position: number) => void;
+    }
+
+	let {
+        updateStore,
+    }: Props = $props();
 
 	function m_delete(index: number) {
 		if (index < 0 || index > $store.currentTimeline.milestones.length - 1) {

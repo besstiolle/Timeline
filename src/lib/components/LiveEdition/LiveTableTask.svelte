@@ -7,8 +7,13 @@
 	import { m } from '../../../paraglide/messages';
 	import { Task } from '$lib/struct.class';
 
-	const props = $props();
-	const updateStore = props.updateStore as (prefix: string, position: number) => void;
+	interface Props {
+        updateStore: (prefix: string, position: number) => void;
+    }
+
+	let {
+        updateStore,
+    }: Props = $props();
 
 	function updateProgression(position: number) {
 		let elm = document.getElementById(LIVE_PREFIX.PR + position) as HTMLInputElement;

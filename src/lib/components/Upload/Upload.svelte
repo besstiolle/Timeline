@@ -11,8 +11,14 @@
 	import { store } from './../../stores';
 	import { m } from '../../../paraglide/messages';
 
-	const props = $props();
-	const download = props.download as (blob: Blob, extensionName: string) => void;
+	interface Props {
+        download: (blob: Blob, extensionName: string) => void;
+    }
+
+	let {
+        download,
+    }: Props = $props();
+	
 	const BOM = new Uint8Array([0xef, 0xbb, 0xbf]);
 
 	let shadowBox: ShadowBox;

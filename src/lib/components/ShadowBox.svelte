@@ -2,10 +2,18 @@
 	import { m } from '../../paraglide/messages';
 
 	let hidden = $state(true);
-	//children is a native SvelteKit property, get the content from parent to slot (@render)
-	const props = $props();
-	const children = props.children;
-	const id = props.id as string;
+
+	interface Props {
+        children: any;
+		id: string;
+    }
+
+	let {
+		//children is a native SvelteKit property, get the content from parent to slot (@render)
+        children,
+		id,
+    }: Props = $props();
+
 	export function closeComponent() {
 		hidden = true;
 		document.body.classList.remove('lock');
