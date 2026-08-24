@@ -1,6 +1,5 @@
 <script lang="ts">
 	let timeout: ReturnType<typeof setTimeout>;
-	let toastClassName = $state('');
 	let content: string = $state('N/A');
 
 	let isVisible = $state(false);
@@ -17,7 +16,6 @@
 		if (timer > 0) {
 			timeout = setTimeout(hide, timer * 1000);
 		} else {
-			toastClassName+=' showAndPersist'
 		}
 	}
 
