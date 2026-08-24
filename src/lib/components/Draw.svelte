@@ -22,7 +22,7 @@
 	let liveComponent = $state<Live>()!;
 	let onlineComponent = $state<Online>()!;
 
-	let timerId = $state<NodeJS.Timeout>()
+	let timerId:NodeJS.Timeout
 	let processRunning = false;
 
 	/**
