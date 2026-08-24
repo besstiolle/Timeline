@@ -10,6 +10,8 @@
 	import { FactoryTimeline } from '$lib/factoryTimeline';
 	import { store } from './../../stores';
 	import { m } from '../../../paraglide/messages';
+	import { shadowBoxComponentState } from '$lib/state/shadowBoxComponentState.svelte';
+	import { toastComponentState } from '$lib/state/toastComponent.svelte';
 
 	interface Props {
         download: (blob: Blob, extensionName: string) => void;
@@ -20,13 +22,6 @@
     }: Props = $props();
 	
 	const BOM = new Uint8Array([0xef, 0xbb, 0xbf]);
-
-	let shadowBox: ShadowBox;
-	let toastComponent: Toast;
-
-	export function openShadowBox() {
-		shadowBox.openComponent();
-	}
 
 	function downloadCsv() {
 		const blob = new Blob([BOM, goCsv($store.currentTimeline)], {
@@ -142,7 +137,7 @@
 			s.currentTimeline = parseAbstractTimeline(s.currentTimeline, abstractTimeline);
 			return { ...s };
 		});
-		toastComponent.show(
+		toastComponentState.show(
 			m.upload_toast_upload_success({
 				countTasks: abstractTimeline.tasks.length,
 				countMilestones: abstractTimeline.milestones.length
@@ -150,7 +145,7 @@
 			true,
 			5
 		);
-		shadowBox.closeComponent();
+		shadowBoxComponentState.openShadowBoxForUpload=false
 	}
 
 	function onReaderLoadCsv(reader: FileReader) {
@@ -163,7 +158,7 @@
 			s.currentTimeline = parseAbstractTimeline(s.currentTimeline, abstractTimeline);
 			return { ...s };
 		});
-		toastComponent.show(
+		toastComponentState.show(
 			m.upload_toast_upload_success({
 				countTasks: abstractTimeline.tasks.length,
 				countMilestones: abstractTimeline.milestones.length
@@ -171,11 +166,13 @@
 			true,
 			5
 		);
-		shadowBox.closeComponent();
+		//shadowBox.closeComponent();
+		shadowBoxComponentState.openShadowBoxForUpload=false
 	}
 </script>
 
-<ShadowBox bind:this={shadowBox} id="droppable">
+{#if shadowBoxComponentState.openShadowBoxForUpload}
+<ShadowBox id="droppable">
 	<!-- https://svelte.dev/docs/svelte/use -->
 	<form method="post" action="" enctype="multipart/form-data" use:svelteAction>
 		<div>
@@ -210,8 +207,8 @@
 			{m.upload_label_download_toml_action_text()}
 		</div>
 	</form>
-</ShadowBox>
-<Toast bind:this={toastComponent} />
+</ShadowBox>{/if}
+<Toast />
 
 <style>
 	:global(#droppable.has-advanced-upload) {

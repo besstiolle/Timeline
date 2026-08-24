@@ -1,8 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { m } from '../../paraglide/messages';
-
-	let hidden = $state(true);
+	import { shadowBoxComponentState } from '$lib/state/shadowBoxComponentState.svelte';
 
 	interface Props {
         children: Snippet;
@@ -17,7 +16,7 @@
 
 	// Authomatic synchronisation between the lock value and the classe on <body />
 	$effect(() => {
-		document.body.classList.toggle('lock', !hidden);
+		document.body.classList.toggle('lock', isShadowBoxOpened());
 
 		// Cleanup in case if component is destroyed during opening
 		return () => {
@@ -25,16 +24,25 @@
 		};
 	});
 	
-	export function closeComponent() {
-		hidden = true;
-	}
-	export function openComponent() {
-		hidden = false;
-	}
 	function handleKeydown(event: KeyboardEvent) {
-		if (!hidden && event.key === 'Escape') {
-			closeComponent();
+		if (event.key === 'Escape') {
+			closingShadowBox()
 		}
+	}
+
+
+	function isShadowBoxOpened(){
+		return shadowBoxComponentState.openShadowBoxForLiveEdition
+				|| shadowBoxComponentState.openShadowBoxForOnline
+				|| shadowBoxComponentState.openShadowBoxForUpload
+				|| shadowBoxComponentState.openShadowBoxForVersion
+		
+	}
+	function closingShadowBox(){
+		shadowBoxComponentState.openShadowBoxForLiveEdition = false;
+		shadowBoxComponentState.openShadowBoxForOnline = false;
+		shadowBoxComponentState.openShadowBoxForUpload = false;
+		shadowBoxComponentState.openShadowBoxForVersion = false;
 	}
 </script>
 
@@ -42,13 +50,13 @@
 
 <div
 	class="ShadowBoxBG"
-	class:hidden
-	onclick={closeComponent}
-	onkeydown={closeComponent}
+	class:hidden={!isShadowBoxOpened()}
+	onclick={closingShadowBox}
+	onkeydown={closingShadowBox}
 	role="button"
 	tabindex="0"
 ></div>
-<div {id} class="ShadowBox bg-sky-50 dark:bg-gray-700 p-4" class:hidden>
+<div {id} class="ShadowBox bg-sky-50 dark:bg-gray-700 p-4" class:hidden={!isShadowBoxOpened()}>
 	<div class="ShadowContent">
 		{@render children?.()}
 	</div>
@@ -56,8 +64,8 @@
 		{m.shadowbox_exit_instruction_0()}
 		<span
 			class="pointer font-bold"
-			onclick={closeComponent}
-			onkeydown={closeComponent}
+			onclick={closingShadowBox}
+			onkeydown={closingShadowBox}
 			role="button"
 			tabindex="0"
 		>

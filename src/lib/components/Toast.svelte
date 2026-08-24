@@ -1,42 +1,17 @@
 <script lang="ts">
-	let timeout: ReturnType<typeof setTimeout>;
-	let content: string = $state('N/A');
-
-	let isVisible = $state(false);
-    let isPersisted = $state(false);
-    let isSuccess = $state(true);
-
-	export function show(newContent: string, success: boolean = true, timer: number = 3) {
-		clearTimeout(timeout);
-		content = newContent;
-		isSuccess = success
-		isVisible=true
-		isPersisted = timer <= 0
-
-		if (timer > 0) {
-			timeout = setTimeout(hide, timer * 1000);
-		} else {
-		}
-	}
-
-	function hide() {
-		clearTimeout(timeout);
-		content = 'N/A';
-		isVisible = false;
-        isPersisted = false;
-	}
+	import { toastComponentState } from "$lib/state/toastComponent.svelte";
 </script>
 
 <div 
-	class:show={isVisible && !isPersisted} 
-    class:showAndPersist={isVisible && isPersisted}
-    class:error={!isSuccess}
-	onclick={hide}
-	onkeydown={hide} 
+	class:show={toastComponentState.isVisible && !toastComponentState.isPersisted} 
+    class:showAndPersist={toastComponentState.isVisible && toastComponentState.isPersisted}
+    class:error={!toastComponentState.isSuccess}
+	onclick={() => toastComponentState.hide()}
+	onkeydown={() => toastComponentState.hide()} 
 	role="button" 
 	tabindex="0"
 >
-	{content}
+	{toastComponentState.message}
 </div>
 
 <style>

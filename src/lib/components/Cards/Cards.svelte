@@ -9,9 +9,8 @@
 	import Toast from '$lib/components/Toast.svelte';
 	import { Card, Timeline } from '$lib/struct.class';
 	import { m } from '../../../paraglide/messages';
-
-	let popUpComponent: PopUpConfirmation;
-	let toastComponent: Toast;
+	import { toastComponentState } from '$lib/state/toastComponent.svelte';
+	import { popupConfirmationComponentState } from '$lib/state/popupComponent.svelte';
 
 	function show(event: MouseEvent | KeyboardEvent, index: number) {
 		event.stopPropagation();
@@ -78,14 +77,14 @@
 			console.warn(
 				m.landing_toast_remote_timeline_cant_be_deleted({ title: timelineToDelete.title })
 			);
-			toastComponent.show(
+			toastComponentState.show(
 				m.landing_toast_remote_timeline_cant_be_deleted({ title: timelineToDelete.title }),
 				false,
 				5
 			);
 			return;
 		}
-		popUpComponent.show(
+		popupConfirmationComponentState.show(
 			m.landing_popup_confirmation_before_deletion_text(),
 			doDelete,
 			m.landing_popup_confirmation_before_deletion_continue(),
@@ -119,7 +118,7 @@
 		let timelineToDelete: Timeline = CustomLocalStorage.getTimeline(key);
 		if (timelineToDelete && timelineToDelete.isOnline) {
 			console.warn(`this chart "${timelineToDelete.title}" is online and can't be deleted`);
-			toastComponent.show(
+			toastComponentState.show(
 				`this chart "${timelineToDelete.title}" is online and can't be deleted`,
 				false,
 				5
@@ -273,5 +272,5 @@
 	{/each}
 </div>
 
-<PopUpConfirmation bind:this={popUpComponent} />
-<Toast bind:this={toastComponent} />
+<PopUpConfirmation />
+<Toast />

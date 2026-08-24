@@ -15,13 +15,10 @@
 	import { FactoryPicto } from '$lib/factoryPicto';
 	import Upload from '$lib/components/Upload/Upload.svelte';
 	import Banner from './Banner/Banner.svelte';
-	import { commitState } from '../commitState.svelte';
+	import { commitState } from '../state/commitState.svelte';
+	import { shadowBoxComponentState } from '$lib/state/shadowBoxComponentState.svelte';
 
-	let toastComponent: Toast;
-	let uploadComponent = $state<Upload>()!;
-	let liveComponent = $state<Live>()!;
-	let onlineComponent = $state<Online>()!;
-
+	
 	let timerId:NodeJS.Timeout
 	let processRunning = false;
 
@@ -154,8 +151,8 @@
 	<div
 		class="rightButton"
 		class:hidden={!$store.rights.isNone()}
-		onclick={onlineComponent.openShadowBox}
-		onkeydown={onlineComponent.openShadowBox}
+		onclick={() => shadowBoxComponentState.openShadowBoxForOnline = true}
+		onkeydown={() => shadowBoxComponentState.openShadowBoxForOnline = true}
 		title="Share & save your chart online"
 		role="button"
 		tabindex="0"
@@ -165,8 +162,8 @@
 	<div
 		class="rightButton"
 		class:hidden={!$store.rights.isOwner()}
-		onclick={onlineComponent.openShadowBox}
-		onkeydown={onlineComponent.openShadowBox}
+		onclick={() => shadowBoxComponentState.openShadowBoxForOnline = true}
+		onkeydown={() => shadowBoxComponentState.openShadowBoxForOnline = true}
 		title="Save your chart on your computer only"
 		role="button"
 		tabindex="0"
@@ -199,8 +196,8 @@
 	<div
 		class="rightButton"
 		class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()}
-		onclick={uploadComponent.openShadowBox}
-		onkeydown={uploadComponent.openShadowBox}
+		onclick={() => shadowBoxComponentState.openShadowBoxForUpload=true}
+		onkeydown={() => shadowBoxComponentState.openShadowBoxForUpload=true}
 		title="Import/Export your data"
 		role="button"
 		tabindex="0"
@@ -220,8 +217,8 @@
 	<div
 		class="rightButton"
 		class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()}
-		onclick={liveComponent.openShadowBox}
-		onkeydown={liveComponent.openShadowBox}
+		onclick={() => shadowBoxComponentState.openShadowBoxForLiveEdition=true}
+		onkeydown={() => shadowBoxComponentState.openShadowBoxForLiveEdition=true}
 		title="Edit your milestones"
 		role="button"
 		tabindex="0"
@@ -230,10 +227,10 @@
 	</div>
 </div>
 
-<Upload bind:this={uploadComponent} {download} />
-<Live bind:this={liveComponent} />
-<Online bind:this={onlineComponent} />
-<Toast bind:this={toastComponent} />
+<Upload {download} />
+<Live />
+<Online />
+<Toast />
 
 <div id="wrapper" class="">
 	<svg viewBox={$store.currentTimeline.viewbox} xmlns="http://www.w3.org/2000/svg">

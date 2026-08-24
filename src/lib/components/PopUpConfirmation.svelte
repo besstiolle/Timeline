@@ -1,50 +1,15 @@
 <script lang="ts">
+	import { popupConfirmationComponentState } from "$lib/state/popupComponent.svelte";
 
-	let showClassName = $state(false)
-	let _message: string = $state('');
-	let _validation: (args: string[]) => void;
-	let _validationText: string = $state('');
-	let _validationArgs: string[];
-	let _cancelation: (args: string[]) => void;
-	let _cancelationText: string = $state('');
-	let _cancelationArgs: string[];
 
-	export function show(
-		message: string,
-		validation: (args: string[]) => void,
-		validationText: string,
-		validationArgs: string[],
-		cancelation: (args: string[]) => void,
-		cancelationText: string,
-		cancelationArgs: string[]
-	) {
-		showClassName = true
 
-		_message = message;
-		_validation = validation;
-		_validationText = validationText;
-		_validationArgs = validationArgs;
-		_cancelation = cancelation;
-		_cancelationText = cancelationText;
-		_cancelationArgs = cancelationArgs;
-	}
-
-	function doValidation() {
-		showClassName = false
-		_validation(_validationArgs);
-	}
-
-	function doCancelation() {
-		showClassName = false
-		_cancelation(_cancelationArgs);
-	}
 </script>
 
-<div id="background" class:show={showClassName}></div>
-<div id="popup" class:show={showClassName}>
-	<div class="content">{_message}</div>
-	<button class="validation" onclick={doValidation}>{_validationText}</button>
-	<button class="cancelation" onclick={doCancelation}>{_cancelationText}</button>
+<div id="background" class:show={popupConfirmationComponentState.showClassName}></div>
+<div id="popup" class:show={popupConfirmationComponentState.showClassName}>
+	<div class="content">{popupConfirmationComponentState._message}</div>
+	<button class="validation" onclick={() => popupConfirmationComponentState.doValidation()}>{popupConfirmationComponentState._validationText}</button>
+	<button class="cancelation" onclick={() => popupConfirmationComponentState.doCancelation()}>{popupConfirmationComponentState._cancelationText}</button>
 </div>
 
 <style>

@@ -16,8 +16,7 @@
 	import { m } from '../../../paraglide/messages';
 	import { Timeline } from '$lib/struct.class';
 	import { goto } from '$app/navigation';
-
-	let toastComponent: Toast;
+	import { toastComponentState } from '$lib/state/toastComponent.svelte';
 
 	store.update((s) => {
 		s.rights = new Rights(page.url.searchParams);
@@ -37,9 +36,8 @@
 		});
 
 		console.error(m.slug_toast_image_misconfigurated(), slug);
-		// @ts-expect-error will be initiate by Svelte
-		if (browser && toastComponent != null) {
-			toastComponent.show(m.slug_toast_image_misconfigurated(), false, 0);
+		if (browser) {
+			toastComponentState.show(m.slug_toast_image_misconfigurated(), false, 0);
 		}
 	}
 
@@ -102,17 +100,17 @@
 			})
 			.catch((err) => {
 				console.error('Error where calling get() in [slug].svelte : %o', err);
-				if (toastComponent) {
-					if (err instanceof NotFoundOnlineException) {
-						toastComponent.show(m.slug_toast_distant_timeline_non_existent(), false, 10);
-						//Refresh page after 10s
-						setTimeout(function () {
-							window.location.href = page.url.protocol + '//' + page.url.host + '/g/' + slug;
-						}, 5000);
-					} else {
-						toastComponent.show(m.slug_toast_remote_offline(), false, 0);
-					}
+
+				if (err instanceof NotFoundOnlineException) {
+					toastComponentState.show(m.slug_toast_distant_timeline_non_existent(), false, 10);
+					//Refresh page after 10s
+					setTimeout(function () {
+						window.location.href = page.url.protocol + '//' + page.url.host + '/g/' + slug;
+					}, 5000);
+				} else {
+					toastComponentState.show(m.slug_toast_remote_offline(), false, 0);
 				}
+				
 				store.update((s) => {
 					s.currentTimeline = currentTimeline;
 					return { ...s };
@@ -132,4 +130,4 @@
 	<Draw />
 {/if}
 
-<Toast bind:this={toastComponent} />
+<Toast />

@@ -11,8 +11,8 @@
 	import ShadowBox from '$lib/components/ShadowBox.svelte';
 	import { page } from '$app/state';
 	import { m } from '../../../paraglide/messages';
+	import { shadowBoxComponentState } from '$lib/state/shadowBoxComponentState.svelte';
 
-	let shadowBox: ShadowBox;
 
 	let localVersion: Version = { x: 0, y: 0, z: 0 };
 	let distantVersion: Version = { x: 0, y: 0, z: 0 };
@@ -78,8 +78,8 @@
 		<div
 			use:myaction
 			class="{className} cursor-pointer"
-			onclick={() => shadowBox.openComponent()}
-			onkeydown={() => shadowBox.openComponent()}
+			onclick={() => shadowBoxComponentState.openShadowBoxForVersion=true}
+			onkeydown={() => shadowBoxComponentState.openShadowBoxForVersion=true}
 			role="button"
 			tabindex="0"
 		>
@@ -91,7 +91,8 @@
 		</div>
 	{/if}
 
-	<ShadowBox bind:this={shadowBox} id="versionChecking">
+	{#if shadowBoxComponentState.openShadowBoxForVersion}
+	<ShadowBox id="versionChecking">
 		<p>🎉 {m.version_update_available()} 🎉</p>
 		{#if hasMajor}
 			<p>{m.version_major()}⚠️</p>
@@ -107,7 +108,7 @@
 				>{m.version_link_to_release()} {toString(distantVersion)}</a
 			>
 		</p>
-	</ShadowBox>
+	</ShadowBox>{/if}
 {/if}
 
 <style>

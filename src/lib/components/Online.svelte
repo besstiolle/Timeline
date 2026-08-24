@@ -10,14 +10,10 @@
 	import { FactoryCards } from '$lib/factoryCards';
 	import type { ResponseWithMeta } from '$lib/server/types';
 	import { m } from '../../paraglide/messages';
-	import { commitState } from '../commitState.svelte';
+	import { commitState } from '../state/commitState.svelte';
+	import { shadowBoxComponentState } from '$lib/state/shadowBoxComponentState.svelte';
+	import { toastComponentState } from '$lib/state/toastComponent.svelte';
 
-	let toastComponent: Toast;
-	let shadowBox: ShadowBox;
-
-	export function openShadowBox() {
-		shadowBox.openComponent();
-	}
 	export function commit() {
 		if (
 			$store.lastUpdatedLocally !== null &&
@@ -29,15 +25,12 @@
 			create($store.currentTimeline)
 				.then((responseWithMeta: ResponseWithMeta) => {
 					$store.lastCommitedRemotely = responseWithMeta.meta.ts;
-					if (toastComponent) {
-						toastComponent.show(m.online_toast_saved_success());
-					}
+					toastComponentState.show(m.online_toast_saved_success());
+					
 				})
 				.catch((err) => {
 					console.error('Error where calling create() in Online.commit() : %o', err);
-					if (toastComponent) {
-						toastComponent.show(m.online_toast_remote_offline(), false, 0);
-					}
+					toastComponentState.show(m.online_toast_remote_offline(), false, 0);
 				})
 				.finally(() => {
 					commitState.inProgress = false;
@@ -74,9 +67,7 @@
 			})
 			.catch((err) => {
 				console.error('Error where calling remove() in Online.doOffline() : %o', err);
-				if (toastComponent) {
-					toastComponent.show(m.online_toast_remote_offline(), false, 0);
-				}
+				toastComponentState.show(m.online_toast_remote_offline(), false, 0);
 			})
 			.finally(() => {});
 
@@ -99,9 +90,7 @@
 		create($store.currentTimeline)
 			.then((responseWithMeta: ResponseWithMeta) => {
 				$store.lastCommitedRemotely = responseWithMeta.meta.ts;
-				if (toastComponent) {
-					toastComponent.show(m.online_toast_saved_success());
-				}
+				toastComponentState.show(m.online_toast_saved_success());
 				//Refresh internal Rights value
 				store.update((s) => {
 					s.rights = new Rights($store.currentTimeline.ownerKey);
@@ -110,9 +99,7 @@
 			})
 			.catch((err) => {
 				console.error('Error where calling create() in Online.doOnline() : %o', err);
-				if (toastComponent) {
-					toastComponent.show(m.online_toast_remote_offline(), false, 0);
-				}
+				toastComponentState.show(m.online_toast_remote_offline(), false, 0);
 				store.update((s) => {
 					s.currentTimeline.isOnline = false;
 					s.currentTimeline.ownerKey = null;
@@ -141,7 +128,8 @@
 	}
 </script>
 
-<ShadowBox bind:this={shadowBox} id="onlinePopup">
+{#if shadowBoxComponentState.openShadowBoxForOnline}
+<ShadowBox id="onlinePopup">
 	{#if $store.currentTimeline.isOnline}
 		<div class="warn">
 			{m.online_warn_before_offline_0()} "<span class="font-bold"
@@ -225,8 +213,8 @@
 			{m.online_action_online()}
 		</button>
 	{/if}
-</ShadowBox>
-<Toast bind:this={toastComponent} />
+</ShadowBox>{/if}
+<Toast />
 
 <style>
 </style>
