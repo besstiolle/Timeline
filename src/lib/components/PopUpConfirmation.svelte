@@ -1,6 +1,6 @@
 <script lang="ts">
-	let showClassName = $state('lock')
 
+	let showClassName = $state(false)
 	let _message: string = $state('');
 	let _validation: (args: string[]) => void;
 	let _validationText: string = $state('');
@@ -18,7 +18,7 @@
 		cancelationText: string,
 		cancelationArgs: string[]
 	) {
-		showClassName = 'show'
+		showClassName = true
 
 		_message = message;
 		_validation = validation;
@@ -30,18 +30,18 @@
 	}
 
 	function doValidation() {
-		showClassName = ''
+		showClassName = false
 		_validation(_validationArgs);
 	}
 
 	function doCancelation() {
-		showClassName = ''
+		showClassName = true
 		_cancelation(_cancelationArgs);
 	}
 </script>
 
-<div id="background" class="{showClassName}"></div>
-<div id="popup" class="{showClassName}">
+<div id="background" class:show={showClassName}></div>
+<div id="popup" class:show={showClassName}>
 	<div class="content">{_message}</div>
 	<button class="validation" onclick={doValidation}>{_validationText}</button>
 	<button class="cancelation" onclick={doCancelation}>{_cancelationText}</button>

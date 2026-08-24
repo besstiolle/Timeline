@@ -1,22 +1,21 @@
 <script lang="ts">
-	let timeout: NodeJS.Timeout | string | number | undefined;
+	let timeout: ReturnType<typeof setTimeout>;
 	let toastClassName = $state('');
-	let content: string = $state('');
+	let content: string = $state('N/A');
+
+	let isVisible = $state(false);
+    let isPersisted = $state(false);
+    let isSuccess = $state(true);
 
 	export function show(newContent: string, success: boolean = true, timer: number = 3) {
 		clearTimeout(timeout);
-
-		if (success) {
-			toastClassName='success'
-		} else {
-			toastClassName='error'
-		}
 		content = newContent;
+		isSuccess = success
+		isVisible=true
+		isPersisted = timer <= 0
+
 		if (timer > 0) {
-			toastClassName+=' show'
-			timeout = setTimeout(function () {
-				hide();
-			}, timer * 1000);
+			timeout = setTimeout(hide, timer * 1000);
 		} else {
 			toastClassName+=' showAndPersist'
 		}
@@ -24,12 +23,23 @@
 
 	function hide() {
 		clearTimeout(timeout);
-		toastClassName=''
 		content = 'N/A';
+		isVisible = false;
+        isPersisted = false;
 	}
 </script>
 
-<div onclick={hide} onkeydown={hide} role="button" tabindex="0" class={toastClassName}>{content}</div>
+<div 
+	class:show={isVisible && !isPersisted} 
+    class:showAndPersist={isVisible && isPersisted}
+    class:error={!isSuccess}
+	onclick={hide}
+	onkeydown={hide} 
+	role="button" 
+	tabindex="0"
+>
+	{content}
+</div>
 
 <style>
 	div {

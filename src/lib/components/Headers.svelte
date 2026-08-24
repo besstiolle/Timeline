@@ -6,7 +6,7 @@
 	const locales_ln = locales.length - 1;
 	const currentLocale = getLocale();
 
-	let isDark = false;
+	let isDark = $state(false);
 	if (browser) {
 		// Lecture du thème stocké ou détection préférée
 		const stored = localStorage.getItem('theme');
