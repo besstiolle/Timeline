@@ -50,7 +50,7 @@
 	"type": "module",
 	"dependencies": {
 		"@tailwindcss/vite": "^4.1.0",
-		"better-sqlite3": "^11.8.0",
+		"better-sqlite3": "^13.0.3",
 		"drizzle-orm": "^0.45.2",
 		"html2canvas-pro": "^1.5.0",
 		"tailwindcss": "^4.1.0",
