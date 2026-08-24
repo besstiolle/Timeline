@@ -2,8 +2,6 @@
 	import { GRID } from '$lib/constantes';
 	import { store } from '$lib/stores';
 
-	let startString = $store.currentTimeline.start;
-	let endString = $store.currentTimeline.end;
 </script>
 
 <div id="grid">
@@ -17,14 +15,14 @@
 		<rect x="0" y="0" width={GRID.RIGHT_X} height={GRID.ALL_WIDTH / 2} fill="green" />
 		<text text-anchor="end" x={GRID.RIGHT_X} y="30" font-size="10" fill="white">{GRID.RIGHT_X}</text
 		>
-		<text text-anchor="end" x={GRID.RIGHT_X} y="50" font-size="10" fill="white">{endString}</text>
+		<text text-anchor="end" x={GRID.RIGHT_X} y="50" font-size="10" fill="white">{$store.currentTimeline.end}</text>
 
 		<rect x="0" y="0" width={GRID.MIDDLE_X} height={GRID.ALL_WIDTH / 2} fill="red" />
 		<text text-anchor="end" x={GRID.MIDDLE_X} y="30" font-size="10" fill="white"
 			>{GRID.MIDDLE_X}</text
 		>
 		<text text-anchor="start" x={GRID.MIDDLE_X} y="50" font-size="10" fill="white"
-			>{startString}</text
+			>{$store.currentTimeline.start}</text
 		>
 
 		<text text-anchor="end" x={GRID.ALL_WIDTH} y="30" font-size="10" fill="white"
