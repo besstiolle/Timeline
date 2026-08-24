@@ -35,7 +35,7 @@
 	}
 
 	function doCancelation() {
-		showClassName = true
+		showClassName = false
 		_cancelation(_cancelationArgs);
 	}
 </script>
