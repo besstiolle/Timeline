@@ -1,7 +1,7 @@
-import { json, type RequestHandler } from '@sveltejs/kit';
+import { json } from '@sveltejs/kit';
 import { _FALLBACK, _OPTIONS } from '$lib/api/apiUtils';
 import type { ResponseWithMeta } from '$lib/server/types';
-import type { RequestEvent } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
 
 /**
  * POST /g/[slug]
@@ -11,9 +11,7 @@ import type { RequestEvent } from '@sveltejs/kit';
  *  a 400 Response if there is a malformed body
  *  a 401 Response if security keys don't match
  */
-export const POST: RequestHandler = async (
-	requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>
-) => {
+export const POST: RequestHandler = async (requestEvent) => {
 	//Prepare the standard response with data & meta
 	const responseWithMeta: ResponseWithMeta = {
 		meta: {

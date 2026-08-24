@@ -1,5 +1,4 @@
 import { json } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
 import { accessControl } from '$lib/server/keyValidator';
 import { deleteTimelineByKey, findLastTimelineByKey } from '$lib/server/timelineCRUD';
 import type { ResponseWithMeta } from '$lib/server/types';
@@ -7,9 +6,8 @@ import { TIMELINE_NOT_FOUND_ProblemJsonResponse } from '$lib/api/problemJson';
 import { _FALLBACK, _OPTIONS, requestToInstance } from '$lib/api/apiUtils';
 import { REGEX_FAILED_ProblemJsonResponse } from '$lib/api/problemJson';
 import { EMPTY_KEYS_ProblemJsonResponse } from '$lib/api/problemJson';
-import type { RequestEvent } from '@sveltejs/kit';
 import type { Timeline } from '$lib/struct.class';
-//import { db } from '$lib/server/db';
+import type { RequestHandler } from './$types';
 
 const ALPHANUM64 = new RegExp('^[A-Z0-9a-z]{64}$');
 /**
@@ -21,9 +19,7 @@ const ALPHANUM64 = new RegExp('^[A-Z0-9a-z]{64}$');
  *  a 401 Response if security keys don't match
  *  a 404 Response if instance is not found
  */
-export const GET: RequestHandler = (
-	requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>
-) => {
+export const GET: RequestHandler = async (requestEvent) => {
 	const db = requestEvent.locals.db;
 	const instance = requestToInstance(requestEvent.request);
 	const slug = requestEvent.params.slug;
@@ -108,9 +104,7 @@ export const GET: RequestHandler = (
  *  a 401 Response if security keys don't match
  *  a 404 Response if instance is not found
  */
-export const DELETE: RequestHandler = (
-	requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>
-): Response => {
+export const DELETE: RequestHandler = async (requestEvent) => {
 	const db = requestEvent.locals.db;
 	const instance = requestToInstance(requestEvent.request);
 	const slug = requestEvent.params.slug;

@@ -3,7 +3,8 @@ import { accessControl } from '$lib/server/keyValidator';
 import { findLastTimelineByKey } from '$lib/server/timelineCRUD';
 import type { ResponseWithMeta } from '$lib/server/types';
 import { insertTimeline } from '$lib/server/timelineCRUD';
-import { json, type RequestEvent, type RequestHandler } from '@sveltejs/kit';
+import { json } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
 import {
 	EMPTY_KEYS_ProblemJsonResponse,
 	EMPTY_OWNERKEY_ProblemJsonResponse,
@@ -24,9 +25,7 @@ const ALPHANUM64 = new RegExp('^[A-Z0-9a-z]{64}$');
  *  a 400 Response if there is a malformed body
  *  a 401 Response if security keys don't match
  */
-export const POST: RequestHandler = async (
-	requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>
-) => {
+export const POST: RequestHandler = async (requestEvent) => {
 	const instance = requestToInstance(requestEvent.request);
 	const db = requestEvent.locals.db;
 

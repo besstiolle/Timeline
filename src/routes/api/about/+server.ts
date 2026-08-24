@@ -1,10 +1,11 @@
-import { json, type RequestHandler } from '@sveltejs/kit';
+import { json } from '@sveltejs/kit';
 import pkg from './../../../../package.json' with { type: 'json' };
 import { _FALLBACK, _OPTIONS } from '$lib/api/apiUtils';
 import type { ResponseWithMeta } from '$lib/server/types';
 import { env } from '$env/dynamic/private';
 import type { RequestEvent } from '@sveltejs/kit';
 import { countTimeline } from '$lib/server/timelineCRUD';
+import type { RequestHandler } from './$types';
 
 /**
  * GET /api/about
@@ -12,9 +13,7 @@ import { countTimeline } from '$lib/server/timelineCRUD';
  * @returns
  *  a 200 Response with the information about this instance of TimeChart
  */
-export const GET: RequestHandler = async (
-	requestEvent: RequestEvent<Partial<Record<string, string>>, string | null>
-) => {
+export const GET: RequestHandler = async (requestEvent) => {
 	let version = '';
 
 	if (env.SHOW_VERSION != undefined && env.SHOW_VERSION.toLowerCase() === 'true') {

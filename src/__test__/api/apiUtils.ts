@@ -34,8 +34,9 @@ export class RequestEventStub {
  * @param request the RequestEventStub
  * @returns the RequestEvent for testing only
  */
-export function toRequestEvent(request: RequestEventStub): RequestEvent {
-	return request as unknown as RequestEvent;
+export function toRequestEvent<E extends RequestEvent = RequestEvent>(request: RequestEventStub): E {
+    // Forcing cast to E
+    return request as unknown as E;
 }
 
 export const VALID_DUMMY_TIMELINE: Timeline = JSON.parse(

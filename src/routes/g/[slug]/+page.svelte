@@ -15,6 +15,7 @@
 	import type { ResponseWithMeta } from '$lib/server/types';
 	import { m } from '../../../paraglide/messages';
 	import { Timeline } from '$lib/struct.class';
+	import { goto } from '$app/navigation';
 
 	let toastComponent: Toast;
 
@@ -23,8 +24,18 @@
 		return { ...s };
 	});
 
-	const slug = page.params.slug;
+	const slug = page.params.slug as string;
+
 	if (!slug.match('^[a-zA-Z0-9]{64}$')) {
+		$effect(() => {
+			const timer = setTimeout(() => {
+				goto('/');
+			}, 1000);
+
+			// Clearing if user go somechere else before timing
+			return () => clearTimeout(timer);
+		});
+
 		console.error(m.slug_toast_image_misconfigurated(), slug);
 		// @ts-expect-error will be initiate by Svelte
 		if (browser && toastComponent != null) {
@@ -97,7 +108,7 @@
 						//Refresh page after 10s
 						setTimeout(function () {
 							window.location.href = page.url.protocol + '//' + page.url.host + '/g/' + slug;
-						}, 10000);
+						}, 5000);
 					} else {
 						toastComponent.show(m.slug_toast_remote_offline(), false, 0);
 					}
