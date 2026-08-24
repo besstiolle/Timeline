@@ -1,22 +1,31 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import { store } from '$lib/stores';
 
 	import { FactoryMilestone } from '$lib/factoryMilestone';
-	import { GRID, MONTHS } from '$lib/constantes';
+	import { GRID } from '$lib/constantes';
 	import { displayableMilestones } from '$lib/derivedStore';
+	import { MilestoneViewModel } from '$lib/viewModel';
+	import { Milestone } from '$lib/struct.class';
+	import MilestoneComponent from './Milestone.svelte';
+	import { Helpers } from '$lib/helpers';
 
-	let ghostSVGNode: HTMLElement | null = null;
-	let currentTarget: HTMLElement | null = null;
-	let hoverGroup: boolean = false;
-	let recBox: DOMRect;
+	interface ActiveDragInterface{
+		milestoneId: number,
+        currentX: number
+	}
+	let activeDrag = $state<ActiveDragInterface | null>(null)
+	let selectedMilestone = $state<Milestone|null>(null)
 
-	const GHOST_SVG_NODE_ID: string = 'ghostSVGNode';
+
+	function getSvgX(event: MouseEvent):number{
+		return (event.clientX / window.innerWidth) * GRID.ALL_WIDTH
+	}
+
 	/**
 	 * Triggered every time user try to "grab" an svg group of Milestone
 	 * @param event the event mousedown
 	 */
-	function down(event: Event) {
+	function down(event: MouseEvent, milestoneId:number) {
 		//Security : we can't manipulate data if we are a simple Reader
 		if ($store.rights.isReader()) {
 			return;
@@ -24,22 +33,26 @@
 
 		//Avoid selecting text. source : https://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/
 		event.preventDefault();
-		currentTarget = event.currentTarget as HTMLElement; //currentTarget => svg, target => sub element of svg
-		ghostSVGNode = currentTarget.cloneNode(true) as HTMLElement;
-		ghostSVGNode.setAttribute('id', GHOST_SVG_NODE_ID);
 
-		//Find the last node of our SVG group
-		let endMilestoneNode = document.getElementById('endMilestoneNode') as HTMLElement;
-
-		//create ghost node <svg> after the last node of our SVG group
-		if (endMilestoneNode.parentNode) {
-			endMilestoneNode.parentNode.insertBefore(ghostSVGNode, endMilestoneNode);
+		// Create a Ghost
+		let currentSelection:Milestone
+		try{
+			currentSelection = FactoryMilestone.getById($store.currentTimeline, milestoneId)
+		} catch (NotFoundException) {
+			//Nothing to do, the rest of the function will clean everything
+			console.debug('catch a NotFoundExeption but everything is normal', NotFoundException);
+			return
 		}
 
-		//Refresh our ghost Node reference
-		ghostSVGNode = document.getElementById(GHOST_SVG_NODE_ID) as HTMLElement;
+		const viewModel = new MilestoneViewModel(currentSelection, $store.currentTimeline)
 
-		ghostSVGNode.classList.add('grabbing');
+		//construction of activeDrag
+		activeDrag = {
+			milestoneId: milestoneId,
+			currentX: getSvgX(event)
+		}
+		//Preservation of selected Milestone
+		selectedMilestone = currentSelection
 	}
 
 	/**
@@ -48,37 +61,32 @@
 	 */
 	function up(event: MouseEvent) {
 		//Security : we can't manipulate data if we are a simple Reader
-		if ($store.rights.isReader()) {
+		if ($store.rights.isReader() || activeDrag === null) {
 			return;
 		}
+	
+		try {
+			let milestoneToUpdate = FactoryMilestone.getById($store.currentTimeline,activeDrag.milestoneId);
+			
+			const newDate = Helpers.getDateFromViewportX(
+				activeDrag.currentX,
+				$store.currentTimeline.getStart(),
+				$store.currentTimeline.getEnd())
 
-		if (ghostSVGNode && hoverGroup && currentTarget) {
-			let newX = (event.clientX / window.innerWidth) * GRID.ALL_WIDTH;
-			let date = processNewDate(newX - GRID.MIDDLE_X);
-			let idMilestone = (currentTarget.getAttribute('id') as string).substring(1); // M999 => 999
+			milestoneToUpdate.date = Helpers.toYYYY_MM_DD(newDate)
 
-			try {
-				const milestoneToUpdate = FactoryMilestone.getById(
-					$store.currentTimeline,
-					parseInt(idMilestone)
-				);
-				milestoneToUpdate.setDate(date);
-				store.update((s) => {
-					s.currentTimeline = FactoryMilestone.updateById(s.currentTimeline, milestoneToUpdate);
-					return { ...s };
-				});
-			} catch (NotFoundException) {
-				//Nothing to do, the rest of the function will clean everything
-				console.debug('catch a NotFoundExeption but everything is normal', NotFoundException);
-			}
+			store.update((s) => {
+				s.currentTimeline = FactoryMilestone.updateById(s.currentTimeline, milestoneToUpdate);
+				return { ...s };
+			});
+		} catch (NotFoundException) {
+			//Nothing to do, the rest of the function will clean everything
+			console.debug('catch a NotFoundExeption but everything is normal', NotFoundException);
 		}
 
 		//Reset vars
-		if (ghostSVGNode) {
-			ghostSVGNode.remove();
-			ghostSVGNode = null;
-		}
-		currentTarget = null;
+		activeDrag=null
+		selectedMilestone=null
 	}
 
 	/**
@@ -86,58 +94,52 @@
 	 * @param event the event mousemove
 	 */
 	function move(event: MouseEvent) {
+
 		//Security : we can't manipulate data if we are a simple Reader
-		if ($store.rights.isReader()) {
+		if ($store.rights.isReader() || activeDrag === null) {
 			return;
 		}
 
-		if (!recBox && browser) {
-			recBox = (
-				document.getElementById('milestonesSection') as HTMLElement
-			).getBoundingClientRect();
+		//Conversion Xposition => Date
+		let currentDate = Helpers.getDateFromViewportX(
+				getSvgX(event),
+				$store.currentTimeline.getStart(),
+				$store.currentTimeline.getEnd())
+
+		//Avoid going to far left/right
+		if(currentDate > $store.currentTimeline.getEnd()){
+			currentDate = $store.currentTimeline.getEnd()
+		}
+		if(currentDate < $store.currentTimeline.getStart()){
+			currentDate = $store.currentTimeline.getStart()
 		}
 
-		if (
-			hoverGroup &&
-			(event.clientX <= recBox.left ||
-				event.clientX >= recBox.right ||
-				event.clientY <= recBox.top ||
-				event.clientY >= recBox.bottom)
-		) {
-			hoverGroup = false;
-		}
+		const currentXpos = Helpers.getViewportXFromDate(currentDate,
+					$store.currentTimeline.getStart(),
+					$store.currentTimeline.getEnd())
 
-		if (
-			!hoverGroup &&
-			event.clientX > recBox.left &&
-			event.clientX < recBox.right &&
-			event.clientY > recBox.top &&
-			event.clientY < recBox.bottom
-		) {
-			hoverGroup = true;
-		}
-
-		//Moving ghostUseNode on the axe <===>
-		if (ghostSVGNode && hoverGroup) {
-			let newX = (event.clientX / window.innerWidth) * GRID.ALL_WIDTH;
-			ghostSVGNode.setAttribute('x', `${newX - 10}`);
-
-			//Get new Date
-			let newDate: Date = processNewDate(newX - GRID.MIDDLE_X);
-			let newDateLabel = newDate.getDate() + '-' + MONTHS[newDate.getMonth()];
-			let svgGDateLabelNode: HTMLElement = <HTMLElement>ghostSVGNode.lastChild;
-			if (svgGDateLabelNode) {
-				svgGDateLabelNode.innerHTML = newDateLabel;
-			}
-		}
+		//Moving ghost on the axe <====>
+		activeDrag.currentX = currentXpos
 	}
 
-	function processNewDate(newX: number) {
-		let ratio =
-			$store.currentTimeline.getStart().getTime() +
-			(newX / GRID.MIDDLE_WIDTH) *
-				($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime());
-		return new Date(ratio);
+
+	// return MilestoneViewModel of the activeDrag one
+	function getActiveDrag(): Milestone|null {
+
+		if(activeDrag !== null && selectedMilestone !== null){
+			
+			const newDate = Helpers.getDateFromViewportX(
+				activeDrag.currentX,
+				$store.currentTimeline.getStart(),
+				$store.currentTimeline.getEnd())
+
+			let previewMilestone = selectedMilestone.clone();
+			previewMilestone.date = Helpers.toYYYY_MM_DD(newDate)
+
+			return previewMilestone
+		}
+
+		return null;
 	}
 </script>
 
@@ -150,52 +152,14 @@
 	height={GRID.MILESTONE_H}
 	stroke-dasharray="0.5 2"
 	fill="transparent"
-	class:onhover={ghostSVGNode && hoverGroup && !$store.rights.isReader()}
+	class:onhover={activeDrag !== null && !$store.rights.isReader()}
 />
 {#each $displayableMilestones as milestone, index (milestone.id)}
-	<svg
-		viewBox={$store.currentTimeline.viewbox}
-		xmlns="http://www.w3.org/2000/svg"
-		x={GRID.MIDDLE_X +
-			((milestone.getDate().getTime() - $store.currentTimeline.getStart().getTime()) /
-				($store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime())) *
-				GRID.MIDDLE_WIDTH -
-			10}
-		y={(index % 2) * 25}
-		class:milestoneSVGSection={!$store.rights.isReader()}
-		class:shouldBeHidden={!milestone.isShow}
-		onmousedown={down}
-		id="M{milestone.id}"
-		role="presentation"
-	>
-		<use
-			x="0"
-			y="0"
-			href="#mapfiller"
-			class="fill-transparent stroke-transparent toExcludeFromSnapshot"
-		/>
-		<use x="0" y="0" href="#map" class="svgWithFiller primaryFill" />
-		{#if index % 2 == 0}
-			<line stroke-dasharray="1" x1="10" y1="20" x2="10" y2="50" class="primaryStroke" />
-		{:else}
-			<line stroke-dasharray="1" x1="10" y1="20" x2="10" y2="25" class="primaryStroke" />
-		{/if}
-		<text x="17" y="9" font-size="10" class="primaryFill">{milestone.label}</text>
-		<text x="17" y="18" class="primaryFill"
-			>{milestone.getDate().getDate()}-{MONTHS[milestone.getDate().getMonth()]}</text
-		>
-	</svg>
-	<line id="endMilestoneNode" x1="0" y1="0" x2="0" y2="0" stroke="transparent" />
+	<MilestoneComponent down={down} i={index} isGhost={false}
+		milestoneVM={new MilestoneViewModel(milestone, $store.currentTimeline)}/>
 {/each}
+{#if activeDrag !== null}	
+	<MilestoneComponent down={down} i={$displayableMilestones.length} isGhost={true}
+		milestoneVM={new MilestoneViewModel(getActiveDrag() as Milestone, $store.currentTimeline)}/>
+{/if}
 
-<style>
-	.milestoneSVGSection {
-		cursor: grab;
-	}
-	:global(.milestoneSVGSection.grabbing) {
-		cursor: grabbing;
-	}
-	:global(#GHOST_SVG_NODE_ID) {
-		opacity: 1;
-	}
-</style>

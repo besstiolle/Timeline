@@ -215,6 +215,15 @@ export class Milestone {
 	setDate(date: Date): void {
 		this.date = Helpers.toYYYY_MM_DD(date);
 	}
+
+	clone():Milestone{
+		return new Milestone(
+			this.id,
+			this.label,
+			this.date,
+			this.isShow,
+		)
+	}
 }
 
 export class Swimline {
