@@ -108,49 +108,25 @@
 	<text id="T{taskVM.id}_rlabel" x={taskVM.rightGrayXPosition + 5} y="10.5" class="secondaryFill"
 		>{taskVM.labelRight}</text
 	>
-	<!-- Draggable overlay -->
-	<rect
-		id="T{taskVM.id}_rec"
-		x={taskVM.leftGrayXPosition}
-		y="0"
-		width={taskVM.grayWidth}
-		class="draggabledElement"
-		height="15"
-		rx="5"
-		ry="5"
-		fill="url(#pattern_A)"
-	/>
 
-	<svg
-		id="T{taskVM.id}_l"
-		x={taskVM.leftGrayXPosition - 5}
-		y="10"
-		width="15px"
-		height="15px"
-		viewBox="0 0 20 20"
-		class:grabbable={!$store.rights.isReader() && taskVM.isGrabbable}
-		class="draggabledElement"
-	>
-		<use href="#filler" onmousedown={(e) => downLeft(e, taskVM.id)} role="presentation" />
-		<use href="#drag_left" class="secondaryFill" onmousedown={(e) => downLeft(e, taskVM.id)} role="presentation" />
-	</svg>
-	<svg
-		id="T{taskVM.id}_r"
-		x={taskVM.rightGrayXPosition - 10}
-		y="10"
-		width="15px"
-		height="15px"
-		viewBox="0 0 20 20"
-		class:grabbable={!$store.rights.isReader() && taskVM.isGrabbable}
-		class="draggabledElement"
-	>
-		<use href="#filler" onmousedown={(e) => downRight(e, taskVM.id)} role="presentation" />
-		<use href="#drag_right" class="secondaryFill" onmousedown={(e) => downRight(e, taskVM.id)} role="presentation" />
-	</svg>
-	{#if taskVM.hasProgress}
+	{#if $store.rights.isWriter() || $store.rights.isOwner()}
+
+		<!-- Draggable overlay -->
+		<rect
+			id="T{taskVM.id}_rec"
+			x={taskVM.leftGrayXPosition}
+			y="0"
+			width={taskVM.grayWidth}
+			class="draggabledElement"
+			height="15"
+			rx="5"
+			ry="5"
+			fill="url(#pattern_A)"
+		/>
+
 		<svg
-			id="T{taskVM.id}_p"
-			x={taskVM.percentXPosition}
+			id="T{taskVM.id}_l"
+			x={taskVM.leftGrayXPosition - 5}
 			y="10"
 			width="15px"
 			height="15px"
@@ -158,16 +134,45 @@
 			class:grabbable={!$store.rights.isReader() && taskVM.isGrabbable}
 			class="draggabledElement"
 		>
-			<use href="#filler" onmousedown={(e) => downProgress(e, taskVM.id)} role="presentation" />
-			<use
-				href="#drag_progress"
-				class="secondaryFill"
-				onmousedown={(e) => downProgress(e, taskVM.id)}
-				role="presentation"
-			/>
+			<use href="#filler" onmousedown={(e) => downLeft(e, taskVM.id)} role="presentation" />
+			<use href="#drag_left" class="secondaryFill" onmousedown={(e) => downLeft(e, taskVM.id)} role="presentation" />
 		</svg>
+		<svg
+			id="T{taskVM.id}_r"
+			x={taskVM.rightGrayXPosition - 10}
+			y="10"
+			width="15px"
+			height="15px"
+			viewBox="0 0 20 20"
+			class:grabbable={!$store.rights.isReader() && taskVM.isGrabbable}
+			class="draggabledElement"
+		>
+			<use href="#filler" onmousedown={(e) => downRight(e, taskVM.id)} role="presentation" />
+			<use href="#drag_right" class="secondaryFill" onmousedown={(e) => downRight(e, taskVM.id)} role="presentation" />
+		</svg>
+		{#if taskVM.hasProgress}
+			<svg
+				id="T{taskVM.id}_p"
+				x={taskVM.percentXPosition}
+				y="10"
+				width="15px"
+				height="15px"
+				viewBox="0 0 20 20"
+				class:grabbable={!$store.rights.isReader() && taskVM.isGrabbable}
+				class="draggabledElement"
+			>
+				<use href="#filler" onmousedown={(e) => downProgress(e, taskVM.id)} role="presentation" />
+				<use
+					href="#drag_progress"
+					class="secondaryFill"
+					onmousedown={(e) => downProgress(e, taskVM.id)}
+					role="presentation"
+				/>
+			</svg>
+		{/if}
+		<!-- END overlay-->
+		
 	{/if}
-	<!-- END overlay-->
 </svg>
 
 <style>
