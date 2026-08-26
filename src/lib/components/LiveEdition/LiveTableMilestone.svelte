@@ -2,20 +2,12 @@
 	import { store } from '$lib/stores';
 	import { Helpers } from '$lib/helpers';
 	import { FactoryTimeline } from '$lib/factoryTimeline';
-	import { LIVE_PREFIX } from '$lib/constantes';
 	import { FactoryMilestone } from '$lib/factoryMilestone';
 	import { m } from '../../../paraglide/messages';
 	import { Milestone } from '$lib/struct.class';
+	import LiveTableMilestoneRow from './LiveTableMilestoneRow.svelte';
 
-	interface Props {
-        updateStore: (prefix: string, position: number) => void;
-    }
-
-	let {
-        updateStore,
-    }: Props = $props();
-
-	function m_delete(index: number) {
+	function onDelete(index: number) {
 		if (index < 0 || index > $store.currentTimeline.milestones.length - 1) {
 			console.warn('index was abnormal', index);
 			return;
@@ -26,7 +18,7 @@
 		});
 	}
 
-	function m_up(index: number) {
+	function onUp(index: number) {
 		if (index <= 0 || index > $store.currentTimeline.milestones.length - 1) {
 			console.warn('index was abnormal', index);
 			return;
@@ -38,7 +30,7 @@
 			return { ...s };
 		});
 	}
-	function m_down(index: number) {
+	function onDown(index: number) {
 		if (index < 0 || index >= $store.currentTimeline.milestones.length - 1) {
 			console.warn('index was abnormal', index);
 			return;
@@ -50,17 +42,7 @@
 			return { ...s };
 		});
 	}
-	function m_show(index: number) {
-		if (index < 0 || index > $store.currentTimeline.milestones.length - 1) {
-			console.warn('index was abnormal', index);
-			return;
-		}
-		store.update((s) => {
-			s.currentTimeline.milestones[index].isShow = !s.currentTimeline.milestones[index].isShow;
-			return { ...s };
-		});
-	}
-	function m_duplicate(index: number) {
+	function onDuplicate(index: number) {
 		if (index < 0 || index > $store.currentTimeline.milestones.length - 1) {
 			console.warn('index was abnormal', index);
 			return;
@@ -87,7 +69,7 @@
 			return { ...s };
 		});
 	}
-	function m_add() {
+	function onAdd() {
 		let diffSec: number =
 			$store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime();
 
@@ -108,107 +90,18 @@
 </script>
 
 {#each $store.currentTimeline.milestones as milestone, index (milestone.id)}
-	<div class="live__line show_{milestone.isShow}">
-		<div
-			data-name="M{index}"
-			class="live_cmd"
-			onclick={() => {
-				m_show(index);
-			}}
-			onkeydown={() => {
-				m_show(index);
-			}}
-			title={m.live_milestone_editor_toggle()}
-			role="button"
-			tabindex="0"
-		>
-			<svg viewBox="0 0 20 20">
-				<use x="0" y="0" href="#b_show" />
-			</svg>
-		</div>
-		<div
-			data-name="M{index}"
-			class="live_cmd"
-			onclick={() => {
-				m_up(index);
-			}}
-			onkeydown={() => {
-				m_up(index);
-			}}
-			title={m.live_milestone_editor_down()}
-			role="button"
-			tabindex="0"
-		>
-			<svg viewBox="0 0 20 20">
-				<use x="0" y="0" href="#b_up" />
-			</svg>
-		</div>
-		<div
-			data-name="M{index}"
-			class="live_cmd"
-			onclick={() => {
-				m_down(index);
-			}}
-			onkeydown={() => {
-				m_down(index);
-			}}
-			title={m.live_milestone_editor_up()}
-			role="button"
-			tabindex="0"
-		>
-			<svg viewBox="0 0 20 20">
-				<use x="0" y="0" href="#b_down" />
-			</svg>
-		</div>
-		<div
-			data-name="M{index}"
-			class="live_cmd"
-			onclick={() => {
-				m_duplicate(index);
-			}}
-			onkeydown={() => {
-				m_duplicate(index);
-			}}
-			title={m.live_milestone_editor_clone()}
-			role="button"
-			tabindex="0"
-		>
-			<svg viewBox="0 0 20 20">
-				<use x="0" y="0" href="#b_duplicate" />
-			</svg>
-		</div>
-		<div
-			data-name="M{index}"
-			class="live_cmd live_cmd_red"
-			onclick={() => {
-				m_delete(index);
-			}}
-			onkeydown={() => {
-				m_delete(index);
-			}}
-			title={m.live_milestone_editor_delete()}
-			role="button"
-			tabindex="0"
-		>
-			<svg viewBox="0 0 20 20">
-				<use x="0" y="0" href="#b_delete" />
-			</svg>
-		</div>
-		<input type="text" bind:value={milestone.label} class="label" />
-		<input
-			type="date"
-			id="{LIVE_PREFIX.MD}{index}"
-			value={milestone.date}
-			min="1900-01-01"
-			max="2999-12-31"
-			onchange={() => updateStore(LIVE_PREFIX.MD, index)}
-			onblur={() => updateStore(LIVE_PREFIX.MD, index)}
-		/>
-	</div>
+	<LiveTableMilestoneRow
+		{milestone}
+		{index}
+		onDelete={onDelete}
+		onUp={onUp}
+		onDown={onDown}
+		onDuplicate={onDuplicate}
+	/>
 {/each}
 
 <div class="live__action">
-	<div class="live__action__button" onclick={m_add} onkeydown={m_add} role="button" tabindex="0">
+	<div class="live__action__button" onclick={onAdd} onkeydown={onAdd} role="button" tabindex="0">
 		<svg class="svg-icon" viewBox="0 0 20 20">
 			<use x="0" y="0" href="#b_add" />
 		</svg>

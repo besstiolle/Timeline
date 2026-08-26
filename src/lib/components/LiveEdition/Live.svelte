@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { store } from '$lib/stores';
-	import { LIVE_PREFIX } from '$lib/constantes';
 
 	import LiveTableTask from './LiveTableTask.svelte';
 	import LiveTableMilestone from './LiveTableMilestone.svelte';
@@ -8,70 +7,6 @@
 	import { m } from '../../../paraglide/messages';
 	import { shadowBoxComponentState } from '$lib/state/shadowBoxComponentState.svelte';
 
-	const css_class_warn = 'date_warn';
-	const css_class_warn_order = 'date_warn_order';
-
-	function updateStore(prefix: string, position: number): void {
-		let elm = document.getElementById(prefix + position) as HTMLInputElement;
-		let val: string = elm.value;
-
-		if (val === undefined || val === '') {
-			elm.classList.add(css_class_warn);
-			return;
-		}
-
-		let date: Date = new Date(val);
-		if (!(date instanceof Date) || isNaN(date.getTime())) {
-			elm.classList.add(css_class_warn);
-			return;
-		}
-
-		let diff: number = Math.abs(new Date(val).getFullYear() - new Date().getFullYear());
-		if (diff > 40) {
-			elm.classList.add(css_class_warn);
-			return;
-		}
-
-		if (prefix === LIVE_PREFIX.TS) {
-			let other = document.getElementById(LIVE_PREFIX.TE + position) as HTMLInputElement;
-			if (other.value < val) {
-				elm.classList.add(css_class_warn_order);
-				other.classList.add(css_class_warn_order);
-				return;
-			} else {
-				elm.classList.remove(css_class_warn_order);
-				other.classList.remove(css_class_warn_order);
-			}
-		}
-		if (prefix === LIVE_PREFIX.TE) {
-			let other = document.getElementById(LIVE_PREFIX.TS + position) as HTMLInputElement;
-			if (other.value > val) {
-				elm.classList.add(css_class_warn_order);
-				other.classList.add(css_class_warn_order);
-				return;
-			} else {
-				elm.classList.remove(css_class_warn_order);
-				other.classList.remove(css_class_warn_order);
-			}
-		}
-
-		elm.classList.remove(css_class_warn);
-
-		store.update((s) => {
-			if (prefix === LIVE_PREFIX.TS) {
-				s.currentTimeline.tasks[position].dateStart = val;
-			}
-
-			if (prefix === LIVE_PREFIX.TE) {
-				s.currentTimeline.tasks[position].dateEnd = val;
-			}
-
-			if (prefix === LIVE_PREFIX.MD) {
-				s.currentTimeline.milestones[position].date = val;
-			}
-			return { ...s };
-		});
-	}
 </script>
 
 {#if shadowBoxComponentState.openShadowBoxForLiveEdition}
@@ -85,8 +20,8 @@
 			class="w-2xl"
 		/>
 	</div>
-	<LiveTableTask {updateStore} />
-	<LiveTableMilestone {updateStore} />
+	<LiveTableTask />
+	<LiveTableMilestone />
 	<div>
 		<label for="showToday">{m.live_editor_show_today_vertical_line()} : </label><input
 			type="checkbox"
@@ -168,9 +103,6 @@
 		width: 20px;
 		height: 20px;
 		display: inline-block;
-	}
-	:global(.date_warn, .date_warn_order) {
-		background-color: #ff9800;
 	}
 
 	:global(progress) {
