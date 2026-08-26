@@ -1,9 +1,8 @@
 import { json } from '@sveltejs/kit';
 import pkg from './../../../../package.json' with { type: 'json' };
 import { _FALLBACK, _OPTIONS } from '$lib/api/apiUtils';
-import type { ResponseWithMeta } from '$lib/server/types';
+import type { ResponseWithMeta } from '$lib/types';
 import { env } from '$env/dynamic/private';
-import type { RequestEvent } from '@sveltejs/kit';
 import { countTimeline } from '$lib/server/timelineCRUD';
 import type { RequestHandler } from './$types';
 

@@ -1,4 +1,4 @@
-import type { ResponseWithMeta } from '$lib/server/types';
+import type { ResponseWithMeta } from '$lib/types';
 import type { Timeline } from './struct.class';
 import { NotFoundOnlineException } from './timelineException.class';
 

@@ -12,7 +12,7 @@
 	import Draw from '$lib/components/Draw.svelte';
 	import Toast from '$lib/components/Toast.svelte';
 	import { NotFoundOnlineException } from '$lib/timelineException.class';
-	import type { ResponseWithMeta } from '$lib/server/types';
+	import type { ResponseWithMeta } from '$lib/types';
 	import { m } from '../../../paraglide/messages';
 	import { Timeline } from '$lib/struct.class';
 	import { goto } from '$app/navigation';

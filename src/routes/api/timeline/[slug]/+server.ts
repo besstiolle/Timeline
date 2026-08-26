@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import { accessControl } from '$lib/server/keyValidator';
 import { deleteTimelineByKey, findLastTimelineByKey } from '$lib/server/timelineCRUD';
-import type { ResponseWithMeta } from '$lib/server/types';
+import type { ResponseWithMeta } from '$lib/types';
 import { TIMELINE_NOT_FOUND_ProblemJsonResponse } from '$lib/api/problemJson';
 import { _FALLBACK, _OPTIONS, requestToInstance } from '$lib/api/apiUtils';
 import { REGEX_FAILED_ProblemJsonResponse } from '$lib/api/problemJson';

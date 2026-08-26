@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => ({
 		sveltekit()
 	],
 	test: {
-		include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+		include: ['tests/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
 		globals: true,
 		environment: 'jsdom',
 		coverage: {

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { RequestEventStub, toRequestEvent, VALID_DUMMY_TIMELINE } from '../apiUtils';
 
-import type { ResponseWithMeta } from '$lib/server/types';
+
 import { countTimelineByKey, truncateTimeline } from '$lib/server/timelineCRUD';
 import type { Timeline } from '$lib/struct.class';
 import { createTestDb } from '../dbUtilsTest';
@@ -15,8 +15,9 @@ const FAKE_KEY = 'WrongKey64Car0000000000000000000000000000000000000000000000000
 vi.mock('$lib/server/db', async () => {
 	return { db: await createTestDb() };
 });
-import * as handlers from '../../../routes/api/timeline/+server';
+import * as handlers from '../../../src/routes/api/timeline/+server';
 import { db } from '$lib/server/db';
+import type { ResponseWithMeta } from '$lib/types';
 
 beforeEach(async () => {
 	//truncate tables in db

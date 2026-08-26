@@ -28,7 +28,7 @@ it('GET /api/about should return a ResponseWithMeta JSON with no version if we c
 	vi.doMock('$env/dynamic/private', () => ({
 		env: { SHOW_VERSION: 'false' }
 	}));
-	const { GET } = await import('../../../routes/api/about/+server');
+	const { GET } = await import('../../../src/routes/api/about/+server');
 
 	const { env } = await import('$env/dynamic/private');
 
@@ -54,7 +54,7 @@ it('GET /api/about should return a ResponseWithMeta JSON with no version if we c
 	vi.doMock('$env/dynamic/private', () => ({
 		env: { SHOW_VERSION: undefined }
 	}));
-	const { GET } = await import('../../../routes/api/about/+server');
+	const { GET } = await import('../../../src/routes/api/about/+server');
 
 	const { env } = await import('$env/dynamic/private');
 	expect(env.SHOW_VERSION).toBe(undefined);
@@ -79,7 +79,7 @@ it('GET /api/about should return a ResponseWithMeta JSON with no version if we c
 	vi.doMock('$env/dynamic/private', () => ({
 		env: {}
 	}));
-	const { GET } = await import('../../../routes/api/about/+server');
+	const { GET } = await import('../../../src/routes/api/about/+server');
 
 	const { env } = await import('$env/dynamic/private');
 	expect(env.SHOW_VERSION).toBe(undefined);

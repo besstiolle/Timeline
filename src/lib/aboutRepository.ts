@@ -1,4 +1,4 @@
-import type { ResponseWithMeta } from '$lib/server/types';
+import type { ResponseWithMeta } from "./types";
 
 const endpoint = '/api/about';
 const headers = {

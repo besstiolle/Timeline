@@ -12,7 +12,7 @@ const HEADER_ALLOW = 'allow';
 vi.mock('$lib/server/db', async () => {
 	return { db: await createTestDb() };
 });
-import * as handlers from '../../../routes/api/about/+server';
+import * as handlers from '../../../src/routes/api/about/+server';
 import { db } from '$lib/server/db';
 
 beforeEach(async () => {

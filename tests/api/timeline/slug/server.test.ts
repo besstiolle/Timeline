@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { RequestEventStub } from '../../apiUtils';
 import { insertTimeline, truncateTimeline } from '$lib/server/timelineCRUD';
-import type { RequestEvent } from '../../../../routes/api/timeline/[slug]/$types';
+import type { RequestEvent } from '../../../../src/routes/api/timeline/[slug]/$types';
 import { Timeline } from '$lib/struct.class';
 import { createTestDb } from '../../dbUtilsTest';
 
@@ -25,7 +25,7 @@ function toRequestEventWithSlug(request: RequestEventStub) {
 vi.mock('$lib/server/db', async () => {
 	return { db: await createTestDb() };
 });
-import * as handlers from '../../../../routes/api/timeline/[slug]/+server';
+import * as handlers from '../../../../src/routes/api/timeline/[slug]/+server';
 import { db } from '$lib/server/db';
 
 beforeEach(async () => {

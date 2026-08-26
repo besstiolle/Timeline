@@ -1,4 +1,11 @@
 /**
+ * This file must only contain type definitions for the Svelte server-side portion. 
+ * Any sharing in the client-side portion of this code will result in an warn & an error during production build 
+ *    	Warn => [plugin vite:resolve] Module "node:async_hooks" has been externalized for browser compatibility,
+ * 		Error => Could not load /app/src/hooks.server.ts [...]
+ */
+
+/**
  * Represent the database structure to storage a StructTimeline (in a raw json format) + few information
  *
  * The raw structure allow us to work with sqlite like a key/value database as we don't need to operate query with a lot of informations.
@@ -11,12 +18,4 @@ export interface StructTimelineInDbInterface {
 	readKey: string | null;
 	createdDateTime: number;
 	json: string;
-}
-
-export interface ResponseWithMeta {
-	meta: {
-		ts: number;
-		duration: number; //duration of execution on the server side in milliseconds
-	};
-	data: object;
 }

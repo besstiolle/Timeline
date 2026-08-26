@@ -24,7 +24,7 @@ But other Node's versions are tested to ensure a large compatibility
 
 ## Testing
 
-We have a handful of tests which are located in /src/\__test\__ directory. They are made with [jest](https://jestjs.io/fr/). Please take time to run all the tests before pushing your code.
+We have a handful of tests which are located in /tests directory. They are made with [jest](https://jestjs.io/fr/). Please take time to run all the tests before pushing your code.
 
 [Learn more about the commandes](./README.md)
 

@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import Database from 'better-sqlite3';
-import * as schema from '../../lib/server/db/schema';
+import * as schema from '../../src/lib/server/db/schema';
 import path from 'path';
 import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
 
@@ -10,7 +10,7 @@ export function createTestDb(): ReturnType<typeof drizzle> {
 
 	//Force migration to have the memory db in the good shape
 	migrate(db, {
-		migrationsFolder: path.resolve(__dirname, '../../../drizzle')
+		migrationsFolder: path.resolve(__dirname, '../../drizzle')
 	});
 
 	return db;

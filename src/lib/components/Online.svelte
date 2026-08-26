@@ -8,7 +8,7 @@
 	import Toast from '$lib/components/Toast.svelte';
 	import { Rights } from '$lib/rights.class';
 	import { FactoryCards } from '$lib/factoryCards';
-	import type { ResponseWithMeta } from '$lib/server/types';
+	import type { ResponseWithMeta } from '$lib/types';
 	import { m } from '../../paraglide/messages';
 	import { commitState } from '../state/commitState.svelte';
 	import { shadowBoxComponentState } from '$lib/state/shadowBoxComponentState.svelte';

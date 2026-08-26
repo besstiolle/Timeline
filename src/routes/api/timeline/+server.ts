@@ -1,7 +1,7 @@
 import { JsonParser } from '$lib/jsonParser';
 import { accessControl } from '$lib/server/keyValidator';
 import { findLastTimelineByKey } from '$lib/server/timelineCRUD';
-import type { ResponseWithMeta } from '$lib/server/types';
+import type { ResponseWithMeta } from '$lib/types';
 import { insertTimeline } from '$lib/server/timelineCRUD';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';

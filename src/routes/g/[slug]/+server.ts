@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import { _FALLBACK, _OPTIONS } from '$lib/api/apiUtils';
-import type { ResponseWithMeta } from '$lib/server/types';
+import type { ResponseWithMeta } from '$lib/types';
 import type { RequestHandler } from './$types';
 
 /**
