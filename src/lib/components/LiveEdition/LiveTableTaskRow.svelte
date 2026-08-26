@@ -2,7 +2,6 @@
 	import { Task } from '$lib/struct.class';
 	import { store } from '$lib/stores';
 	import { TaskValidator } from '$lib/taskValidator';
-	import { LIVE_PREFIX } from '$lib/constantes';
 	import { m } from '../../../paraglide/messages';
 	import { untrack } from 'svelte';
 
@@ -96,7 +95,6 @@
 		<!-- Dates: based on the local timestamp + conditional store update -->
 		<input
 			type="date"
-			id="{LIVE_PREFIX.TS}{index}"
 			bind:value={localDateStart}
 			class:date_warn={!isStartValid}
 			onchange={handleDateStartChange}
@@ -107,7 +105,6 @@
 
 		<input
 			type="date"
-			id="{LIVE_PREFIX.TE}{index}"
 			bind:value={localDateEnd}
 			class:date_warn={!isEndValid}
 			onchange={handleDateEndChange}
@@ -125,7 +122,6 @@
 
 		<input
 			type="number"
-			id="{LIVE_PREFIX.PR}{index}"
 			bind:value={localProgression}
 			oninput={handleProgressionChange}
 			min="0"

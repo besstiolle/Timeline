@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { store } from '$lib/stores';
-	import { LIVE_PREFIX } from '$lib/constantes';
 	import { m } from '../../../paraglide/messages';
 	import { Milestone } from '$lib/struct.class';
 	import { untrack } from 'svelte';
@@ -122,7 +121,6 @@
 	/>
 	<input
 		type="date"
-		id="{LIVE_PREFIX.MD}{index}"
 		bind:value={localDate}
 		class:date_warn={!isDateValid}
 		oninput={handleDateChange}

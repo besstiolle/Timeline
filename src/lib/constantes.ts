@@ -40,15 +40,6 @@ export const DAYS = [
 	m.cst_saturday()
 ];
 
-export const LIVE_PREFIX = {
-	TS: 'taskStart_',
-	TE: 'taskEnd_',
-	MD: 'milestoneDate_',
-	PR: 'progress_',
-	TSF: 'timelineStartFocus',
-	TEF: 'timelineEndFocus'
-};
-
 export const LOCAL_STORAGE = {
 	KEY_CARDS: 'cards',
 	KEY_PICTO: 'picto_'
