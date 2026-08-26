@@ -230,7 +230,7 @@
 
 <Upload {download} />
 <Live />
-<Online bind:this={onlineComponent} />
+<Online bind:this={onlineComponent} /> <!-- FIXME -->
 <Toast />
 
 <div id="wrapper" class="">

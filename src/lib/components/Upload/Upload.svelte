@@ -91,7 +91,10 @@
 	};
 
 	function onChange(event: Event) {
-		event.preventDefault();
+		//FIXME : https://svelte.dev/docs/svelte/legacy-on 
+		// Add modifiers to element event handlers with the | character.
+		// <form on:submit|preventDefault={handleSubmit}>
+		event.preventDefault();  
 		let htmlElement = event.target as HTMLInputElement;
 		if (htmlElement.files) {
 			readFiles(htmlElement.files);
@@ -176,6 +179,7 @@
 	<!-- https://svelte.dev/docs/svelte/use -->
 	<form method="post" action="" enctype="multipart/form-data" use:svelteAction>
 		<div>
+			<!-- FIXME : using https://svelte.dev/docs/svelte/bind#input-bind:files-->
 			<input type="file" name="files[]" accept=".csv,.toml" id="file" />
 			<label for="file"
 				><span
