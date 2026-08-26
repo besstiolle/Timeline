@@ -19,7 +19,7 @@
 	import { shadowBoxComponentState } from '$lib/state/shadowBoxComponentState.svelte';
 
 	
-	let timerId:NodeJS.Timeout
+	let timerId:ReturnType<typeof setInterval>
 	let processRunning = false;
 	let onlineComponent = $state<Online>()!;
 
