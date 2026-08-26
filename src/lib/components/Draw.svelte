@@ -21,6 +21,7 @@
 	
 	let timerId:NodeJS.Timeout
 	let processRunning = false;
+	let onlineComponent = $state<Online>()!;
 
 	/**
 	 * Generate a thumbbnail every 30s and save it into the localstorage
@@ -229,7 +230,7 @@
 
 <Upload {download} />
 <Live />
-<Online />
+<Online bind:this={onlineComponent} />
 <Toast />
 
 <div id="wrapper" class="">
