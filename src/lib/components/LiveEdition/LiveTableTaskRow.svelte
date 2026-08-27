@@ -26,18 +26,16 @@
 	let isStartValid = $derived(TaskValidator.isStartDateValid(localDateStart, localDateEnd));
 	let isEndValid = $derived(TaskValidator.isEndDateValid(localDateStart, localDateEnd));
 
-	// Try updating the store for the start date
-	function handleDateStartChange() {
+	// Try updating the store for the start date AND the end date to fix 
+	// 		"The wrong date is displayed #7" https://github.com/besstiolle/Timeline/issues/7
+	function handleDateChange() {
 		if (isStartValid && localDateStart !== task.dateStart) {
 			store.update((s) => {
 				task.dateStart = localDateStart;
 				return { ...s };
 			});
 		}
-	}
 
-	// Try updating the store for the end date
-	function handleDateEndChange() {
 		if (isEndValid && localDateEnd !== task.dateEnd) {
 			store.update((s) => {
 				task.dateEnd = localDateEnd;
@@ -97,8 +95,8 @@
 			type="date"
 			bind:value={localDateStart}
 			class:date_warn={!isStartValid}
-			onchange={handleDateStartChange}
-			onblur={handleDateStartChange}
+			onchange={handleDateChange}
+			onblur={handleDateChange}
 			min="1900-01-01"
 			max="2999-12-31"
 		/>
@@ -107,8 +105,8 @@
 			type="date"
 			bind:value={localDateEnd}
 			class:date_warn={!isEndValid}
-			onchange={handleDateEndChange}
-			onblur={handleDateEndChange}
+			onchange={handleDateChange}
+			onblur={handleDateChange}
 			min="1900-01-01"
 			max="2999-12-31"
 		/>
