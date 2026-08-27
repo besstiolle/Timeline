@@ -3,11 +3,11 @@
 
 	import { FactoryMilestone } from '$lib/factoryMilestone';
 	import { GRID } from '$lib/constantes';
-	import { displayableMilestones } from '$lib/derivedStore';
 	import { MilestoneViewModel } from '$lib/viewModel';
 	import { Milestone } from '$lib/struct.class';
 	import MilestoneComponent from './Milestone.svelte';
 	import { Helpers } from '$lib/helpers';
+	import { displayableMilestones as milestonesToDerive } from './Milestones';
 
 	interface ActiveDragInterface{
 		milestoneId: number,
@@ -16,6 +16,9 @@
 	let activeDrag = $state<ActiveDragInterface | null>(null)
 	let selectedMilestone = $state<Milestone|null>(null)
 
+	const displayableMilestones = $derived(
+		milestonesToDerive($store.currentTimeline)
+	)
 
 	function getSvgX(event: MouseEvent):number{
 		return (event.clientX / window.innerWidth) * GRID.ALL_WIDTH
@@ -154,12 +157,12 @@
 	fill="transparent"
 	class:onhover={activeDrag !== null && !$store.rights.isReader()}
 />
-{#each $displayableMilestones as milestone, index (milestone.id)}
+{#each displayableMilestones as milestone, index (milestone.id)}
 	<MilestoneComponent down={down} i={index} isGhost={false}
 		milestoneVM={new MilestoneViewModel(milestone, $store.currentTimeline)}/>
 {/each}
 {#if activeDrag !== null}	
-	<MilestoneComponent down={down} i={$displayableMilestones.length} isGhost={true}
+	<MilestoneComponent down={down} i={displayableMilestones.length} isGhost={true}
 		milestoneVM={new MilestoneViewModel(getActiveDrag() as Milestone, $store.currentTimeline)}/>
 {/if}
 

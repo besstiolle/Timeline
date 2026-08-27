@@ -37,16 +37,18 @@
 		x={GRID.MIDDLE_X}
 		y={GRID.MILESTONE_H}
 	>
-		<rect x="0" y="20" width={todayXPosition} height="5" fill={todayColor} />
-		<polygon points="{todayXPosition},25 {todayXPosition + 5},40 {todayXPosition - 5},40" fill={todayColor} />
-		<text x={todayXPosition + 7} y="37" font-size="7" class="secondaryFill">{m.today_text()}</text>
-		<line
-			stroke-dasharray="0.5 2"
-			x1={todayXPosition}
-			y1="40"
-			x2={todayXPosition}
-			y2="100%"
-			stroke={todayColor}
-		/>
+		<g id="todaySection">
+			<rect x="0" y="20" width={todayXPosition} height="5" fill={todayColor} />
+			<polygon points="{todayXPosition},25 {todayXPosition + 5},40 {todayXPosition - 5},40" fill={todayColor} />
+			<text x={todayXPosition + 7} y="37" font-size="7" class="secondaryFill">{m.today_text()}</text>
+			<line
+				stroke-dasharray="0.5 2"
+				x1={todayXPosition}
+				y1="40"
+				x2={todayXPosition}
+				y2="100%"
+				stroke={todayColor}
+			/>
+		</g>
 	</svg>
 {/if}

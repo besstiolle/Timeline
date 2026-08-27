@@ -6,7 +6,6 @@
 
 	import { Helpers } from '$lib/helpers';
 
-	import Milestones from '$lib/components/Milestones.svelte';
 	import Today from '$lib/components/Today/Today.svelte';
 	import Live from '$lib/components/LiveEdition/Live.svelte';
 	import SwimAndTasks from '$lib/components/SwimAndTasks/SwimAndTasks.svelte';
@@ -17,6 +16,7 @@
 	import Banner from './Banner/Banner.svelte';
 	import { commitState } from '../state/commitState.svelte';
 	import { shadowBoxComponentState } from '$lib/state/shadowBoxComponentState.svelte';
+	import Milestones from './Milestones/Milestones.svelte';
 
 	
 	let timerId:ReturnType<typeof setInterval>

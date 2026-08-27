@@ -5,10 +5,11 @@
 	import { Helpers } from '$lib/helpers';
 	import { FactoryTask } from '$lib/factoryTask';
 	import TaskComponent from './Task.svelte';
-	import { displayableTasks } from '$lib/derivedStore';
 	import Swimlines from './Swimlines.svelte';
 	import { TaskViewModel } from '$lib/viewModel';
 	import type { Task } from '$lib/struct.class';
+	import { derived } from 'svelte/store';
+	import { displayableTasks as tasksToDerive } from './SwimAndTasks';
 
 
 	interface ActiveDragInterface{
@@ -21,6 +22,10 @@
 		initialLeftXPosition:number,
 		initialRightXPosition:number,
 	}
+
+	const displayableTasks = $derived(
+		tasksToDerive($store.currentTimeline)
+	)
 
 	type ACTION = 'L' | 'R' | 'P';
 
@@ -195,7 +200,7 @@
 <svelte:window onmouseup={up} onmousemove={move} />
 <Swimlines />
 
-	{#each $displayableTasks as task, index (task.id)}
+	{#each displayableTasks as task, index}
 		<TaskComponent
 			i={index}
 			taskVM={new TaskViewModel(

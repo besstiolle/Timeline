@@ -1,8 +1,17 @@
 <script lang="ts">
 	import { COLORS, GRID } from '$lib/constantes';
-	import { displayableSwimlines, displayableTasks } from '$lib/derivedStore';
 	import { store } from '$lib/stores';
 	import type { Task } from '$lib/struct.class';
+	import { displayableSwimlines as swimlinesToDerive, displayableTasks as tasksToDerive } from './SwimAndTasks';
+
+
+	const displayableTasks = $derived(
+		tasksToDerive($store.currentTimeline)
+	)
+
+	const displayableSwimlines = $derived(
+		swimlinesToDerive($store.currentTimeline, displayableTasks)
+	)
 
 	function toggleSwimlineVisibility(event: Event, id:number) {
 		let value = !$store.currentTimeline.swimlines[id].isShow;
@@ -24,9 +33,9 @@
 	y={GRID.MILESTONE_H + GRID.ANNUAL_H - 5}
 	id="svgSwimlineAndTasks"
 >
-	{#each $displayableTasks as task, index (task.id)}
-		{#if $displayableSwimlines.has(task.id)}
-			{@const localSwimline = $displayableSwimlines.get(task.id)}
+	{#each displayableTasks as task, index (task.id)}
+		{#if displayableSwimlines.has(task.id)}
+			{@const localSwimline = displayableSwimlines.get(task.id)}
 			{#if localSwimline}
 				<g class="wrapperSwimline">
 				<rect
