@@ -20,7 +20,7 @@ export class TaskValidator {
 	static isStartDateValid(startStr: string, endStr: string): boolean {
 		if (!this.isValidDateString(startStr)) return false;
 		if (!this.isValidDateString(endStr)) return true;
-		return new Date(startStr) < new Date(endStr);
+		return new Date(startStr) <= new Date(endStr);
 	}
 
 	/**
@@ -32,7 +32,7 @@ export class TaskValidator {
 	static isEndDateValid(startStr: string, endStr: string): boolean {
 		if (!this.isValidDateString(endStr)) return false;
 		if (!this.isValidDateString(startStr)) return true;
-		return new Date(startStr) < new Date(endStr);
+		return new Date(startStr) <= new Date(endStr);
 	}
 
     static getValideProgression(progression:number):number{

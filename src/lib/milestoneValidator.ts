@@ -4,7 +4,6 @@ export class MilestoneValidator {
 		const date = new Date(dateString);
 		if (isNaN(date.getTime())) return false;
 		const diff = Math.abs(date.getFullYear() - new Date().getFullYear());
-		console.info(diff)
 		return diff <= 40;
 	}
 }

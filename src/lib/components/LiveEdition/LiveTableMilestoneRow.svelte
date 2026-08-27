@@ -24,13 +24,10 @@
 	// Reactive validation
 	let isDateValid = $derived(MilestoneValidator.isValidDateString(localDate));
 
-	$inspect(isDateValid)
-
 	// Try updating the store for the date
 	function handleDateChange() {
 		if (isDateValid && localDate !== milestone.date) {
 			store.update((s) => {
-				console.info("update Field Date", localDate)
 				milestone.date = localDate;
 				return { ...s };
 			});
