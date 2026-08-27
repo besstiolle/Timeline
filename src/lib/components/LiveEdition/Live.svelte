@@ -37,7 +37,7 @@
 
 <style>
 	/* Surcharge */
-	:global(#uploadSB) {
+	:global(#liveSB) {
 		min-width: 80vw;
 		width: auto;
 		left: 10vw;
