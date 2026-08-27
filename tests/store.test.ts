@@ -5,16 +5,19 @@ import { get } from 'svelte/store';
 import { Rights } from '$lib/rights.class';
 import { Card, Timeline, TimelineStore } from '$lib/struct.class';
 
-describe('test Mocked Store', () => {
-	vi.mock('$app/environment', () => ({
-		default: {
-			browser: true
-		}
-	}));
 
-	vi.mock('$lib/stores', () => {
-		return vi.importActual('./mockedStores');
-	});
+vi.mock('$app/environment', () => ({
+	default: {
+		browser: true
+	}
+}));
+
+vi.mock('$lib/stores', () => {
+	return vi.importActual('./mockedStores');
+});
+
+
+describe('test Mocked Store', () => {
 
 	it('Updating store should return udated values', () => {
 		const timelineStore = new TimelineStore(new Array<Card>(), new Timeline(), new Rights());

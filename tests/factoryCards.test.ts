@@ -3,12 +3,14 @@ import { describe, expect, it, vi } from 'vitest';
 import { FactoryCards } from '$lib/factoryCards';
 import { Card, Timeline } from '$lib/struct.class';
 
+vi.mock('$app/environment', () => ({
+	default: {
+		browser: true
+	}
+}));
+
 describe('test factoryCards', () => {
-	vi.mock('$app/environment', () => ({
-		default: {
-			browser: true
-		}
-	}));
+	
 
 	it('FactoryCards.updateCardsWithTimeline with an existing key', () => {
 		const cards = new Array<Card>();
