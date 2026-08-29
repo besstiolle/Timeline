@@ -2,6 +2,7 @@ import type { Milestone, Task, Timeline } from "./struct.class.svelte";
 import { GRID, MONTHS } from '$lib/constantes';
 import { Helpers } from '$lib/helpers';
 import { volatileAppState } from "./state/volatileAppState.svelte";
+import { appState } from "./state/appState.svelte";
 
 export class MilestoneViewModel{
     #milestone: Milestone
@@ -31,8 +32,8 @@ export class MilestoneViewModel{
     get xPosition():number{
         return Helpers.getViewportXFromDate(
             this.#milestone.getDate(),
-			volatileAppState.timelineStart,
-			volatileAppState.timelineEnd
+			appState.currentTimeline.start,
+			appState.currentTimeline.end
         )
         - 10
     }
@@ -86,8 +87,8 @@ export class TaskViewModel {
     get leftGrayXPosition(): number{
         return Helpers.getViewportXFromDate(
 			this.#task.getStart(),
-			volatileAppState.timelineStart,
-			volatileAppState.timelineEnd
+			appState.currentTimeline.start,
+			appState.currentTimeline.end
 		)
     }
 
@@ -100,8 +101,8 @@ export class TaskViewModel {
 
         return Helpers.getViewportXFromDate(
             endDate,
-			volatileAppState.timelineStart,
-			volatileAppState.timelineEnd
+			appState.currentTimeline.start,
+			appState.currentTimeline.end
         )
     }
 

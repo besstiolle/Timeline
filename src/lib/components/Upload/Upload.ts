@@ -2,6 +2,8 @@ import { FactorySwimline } from '$lib/factorySwimline';
 import { FactoryTimeline } from '$lib/factoryTimeline';
 import { Milestone, Task, Timeline, type abstractTimelineInterface } from '$lib/struct.class.svelte';
 
+
+// FIXME : reuse _processVolatile() & co for swimlines
 export function parseAbstractTimeline(
 	newTimeline: Timeline,
 	abstractTimeline: abstractTimelineInterface

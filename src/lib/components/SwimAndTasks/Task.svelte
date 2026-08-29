@@ -28,7 +28,7 @@
 </script>
 
 <svg
-	viewBox={volatileAppState.viewbox}
+	viewBox={appState.currentTimeline.viewbox}
 	xmlns="http://www.w3.org/2000/svg"
 	x="0"
 	y={i * GRID.ONE_TASK_H + GRID.MILESTONE_H + GRID.ANNUAL_H}

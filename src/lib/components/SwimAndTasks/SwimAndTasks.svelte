@@ -159,11 +159,11 @@
 		//Conversion Xposition => Date
 		let currentDate = Helpers.getDateFromViewportX(
 				currentX,
-				volatileAppState.timelineStart,
-				volatileAppState.timelineEnd)
+				appState.currentTimeline.start,
+				appState.currentTimeline.end)
 
-		if(currentDate < volatileAppState.timelineStart){
-			currentDate = volatileAppState.timelineStart
+		if(currentDate < appState.currentTimeline.start){
+			currentDate = appState.currentTimeline.start
 		}
 		
 		return currentDate
@@ -180,11 +180,11 @@
 		//Conversion Xposition => Date
 		let currentDate = Helpers.getDateFromViewportX(
 				currentX,
-				volatileAppState.timelineStart,
-				volatileAppState.timelineEnd)
+				appState.currentTimeline.start,
+				appState.currentTimeline.end)
 
-		if(currentDate > volatileAppState.timelineEnd){
-			currentDate = volatileAppState.timelineEnd
+		if(currentDate > appState.currentTimeline.end){
+			currentDate = appState.currentTimeline.end
 		}
 		
 		return currentDate

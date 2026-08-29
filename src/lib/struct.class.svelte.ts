@@ -1,3 +1,5 @@
+import { DIFF, GRID } from './constantes';
+import { FactoryTimeline } from './factoryTimeline';
 import { Helpers } from './helpers';
 import type { Rights } from './rights.class';
 /*
@@ -66,7 +68,7 @@ export class Timeline {
 	//end: string | null = $state(null);
 	//differencial: string | null = $state(null);
 	maxId: number = $state(0);
-	viewbox: string = $state('0 0 0 0');
+	//viewbox: string = $state('0 0 0 0');
 	showAll: boolean = $state(false);
 	isOnline: boolean = $state(false);
 	ownerKey: string | null = $state(null);
@@ -83,6 +85,29 @@ export class Timeline {
 		this.title = title;
 	}
 
+	get viewbox(): string{
+		//Reprocess viewbox sizing
+		let len = this.tasks.length;
+		if (!this.showAll) {
+			len = Helpers.countVisibleTasksInList(this.tasks);
+		}
+		return `0 0 ${GRID.ALL_WIDTH} ${GRID.MILESTONE_H + GRID.ANNUAL_H + GRID.ONE_TASK_H * len + GRID.TODAY_H}`;
+	}
+
+	get differencial():string{
+			const start = FactoryTimeline.getMin(this.tasks, this.milestones, this.showAll);
+			const end = FactoryTimeline.getMax(this.tasks, this.milestones, this.showAll);
+		
+			return Helpers.getEstimationOfDiff(start, end);
+	}
+
+	get start():Date{
+			return FactoryTimeline.getStartAndEnd(this.tasks, this.milestones, this.showAll, this.differencial).start
+	}
+	
+	get end():Date{
+			return FactoryTimeline.getStartAndEnd(this.tasks, this.milestones, this.showAll, this.differencial).end
+	}
 
 	toJSON() {
         return { 
@@ -116,7 +141,7 @@ export class Timeline {
 		clone.end= this.end;
 		clone.differencial= this.differencial; */
 		clone.maxId= this.maxId;
-		clone.viewbox= this.viewbox;
+		//clone.viewbox= this.viewbox;
 		clone.showAll= this.showAll;
 		clone.isOnline= this.isOnline;
 		clone.ownerKey= this.ownerKey;

@@ -62,14 +62,14 @@
 
 	function onAdd() {
 		let diffSec: number =
-			volatileAppState.timelineEnd.getTime() - volatileAppState.timelineStart.getTime();
+			appState.currentTimeline.end.getTime() - appState.currentTimeline.start.getTime();
 		const timelineUpdated = FactoryTimeline.addTask(
 			appState.currentTimeline,
 			new Task(
 				appState.currentTimeline.getNextId(),
 				'Some task',
-				Helpers.toYYYY_MM_DD(new Date(volatileAppState.timelineStart.getTime() + 0.1 * diffSec)),
-				Helpers.toYYYY_MM_DD(new Date(volatileAppState.timelineEnd.getTime() - 0.1 * diffSec)),
+				Helpers.toYYYY_MM_DD(new Date(appState.currentTimeline.start.getTime() + 0.1 * diffSec)),
+				Helpers.toYYYY_MM_DD(new Date(appState.currentTimeline.end.getTime() - 0.1 * diffSec)),
 				true,
 				0,
 				true,

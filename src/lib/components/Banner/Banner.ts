@@ -1,4 +1,5 @@
 import { DAYS, DIFF, GRID, MONTHS } from '$lib/constantes';
+import { appState } from '$lib/state/appState.svelte';
 import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 
 export interface jalonInterface {
@@ -8,10 +9,10 @@ export interface jalonInterface {
 }
 
 export function getJalons(): jalonInterface[] {
-	let dateIncremental = new Date(volatileAppState.timelineStart);
-	const msStart = volatileAppState.timelineStart.getTime();
-	const msEnd = volatileAppState.timelineEnd.getTime();
-	const differencial = volatileAppState.timelineDifferencial;
+	let dateIncremental = new Date(appState.currentTimeline.start);
+	const msStart = appState.currentTimeline.start.getTime();
+	const msEnd = appState.currentTimeline.end.getTime();
+	const differencial = appState.currentTimeline.differencial;
 
 	let i = 0;
 	const jalons: jalonInterface[] = [];
@@ -19,7 +20,7 @@ export function getJalons(): jalonInterface[] {
 	let innerLabel: number | string = '';
 	let left: number;
 
-	while (i < 100 && volatileAppState.timelineEnd.getTime() >= dateIncremental.getTime()) {
+	while (i < 100 && appState.currentTimeline.end.getTime() >= dateIncremental.getTime()) {
 	
 		i++;
 		left = ((dateIncremental.getTime() - msStart) / (msEnd - msStart)) * GRID.MIDDLE_WIDTH;

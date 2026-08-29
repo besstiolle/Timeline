@@ -2,29 +2,31 @@ import { browser } from '$app/environment';
 import { Helpers } from './helpers';
 import { FactorySwimline } from './factorySwimline';
 import { Milestone, Swimline, Task, Timeline } from './struct.class.svelte';
-import { DIFF, GRID } from './constantes';
 import { DuplicateEntityException } from './timelineException.class';
+import { DIFF } from './constantes';
 
 export class FactoryTimeline {
 	/**
 	 * Return the min date of all tasks & all minestones.
 	 *   If there is no tasks/milestones it return the date of the system
-	 * @param timeline the Timeline to investigate
+	 * @param tasks the list of task
+	 * @param milestones the list of milestones
+	 * @param showAll if we want to see everything, even the hiddens tasks/milestones
 	 * @returns <Date> the min date of milestones & tasks in the Timeline
 	 */
-	static getMin(timeline: Timeline): Date {
-		if (timeline.tasks.length === 0 && timeline.milestones.length === 0) {
+	static getMin(tasks:Task[], milestones:Milestone[], showAll:boolean): Date {
+		if (tasks.length === 0 && milestones.length === 0) {
 			return new Date();
 		}
 
 		let min: Date = new Date('2999-12-31');
-		timeline.tasks.forEach((task) => {
-			if ((timeline.showAll || task.isShow) && min > task.getStart()) {
+		tasks.forEach((task) => {
+			if ((showAll || task.isShow) && min > task.getStart()) {
 				min = task.getStart();
 			}
 		});
-		timeline.milestones.forEach((milestone) => {
-			if ((timeline.showAll || milestone.isShow) && min > milestone.getDate()) {
+		milestones.forEach((milestone) => {
+			if ((showAll || milestone.isShow) && min > milestone.getDate()) {
 				min = milestone.getDate();
 			}
 		});
@@ -35,22 +37,24 @@ export class FactoryTimeline {
 	/**
 	 * Return the max date of all tasks & all minestones.
 	 *   If there is no tasks/milestones it return the date of the system
-	 * @param timeline the Timeline to investigate
+	 * @param tasks the list of task
+	 * @param milestones the list of milestones
+	 * @param showAll if we want to see everything, even the hiddens tasks/milestones
 	 * @returns <Date> the max date of milestones & tasks in the Timeline
 	 */
-	static getMax(timeline: Timeline): Date {
-		if (timeline.tasks.length === 0 && timeline.milestones.length === 0) {
+	static getMax(tasks:Task[], milestones:Milestone[], showAll:boolean): Date {
+		if (tasks.length === 0 && milestones.length === 0) {
 			return new Date();
 		}
 
 		let max: Date = new Date('1900-01-01');
-		timeline.tasks.forEach((task) => {
-			if ((timeline.showAll || task.isShow) && max < task.getEnd()) {
+		tasks.forEach((task) => {
+			if ((showAll || task.isShow) && max < task.getEnd()) {
 				max = task.getEnd();
 			}
 		});
-		timeline.milestones.forEach((milestone) => {
-			if ((timeline.showAll || milestone.isShow) && max < milestone.getDate()) {
+		milestones.forEach((milestone) => {
+			if ((showAll || milestone.isShow) && max < milestone.getDate()) {
 				max = milestone.getDate();
 			}
 		});
@@ -109,7 +113,7 @@ export class FactoryTimeline {
 		timeline.end = null;
 		timeline.differencial = null; */
 		timeline.maxId = 0;
-		timeline.viewbox = '0 0 0 0';
+//		timeline.viewbox = '0 0 0 0';
 		//timeline.showAll = false //Don't reset this parameter
 		//timeline.isOnline = false //Don't reset this parameter
 		//timeline.ownerKey = null //Don't reset this parameter
@@ -167,6 +171,46 @@ export class FactoryTimeline {
 		}
 
 		return timeline;
+	}
+
+	static getStartAndEnd(tasks:Task[], milestones:Milestone[], showAll:boolean, differencial:string):{start:Date,end:Date}{
+		const start = FactoryTimeline.getMin(tasks, milestones, showAll);
+		const end = FactoryTimeline.getMax(tasks, milestones, showAll);
+	
+		switch (differencial) {
+			case DIFF.isMoreThan20Years:
+			case DIFF.isBetween10YearsAnd20Years:
+				start.setFullYear(start.getFullYear() - 1);
+				end.setFullYear(end.getFullYear() + 1);
+				start.setDate(1);
+				end.setDate(1);
+				break;
+			case DIFF.isBetween6YearsAnd10Years:
+			case DIFF.isBetween3YearsAnd6Years:
+			case DIFF.isBetween20MonthsAnd3Years:
+			case DIFF.isBetween5MonthsAnd20Months:
+				if (start.getDate() < 15) {
+					start.setMonth(start.getMonth() - 1);
+				}
+				if (end.getDate() > 15) {
+					end.setMonth(end.getMonth() + 2);
+				} else {
+					end.setMonth(end.getMonth() + 1);
+				}
+				start.setDate(1);
+				end.setDate(1);
+				break;
+			case DIFF.isBetween1MonthAnd5Months:
+				start.setDate(start.getDate() - 5);
+				end.setDate(end.getDate() + 5);
+				break;
+			case DIFF.isBelow1Month:
+				start.setDate(start.getDate() - 2);
+				end.setDate(end.getDate() + 2);
+				break;
+		}
+	
+		return {start: start, end: end}
 	}
 
 	/* protected static _processLimites(timeline: Timeline): Timeline {

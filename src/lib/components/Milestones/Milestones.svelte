@@ -73,8 +73,8 @@
 			
 			const newDate = Helpers.getDateFromViewportX(
 				activeDrag.currentX,
-				volatileAppState.timelineStart,
-				volatileAppState.timelineEnd)
+				appState.currentTimeline.start,
+				appState.currentTimeline.end)
 
 			milestoneToUpdate.date = Helpers.toYYYY_MM_DD(newDate)
 
@@ -103,20 +103,20 @@
 		//Conversion Xposition => Date
 		let currentDate = Helpers.getDateFromViewportX(
 				getSvgX(event),
-				volatileAppState.timelineStart,
-				volatileAppState.timelineEnd)
+				appState.currentTimeline.start,
+				appState.currentTimeline.end)
 
 		//Avoid going to far left/right
-		if(currentDate > volatileAppState.timelineEnd){
-			currentDate = volatileAppState.timelineEnd
+		if(currentDate > appState.currentTimeline.end){
+			currentDate = appState.currentTimeline.end
 		}
-		if(currentDate < volatileAppState.timelineStart){
-			currentDate = volatileAppState.timelineStart
+		if(currentDate < appState.currentTimeline.start){
+			currentDate = appState.currentTimeline.start
 		}
 
 		const currentXpos = Helpers.getViewportXFromDate(currentDate,
-					volatileAppState.timelineStart,
-					volatileAppState.timelineEnd)
+					appState.currentTimeline.start,
+					appState.currentTimeline.end)
 
 		//Moving ghost on the axe <====>
 		activeDrag.currentX = currentXpos
@@ -130,8 +130,8 @@
 			
 			const newDate = Helpers.getDateFromViewportX(
 				activeDrag.currentX,
-				volatileAppState.timelineStart,
-				volatileAppState.timelineEnd)
+				appState.currentTimeline.start,
+				appState.currentTimeline.end)
 
 			let previewMilestone = selectedMilestone.clone();
 			previewMilestone.date = Helpers.toYYYY_MM_DD(newDate)

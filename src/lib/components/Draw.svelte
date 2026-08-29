@@ -230,7 +230,7 @@
 <Toast />
 
 <div id="wrapper" class="">
-	<svg id="DrawWrapper" viewBox={volatileAppState.viewbox} xmlns="http://www.w3.org/2000/svg">
+	<svg id="DrawWrapper" viewBox={appState.currentTimeline.viewbox} xmlns="http://www.w3.org/2000/svg">
 		<!-- http://svgicons.sparkk.fr/ -->
 		<!-- https://svgedit.netlify.app/editor/index.html -->
 		<!-- https://svg-stripe-generator.web.app/ -->

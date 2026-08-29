@@ -18,7 +18,7 @@
 	import { toastComponentState } from '$lib/state/toastComponent.svelte';
 	import { appState } from '$lib/state/appState.svelte';
 	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
-	import { processVolatile } from '../../layout';
+	import { _processVolatile } from '../../+layout';
 
 	appState.rights = new Rights(page.url.searchParams);
 
@@ -44,7 +44,7 @@
 	if(currentTimeline){
 		//Refresh other variables of volatileState
 		console.debug("processVolatile from [slug]/+page 1")
-		processVolatile()
+		_processVolatile()
 	}
 
 	//If the local copie of Timeline has bigger rights than current url query parameter
@@ -69,7 +69,7 @@
 			if(currentTimeline){
 				//Refresh other variables of volatileState
 				console.debug("processVolatile from [slug]/+page 2")
-				processVolatile()
+				_processVolatile()
 			}
 		}
 		appState.currentTimeline = currentTimeline;
@@ -103,7 +103,7 @@
 				if(currentTimeline){
 					//Refresh other variables of volatileState
 					console.debug("processVolatile from [slug]/+page 3")		
-					processVolatile()
+					_processVolatile()
 				}
 			})
 			.catch((err) => {

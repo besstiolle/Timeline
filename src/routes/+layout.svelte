@@ -4,15 +4,16 @@
 	import Plausible from '$lib/components/Analytics/Plausible.svelte';
 	import Umami from '$lib/components/Analytics/Umami.svelte';
 	import Headers from '$lib/components/Headers.svelte';
-	import { processVolatile } from './layout';
+	import { _processVolatile } from './+layout';
 	import { syncLocalStorage } from '$lib/state/appState.svelte';
 	
 	//Update Storage as soon as appState.Cards/Timeline are updated
 	$effect(() => {
-		//$inspect(appState)
 		console.debug("processVolatile from +layout.svelte")
-		processVolatile()
+		//Refresh Volatile State
+		_processVolatile()
 
+		//Save update of appState into localstoragestandard Sta
 		syncLocalStorage();
 	});
 

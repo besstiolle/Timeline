@@ -61,14 +61,14 @@
 	}
 	function onAdd() {
 		let diffSec: number =
-			volatileAppState.timelineEnd.getTime() - volatileAppState.timelineStart.getTime();
+			appState.currentTimeline.end.getTime() - appState.currentTimeline.start.getTime();
 
 		const timelineUpdated = FactoryTimeline.addMilestone(
 			appState.currentTimeline,
 			new Milestone(
 				appState.currentTimeline.getNextId(),
 				'My Milestone',
-				Helpers.toYYYY_MM_DD(new Date(volatileAppState.timelineStart.getTime() + 0.5 * diffSec)),
+				Helpers.toYYYY_MM_DD(new Date(appState.currentTimeline.start.getTime() + 0.5 * diffSec)),
 				true
 			)
 		);

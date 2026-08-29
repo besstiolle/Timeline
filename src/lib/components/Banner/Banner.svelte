@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { GRID } from '$lib/constantes';
-	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
+	import { appState } from '$lib/state/appState.svelte';
 	import { getJalons } from './Banner';
 </script>
 
@@ -20,7 +20,7 @@
 
 <svg
 	data-testid="Banner.svelte"
-	viewBox={volatileAppState.viewbox}
+	viewBox={appState.currentTimeline.viewbox}
 	xmlns="http://www.w3.org/2000/svg"
 	x={GRID.LEFT_WIDTH}
 	y={GRID.MILESTONE_H}
