@@ -1,5 +1,5 @@
 import { DIFF, GRID, TIMERS } from './constantes';
-import type { Task } from './struct.class';
+import type { Task } from './struct.class.svelte';
 
 export class Helpers {
 	/**
@@ -152,5 +152,9 @@ export class Helpers {
 
 		//Default return statement
 		return DIFF.isMoreThan20Years;
+	}
+
+	static hashString(val:number):number {
+		return val;
 	}
 }

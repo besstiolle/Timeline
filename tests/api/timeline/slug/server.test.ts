@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { RequestEventStub } from '../../apiUtils';
 import { insertTimeline, truncateTimeline } from '$lib/server/timelineCRUD';
 import type { RequestEvent } from '../../../../src/routes/api/timeline/[slug]/$types';
-import { Timeline } from '$lib/struct.class';
+import { Timeline } from '$lib/struct.class.svelte';
 import { createTestDb } from '../../dbUtilsTest';
 
 const ENTRYPOINT = 'https://dummyEntrypoint.io/api/timeline/';

@@ -1,4 +1,4 @@
-import type { Timeline } from '$lib/struct.class';
+import type { Timeline } from '$lib/struct.class.svelte';
 import { count, desc, eq, type InferSelectModel } from 'drizzle-orm';
 import { timelines } from './db/schema';
 import type { drizzle } from 'drizzle-orm/better-sqlite3';

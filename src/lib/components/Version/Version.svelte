@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { AboutInterface, Version } from '$lib/struct.class';
+	import type { AboutInterface, Version } from '$lib/struct.class.svelte';
 	import type { Action } from 'svelte/action';
 	import {
 		getCurrentVersion,

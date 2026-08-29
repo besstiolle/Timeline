@@ -1,19 +1,17 @@
 <script lang="ts">
 	import { Helpers } from '$lib/helpers';
 	import { Rights } from '$lib/rights.class';
-	import { store } from '$lib/stores';
-	import { Timeline } from '$lib/struct.class';
+	import { Timeline } from '$lib/struct.class.svelte';
 	import Cards from '$lib/components/Cards/Cards.svelte';
 	import { m } from '../paraglide/messages';
+	import { appState } from '$lib/state/appState.svelte';
+	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 
 	//Reset store currentTimeline information when we are here
-	store.update((s) => {
-		s.currentTimeline = new Timeline();
-		s.lastCommitedRemotely = -1;
-		s.lastUpdatedLocally = -1;
-		s.rights = new Rights(null);
-		return { ...s };
-	});
+	appState.currentTimeline = new Timeline();
+	volatileAppState.lastCommitedRemotely = -1;
+	volatileAppState.lastUpdatedLocally = -1;
+	appState.rights = new Rights(null);
 
 	function gotoNew() {
 		window.location.href = '/g/' + Helpers.randomeString(64);

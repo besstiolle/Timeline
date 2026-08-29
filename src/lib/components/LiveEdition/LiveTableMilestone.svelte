@@ -1,62 +1,55 @@
 <script lang="ts">
-	import { store } from '$lib/stores';
 	import { Helpers } from '$lib/helpers';
 	import { FactoryTimeline } from '$lib/factoryTimeline';
 	import { FactoryMilestone } from '$lib/factoryMilestone';
 	import { m } from '../../../paraglide/messages';
-	import { Milestone } from '$lib/struct.class';
+	import { Milestone } from '$lib/struct.class.svelte';
 	import LiveTableMilestoneRow from './LiveTableMilestoneRow.svelte';
+	import { appState } from '$lib/state/appState.svelte';
+	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 
 	function onDelete(index: number) {
-		if (index < 0 || index > $store.currentTimeline.milestones.length - 1) {
+		if (index < 0 || index > appState.currentTimeline.milestones.length - 1) {
 			console.warn('index was abnormal', index);
 			return;
 		}
-		store.update((s) => {
-			s.currentTimeline.milestones.splice(index, 1);
-			return { ...s };
-		});
+		appState.currentTimeline.milestones.splice(index, 1);
 	}
 
 	function onUp(index: number) {
-		if (index <= 0 || index > $store.currentTimeline.milestones.length - 1) {
+		if (index <= 0 || index > appState.currentTimeline.milestones.length - 1) {
 			console.warn('index was abnormal', index);
 			return;
 		}
-		let tmpMilestone: Milestone = $store.currentTimeline.milestones[index];
-		store.update((s) => {
-			s.currentTimeline.milestones[index] = s.currentTimeline.milestones[index - 1];
-			s.currentTimeline.milestones[index - 1] = tmpMilestone;
-			return { ...s };
-		});
+		let tmpMilestone: Milestone = appState.currentTimeline.milestones[index];
+		appState.currentTimeline.milestones[index] = appState.currentTimeline.milestones[index - 1];
+		appState.currentTimeline.milestones[index - 1] = tmpMilestone;
+
 	}
 	function onDown(index: number) {
-		if (index < 0 || index >= $store.currentTimeline.milestones.length - 1) {
+		if (index < 0 || index >= appState.currentTimeline.milestones.length - 1) {
 			console.warn('index was abnormal', index);
 			return;
 		}
-		let tmpMilestone: Milestone = $store.currentTimeline.milestones[index];
-		store.update((s) => {
-			s.currentTimeline.milestones[index] = s.currentTimeline.milestones[index + 1];
-			s.currentTimeline.milestones[index + 1] = tmpMilestone;
-			return { ...s };
-		});
+		let tmpMilestone: Milestone = appState.currentTimeline.milestones[index];
+		appState.currentTimeline.milestones[index] = appState.currentTimeline.milestones[index + 1];
+		appState.currentTimeline.milestones[index + 1] = tmpMilestone;
 	}
 	function onDuplicate(index: number) {
-		if (index < 0 || index > $store.currentTimeline.milestones.length - 1) {
+		if (index < 0 || index > appState.currentTimeline.milestones.length - 1) {
 			console.warn('index was abnormal', index);
 			return;
 		}
-		let tmpMilestones: Array<Milestone> = $store.currentTimeline.milestones.splice(
+		let tmpMilestones: Array<Milestone> = appState.currentTimeline.milestones.splice(
 			index + 1,
-			$store.currentTimeline.milestones.length
+			appState.currentTimeline.milestones.length
 		);
 
 		let timelineUpdated = FactoryTimeline.addMilestone(
-			$store.currentTimeline,
+			appState.currentTimeline,
 			FactoryMilestone.duplicate(
-				$store.currentTimeline.milestones[index],
-				$store.currentTimeline.getNextId(),
+				appState.currentTimeline.milestones[index],
+				appState.currentTimeline.getNextId(),
 				' (copy)'
 			)
 		);
@@ -64,32 +57,26 @@
 			timelineUpdated = FactoryTimeline.addMilestone(timelineUpdated, tmpMilestone);
 		});
 
-		store.update((s) => {
-			s.currentTimeline = timelineUpdated;
-			return { ...s };
-		});
+		appState.currentTimeline = timelineUpdated;
 	}
 	function onAdd() {
 		let diffSec: number =
-			$store.currentTimeline.getEnd().getTime() - $store.currentTimeline.getStart().getTime();
+			volatileAppState.timelineEnd.getTime() - volatileAppState.timelineStart.getTime();
 
 		const timelineUpdated = FactoryTimeline.addMilestone(
-			$store.currentTimeline,
+			appState.currentTimeline,
 			new Milestone(
-				$store.currentTimeline.getNextId(),
+				appState.currentTimeline.getNextId(),
 				'My Milestone',
-				Helpers.toYYYY_MM_DD(new Date($store.currentTimeline.getStart().getTime() + 0.5 * diffSec)),
+				Helpers.toYYYY_MM_DD(new Date(volatileAppState.timelineStart.getTime() + 0.5 * diffSec)),
 				true
 			)
 		);
-		store.update((s) => {
-			s.currentTimeline = timelineUpdated;
-			return { ...s };
-		});
+		appState.currentTimeline = timelineUpdated;
 	}
 </script>
 
-{#each $store.currentTimeline.milestones as milestone, index (milestone.id)}
+{#each appState.currentTimeline.milestones as milestone, index (milestone.id)}
 	<LiveTableMilestoneRow
 		{milestone}
 		{index}

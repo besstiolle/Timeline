@@ -1,33 +1,32 @@
 <script lang="ts">
 	import { COLORS, GRID } from '$lib/constantes';
-	import { store } from '$lib/stores';
-	import type { Task } from '$lib/struct.class';
+	import { Helpers } from '$lib/helpers';
+	import { appState } from '$lib/state/appState.svelte';
+	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
+	import type { Task } from '$lib/struct.class.svelte';
 	import { displayableSwimlines as swimlinesToDerive, displayableTasks as tasksToDerive } from './SwimAndTasks';
 
 
 	const displayableTasks = $derived(
-		tasksToDerive($store.currentTimeline)
+		tasksToDerive(appState.currentTimeline)
 	)
 
 	const displayableSwimlines = $derived(
-		swimlinesToDerive($store.currentTimeline, displayableTasks)
+		swimlinesToDerive(appState.currentTimeline, displayableTasks)
 	)
 
 	function toggleSwimlineVisibility(event: Event, id:number) {
-		let value = !$store.currentTimeline.swimlines[id].isShow;
-		store.update((s) => {
-			s.currentTimeline.tasks.forEach((task: Task) => {
-				if (task.swimlineId == id) {
-					task.isShow = value;
-				}
-			});
-			return { ...s };
+		let value = !appState.currentTimeline.swimlines[id].isShow;
+		appState.currentTimeline.tasks.forEach((task: Task) => {
+			if (task.swimlineId == id) {
+				task.isShow = value;
+			}
 		});
 	}
 </script>
 
 <svg
-	viewBox={$store.currentTimeline.viewbox}
+	viewBox={volatileAppState.viewbox}
 	xmlns="http://www.w3.org/2000/svg"
 	x="0"
 	y={GRID.MILESTONE_H + GRID.ANNUAL_H - 5}
@@ -75,8 +74,8 @@
 					height="24"
 					width="24"
 					data-html2canvas-ignore="true"
-					onclick={(e) => toggleSwimlineVisibility(e, task.swimlineId)}
-					onkeydown={(e) => toggleSwimlineVisibility(e, task.swimlineId)}
+					onclick={(e) => toggleSwimlineVisibility(e, Helpers.hashString(task.swimlineId))}
+					onkeydown={(e) => toggleSwimlineVisibility(e, Helpers.hashString(task.swimlineId))}
 					id="s{task.swimlineId}"
 					class="toggleVisibility"
 					role="button"

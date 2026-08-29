@@ -8,10 +8,10 @@
 	import { goCsv, parseCsv } from '$lib/csv';
 	import { goToml, timelineToObject } from '$lib/toml';
 	import { FactoryTimeline } from '$lib/factoryTimeline';
-	import { store } from './../../stores';
 	import { m } from '../../../paraglide/messages';
 	import { shadowBoxComponentState } from '$lib/state/shadowBoxComponentState.svelte';
 	import { toastComponentState } from '$lib/state/toastComponent.svelte';
+	import { appState } from '$lib/state/appState.svelte';
 
 	interface Props {
         download: (blob: Blob, extensionName: string) => void;
@@ -24,14 +24,14 @@
 	const BOM = new Uint8Array([0xef, 0xbb, 0xbf]);
 
 	function downloadCsv() {
-		const blob = new Blob([BOM, goCsv($store.currentTimeline)], {
+		const blob = new Blob([BOM, goCsv(appState.currentTimeline)], {
 			type: 'data:text/csv;charset=utf-8'
 		});
 		download(blob, '.csv');
 	}
 
 	function downloadToml() {
-		const blob = new Blob([BOM, goToml(timelineToObject($store.currentTimeline))], {
+		const blob = new Blob([BOM, goToml(timelineToObject(appState.currentTimeline))], {
 			type: 'application/toml;charset=utf-8'
 		});
 		download(blob, '.toml');
@@ -130,16 +130,9 @@
 	}
 
 	function onReaderLoadToml(reader: FileReader) {
-		store.update((s) => {
-			s.currentTimeline = FactoryTimeline.purge(s.currentTimeline);
-			return { ...s };
-		});
-
+		appState.currentTimeline = FactoryTimeline.purge(appState.currentTimeline);
 		let abstractTimeline = toml.parse(reader.result as string);
-		store.update((s) => {
-			s.currentTimeline = parseAbstractTimeline(s.currentTimeline, abstractTimeline);
-			return { ...s };
-		});
+		appState.currentTimeline = parseAbstractTimeline(appState.currentTimeline, abstractTimeline);
 		toastComponentState.show(
 			m.upload_toast_upload_success({
 				countTasks: abstractTimeline.tasks.length,
@@ -152,15 +145,9 @@
 	}
 
 	function onReaderLoadCsv(reader: FileReader) {
-		store.update((s) => {
-			s.currentTimeline = FactoryTimeline.purge(s.currentTimeline);
-			return { ...s };
-		});
+		appState.currentTimeline = FactoryTimeline.purge(appState.currentTimeline);
 		let abstractTimeline = parseCsv(reader.result as string);
-		store.update((s) => {
-			s.currentTimeline = parseAbstractTimeline(s.currentTimeline, abstractTimeline);
-			return { ...s };
-		});
+		appState.currentTimeline = parseAbstractTimeline(appState.currentTimeline, abstractTimeline);
 		toastComponentState.show(
 			m.upload_toast_upload_success({
 				countTasks: abstractTimeline.tasks.length,
@@ -169,7 +156,6 @@
 			true,
 			5
 		);
-		//shadowBox.closeComponent();
 		shadowBoxComponentState.openShadowBoxForUpload=false
 	}
 </script>

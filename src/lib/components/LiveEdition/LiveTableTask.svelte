@@ -1,63 +1,54 @@
 <script lang="ts">
-	import { store } from '$lib/stores';
 	import { Helpers } from '$lib/helpers';
 	import { FactoryTimeline } from '$lib/factoryTimeline';
 	import { FactoryTask } from '$lib/factoryTask';
 	import { m } from '../../../paraglide/messages';
-	import { Task } from '$lib/struct.class';
+	import { Task } from '$lib/struct.class.svelte';
 	import LiveTableTaskRow from './LiveTableTaskRow.svelte';
+	import { appState } from '$lib/state/appState.svelte';
+	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 
 	function onDelete(index: number) {
-		if (index < 0 || index > $store.currentTimeline.tasks.length - 1) {
+		if (index < 0 || index > appState.currentTimeline.tasks.length - 1) {
 			console.warn('index was abnormal', index);
 			return;
 		}
-		store.update((s) => {
-			s.currentTimeline.tasks.splice(index, 1);
-			return { ...s };
-		});
+		appState.currentTimeline.tasks.splice(index, 1);
 	}
 
 	function onUp(index: number) {
-		if (index <= 0 || index > $store.currentTimeline.tasks.length - 1) {
+		if (index <= 0 || index > appState.currentTimeline.tasks.length - 1) {
 			console.warn('index was abnormal', index);
 			return;
 		}
-		let tmpTask: Task = $store.currentTimeline.tasks[index];
-		store.update((s) => {
-			s.currentTimeline.tasks[index] = s.currentTimeline.tasks[index - 1];
-			s.currentTimeline.tasks[index - 1] = tmpTask;
-			return { ...s };
-		});
+		let tmpTask: Task = appState.currentTimeline.tasks[index];
+		appState.currentTimeline.tasks[index] = appState.currentTimeline.tasks[index - 1];
+		appState.currentTimeline.tasks[index - 1] = tmpTask;
 	}
 	function onDown(index: number) {
-		if (index < 0 || index >= $store.currentTimeline.tasks.length - 1) {
+		if (index < 0 || index >= appState.currentTimeline.tasks.length - 1) {
 			console.warn('index was abnormal', index);
 			return;
 		}
-		let tmpTask: Task = $store.currentTimeline.tasks[index];
-
-		store.update((s) => {
-			s.currentTimeline.tasks[index] = s.currentTimeline.tasks[index + 1];
-			s.currentTimeline.tasks[index + 1] = tmpTask;
-			return { ...s };
-		});
+		let tmpTask: Task = appState.currentTimeline.tasks[index];
+		appState.currentTimeline.tasks[index] = appState.currentTimeline.tasks[index + 1];
+		appState.currentTimeline.tasks[index + 1] = tmpTask;
 	}
 	function onDuplicate(index: number) {
-		if (index < 0 || index > $store.currentTimeline.tasks.length - 1) {
+		if (index < 0 || index > appState.currentTimeline.tasks.length - 1) {
 			console.warn('index was abnormal', index);
 			return;
 		}
-		let tmpTasks: Array<Task> = $store.currentTimeline.tasks.splice(
+		let tmpTasks: Array<Task> = appState.currentTimeline.tasks.splice(
 			index + 1,
-			$store.currentTimeline.tasks.length
+			appState.currentTimeline.tasks.length
 		);
 
 		let timelineUpdated = FactoryTimeline.addTask(
-			$store.currentTimeline,
+			appState.currentTimeline,
 			FactoryTask.duplicate(
-				$store.currentTimeline.tasks[index],
-				$store.currentTimeline.getNextId(),
+				appState.currentTimeline.tasks[index],
+				appState.currentTimeline.getNextId(),
 				' (copy)'
 			)
 		);
@@ -66,22 +57,19 @@
 			timelineUpdated = FactoryTimeline.addTask(timelineUpdated, tmpTask);
 		});
 
-		store.update((s) => {
-			s.currentTimeline = timelineUpdated;
-			return { ...s };
-		});
+		appState.currentTimeline = timelineUpdated;
 	}
 
 	function onAdd() {
 		let diffSec: number =
-			$store.currentTimeline.getEndTime() - $store.currentTimeline.getStartTime();
+			volatileAppState.timelineEnd.getTime() - volatileAppState.timelineStart.getTime();
 		const timelineUpdated = FactoryTimeline.addTask(
-			$store.currentTimeline,
+			appState.currentTimeline,
 			new Task(
-				$store.currentTimeline.getNextId(),
+				appState.currentTimeline.getNextId(),
 				'Some task',
-				Helpers.toYYYY_MM_DD(new Date($store.currentTimeline.getStartTime() + 0.1 * diffSec)),
-				Helpers.toYYYY_MM_DD(new Date($store.currentTimeline.getEndTime() - 0.1 * diffSec)),
+				Helpers.toYYYY_MM_DD(new Date(volatileAppState.timelineStart.getTime() + 0.1 * diffSec)),
+				Helpers.toYYYY_MM_DD(new Date(volatileAppState.timelineEnd.getTime() - 0.1 * diffSec)),
 				true,
 				0,
 				true,
@@ -90,15 +78,12 @@
 			)
 		);
 
-		store.update((s) => {
-			s.currentTimeline = timelineUpdated;
-			return { ...s };
-		});
+		appState.currentTimeline = timelineUpdated;
 	}
 
 </script>
 
-{#each $store.currentTimeline.tasks as task, index (task.id)}
+{#each appState.currentTimeline.tasks as task, index (task.id)}
 	<LiveTableTaskRow
 		{task}
 		{index}

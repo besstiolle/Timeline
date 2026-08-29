@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { store } from '$lib/stores';
 
 	import { Helpers } from '$lib/helpers';
 	import { remove, create } from '$lib/timelineRepository';
@@ -13,18 +12,20 @@
 	import { commitState } from '../state/commitState.svelte';
 	import { shadowBoxComponentState } from '$lib/state/shadowBoxComponentState.svelte';
 	import { toastComponentState } from '$lib/state/toastComponent.svelte';
+	import { appState } from '$lib/state/appState.svelte';
+	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 
 	export function commit() {
 		if (
-			$store.lastUpdatedLocally !== null &&
-			$store.lastCommitedRemotely !== null &&
-			$store.lastUpdatedLocally - $store.lastCommitedRemotely > 5000
+			volatileAppState.lastUpdatedLocally !== null &&
+			volatileAppState.lastCommitedRemotely !== null &&
+			volatileAppState.lastUpdatedLocally - volatileAppState.lastCommitedRemotely > 5000
 		) {
 			commitState.inProgress = true;
-			console.debug('gap > 5000 ms : %o', $store.lastUpdatedLocally - $store.lastCommitedRemotely);
-			create($store.currentTimeline)
+			console.debug('gap > 5000 ms : %o', volatileAppState.lastUpdatedLocally - volatileAppState.lastCommitedRemotely);
+			create(appState.currentTimeline)
 				.then((responseWithMeta: ResponseWithMeta) => {
-					$store.lastCommitedRemotely = responseWithMeta.meta.ts;
+					volatileAppState.lastCommitedRemotely = responseWithMeta.meta.ts;
 					toastComponentState.show(m.online_toast_saved_success());
 					
 				})
@@ -36,34 +37,31 @@
 					commitState.inProgress = false;
 				});
 		} else {
-			console.debug('gap < 5000 ms : %o', $store.lastUpdatedLocally - $store.lastCommitedRemotely);
+			console.debug('gap < 5000 ms : %o', volatileAppState.lastUpdatedLocally - volatileAppState.lastCommitedRemotely);
 		}
 	}
 
 	const base_url = page.url.protocol + '//' + page.url.host;
 
 	function doOffline() {
-		let ownerKey = $store.currentTimeline.ownerKey;
+		let ownerKey = appState.currentTimeline.ownerKey;
 		if (ownerKey == null) {
 			ownerKey = '';
 		}
 		let seachParams = new URLSearchParams([
-			['key', $store.currentTimeline.key],
+			['key', appState.currentTimeline.key],
 			['ownerKey', ownerKey]
 		]);
 		remove(seachParams)
 			.then(() => {
-				store.update((s) => {
-					s.currentTimeline.isOnline = false;
-					s.currentTimeline.ownerKey = null;
-					s.currentTimeline.writeKey = null;
-					s.currentTimeline.readKey = null;
-					s.lastCommitedRemotely = -1;
-					return { ...s };
-				});
+				appState.currentTimeline.isOnline = false;
+				appState.currentTimeline.ownerKey = null;
+				appState.currentTimeline.writeKey = null;
+				appState.currentTimeline.readKey = null;
+				volatileAppState.lastCommitedRemotely = -1;
 
 				//Rewrite URL
-				window.location.href = base_url + '/g/' + $store.currentTimeline.key;
+				window.location.href = base_url + '/g/' + appState.currentTimeline.key;
 			})
 			.catch((err) => {
 				console.error('Error where calling remove() in Online.doOffline() : %o', err);
@@ -73,49 +71,34 @@
 
 		//update cards with the online/offline information
 		//TODO : vérifier pertinence de cet update vs update réalisé dans l'obs du store
-		store.update((s) => {
-			s.cards = FactoryCards.updateCardsWithTimeline($store.cards, $store.currentTimeline);
-			return { ...s };
-		});
+		appState.cards = FactoryCards.updateCardsWithTimeline(appState.cards, appState.currentTimeline);
 	}
 	function doOnline() {
-		store.update((s) => {
-			s.currentTimeline.isOnline = true;
-			s.currentTimeline.ownerKey = Helpers.randomeString(64);
-			s.currentTimeline.writeKey = Helpers.randomeString(64);
-			s.currentTimeline.readKey = Helpers.randomeString(64);
-			return { ...s };
-		});
+			appState.currentTimeline.isOnline = true;
+			appState.currentTimeline.ownerKey = Helpers.randomeString(64);
+			appState.currentTimeline.writeKey = Helpers.randomeString(64);
+			appState.currentTimeline.readKey = Helpers.randomeString(64);
 
-		create($store.currentTimeline)
+		create(appState.currentTimeline)
 			.then((responseWithMeta: ResponseWithMeta) => {
-				$store.lastCommitedRemotely = responseWithMeta.meta.ts;
+				volatileAppState.lastCommitedRemotely = responseWithMeta.meta.ts;
 				toastComponentState.show(m.online_toast_saved_success());
 				//Refresh internal Rights value
-				store.update((s) => {
-					s.rights = new Rights($store.currentTimeline.ownerKey);
-					return { ...s };
-				});
+				appState.rights = new Rights(appState.currentTimeline.ownerKey);
 			})
 			.catch((err) => {
 				console.error('Error where calling create() in Online.doOnline() : %o', err);
 				toastComponentState.show(m.online_toast_remote_offline(), false, 0);
-				store.update((s) => {
-					s.currentTimeline.isOnline = false;
-					s.currentTimeline.ownerKey = null;
-					s.currentTimeline.writeKey = null;
-					s.currentTimeline.readKey = null;
-					return { ...s };
-				});
+					appState.currentTimeline.isOnline = false;
+					appState.currentTimeline.ownerKey = null;
+					appState.currentTimeline.writeKey = null;
+					appState.currentTimeline.readKey = null;
 			})
 			.finally(() => {});
 
 		//update cards with the online/offline information
 		//TODO : vérifier pertinence de cet update vs update réalisé dans l'obs du store
-		store.update((s) => {
-			s.cards = FactoryCards.updateCardsWithTimeline(s.cards, s.currentTimeline);
-			return { ...s };
-		});
+		appState.cards = FactoryCards.updateCardsWithTimeline(appState.cards, appState.currentTimeline);
 	}
 
 	function select(event: MouseEvent) {
@@ -130,7 +113,7 @@
 
 {#if shadowBoxComponentState.openShadowBoxForOnline}
 <ShadowBox id="onlinePopup">
-	{#if $store.currentTimeline.isOnline}
+	{#if appState.currentTimeline.isOnline}
 		<div class="warn">
 			{m.online_warn_before_offline_0()} "<span class="font-bold"
 				>{m.online_warn_before_offline_1()}</span
@@ -159,9 +142,9 @@
 				onclick={select}
 				value={base_url +
 					'/g/' +
-					$store.currentTimeline.key +
+					appState.currentTimeline.key +
 					'?r=' +
-					$store.currentTimeline.readKey}
+					appState.currentTimeline.readKey}
 			/>
 		</div>
 		<div class="text-left mx-30 mt-5">
@@ -174,9 +157,9 @@
 				onclick={select}
 				value={base_url +
 					'/g/' +
-					$store.currentTimeline.key +
+					appState.currentTimeline.key +
 					'?w=' +
-					$store.currentTimeline.writeKey}
+					appState.currentTimeline.writeKey}
 			/>
 		</div>
 		<div class="text-left mx-30 mt-5">
@@ -189,9 +172,9 @@
 				onclick={select}
 				value={base_url +
 					'/g/' +
-					$store.currentTimeline.key +
+					appState.currentTimeline.key +
 					'?o=' +
-					$store.currentTimeline.ownerKey}
+					appState.currentTimeline.ownerKey}
 			/>
 		</div>
 	{:else}

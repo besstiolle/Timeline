@@ -1,5 +1,5 @@
 import { JsonParser } from '$lib/jsonParser';
-import type { Timeline } from '$lib/struct.class';
+import type { Timeline } from '$lib/struct.class.svelte';
 import type { RequestEvent } from '@sveltejs/kit';
 import type { drizzle } from 'drizzle-orm/better-sqlite3';
 
@@ -39,7 +39,9 @@ export function toRequestEvent<E extends RequestEvent = RequestEvent>(request: R
     return request as unknown as E;
 }
 
-export const VALID_DUMMY_TIMELINE: Timeline = JSON.parse(
+export function getValideDummyTimeline(): Timeline {
+
+ return JSON.parse(
 	`{
   "key": "64CarForKey00000000000000000000000000000000000000000000000000000",
   "title": "My new Project",
@@ -184,4 +186,4 @@ export const VALID_DUMMY_TIMELINE: Timeline = JSON.parse(
   "dateEndFocus": null
 }`,
 	JsonParser.timelineReviver
-);
+ )};

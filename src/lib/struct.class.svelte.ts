@@ -1,6 +1,6 @@
 import { Helpers } from './helpers';
 import type { Rights } from './rights.class';
-
+/*
 export interface TimelineStoreInterface {
 	cards: Array<Card>;
 	currentTimeline: Timeline;
@@ -22,13 +22,13 @@ export class TimelineStore implements TimelineStoreInterface {
 		this.currentTimeline = currentTimeline;
 		this.rights = rights;
 	}
-}
+}*/
 
 export class Card {
-	key: string;
-	title: string;
-	lastUpdated: Date | null = null;
-	isOnline: boolean = false;
+	key: string = $state('');
+	title: string = $state('');
+	lastUpdated: Date | null = $state(null);
+	isOnline: boolean = $state(false);
 	//Check jsonParser.ts > cardsReviver() function if you add something here.
 
 	constructor(key: string, title: string) {
@@ -37,29 +37,45 @@ export class Card {
 		this.lastUpdated = new Date();
 		this.isOnline = false;
 	}
+
+	toJSON() {
+        return { 
+			key: this.key, 
+			title: this.title, 
+			lastUpdated: this.lastUpdated, 
+			isOnline: this.isOnline 
+		};
+    }
+
+	clone():Card {
+		let clone = new Card(this.key,this.title);
+		clone.lastUpdated = this.lastUpdated;
+		clone.isOnline = this.isOnline;
+		return clone;
+	}
 }
 
 export class Timeline {
-	key: string;
-	title: string;
-	tasks: Array<Task> = new Array<Task>();
-	milestones: Array<Milestone> = new Array<Milestone>();
-	swimlines: Array<Swimline> = new Array<Swimline>();
-	isInitiate: boolean = false;
-	start: string | null = null;
-	end: string | null = null;
-	differencial: string | null = null;
-	maxId: number = 0;
-	viewbox: string = '0 0 0 0';
-	showAll: boolean = false;
-	isOnline: boolean = false;
-	ownerKey: string | null = null;
-	writeKey: string | null = null;
-	readKey: string | null = null;
-	showToday: boolean = true;
-	showOutOfBounds: boolean = true;
-	dateStartFocus: string | null = null;
-	dateEndFocus: string | null = null;
+	key: string = $state('');
+	title: string = $state('');
+	tasks: Array<Task> = $state(new Array<Task>());
+	milestones: Array<Milestone> = $state(new Array<Milestone>());
+	swimlines: Array<Swimline> = $state(new Array<Swimline>());
+	isInitiate: boolean = $state(false);
+	//start: string | null = $state(null);
+	//end: string | null = $state(null);
+	//differencial: string | null = $state(null);
+	maxId: number = $state(0);
+	viewbox: string = $state('0 0 0 0');
+	showAll: boolean = $state(false);
+	isOnline: boolean = $state(false);
+	ownerKey: string | null = $state(null);
+	writeKey: string | null = $state(null);
+	readKey: string | null = $state(null);
+	showToday: boolean = $state(true);
+	showOutOfBounds: boolean = $state(true);
+	dateStartFocus: string | null = $state(null);
+	dateEndFocus: string | null = $state(null);
 	//Check jsonParser.ts > timelineReviver() function if you add something here.
 
 	constructor(key: string = 'dummy', title: string = 'dummy') {
@@ -67,11 +83,70 @@ export class Timeline {
 		this.title = title;
 	}
 
+
+	toJSON() {
+        return { 
+			key: this.key, 
+			title: this.title, 
+			tasks: this.tasks,
+			milestones: this.milestones,
+			swimlines: this.swimlines,
+			isInitiate: this.isInitiate,
+	/* 		start: this.start,
+			end: this.end,
+			differencial: this.differencial, */
+			maxId: this.maxId,
+			/* viewbox: this.viewbox, */
+			showAll: this.showAll,
+			isOnline: this.isOnline,
+			ownerKey: this.ownerKey,
+			writeKey: this.writeKey,
+			readKey: this.readKey,
+			showToday: this.showToday,
+			showOutOfBounds: this.showOutOfBounds,
+			dateStartFocus: this.dateStartFocus,
+			dateEndFocus: this.dateEndFocus
+		};
+    }
+
+	clone():Timeline {
+		let clone = new Timeline(this.key,this.title)
+		clone.isInitiate= this.isInitiate;/* 
+		clone.start= this.start;
+		clone.end= this.end;
+		clone.differencial= this.differencial; */
+		clone.maxId= this.maxId;
+		clone.viewbox= this.viewbox;
+		clone.showAll= this.showAll;
+		clone.isOnline= this.isOnline;
+		clone.ownerKey= this.ownerKey;
+		clone.writeKey= this.writeKey;
+		clone.readKey= this.readKey;
+		clone.showToday= this.showToday;
+		clone.showOutOfBounds= this.showOutOfBounds;
+		clone.dateStartFocus= this.dateStartFocus;
+		clone.dateEndFocus= this.dateEndFocus
+
+
+		const clonedTasks:Task[] = []
+		this.tasks.map((task:Task) => clonedTasks.push(task))
+		const clonedMilestones:Milestone[] = []
+		this.milestones.map((milestone:Milestone) => clonedMilestones.push(milestone))
+		const clonedSwimlines:Swimline[] = []
+		this.swimlines.map((swimline:Swimline) => clonedSwimlines.push(swimline))
+
+		clone.tasks= clonedTasks;
+		clone.milestones= clonedMilestones;
+		clone.swimlines= clonedSwimlines;
+
+		return clone
+	}
+
 	getNextId(): number {
 		this.maxId++;
 		return this.maxId;
 	}
-
+/* 
 	getStart(): Date {
 		if (this.start == null) {
 			return new Date();
@@ -106,7 +181,7 @@ export class Timeline {
 
 	setEnd(end: Date): void {
 		this.end = Helpers.toYYYY_MM_DD(end);
-	}
+	} */
 
 	getStartFocus(): Date | null {
 		if (this.dateStartFocus == null) {
@@ -132,15 +207,15 @@ export class Timeline {
 }
 
 export class Task {
-	id: number;
-	label: string;
-	dateStart: string;
-	dateEnd: string;
-	hasProgress: boolean;
-	progress: number;
-	isShow: boolean;
-	swimline: string;
-	swimlineId: number;
+	id: number = $state(-1);
+	label: string = $state('');
+	dateStart: string = $state('');
+	dateEnd: string = $state('');
+	hasProgress: boolean = $state(false);
+	progress: number = $state(-1);
+	isShow: boolean = $state(false);
+	swimline: string = $state('');
+	swimlineId: number = $state(-1);
 
 	constructor(
 		id: number,
@@ -163,6 +238,20 @@ export class Task {
 		this.swimline = swimline;
 		this.swimlineId = swimlineId;
 	}
+
+	toJSON() {
+        return { 
+			id: this.id, 
+			label: this.label, 
+			dateStart: this.dateStart,
+			dateEnd: this.dateEnd,
+			hasProgress: this.hasProgress,
+			progress: this.progress,
+			isShow: this.isShow,
+			swimline: this.swimline,
+			swimlineId: this.swimlineId
+		};
+    }
 
 	getStart(): Date {
 		return new Date(this.dateStart);
@@ -196,10 +285,10 @@ export class Task {
 }
 
 export class Milestone {
-	id: number;
-	label: string;
-	date: string;
-	isShow: boolean;
+	id: number = $state(-1);
+	label: string = $state('');
+	date: string = $state('');
+	isShow: boolean = $state(false);
 
 	constructor(id: number, label: string, date: string, isShow: boolean) {
 		this.id = id;
@@ -207,6 +296,15 @@ export class Milestone {
 		this.date = date;
 		this.isShow = isShow;
 	}
+	
+	toJSON() {
+        return { 
+			id: this.id, 
+			label: this.label, 
+			date: this.date,
+			isShow: this.isShow
+		};
+    }
 
 	getDate(): Date {
 		return new Date(this.date);
@@ -227,10 +325,10 @@ export class Milestone {
 }
 
 export class Swimline {
-	label: string; // the label of the swimline
-	countVisibleTasks: number; // Number of visible task
-	countAllTasks: number; // Number of visible task
-	isShow: boolean; // If we need to see this Swimline
+	label: string = $state(''); // the label of the swimline
+	countVisibleTasks: number = $state(-1); // Number of visible task
+	countAllTasks: number = $state(-1); // Number of visible task
+	isShow: boolean = $state(false); // If we need to see this Swimline
 
 	constructor(label: string) {
 		this.label = label;
@@ -238,6 +336,14 @@ export class Swimline {
 		this.countAllTasks = 0;
 		this.isShow = true;
 	}
+	toJSON() {
+        return { 
+			label: this.label, 
+			countVisibleTasks: this.countVisibleTasks,
+			countAllTasks: this.countAllTasks,
+			isShow: this.isShow
+		};
+    }
 }
 
 export interface abstractTimelineInterface {

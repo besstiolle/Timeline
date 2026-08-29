@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+/*import { writable } from 'svelte/store';
 
 import { CustomLocalStorage } from './customLocalStorage';
 import { FactoryCards } from './factoryCards';
@@ -40,4 +40,4 @@ function updateLocalStorage(timelineStore: TimelineStore) {
 		CustomLocalStorage.save(currentTimeline.key, currentTimeline);
 	}
 	CustomLocalStorage.save(LOCAL_STORAGE.KEY_CARDS, cards);
-}
+}*/

@@ -1,11 +1,9 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import { store } from '$lib/stores';
-import { get } from 'svelte/store';
 import { Rights } from '$lib/rights.class';
-import { Card, Timeline, TimelineStore } from '$lib/struct.class';
+/*import { Card, Timeline, TimelineStore } from '$lib/struct.class';
 
-
+ 
 vi.mock('$app/environment', () => ({
 	default: {
 		browser: true
@@ -32,5 +30,14 @@ describe('test Mocked Store', () => {
 		expect(get(store).currentTimeline.start).toBe('2020-01-01');
 		expect(get(store).currentTimeline.end).toBe('2020-12-31');
 		expect(get(store).currentTimeline.viewbox).toBe('0 0 10 20');
+	});
+}); */
+
+describe('test to Delete', () => {
+
+	it('xxxs', () => {
+		
+		expect("ee").toBe("ee");
+		
 	});
 });

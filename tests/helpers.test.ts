@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Helpers } from '$lib/helpers';
 import { DIFF, GRID } from '$lib/constantes';
-import { Task } from '$lib/struct.class';
+import { Task } from '$lib/struct.class.svelte';
 
 describe('Helpers File DateConvertor testing', () => {
 	it('Helpers.toYYYYMMDD_hhmm with nominal values', () => {

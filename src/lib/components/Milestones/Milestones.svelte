@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { store } from '$lib/stores';
-
 	import { FactoryMilestone } from '$lib/factoryMilestone';
 	import { GRID } from '$lib/constantes';
 	import { MilestoneViewModel } from '$lib/viewModel';
-	import { Milestone } from '$lib/struct.class';
+	import { Milestone } from '$lib/struct.class.svelte';
 	import MilestoneComponent from './Milestone.svelte';
 	import { Helpers } from '$lib/helpers';
 	import { displayableMilestones as milestonesToDerive } from './Milestones';
+	import { appState } from '$lib/state/appState.svelte';
+	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 
 	interface ActiveDragInterface{
 		milestoneId: number,
@@ -17,7 +17,7 @@
 	let selectedMilestone = $state<Milestone|null>(null)
 
 	const displayableMilestones = $derived(
-		milestonesToDerive($store.currentTimeline)
+		milestonesToDerive(appState.currentTimeline)
 	)
 
 	function getSvgX(event: MouseEvent):number{
@@ -30,7 +30,7 @@
 	 */
 	function down(event: MouseEvent, milestoneId:number) {
 		//Security : we can't manipulate data if we are a simple Reader
-		if ($store.rights.isReader()) {
+		if (appState.rights.isReader()) {
 			return;
 		}
 
@@ -40,14 +40,14 @@
 		// Create a Ghost
 		let currentSelection:Milestone
 		try{
-			currentSelection = FactoryMilestone.getById($store.currentTimeline, milestoneId)
+			currentSelection = FactoryMilestone.getById(appState.currentTimeline, milestoneId)
 		} catch (NotFoundException) {
 			//Nothing to do, the rest of the function will clean everything
 			console.debug('catch a NotFoundExeption but everything is normal', NotFoundException);
 			return
 		}
 
-		const viewModel = new MilestoneViewModel(currentSelection, $store.currentTimeline)
+		const viewModel = new MilestoneViewModel(currentSelection, appState.currentTimeline)
 
 		//construction of activeDrag
 		activeDrag = {
@@ -64,24 +64,21 @@
 	 */
 	function up(event: MouseEvent) {
 		//Security : we can't manipulate data if we are a simple Reader
-		if ($store.rights.isReader() || activeDrag === null) {
+		if (appState.rights.isReader() || activeDrag === null) {
 			return;
 		}
 	
 		try {
-			let milestoneToUpdate = FactoryMilestone.getById($store.currentTimeline,activeDrag.milestoneId);
+			let milestoneToUpdate = FactoryMilestone.getById(appState.currentTimeline,activeDrag.milestoneId);
 			
 			const newDate = Helpers.getDateFromViewportX(
 				activeDrag.currentX,
-				$store.currentTimeline.getStart(),
-				$store.currentTimeline.getEnd())
+				volatileAppState.timelineStart,
+				volatileAppState.timelineEnd)
 
 			milestoneToUpdate.date = Helpers.toYYYY_MM_DD(newDate)
 
-			store.update((s) => {
-				s.currentTimeline = FactoryMilestone.updateById(s.currentTimeline, milestoneToUpdate);
-				return { ...s };
-			});
+			appState.currentTimeline = FactoryMilestone.updateById(appState.currentTimeline, milestoneToUpdate);
 		} catch (NotFoundException) {
 			//Nothing to do, the rest of the function will clean everything
 			console.debug('catch a NotFoundExeption but everything is normal', NotFoundException);
@@ -99,27 +96,27 @@
 	function move(event: MouseEvent) {
 
 		//Security : we can't manipulate data if we are a simple Reader
-		if ($store.rights.isReader() || activeDrag === null) {
+		if (appState.rights.isReader() || activeDrag === null) {
 			return;
 		}
 
 		//Conversion Xposition => Date
 		let currentDate = Helpers.getDateFromViewportX(
 				getSvgX(event),
-				$store.currentTimeline.getStart(),
-				$store.currentTimeline.getEnd())
+				volatileAppState.timelineStart,
+				volatileAppState.timelineEnd)
 
 		//Avoid going to far left/right
-		if(currentDate > $store.currentTimeline.getEnd()){
-			currentDate = $store.currentTimeline.getEnd()
+		if(currentDate > volatileAppState.timelineEnd){
+			currentDate = volatileAppState.timelineEnd
 		}
-		if(currentDate < $store.currentTimeline.getStart()){
-			currentDate = $store.currentTimeline.getStart()
+		if(currentDate < volatileAppState.timelineStart){
+			currentDate = volatileAppState.timelineStart
 		}
 
 		const currentXpos = Helpers.getViewportXFromDate(currentDate,
-					$store.currentTimeline.getStart(),
-					$store.currentTimeline.getEnd())
+					volatileAppState.timelineStart,
+					volatileAppState.timelineEnd)
 
 		//Moving ghost on the axe <====>
 		activeDrag.currentX = currentXpos
@@ -133,8 +130,8 @@
 			
 			const newDate = Helpers.getDateFromViewportX(
 				activeDrag.currentX,
-				$store.currentTimeline.getStart(),
-				$store.currentTimeline.getEnd())
+				volatileAppState.timelineStart,
+				volatileAppState.timelineEnd)
 
 			let previewMilestone = selectedMilestone.clone();
 			previewMilestone.date = Helpers.toYYYY_MM_DD(newDate)
@@ -155,14 +152,14 @@
 	height={GRID.MILESTONE_H}
 	stroke-dasharray="0.5 2"
 	fill="transparent"
-	class:onhover={activeDrag !== null && !$store.rights.isReader()}
+	class:onhover={activeDrag !== null && !appState.rights.isReader()}
 />
 {#each displayableMilestones as milestone, index (milestone.id)}
 	<MilestoneComponent down={down} i={index} isGhost={false}
-		milestoneVM={new MilestoneViewModel(milestone, $store.currentTimeline)}/>
+		milestoneVM={new MilestoneViewModel(milestone, appState.currentTimeline)}/>
 {/each}
 {#if activeDrag !== null}	
 	<MilestoneComponent down={down} i={displayableMilestones.length} isGhost={true}
-		milestoneVM={new MilestoneViewModel(getActiveDrag() as Milestone, $store.currentTimeline)}/>
+		milestoneVM={new MilestoneViewModel(getActiveDrag() as Milestone, appState.currentTimeline)}/>
 {/if}
 

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { store } from '$lib/stores';
+	import { appState } from '$lib/state/appState.svelte';
+	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 	import type { MilestoneViewModel } from '$lib/viewModel';
 
     interface Props {
@@ -19,11 +20,11 @@
 
 
 <svg
-    viewBox={$store.currentTimeline.viewbox}
+    viewBox={volatileAppState.viewbox}
     xmlns="http://www.w3.org/2000/svg"
     x={milestoneVM.xPosition}
     y={(i % 2) * 25}
-    class:milestoneSVGSection={!$store.rights.isReader()}
+    class:milestoneSVGSection={!appState.rights.isReader()}
     class:shouldBeHidden={!milestoneVM.isShow}
     class:grabbing={isGhost}
     onmousedown={(e) => down(e, milestoneVM.id)}

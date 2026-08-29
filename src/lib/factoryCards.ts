@@ -1,4 +1,4 @@
-import { Card, Timeline } from './struct.class';
+import { Card, Timeline } from './struct.class.svelte';
 
 export class FactoryCards {
 	/**

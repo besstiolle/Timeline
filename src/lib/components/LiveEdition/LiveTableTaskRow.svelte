@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { Task } from '$lib/struct.class';
-	import { store } from '$lib/stores';
+	import { Task } from '$lib/struct.class.svelte';
 	import { TaskValidator } from '$lib/taskValidator';
 	import { m } from '../../../paraglide/messages';
 	import { untrack } from 'svelte';
@@ -30,35 +29,22 @@
 	// 		"The wrong date is displayed #7" https://github.com/besstiolle/Timeline/issues/7
 	function handleDateChange() {
 		if (isStartValid && localDateStart !== task.dateStart) {
-			store.update((s) => {
-				task.dateStart = localDateStart;
-				return { ...s };
-			});
+			task.dateStart = localDateStart;
 		}
 
 		if (isEndValid && localDateEnd !== task.dateEnd) {
-			store.update((s) => {
-				task.dateEnd = localDateEnd;
-				return { ...s };
-			});
+			task.dateEnd = localDateEnd;
 		}
 	}
     
 	// Try updating the store for the progression field
 	function handleProgressionChange() {
-		const progression = TaskValidator.getValideProgression(localProgression)
-        store.update((s) => {
-            task.progress = progression;
-            return { ...s };
-        });
+		task.progress = TaskValidator.getValideProgression(localProgression);
 	}
 
 	// Try updating the store for the other field
     function updateTaskField<K extends keyof Task>(field: K, value: Task[K]) {
-		store.update((s) => {
-			task[field] = value;
-			return { ...s };
-		});
+		task[field] = value;
 	}
 </script>
 

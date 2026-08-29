@@ -1,14 +1,15 @@
 <script lang="ts">
 	import { m } from '../../../paraglide/messages';
 	import { GRID } from '$lib/constantes';
-	import { store } from '$lib/stores';
 	import { Helpers } from '$lib/helpers';
+	import { appState } from '$lib/state/appState.svelte';
+	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 
 	// Calcul automatique de la position X basé sur le Store
 	let todayXPosition = $derived.by(() => {
 		let today = new Date();
-		const start = $store.currentTimeline.getStart();
-		const end = $store.currentTimeline.getEnd();
+		const start = volatileAppState.timelineStart;
+		const end = volatileAppState.timelineEnd;
 
 		// - GRID.MIDDLE_X because Today's <svg /> start of GRID.MIDDLE_X px on the left
 		return Helpers.getViewportXFromDate(today, start, end) - GRID.MIDDLE_X;
@@ -17,11 +18,11 @@
 
 	// Vérification automatique de l'affichage
 	let isVisible = $derived.by(() => {
-		if (!$store.currentTimeline.showToday) return false;
+		if (!appState.currentTimeline.showToday) return false;
 
 		const today = new Date().getTime();
-		const start = $store.currentTimeline.getStartTime();
-		const end = $store.currentTimeline.getEndTime();
+		const start = volatileAppState.timelineStart.getTime();
+		const end = volatileAppState.timelineEnd.getTime();
 
 		return today >= start && today <= end;
 	});
@@ -32,7 +33,7 @@
 
 {#if isVisible}
 	<svg
-		viewBox={$store.currentTimeline.viewbox}
+		viewBox={volatileAppState.viewbox}
 		xmlns="http://www.w3.org/2000/svg"
 		x={GRID.MIDDLE_X}
 		y={GRID.MILESTONE_H}

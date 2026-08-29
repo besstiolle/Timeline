@@ -1,7 +1,6 @@
 <script lang="ts">
 	import html2canvas from 'html2canvas-pro';
 
-	import { store } from '$lib/stores';
 	import { browser } from '$app/environment';
 
 	import { Helpers } from '$lib/helpers';
@@ -17,6 +16,9 @@
 	import { commitState } from '../state/commitState.svelte';
 	import { shadowBoxComponentState } from '$lib/state/shadowBoxComponentState.svelte';
 	import Milestones from './Milestones/Milestones.svelte';
+	import { appState } from '$lib/state/appState.svelte';
+	import { inspect } from 'vitest/internal/browser';
+	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 
 	
 	let timerId:ReturnType<typeof setInterval>
@@ -52,7 +54,7 @@
 					var ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 					ctx.drawImage(image, 0, 0, 128, 128);
 					var dataurl = canvas.toDataURL('image/jpeg', 1);
-					FactoryPicto.createPicto($store.currentTimeline, dataurl);
+					FactoryPicto.createPicto(appState.currentTimeline, dataurl);
 				})
 				.catch((error) => {
 					console.error('erreur capté : ', error);
@@ -107,39 +109,33 @@
 		var downloadLink = document.createElement('a');
 		downloadLink.href = url;
 		downloadLink.download =
-			$store.currentTimeline.title + '_' + Helpers.toYYYYMMDD_hhmm(new Date()) + extensionName;
+			appState.currentTimeline.title + '_' + Helpers.toYYYYMMDD_hhmm(new Date()) + extensionName;
 		document.body.appendChild(downloadLink);
 		downloadLink.click();
 		document.body.removeChild(downloadLink);
 	}
 
 	function toggleShowHide() {
-		store.update((s) => {
-			s.currentTimeline.showAll = !s.currentTimeline.showAll;
-			return { ...s };
-		});
-		/*if($store.currentTimeline.showAll){
-			console.info("switch tout afficher")
-		} else {
-			console.info("switch cacher")
-		}*/
+		console.info("toggleShowHide was", appState.currentTimeline.showAll)
+		appState.currentTimeline.showAll = !appState.currentTimeline.showAll;
+		console.info("toggleShowHide is", appState.currentTimeline.showAll)
 	}
 </script>
 
 <div class="rightButtons">
 	<div
 		class="rightButtonDisabled"
-		class:hidden={!$store.rights.hasWriter() ||
-			$store.lastUpdatedLocally - $store.lastCommitedRemotely > 5000}
+		class:hidden={!appState.rights.hasWriter() ||
+			volatileAppState.lastUpdatedLocally - volatileAppState.lastCommitedRemotely > 5000}
 		title="There is nothing to save"
 	>
 		<i class="saveCloud"></i>
 	</div>
 	<div
 		class="rightButton"
-		class:hidden={!$store.rights.hasWriter() ||
+		class:hidden={!appState.rights.hasWriter() ||
 			commitState.inProgress ||
-			$store.lastUpdatedLocally - $store.lastCommitedRemotely < 5000}
+			volatileAppState.lastUpdatedLocally - volatileAppState.lastCommitedRemotely < 5000}
 		onclick={onlineComponent.commit}
 		onkeydown={onlineComponent.commit}
 		title="Save your modifications remotly"
@@ -151,7 +147,7 @@
 
 	<div
 		class="rightButton"
-		class:hidden={!$store.rights.isNone()}
+		class:hidden={!appState.rights.isNone()}
 		onclick={() => shadowBoxComponentState.openShadowBoxForOnline = true}
 		onkeydown={() => shadowBoxComponentState.openShadowBoxForOnline = true}
 		title="Share & save your chart online"
@@ -162,7 +158,7 @@
 	</div>
 	<div
 		class="rightButton"
-		class:hidden={!$store.rights.isOwner()}
+		class:hidden={!appState.rights.isOwner()}
 		onclick={() => shadowBoxComponentState.openShadowBoxForOnline = true}
 		onkeydown={() => shadowBoxComponentState.openShadowBoxForOnline = true}
 		title="Save your chart on your computer only"
@@ -174,7 +170,7 @@
 
 	<div
 		class="rightButton"
-		class:hidden={!$store.currentTimeline.showAll}
+		class:hidden={!appState.currentTimeline.showAll}
 		onclick={toggleShowHide}
 		onkeydown={toggleShowHide}
 		title="Show regular tasks"
@@ -185,7 +181,7 @@
 	</div>
 	<div
 		class="rightButton"
-		class:hidden={$store.currentTimeline.showAll}
+		class:hidden={appState.currentTimeline.showAll}
 		onclick={toggleShowHide}
 		onkeydown={toggleShowHide}
 		title="Show all tasks even if they're hidden"
@@ -196,7 +192,7 @@
 	</div>
 	<div
 		class="rightButton"
-		class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()}
+		class:hidden={!appState.rights.isNone() && !appState.rights.hasWriter()}
 		onclick={() => shadowBoxComponentState.openShadowBoxForUpload=true}
 		onkeydown={() => shadowBoxComponentState.openShadowBoxForUpload=true}
 		title="Import/Export your data"
@@ -217,7 +213,7 @@
 	</div>
 	<div
 		class="rightButton"
-		class:hidden={!$store.rights.isNone() && !$store.rights.hasWriter()}
+		class:hidden={!appState.rights.isNone() && !appState.rights.hasWriter()}
 		onclick={() => shadowBoxComponentState.openShadowBoxForLiveEdition=true}
 		onkeydown={() => shadowBoxComponentState.openShadowBoxForLiveEdition=true}
 		title="Edit your milestones"
@@ -234,7 +230,7 @@
 <Toast />
 
 <div id="wrapper" class="">
-	<svg viewBox={$store.currentTimeline.viewbox} xmlns="http://www.w3.org/2000/svg">
+	<svg id="DrawWrapper" viewBox={volatileAppState.viewbox} xmlns="http://www.w3.org/2000/svg">
 		<!-- http://svgicons.sparkk.fr/ -->
 		<!-- https://svgedit.netlify.app/editor/index.html -->
 		<!-- https://svg-stripe-generator.web.app/ -->

@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { store } from '$lib/stores';
 	import { m } from '../../../paraglide/messages';
-	import { Milestone } from '$lib/struct.class';
+	import { Milestone } from '$lib/struct.class.svelte';
 	import { untrack } from 'svelte';
 	import { MilestoneValidator } from '$lib/milestoneValidator';
 
@@ -27,19 +26,13 @@
 	// Try updating the store for the date
 	function handleDateChange() {
 		if (isDateValid && localDate !== milestone.date) {
-			store.update((s) => {
-				milestone.date = localDate;
-				return { ...s };
-			});
+			milestone.date = localDate;
 		}
 	}
 
 	// Try updating the store for the other field
     function updateMilestoneField<K extends keyof Milestone>(field: K, value: Milestone[K]) {
-		store.update((s) => {
-			milestone[field] = value;
-			return { ...s };
-		});
+		milestone[field] = value;
 	}
 
 </script>

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { FactoryTask } from '$lib/factoryTask';
 import { NotFoundException } from '$lib/timelineException.class';
-import { Task, Timeline } from '$lib/struct.class';
+import { Task, Timeline } from '$lib/struct.class.svelte';
 
 //Mock console.error() to avoid vi console pollution
 vi.spyOn(console, 'error').mockImplementation(() => {});

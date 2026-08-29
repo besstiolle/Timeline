@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
 import { Helpers } from './helpers';
 import { FactorySwimline } from './factorySwimline';
-import { Milestone, Swimline, Task, Timeline } from './struct.class';
+import { Milestone, Swimline, Task, Timeline } from './struct.class.svelte';
 import { DIFF, GRID } from './constantes';
 import { DuplicateEntityException } from './timelineException.class';
 
@@ -105,9 +105,9 @@ export class FactoryTimeline {
 		timeline.milestones = new Array<Milestone>();
 		timeline.swimlines = new Array<Swimline>();
 		timeline.isInitiate = false;
-		timeline.start = null;
+/* 		timeline.start = null;
 		timeline.end = null;
-		timeline.differencial = null;
+		timeline.differencial = null; */
 		timeline.maxId = 0;
 		timeline.viewbox = '0 0 0 0';
 		//timeline.showAll = false //Don't reset this parameter
@@ -122,8 +122,8 @@ export class FactoryTimeline {
 
 	static refresh(timeline: Timeline): Timeline {
 		timeline = this._refreshSwimlines(timeline);
-		timeline = this._processLimites(timeline);
-		timeline = this._processViewboxResizing(timeline);
+		//timeline = this._processLimites(timeline);
+		//timeline = this._processViewboxResizing(timeline);
 		return timeline;
 	}
 
@@ -169,7 +169,7 @@ export class FactoryTimeline {
 		return timeline;
 	}
 
-	protected static _processLimites(timeline: Timeline): Timeline {
+	/* protected static _processLimites(timeline: Timeline): Timeline {
 		const start = FactoryTimeline.getMin(timeline);
 		const end = FactoryTimeline.getMax(timeline);
 
@@ -212,9 +212,9 @@ export class FactoryTimeline {
 		timeline.setEnd(end);
 
 		return timeline;
-	}
+	} */
 
-	protected static _processViewboxResizing(timeline: Timeline): Timeline {
+	/* protected static _processViewboxResizing(timeline: Timeline): Timeline {
 		//Reprocess viewbox sizing
 		let len = timeline.tasks.length;
 		if (!timeline.showAll) {
@@ -223,7 +223,7 @@ export class FactoryTimeline {
 		timeline.viewbox = `0 0 ${GRID.ALL_WIDTH} ${GRID.MILESTONE_H + GRID.ANNUAL_H + GRID.ONE_TASK_H * len + GRID.TODAY_H}`;
 
 		return timeline;
-	}
+	} */
 
 	/**
 	 * Initiate a brand new mocked Timeline for demo purpose

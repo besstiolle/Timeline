@@ -1,4 +1,4 @@
-import type { Milestone, Task, Timeline } from './struct.class';
+import type { Milestone, Task, Timeline } from './struct.class.svelte';
 
 export function timelineToObject(timeline: Timeline): object {
 	return {

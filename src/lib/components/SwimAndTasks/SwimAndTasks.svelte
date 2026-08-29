@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { store } from '$lib/stores';
-
 	import { GRID } from '$lib/constantes';
 	import { Helpers } from '$lib/helpers';
 	import { FactoryTask } from '$lib/factoryTask';
 	import TaskComponent from './Task.svelte';
 	import Swimlines from './Swimlines.svelte';
 	import { TaskViewModel } from '$lib/viewModel';
-	import type { Task } from '$lib/struct.class';
+	import type { Task } from '$lib/struct.class.svelte';
 	import { derived } from 'svelte/store';
 	import { displayableTasks as tasksToDerive } from './SwimAndTasks';
+	import { appState } from '$lib/state/appState.svelte';
+	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 
 
 	interface ActiveDragInterface{
@@ -24,7 +24,7 @@
 	}
 
 	const displayableTasks = $derived(
-		tasksToDerive($store.currentTimeline)
+		tasksToDerive(appState.currentTimeline)
 	)
 
 	type ACTION = 'L' | 'R' | 'P';
@@ -46,14 +46,14 @@
 	}
 	function down(event: MouseEvent, taskId:number, action: ACTION): void {
 		//Security : we can't manipulate data if we are a simple Reader
-		if ($store.rights.isReader()) {
+		if (appState.rights.isReader()) {
 			return;
 		}
 
 		let task = null
 		try {
 			task = FactoryTask.getById(
-				$store.currentTimeline,taskId
+				appState.currentTimeline,taskId
 			); 
 		} catch (NotFoundException) {
 			//Nothing to do, the rest of the function will clean everything
@@ -62,7 +62,7 @@
 		}
 
 		//Using viewModels to calculate X/Y Coord
-		const viewModel = new TaskViewModel(task, $store.currentTimeline, activeDrag?.taskId ?? null)
+		const viewModel = new TaskViewModel(task, appState.currentTimeline, activeDrag?.taskId ?? null)
 
 		//construction of activeDrag
 		activeDrag = {
@@ -81,19 +81,15 @@
 	}
 	function up(event: MouseEvent): void {
 		//Security : we can't manipulate data if we are a simple Reader
-		if ($store.rights.isReader()) {
+		if (appState.rights.isReader()) {
 			return;
 		}
 
 		if (!activeDrag) return;
 
-		const taskToUpdate = FactoryTask.getById($store.currentTimeline, activeDrag.taskId);
+		const taskToUpdate = FactoryTask.getById(appState.currentTimeline, activeDrag.taskId);
 		const updatedTask = getDisplayTask(taskToUpdate); // Récupère la tâche avec ses valeurs finales
-
-		store.update((s) => {
-			s.currentTimeline = FactoryTask.updateById(s.currentTimeline, updatedTask);
-			return { ...s };
-		});
+		appState.currentTimeline = FactoryTask.updateById(appState.currentTimeline, updatedTask);
 
 		//Clearing current Task Dragged 
 		activeDrag = null
@@ -101,7 +97,7 @@
 	}
 	function move(event: MouseEvent): void {
 		//Security : we can't manipulate data if we are a simple Reader
-		if ($store.rights.isReader()) {
+		if (appState.rights.isReader()) {
 			return;
 		}
 
@@ -113,7 +109,7 @@
 	// If task passed is the activeDrag one, we apply the modifications
 	function getDisplayTask(task: Task): Task {
 		//Security : we can't manipulate data if we are a simple Reader
-		if ($store.rights.isReader() || !activeDrag || activeDrag.taskId !== task.id) {
+		if (appState.rights.isReader() || !activeDrag || activeDrag.taskId !== task.id) {
 			return task; // No activeDrag, we return the non modificated one
 		}
 
@@ -163,11 +159,11 @@
 		//Conversion Xposition => Date
 		let currentDate = Helpers.getDateFromViewportX(
 				currentX,
-				$store.currentTimeline.getStart(),
-				$store.currentTimeline.getEnd())
+				volatileAppState.timelineStart,
+				volatileAppState.timelineEnd)
 
-		if(currentDate < $store.currentTimeline.getStart()){
-			currentDate = $store.currentTimeline.getStart()
+		if(currentDate < volatileAppState.timelineStart){
+			currentDate = volatileAppState.timelineStart
 		}
 		
 		return currentDate
@@ -184,11 +180,11 @@
 		//Conversion Xposition => Date
 		let currentDate = Helpers.getDateFromViewportX(
 				currentX,
-				$store.currentTimeline.getStart(),
-				$store.currentTimeline.getEnd())
+				volatileAppState.timelineStart,
+				volatileAppState.timelineEnd)
 
-		if(currentDate > $store.currentTimeline.getEnd()){
-			currentDate = $store.currentTimeline.getEnd()
+		if(currentDate > volatileAppState.timelineEnd){
+			currentDate = volatileAppState.timelineEnd
 		}
 		
 		return currentDate
@@ -205,7 +201,7 @@
 			i={index}
 			taskVM={new TaskViewModel(
 				getDisplayTask(task), 
-				$store.currentTimeline, 
+				appState.currentTimeline, 
 				activeDrag?.taskId ?? null)}
 			{downRight}
 			{downLeft}

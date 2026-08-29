@@ -1,6 +1,6 @@
 import { GRID } from "$lib/constantes";
 import { FactoryMilestone } from "$lib/factoryMilestone";
-import type { Milestone, Swimline, Task, Timeline } from "$lib/struct.class";
+import type { Milestone, Swimline, Task, Timeline } from "$lib/struct.class.svelte";
 
 interface swimlinesToShowInterface {
     swimline: Swimline;

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { FactoryCards } from '$lib/factoryCards';
-import { Card, Timeline } from '$lib/struct.class';
+import { Card, Timeline } from '$lib/struct.class.svelte';
 
 vi.mock('$app/environment', () => ({
 	default: {

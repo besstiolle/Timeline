@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { CustomLocalStorage } from '$lib/customLocalStorage';
-	import type { Card, Timeline } from '$lib/struct.class';
+	import type { Card, Timeline } from '$lib/struct.class.svelte';
 	import { JsonParserException } from '$lib/timelineException.class';
 
 	let timelines: Array<Timeline> = new Array<Timeline>();

@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { FactoryTimeline } from '$lib/factoryTimeline';
 import { DuplicateEntityException } from '$lib/timelineException.class';
-import { Milestone, Swimline, Task, Timeline } from '$lib/struct.class';
+import { Milestone, Swimline, Task, Timeline } from '$lib/struct.class.svelte';
 
 vi.mock('$app/environment', () => ({
 	default: {

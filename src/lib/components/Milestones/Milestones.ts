@@ -1,5 +1,5 @@
 import { FactoryMilestone } from "$lib/factoryMilestone";
-import type { Milestone, Timeline } from "$lib/struct.class";
+import type { Milestone, Timeline } from "$lib/struct.class.svelte";
 
 export function displayableMilestones(timeline: Timeline): Milestone[] {
 	const showAll = timeline.showAll;

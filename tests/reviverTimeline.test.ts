@@ -5,8 +5,7 @@ import reviverTimeline_withAllvalues from './json/reviverTimeline_withAllvalues.
 import reviverTimeline_withMetaTimelines from './json/reviverTimeline_withMetaTimelines.json';
 import reviverTimeline_withTask from './json/reviverTimeline_withTask.json';
 import reviverTimeline_withMilestone from './json/reviverTimeline_withMilestone.json';
-import { Milestone, Task, Timeline } from '$lib/struct.class';
-//import x from
+import { Milestone, Task, Timeline } from '$lib/struct.class.svelte';
 
 //Mock console.error() to avoid vi console pollution
 vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -97,6 +96,7 @@ describe('test factoryCards', () => {
 	});
 });
 
+//Won't throw exception since we force toJson() into struct.class.svelte.ts
 describe('test factoryCards', () => {
 	const timeline = new Timeline('key', 'title');
 	// @ts-expect-error forcing error for testing porpose
@@ -107,6 +107,6 @@ describe('test factoryCards', () => {
 	it('JsonParser.timelineReviver with unknow values', () => {
 		expect(() => {
 			JSON.parse(jsonResult, JsonParser.timelineReviver);
-		}).toThrow(JsonParserException);
+		}).not.toThrow(JsonParserException);
 	});
-});
+}); 

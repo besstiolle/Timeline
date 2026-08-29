@@ -2,10 +2,11 @@ import { describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/svelte';
 
 import Banner from '$lib/components/Banner/Banner.svelte';
-import { store } from '$lib/stores';
 import { DIFF, MONTHS } from '$lib/constantes';
 import { Rights } from '$lib/rights.class';
-import { Timeline, TimelineStore, type Card } from '$lib/struct.class';
+import { Timeline, type Card } from '$lib/struct.class.svelte';
+import { appState } from '$lib/state/appState.svelte';
+import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 
 vi.mock('$app/environment', () => ({
 	default: {
@@ -13,19 +14,20 @@ vi.mock('$app/environment', () => ({
 	}
 }));
 
-vi.mock('$lib/stores', () => {
-	return vi.importActual('./mockedStores');
-});
-
 describe('test Rendering', () => {
-	const timelineStore = new TimelineStore(new Array<Card>(), new Timeline(), new Rights());
-	timelineStore.currentTimeline = new Timeline('key', 'title');
-	timelineStore.currentTimeline.start = '2019-12-01';
-	timelineStore.currentTimeline.end = '2021-12-01';
-	timelineStore.currentTimeline.viewbox = '0 0 10 20';
-	timelineStore.currentTimeline.differencial = DIFF.isBetween20MonthsAnd3Years;
 
-	store.set(timelineStore);
+	let currentTimeline = new Timeline('key', 'title');
+	currentTimeline.start = '2019-12-01';
+	currentTimeline.end = '2021-12-01';
+	currentTimeline.viewbox = '0 0 10 20';
+	currentTimeline.differencial = DIFF.isBetween20MonthsAnd3Years;
+
+	appState.currentTimeline = currentTimeline
+	appState.cards = new Array<Card>()
+	appState.rights = new Rights()
+	volatileAppState.lastCommitedRemotely = -1
+	volatileAppState.lastUpdatedLocally = -1
+	volatileAppState._cancelRefreshLastUpdatedLocally = false
 
 	it('viexbox must be 0 0 10 20', () => {
 		const { container } = render(Banner /*, {name: 'World'}*/);

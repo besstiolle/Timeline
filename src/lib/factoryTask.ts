@@ -1,4 +1,4 @@
-import { Task, type Timeline } from './struct.class';
+import { Task, type Timeline } from './struct.class.svelte';
 import { NotFoundException } from './timelineException.class';
 
 export class FactoryTask {

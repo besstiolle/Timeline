@@ -13,7 +13,7 @@ import {
 } from '$lib/api/problemJson';
 import { requestToInstance as requestToInstance } from '$lib/api/apiUtils';
 import { _FALLBACK, _OPTIONS } from '$lib/api/apiUtils';
-import type { Timeline } from '$lib/struct.class';
+import type { Timeline } from '$lib/struct.class.svelte';
 
 const ALPHANUM64 = new RegExp('^[A-Z0-9a-z]{64}$');
 
@@ -92,7 +92,7 @@ export const POST: RequestHandler = async (requestEvent) => {
 	}
 
 	//Prepare a clone for insertion
-	const timelineForInsertion = structuredClone(timelineFromParam);
+	const timelineForInsertion = timelineFromParam.clone();
 
 	//We can retrive ownerKey from db if existing (case : a write push a Timeline)
 	if (timelineFromDb !== undefined && timelineOwnerKey == null) {

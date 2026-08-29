@@ -1,4 +1,4 @@
-import { Swimline, Timeline } from './struct.class';
+import { Swimline, Timeline } from './struct.class.svelte';
 
 export class FactorySwimline {
 	/**

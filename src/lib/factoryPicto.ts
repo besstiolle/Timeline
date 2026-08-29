@@ -1,6 +1,6 @@
 import { LOCAL_STORAGE } from './constantes';
 import { CustomLocalStorage } from './customLocalStorage';
-import type { Timeline } from './struct.class';
+import type { Timeline } from './struct.class.svelte';
 
 export class FactoryPicto {
 	/**

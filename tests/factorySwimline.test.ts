@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { FactorySwimline } from '$lib/factorySwimline';
-import { Timeline } from '$lib/struct.class';
+import { Timeline } from '$lib/struct.class.svelte';
 
 describe('FactorySwimline.create', () => {
 	let timeline = new Timeline('key', 'title');

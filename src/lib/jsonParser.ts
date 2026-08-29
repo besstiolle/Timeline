@@ -1,4 +1,4 @@
-import { Card, Milestone, Task, Timeline } from './struct.class';
+import { Card, Milestone, Task, Timeline } from './struct.class.svelte';
 import { JsonParserException } from './timelineException.class';
 
 export class JsonParser {
@@ -31,7 +31,7 @@ export class JsonParser {
 			'countAllTasks',
 			'key',
 			'title',
-			'differencial',
+			'differencial', //Not Used Anymore
 			'isOnline',
 			'ownerKey',
 			'writeKey',
@@ -42,8 +42,8 @@ export class JsonParser {
 			'date',
 			'dateStart',
 			'dateEnd', // date inside object in string format
-			'start',
-			'end', // date outside object in string format
+			'start',//Not Used Anymore
+			'end', //Not Used Anymore// date outside object in string format
 
 			//Old key, not used anymore
 			'commitInProgress'
