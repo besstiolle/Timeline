@@ -1,5 +1,4 @@
-import { appState } from './state/appState.svelte';
-import { Swimline, Task, Timeline } from './struct.class.svelte';
+import { Task } from './struct.class.svelte';
 
 export class FactorySwimline {
 
@@ -15,7 +14,7 @@ export class FactorySwimline {
 	}
 
 	/**
-	 * Return true if at last on task is visible for this swimline
+	 * Return true if at last one task of the list is visible for this swimline
 	 * @param tasks The list of Task to look inside
 	 * @param swimlineName The name of swimline
 	 * @returns boolean 

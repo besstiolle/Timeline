@@ -212,8 +212,7 @@ it('POST /api/timeline should return a ResponseWithMeta object if success', asyn
 	expect(json?.meta?.ts).toBeLessThanOrEqual(Date.now());
 
 	const returnedTimeline = json?.data as Timeline;
-	//FIXME : toStrinctEquals won't work with $state runes
-	//expect(returnedTimeline).toStrictEqual(clone.clone());
+	expect(JSON.stringify(returnedTimeline)).toStrictEqual(JSON.stringify(clone));
 }); 
 it('POST /api/timeline should return 201 if everything is ok and data must be created inside db', async () => {
 	let counter = countTimelineByKey(db, getValideDummyTimeline().key);

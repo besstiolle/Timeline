@@ -3,61 +3,67 @@ import { describe, expect, it, vi } from 'vitest';
 import { FactoryTimeline } from '$lib/factoryTimeline';
 import { DuplicateEntityException } from '$lib/timelineException.class';
 import { Milestone, Swimline, Task, Timeline } from '$lib/struct.class.svelte';
+import { DIFF } from '$lib/constantes';
 
-vi.mock('$app/environment', () => ({
-	default: {
-		browser: true
-	}
-}));
 
 //Mock console.error() to avoid vi console pollution
 vi.spyOn(console, 'error').mockImplementation(() => {});
 
 describe('test FactoryTimeline.getMin', () => {
-	const timeline1 = new Timeline('key', 'title');
-	const timeline2 = new Timeline('key', 'title');
-
 	const date1: string = '2020-01-01';
-	const date2: string = '2021-12-31';
-	const date3: string = '2019-12-31';
-	const date4: string = '2021-02-15';
-	const date5: string = '2000-01-00';
-	const date6: string = '2018-02-15';
+	const date2: string = '2021-12-02';
+	const date3: string = '2019-12-03';
+	const date4: string = '2021-02-04';
+	const date5: string = '2000-01-05';
+	const date6: string = '2018-02-06';
 
-	timeline1.tasks.push(new Task(1, 'label 1', date1, date4, true, 100, true, 'Swimline 1', 5));
-	timeline1.tasks.push(new Task(2, 'label 2', date2, date1, true, 100, true, 'Swimline 1', 5));
-	timeline1.tasks.push(new Task(3, 'label 3', date3, date2, true, 100, true, 'Swimline 1', 5));
-	timeline1.tasks.push(new Task(4, 'label 4', date4, date5, true, 100, true, 'Swimline 1', 5));
 
-	timeline1.milestones.push(new Milestone(1, 'label 1', date2, true));
-	timeline1.milestones.push(new Milestone(2, 'label 2', date2, true));
-	timeline1.milestones.push(new Milestone(3, 'label 3', date2, true));
-	timeline1.milestones.push(new Milestone(4, 'label 4', date2, true));
+	it('Helpers.getMin with minimal value in task.end and task.start with/out show all', () => {
 
-	it('Helpers.getMin with minimal value in task.end and task.start', () => {
-		expect(FactoryTimeline.getMin(timeline1)).toEqual(new Date(date3));
+		const tasks = []
+		const milestones = []
+
+		tasks.push(new Task(1, 'label 1', date1, date4, true, 100, false, 'Swimline 1'));
+		tasks.push(new Task(2, 'label 2', date2, date1, true, 100, true, 'Swimline 1'));
+		tasks.push(new Task(3, 'label 3', date3, date2, true, 100, false, 'Swimline 1'));
+		tasks.push(new Task(4, 'label 4', date4, date5, true, 100, true, 'Swimline 1'));
+
+		milestones.push(new Milestone(1, 'label 1', date2, false));
+		milestones.push(new Milestone(2, 'label 2', date2, true));
+		milestones.push(new Milestone(3, 'label 3', date2, true));
+		milestones.push(new Milestone(4, 'label 4', date2, false));
+
+		console.info(FactoryTimeline.getMin(tasks, milestones, false))
+
+		expect(FactoryTimeline.getMin(tasks, milestones, true)).toEqual(new Date(date3));
+		expect(FactoryTimeline.getMin(tasks, milestones, false)).toEqual(new Date(date4));
 	});
 
-	timeline2.tasks.push(new Task(1, 'label 1', date1, date4, true, 100, true, 'Swimline 1', 5));
-	timeline2.tasks.push(new Task(2, 'label 2', date2, date1, true, 100, true, 'Swimline 1', 5));
-	timeline2.tasks.push(new Task(3, 'label 3', date3, date2, true, 100, true, 'Swimline 1', 5));
-	timeline2.tasks.push(new Task(4, 'label 4', date4, date5, true, 100, true, 'Swimline 1', 5));
 
-	timeline2.milestones.push(new Milestone(1, 'label 1', date2, true));
-	timeline2.milestones.push(new Milestone(2, 'label 2', date2, true));
-	timeline2.milestones.push(new Milestone(3, 'label 3', date2, true));
-	timeline2.milestones.push(new Milestone(4, 'label 4', date2, true));
-	timeline2.milestones.push(new Milestone(5, 'label 5', date6, true));
+	it('Helpers.getMin with minimal value in milestone and with/out show all', () => {
 
-	it('Helpers.getMin with minimal value in milestone', () => {
-		expect(FactoryTimeline.getMin(timeline2)).toEqual(new Date(date6));
+		const tasks = []
+		const milestones = []
+
+		tasks.push(new Task(1, 'label 1', date1, date4, true, 100, false, 'Swimline 1'));
+		tasks.push(new Task(2, 'label 2', date2, date1, true, 100, true, 'Swimline 1'));
+		tasks.push(new Task(3, 'label 3', date3, date2, true, 100, false, 'Swimline 1'));
+		tasks.push(new Task(4, 'label 4', date4, date5, true, 100, true, 'Swimline 1'));
+
+		milestones.push(new Milestone(1, 'label 1', date2, false));
+		milestones.push(new Milestone(2, 'label 2', date2, true));
+		milestones.push(new Milestone(3, 'label 3', date2, true));
+		milestones.push(new Milestone(4, 'label 4', date2, true));
+		milestones.push(new Milestone(5, 'label 5', date6, false));
+
+		expect(FactoryTimeline.getMin(tasks, milestones, true)).toEqual(new Date(date6));
+		expect(FactoryTimeline.getMin(tasks, milestones, false)).toEqual(new Date(date4));
 	});
+
+
 });
 
 describe('test FactoryTimeline.getMax', () => {
-	const timeline1 = new Timeline('key', 'title');
-	const timeline2 = new Timeline('key', 'title');
-
 	const date1: string = '2020-01-01';
 	const date2: string = '2021-12-31';
 	const date3: string = '2019-12-31';
@@ -65,33 +71,44 @@ describe('test FactoryTimeline.getMax', () => {
 	const date5: string = '2000-01-00';
 	const date6: string = '2030-02-15';
 
-	timeline1.tasks.push(new Task(1, 'label 1', date1, date4, true, 100, true, 'Swimline 1', 5));
-	timeline1.tasks.push(new Task(2, 'label 2', date6, date1, true, 100, true, 'Swimline 1', 5));
-	timeline1.tasks.push(new Task(3, 'label 3', date3, date2, true, 100, true, 'Swimline 1', 5));
-	timeline1.tasks.push(new Task(4, 'label 4', date4, date5, true, 100, true, 'Swimline 1', 5));
-
-	timeline1.milestones.push(new Milestone(1, 'label 1', date4, true));
-	timeline1.milestones.push(new Milestone(2, 'label 2', date4, true));
-	timeline1.milestones.push(new Milestone(3, 'label 3', date4, true));
-	timeline1.milestones.push(new Milestone(4, 'label 4', date4, true));
 
 	it('Helpers.getMax with maximal value in task.end and task.start', () => {
-		expect(FactoryTimeline.getMax(timeline1)).toEqual(new Date(date2));
+
+		const tasks = []
+		const milestones = []
+
+		tasks.push(new Task(1, 'label 1', date1, date4, true, 100, true, 'Swimline 1'));
+		tasks.push(new Task(2, 'label 2', date6, date1, true, 100, true, 'Swimline 1'));
+		tasks.push(new Task(3, 'label 3', date3, date2, true, 100, false, 'Swimline 1'));
+		tasks.push(new Task(4, 'label 4', date4, date5, true, 100, true, 'Swimline 1'));
+
+		milestones.push(new Milestone(1, 'label 1', date4, true));
+		milestones.push(new Milestone(2, 'label 2', date4, true));
+		milestones.push(new Milestone(3, 'label 3', date4, false));
+		milestones.push(new Milestone(4, 'label 4', date4, false));
+
+		expect(FactoryTimeline.getMax(tasks, milestones, true)).toEqual(new Date(date2));
+		expect(FactoryTimeline.getMax(tasks, milestones, false)).toEqual(new Date(date4));
 	});
 
-	timeline2.tasks.push(new Task(1, 'label 1', date1, date4, true, 100, true, 'Swimline 1', 5));
-	timeline2.tasks.push(new Task(2, 'label 2', date6, date1, true, 100, true, 'Swimline 1', 5));
-	timeline2.tasks.push(new Task(3, 'label 3', date3, date4, true, 100, true, 'Swimline 1', 5));
-	timeline2.tasks.push(new Task(4, 'label 4', date4, date5, true, 100, true, 'Swimline 1', 5));
-
-	timeline2.milestones.push(new Milestone(1, 'label 1', date4, true));
-	timeline2.milestones.push(new Milestone(2, 'label 2', date4, true));
-	timeline2.milestones.push(new Milestone(3, 'label 3', date4, true));
-	timeline2.milestones.push(new Milestone(4, 'label 4', date4, true));
-	timeline2.milestones.push(new Milestone(5, 'label 5', date2, true));
-
 	it('FactoryTimeline.getMax with maximal value in milestone', () => {
-		expect(FactoryTimeline.getMax(timeline2)).toEqual(new Date(date2));
+
+		const tasks = []
+		const milestones = []
+
+		tasks.push(new Task(1, 'label 1', date1, date4, true, 100, true, 'Swimline 1'));
+		tasks.push(new Task(2, 'label 2', date6, date1, true, 100, true, 'Swimline 1'));
+		tasks.push(new Task(3, 'label 3', date3, date4, true, 100, true, 'Swimline 1'));
+		tasks.push(new Task(4, 'label 4', date4, date5, true, 100, true, 'Swimline 1'));
+
+		milestones.push(new Milestone(1, 'label 1', date4, true));
+		milestones.push(new Milestone(2, 'label 2', date4, true));
+		milestones.push(new Milestone(3, 'label 3', date4, true));
+		milestones.push(new Milestone(4, 'label 4', date4, false));
+		milestones.push(new Milestone(5, 'label 5', date2, false));
+
+		expect(FactoryTimeline.getMax(tasks, milestones, true)).toEqual(new Date(date2));
+		expect(FactoryTimeline.getMax(tasks, milestones, false)).toEqual(new Date(date4));
 	});
 });
 
@@ -102,15 +119,15 @@ describe('test FactoryTimeline.addTask', () => {
 
 	timeline = FactoryTimeline.addTask(
 		timeline,
-		new Task(1, 'label 1', date1, date2, true, 100, true, 'Swimline 1', 5)
+		new Task(1, 'label 1', date1, date2, true, 100, true, 'Swimline 1')
 	);
 	timeline = FactoryTimeline.addTask(
 		timeline,
-		new Task(2, 'label 2', date1, date2, true, 100, true, 'Swimline 1', 5)
+		new Task(2, 'label 2', date1, date2, true, 100, true, 'Swimline 1')
 	);
 	timeline = FactoryTimeline.addTask(
 		timeline,
-		new Task(3, 'label 3', date1, date2, true, 100, true, 'Swimline 1', 5)
+		new Task(3, 'label 3', date1, date2, true, 100, true, 'Swimline 1')
 	);
 
 	it('FactoryTimeline.addTask with nominal value', () => {
@@ -122,13 +139,13 @@ describe('test FactoryTimeline.addTask', () => {
 		expect(() => {
 			timeline = FactoryTimeline.addTask(
 				timeline,
-				new Task(3, 'label 3', date1, date2, true, 100, true, 'Swimline 1', 5)
+				new Task(3, 'label 3', date1, date2, true, 100, true, 'Swimline 1')
 			);
 		}).toThrow(DuplicateEntityException);
 	});
 });
 
-describe('test FactoryTimeline with duplicate creation', () => {
+describe('test FactoryTimeline.addMilestone', () => {
 	let timeline = new Timeline('key', 'title');
 	const date1: string = '2020-01-01';
 
@@ -151,19 +168,15 @@ describe('test FactoryTimeline with duplicate creation', () => {
 describe('test FactoryTimeline.purge', () => {
 	let timeline = new Timeline('key', 'title');
 	timeline.showAll = true;
-	const timelinePurged = new Timeline('key', 'title');
+	let timelinePurged = new Timeline('key', 'title');
 	timelinePurged.showAll = true;
 
 	const date: string = '2020-01-01';
 
-	timeline.tasks.push(new Task(1, 'label 1', date, date, true, 100, true, 'Swimline 1', 5));
+	timeline.tasks.push(new Task(1, 'label 1', date, date, true, 100, true, 'Swimline 1'));
 	timeline.milestones.push(new Milestone(1, 'label 1', date, true));
-	timeline.swimlines.push(new Swimline('label'));
 	timeline.isInitiate = true;
-	timeline.end = date;
-	timeline.start = date;
 	timeline.maxId = 99;
-	timeline.viewbox = 'viewbox Value';
 
 	timeline = FactoryTimeline.purge(timeline);
 
@@ -172,11 +185,11 @@ describe('test FactoryTimeline.purge', () => {
 		expect(timeline).toEqual(timelinePurged);
 	});
 });
-
+/* 
 describe('test FactoryTimeline.refresh with differents dates', () => {
 	let timeline1 = new Timeline('key', 'title');
 	timeline1.tasks.push(
-		new Task(1, 'label 1', '2020-01-01', '2020-01-31', true, 100, true, 'Swimline 1', 5)
+		new Task(1, 'label 1', '2020-01-01', '2020-01-31', true, 100, true, 'Swimline 1')
 	);
 
 	timeline1 = FactoryTimeline.refresh(timeline1);
@@ -187,7 +200,7 @@ describe('test FactoryTimeline.refresh with differents dates', () => {
 
 	let timeline2 = new Timeline('key', 'title');
 	timeline2.tasks.push(
-		new Task(1, 'label 1', '2020-01-15', '2020-03-01', true, 100, true, 'Swimline 1', 5)
+		new Task(1, 'label 1', '2020-01-15', '2020-03-01', true, 100, true, 'Swimline 1')
 	);
 
 	timeline2 = FactoryTimeline.refresh(timeline2);
@@ -198,7 +211,7 @@ describe('test FactoryTimeline.refresh with differents dates', () => {
 
 	let timeline3a = new Timeline('key', 'title');
 	timeline3a.tasks.push(
-		new Task(1, 'label 1', '2020-02-07', '2022-02-07', true, 100, true, 'Swimline 1', 5)
+		new Task(1, 'label 1', '2020-02-07', '2022-02-07', true, 100, true, 'Swimline 1')
 	);
 
 	timeline3a = FactoryTimeline.refresh(timeline3a);
@@ -209,7 +222,7 @@ describe('test FactoryTimeline.refresh with differents dates', () => {
 
 	let timeline3b = new Timeline('key', 'title');
 	timeline3b.tasks.push(
-		new Task(1, 'label 1', '2020-02-17', '2022-02-17', true, 100, true, 'Swimline 1', 5)
+		new Task(1, 'label 1', '2020-02-17', '2022-02-17', true, 100, true, 'Swimline 1')
 	);
 
 	timeline3b = FactoryTimeline.refresh(timeline3b);
@@ -220,7 +233,7 @@ describe('test FactoryTimeline.refresh with differents dates', () => {
 
 	let timeline4 = new Timeline('key', 'title');
 	timeline4.tasks.push(
-		new Task(1, 'label 1', '2020-01-15', '2040-02-01', true, 100, true, 'Swimline 1', 5)
+		new Task(1, 'label 1', '2020-01-15', '2040-02-01', true, 100, true, 'Swimline 1')
 	);
 
 	timeline4 = FactoryTimeline.refresh(timeline4);
@@ -228,12 +241,12 @@ describe('test FactoryTimeline.refresh with differents dates', () => {
 		expect(timeline4.start).toEqual('2019-01-01');
 		expect(timeline4.end).toEqual('2041-02-01');
 	});
-});
-
+}); */
+/* 
 describe('test FactoryTimeline.refresh with show/add & viewbox', () => {
 	const date1: string = '2020-01-01';
-	const taskVisible = new Task(1, 'label 1', date1, date1, true, 100, true, 'Swimline 1', 5);
-	const taskHidden = new Task(1, 'label 1', date1, date1, true, 100, false, 'Swimline 1', 5);
+	const taskVisible = new Task(1, 'label 1', date1, date1, true, 100, true, 'Swimline 1');
+	const taskHidden = new Task(1, 'label 1', date1, date1, true, 100, false, 'Swimline 1');
 	let timeline1 = new Timeline('key', 'title');
 	timeline1.showAll = false;
 	timeline1.tasks.push(taskVisible);
@@ -272,8 +285,8 @@ describe('test FactoryTimeline.refresh with show/add & viewbox', () => {
 	it('FactoryTimeline.testProcessViewboxResizing with showall & various task', () => {
 		expect(timeline3.viewbox).toBe('0 0 1000 235');
 	});
-});
-
+}); */
+/* 
 describe('test FactoryTimeline.refresh with swimline', () => {
 	let timeline1 = new Timeline('key', 'title');
 	const date1: string = '2020-01-01';
@@ -311,4 +324,83 @@ describe('test FactoryTimeline.refresh with swimline', () => {
 	it('FactoryTimeline._refreshSwimlines with no swimline', () => {
 		expect(timeline2.swimlines.length).toBe(0);
 	});
+}); */
+describe('test FactoryTimeline.getStartAndEnd', () => {
+
+	it('Helpers.getStartAndEnd with differencial isMoreThan20Years and with show all', () => {
+		const today = new Date()
+		const tasks = []
+		const milestones = []
+
+		tasks.push(new Task(1, 'label 1', '1980-01-15', '2000-01-15', true, 100, false, ''));
+
+		milestones.push(new Milestone(1, 'label 1', '2020-02-16', false));
+
+
+		const timeline = new Timeline()
+		timeline.tasks = tasks
+		timeline.milestones = milestones
+		let min1 = FactoryTimeline.getMin(tasks, milestones, true);
+		let min2 = FactoryTimeline.getMin(tasks, milestones, false);
+
+		expect(min1).toStrictEqual(new Date('1980-01-15'))
+		expect(min2).toStrictEqual(today)
+
+		let max1 = FactoryTimeline.getMax(tasks, milestones, true);
+		let max2 = FactoryTimeline.getMax(tasks, milestones, false);
+
+		expect(max1).toStrictEqual(new Date('2020-02-16'))
+		expect(max2.getFullYear()).toStrictEqual(today.getFullYear())
+		expect(max2.getMonth()).toStrictEqual(today.getMonth())
+		expect(max2.getDate()).toStrictEqual(today.getDate())
+
+		let {start,end} = FactoryTimeline.getStartAndEnd(tasks, milestones, true, DIFF.isMoreThan20Years)
+
+		expect(start).toStrictEqual(new Date('1979-01-01'));
+		expect(end).toStrictEqual(new Date('2021-02-01'));
+
+	});
+	it('Helpers.getStartAndEnd with differencial isMoreThan20Years and without show all', () => {
+		let today = new Date()
+		const tasks = []
+		const milestones = []
+
+		tasks.push(new Task(1, 'label 1', '1980-01-15', '2000-01-15', true, 100, false, ''));
+
+		milestones.push(new Milestone(1, 'label 1', '2020-02-16', false));
+
+		let {start,end} = FactoryTimeline.getStartAndEnd(tasks, milestones, false, DIFF.isMoreThan20Years)
+
+		//Attendu : (Année-1)-mois-01 et (Année+1)-mois-01 
+		
+		expect(start.getTime()).toBeLessThan(today.getTime());
+		expect(end.getTime()).toBeGreaterThan(today.getTime());
+
+	});
+});
+
+//TODO : faire les cas des autre DIFF
+
+describe('test FactoryTimeline.initiate', () => {
+
+	it('Helpers.initiate', () => {
+
+		const timeline = FactoryTimeline.initiate(new Timeline())
+
+		expect(timeline.tasks.length).toEqual(18);
+		expect(timeline.milestones.length).toEqual(4);
+		expect(timeline.swimlines.length).toEqual(8);
+
+		expect(timeline.maxId).toEqual(18+4);
+		expect(timeline.isInitiate).toEqual(true);
+		expect(timeline.isOnline).toEqual(false);
+		expect(timeline.key).toStrictEqual('dummy');
+		expect(timeline.ownerKey).toStrictEqual(null);
+		expect(timeline.writeKey).toStrictEqual(null);
+		expect(timeline.readKey).toStrictEqual(null);
+		expect(timeline.showAll).toEqual(false);
+		expect(timeline.title).toStrictEqual('dummy');
+
+	});
+	
 });

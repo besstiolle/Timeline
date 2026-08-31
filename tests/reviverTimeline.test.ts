@@ -14,7 +14,7 @@ describe('test factoryCards', () => {
 	const timeline = new Timeline('key', 'title');
 	timeline.tasks = new Array<Task>();
 	timeline.tasks.push(
-		new Task(1, 'label 1', '2022-01-01', '2022-02-01', false, 100, true, 'Swimline 1', 5)
+		new Task(1, 'label 1', '2022-01-01', '2022-02-01', false, 100, true, 'Swimline 1')
 	);
 
 	const jsonResult = JSON.stringify(timeline);
@@ -50,12 +50,9 @@ describe('test factoryCards', () => {
 
 describe('test factoryCards', () => {
 	const timeline = new Timeline('key', 'title');
-	timeline.start = '2022-01-01';
-	timeline.end = '2022-12-31';
 	timeline.isInitiate = true;
 	timeline.maxId = 99;
 	timeline.showAll = true;
-	timeline.viewbox = 'viewbox';
 
 	const jsonResult = JSON.stringify(timeline);
 	const jsonExpected = JSON.stringify(reviverTimeline_withMetaTimelines);
@@ -73,16 +70,13 @@ describe('test factoryCards', () => {
 	const timeline = new Timeline('key', 'title');
 	timeline.tasks = new Array<Task>();
 	timeline.tasks.push(
-		new Task(1, 'label 1', '2022-01-01', '2022-02-01', true, 100, true, 'Swimline 1', 5)
+		new Task(1, 'label 1', '2022-01-01', '2022-02-01', true, 100, true, 'Swimline 1')
 	);
 	timeline.milestones = new Array<Milestone>();
 	timeline.milestones.push(new Milestone(1, 'label 1', '2022-01-01', true));
-	timeline.start = '2022-01-01';
-	timeline.end = '2022-12-31';
 	timeline.isInitiate = true;
 	timeline.maxId = 99;
 	timeline.showAll = true;
-	timeline.viewbox = 'viewbox';
 
 	const jsonResult = JSON.stringify(timeline);
 	const jsonExpected = JSON.stringify(reviverTimeline_withAllvalues);

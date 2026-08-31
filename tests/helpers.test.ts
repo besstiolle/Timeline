@@ -3,14 +3,16 @@ import { Helpers } from '$lib/helpers';
 import { DIFF, GRID } from '$lib/constantes';
 import { Task } from '$lib/struct.class.svelte';
 
-describe('Helpers File DateConvertor testing', () => {
+describe('Helpers.toYYYYMMDD_hhmm', () => {
 	it('Helpers.toYYYYMMDD_hhmm with nominal values', () => {
 		const date1 = new Date('2020-01-01T03:24:00');
 		const date2 = new Date('2020-01-01T13:00:01');
 		expect(Helpers.toYYYYMMDD_hhmm(date1)).toBe('20200101_0324');
 		expect(Helpers.toYYYYMMDD_hhmm(date2)).toBe('20200101_1300');
 	});
+});
 
+describe('Helpers.toYYYY_MM_DD', () => {
 	it('Helpers.toYYYY_MM_DD with nominal values', () => {
 		const date1 = new Date('2020-01-01');
 		const date2 = new Date('2020-01-01T10:20:30');
@@ -30,8 +32,7 @@ describe('Helpers.countVisibleTasksInList', () => {
 		true,
 		100,
 		true,
-		'Swimline 1',
-		5
+		'Swimline 1'
 	);
 	const task2 = new Task(
 		2,
@@ -41,11 +42,10 @@ describe('Helpers.countVisibleTasksInList', () => {
 		true,
 		100,
 		true,
-		'Swimline 1',
-		4
+		'Swimline 1'
 	);
 
-	const task3 = new Task(3, 'label 3', '2020-01-01', '2020-01-01', true, 100, true, '', 3);
+	const task3 = new Task(3, 'label 3', '2020-01-01', '2020-01-01', true, 100, true, '');
 	const task4 = new Task(
 		4,
 		'label 4',
@@ -54,11 +54,10 @@ describe('Helpers.countVisibleTasksInList', () => {
 		true,
 		100,
 		false,
-		'Swimline 2',
-		2
+		'Swimline 2'
 	);
 
-	const task5 = new Task(5, 'label 5', '2020-01-01', '2020-01-01', true, 100, false, '', 1);
+	const task5 = new Task(5, 'label 5', '2020-01-01', '2020-01-01', true, 100, false, '');
 
 	const mapAllVisible = new Array<Task>();
 	const mapAllHidden = new Array<Task>();

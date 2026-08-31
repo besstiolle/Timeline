@@ -1,17 +1,51 @@
 import { describe, expect, it } from 'vitest';
 import { FactorySwimline } from '$lib/factorySwimline';
-import { Timeline } from '$lib/struct.class.svelte';
+import { Task } from '$lib/struct.class.svelte';
 
-describe('FactorySwimline.create', () => {
-	let timeline = new Timeline('key', 'title');
-	timeline = FactorySwimline.create(timeline, 'swimline1');
-	timeline = FactorySwimline.create(timeline, 'swimline2');
-	const index2 = timeline.swimlines.length - 1;
-	timeline = FactorySwimline.create(timeline, 'swimline3');
+describe('FactorySwimline.countVisibleTasksInListForSwimlineName', () => {
+	let tasks = []
+	tasks.push(new Task(1,'task#1','','',true,100,true,'A'))
+	tasks.push(new Task(2,'task#2','','',true,100,true,'A'))
+	tasks.push(new Task(3,'task#3','','',true,100,true,'B'))
+	tasks.push(new Task(4,'task#4','','',true,100,false,'B'))
+	tasks.push(new Task(5,'task#5','','',true,100,true,'B'))
+	tasks.push(new Task(6,'task#6','','',true,100,false,'A'))
+	tasks.push(new Task(7,'task#7','','',true,100,false,'C'))
 
-	it('FactorySwimline.create with nominal values', () => {
-		expect(index2).toBe(1);
-		expect(timeline.swimlines.length).toBe(3);
-		expect(timeline.swimlines[index2].label).toBe('swimline2');
+	it('Test Swimline A', () => {
+		expect(FactorySwimline.countVisibleTasksInListForSwimlineName(
+				tasks,'A')).toBe(2)
+	});
+	it('Test Swimline B', () => {
+		expect(FactorySwimline.countVisibleTasksInListForSwimlineName(
+				tasks,'B')).toBe(2)
+	});
+	it('Test Swimline C', () => {
+		expect(FactorySwimline.countVisibleTasksInListForSwimlineName(
+				tasks,'C')).toBe(0)
+	});
+});
+
+describe('FactorySwimline.hasVisibleTasksInListForSwimlineName', () => {
+	let tasks = []
+	tasks.push(new Task(1,'task#1','','',true,100,true,'A'))
+	tasks.push(new Task(2,'task#2','','',true,100,true,'A'))
+	tasks.push(new Task(3,'task#3','','',true,100,true,'B'))
+	tasks.push(new Task(4,'task#4','','',true,100,false,'B'))
+	tasks.push(new Task(5,'task#5','','',true,100,true,'B'))
+	tasks.push(new Task(6,'task#6','','',true,100,false,'A'))
+	tasks.push(new Task(7,'task#7','','',true,100,false,'C'))
+
+	it('Test Swimline A', () => {
+		expect(FactorySwimline.hasVisibleTasksInListForSwimlineName(
+				tasks,'A')).toBe(true)
+	});
+	it('Test Swimline B', () => {
+		expect(FactorySwimline.hasVisibleTasksInListForSwimlineName(
+				tasks,'B')).toBe(true)
+	});
+	it('Test Swimline C', () => {
+		expect(FactorySwimline.hasVisibleTasksInListForSwimlineName(
+				tasks,'C')).toBe(false)
 	});
 });

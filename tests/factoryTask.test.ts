@@ -2,19 +2,20 @@ import { describe, expect, it, vi } from 'vitest';
 import { FactoryTask } from '$lib/factoryTask';
 import { NotFoundException } from '$lib/timelineException.class';
 import { Task, Timeline } from '$lib/struct.class.svelte';
+import { appState } from '$lib/state/appState.svelte';
 
 //Mock console.error() to avoid vi console pollution
 vi.spyOn(console, 'error').mockImplementation(() => {});
 
-describe('test factoryCards', () => {
-	const task: Task = new Task(1, 'label', '2020-01-01', '2020-01-02', true, 99, true, 'Swim1', 10);
+describe('test factoryCards.join', () => {
+	const task: Task = new Task(1, 'label', '2020-01-01', '2020-01-02', true, 99, true, 'Swim1');
 	const result: string = 'task;label;true;2020-01-01;2020-01-02;true;99;Swim1';
 	it('FactoryTask.join with nominal values', () => {
 		expect(FactoryTask.join(task, ';')).toBe(result);
 	});
 });
 
-describe('FactoryTask.getById', () => {
+describe('test FactoryTask.getById', () => {
 	const task1 = new Task(
 		1,
 		'label 1',
@@ -23,8 +24,7 @@ describe('FactoryTask.getById', () => {
 		true,
 		100,
 		true,
-		'Swimline 1',
-		5
+		'Swimline 1'
 	);
 	const task2 = new Task(
 		2,
@@ -34,8 +34,7 @@ describe('FactoryTask.getById', () => {
 		true,
 		100,
 		true,
-		'Swimline 1',
-		5
+		'Swimline 1'
 	);
 	const task3 = new Task(
 		3,
@@ -45,8 +44,7 @@ describe('FactoryTask.getById', () => {
 		true,
 		100,
 		true,
-		'Swimline 1',
-		5
+		'Swimline 1'
 	);
 	const task4 = new Task(
 		4,
@@ -56,8 +54,7 @@ describe('FactoryTask.getById', () => {
 		true,
 		100,
 		true,
-		'Swimline 1',
-		5
+		'Swimline 1'
 	);
 
 	const timeline = new Timeline('key', 'title');
@@ -77,25 +74,6 @@ describe('FactoryTask.getById', () => {
 	});
 });
 
-describe('FactoryTask.clone', () => {
-	const task1 = new Task(
-		1,
-		'label 1',
-		'2022-01-01',
-		'2022-02-01',
-		true,
-		100,
-		true,
-		'Swimline 1',
-		5
-	);
-	const task2 = FactoryTask.duplicate(task1);
-
-	it('FactoryTask.clone and check memory pointer', () => {
-		expect(task1).not.toBe(task2);
-		expect(task1).toStrictEqual(task2);
-	});
-});
 
 describe('FactoryTask.updateById ', () => {
 	const task1 = new Task(
@@ -106,8 +84,7 @@ describe('FactoryTask.updateById ', () => {
 		true,
 		100,
 		true,
-		'Swimline 1',
-		5
+		'Swimline 1'
 	);
 	const task2 = new Task(
 		2,
@@ -117,8 +94,7 @@ describe('FactoryTask.updateById ', () => {
 		true,
 		100,
 		true,
-		'Swimline 1',
-		5
+		'Swimline 1'
 	);
 	const task2b = new Task(
 		2,
@@ -128,8 +104,7 @@ describe('FactoryTask.updateById ', () => {
 		true,
 		100,
 		true,
-		'Swimline 1',
-		5
+		'Swimline 1'
 	);
 	const task3 = new Task(
 		3,
@@ -139,8 +114,7 @@ describe('FactoryTask.updateById ', () => {
 		true,
 		100,
 		true,
-		'Swimline 1',
-		5
+		'Swimline 1'
 	);
 	const task4 = new Task(
 		4,
@@ -150,8 +124,7 @@ describe('FactoryTask.updateById ', () => {
 		true,
 		100,
 		true,
-		'Swimline 1',
-		5
+		'Swimline 1'
 	);
 	const task10 = new Task(
 		10,
@@ -161,8 +134,7 @@ describe('FactoryTask.updateById ', () => {
 		true,
 		100,
 		true,
-		'Swimline 1',
-		5
+		'Swimline 1'
 	);
 
 	let timeline = new Timeline('key', 'title');
@@ -180,5 +152,105 @@ describe('FactoryTask.updateById ', () => {
 		expect(() => {
 			FactoryTask.updateById(timeline, task10);
 		}).toThrow(NotFoundException);
+	});
+});
+
+
+describe('FactoryTask.duplicate', () => {
+	const task1 = new Task(
+		1,
+		'label 1',
+		'2022-01-01',
+		'2022-02-01',
+		true,
+		100,
+		true,
+		'Swimline 1'
+	);
+	const task2 = FactoryTask.duplicate(task1);
+
+	it('FactoryTask.duplicate and check memory pointer', () => {
+		expect(task1).not.toBe(task2);
+		expect(task1).toStrictEqual(task2);
+	});
+});
+
+describe('FactoryTask.getSimilarTasksWithSameSwimline', () => {
+	const task1 = new Task(
+		1,
+		'label 1',
+		'',
+		'',
+		true,
+		100,
+		true,
+		'Swimline 1'
+	);
+	const task2 = new Task(
+		2,
+		'label 2',
+		'',
+		'',
+		true,
+		100,
+		true,
+		'Swimline 1'
+	);
+	const task3 = new Task(
+		3,
+		'label 3',
+		'',
+		'',
+		true,
+		100,
+		true,
+		'Swimline 2'
+	);
+	const task4 = new Task(
+		4,
+		'label 4',
+		'',
+		'',
+		true,
+		100,
+		true,
+		'Swimline 1'
+	);
+	const task_other = new Task(
+		5,
+		'label 5',
+		'',
+		'',
+		true,
+		100,
+		true,
+		'Swimline 1'
+	);
+
+	appState.currentTimeline.tasks = []
+	appState.currentTimeline.tasks.push(task1)
+	appState.currentTimeline.tasks.push(task2)
+	appState.currentTimeline.tasks.push(task3)
+	appState.currentTimeline.tasks.push(task4)
+
+	it('FactoryTask.getSimilarTasksWithSameSwimline and no valid swmiline', () => {
+		const result = FactoryTask.getSimilarTasksWithSameSwimline(task_other)
+		expect(result.length).toBe(0);
+	});
+	it('FactoryTask.getSimilarTasksWithSameSwimline and unique swmiline', () => {
+		const result = FactoryTask.getSimilarTasksWithSameSwimline(task3)
+		expect(result.length).toBe(1);
+		expect(result[0].label).toBe(task3.label);
+	});
+	it('FactoryTask.getSimilarTasksWithSameSwimline and first dispatched swmiline', () => {
+		const result = FactoryTask.getSimilarTasksWithSameSwimline(task1)
+		expect(result.length).toBe(2);
+		expect(result[0].label).toBe(task1.label);
+		expect(result[1].label).toBe(task2.label);
+	});
+	it('FactoryTask.getSimilarTasksWithSameSwimline and first dispatched swmiline', () => {
+		const result = FactoryTask.getSimilarTasksWithSameSwimline(task4)
+		expect(result.length).toBe(1);
+		expect(result[0].label).toBe(task4.label);
 	});
 });

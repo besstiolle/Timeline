@@ -1,7 +1,6 @@
-import { browser } from '$app/environment';
+//import { browser } from '$app/environment';
 import { Helpers } from './helpers';
-import { FactorySwimline } from './factorySwimline';
-import { Milestone, Swimline, Task, Timeline } from './struct.class.svelte';
+import { Milestone, Task, Timeline } from './struct.class.svelte';
 import { DuplicateEntityException } from './timelineException.class';
 import { DIFF } from './constantes';
 
@@ -15,23 +14,24 @@ export class FactoryTimeline {
 	 * @returns <Date> the min date of milestones & tasks in the Timeline
 	 */
 	static getMin(tasks:Task[], milestones:Milestone[], showAll:boolean): Date {
+		const today = new Date();
 		if (tasks.length === 0 && milestones.length === 0) {
-			return new Date();
+			return today
 		}
 
-		let min: Date = new Date('2999-12-31');
+		let min: Date|null = null
 		tasks.forEach((task) => {
-			if ((showAll || task.isShow) && min > task.getStart()) {
+			if ((showAll || task.isShow) && (min == null || min > task.getStart())) {
 				min = task.getStart();
 			}
 		});
 		milestones.forEach((milestone) => {
-			if ((showAll || milestone.isShow) && min > milestone.getDate()) {
+			if ((showAll || milestone.isShow) && (min == null || min > milestone.getDate())) {
 				min = milestone.getDate();
 			}
 		});
 
-		return min;
+		return min?min:today;
 	}
 
 	/**
@@ -43,22 +43,24 @@ export class FactoryTimeline {
 	 * @returns <Date> the max date of milestones & tasks in the Timeline
 	 */
 	static getMax(tasks:Task[], milestones:Milestone[], showAll:boolean): Date {
+		const today = new Date();
 		if (tasks.length === 0 && milestones.length === 0) {
-			return new Date();
+			return today;
 		}
 
-		let max: Date = new Date('1900-01-01');
+		let max: Date|null = null
 		tasks.forEach((task) => {
-			if ((showAll || task.isShow) && max < task.getEnd()) {
+			if ((showAll || task.isShow) && (max == null || max < task.getEnd())) {
 				max = task.getEnd();
 			}
 		});
 		milestones.forEach((milestone) => {
-			if ((showAll || milestone.isShow) && max < milestone.getDate()) {
+			if ((showAll || milestone.isShow) && (max == null || max < milestone.getDate())) {
 				max = milestone.getDate();
 			}
 		});
-		return max;
+
+		return max?max:today;
 	}
 
 	/**
@@ -119,55 +121,6 @@ export class FactoryTimeline {
 		return timeline;
 	}
 
-	static refresh(timeline: Timeline): Timeline {
-		//timeline = this._refreshSwimlines(timeline);
-		//timeline = this._processLimites(timeline);
-		//timeline = this._processViewboxResizing(timeline);
-		return timeline;
-	}
-
-	/* protected static _refreshSwimlines(timeline: Timeline): Timeline {
-		timeline.swimlines = new Array<Swimline>();
-
-		let swimlineLabel: string;
-		let previousSwimlineLabel = '';
-		let previousSwimlineId = -1;
-
-		//Initiate each swimline
-		for (let i: number = 0; i < timeline.tasks.length; i++) {
-			swimlineLabel = timeline.tasks[i].swimline;
-			if (swimlineLabel !== '' && previousSwimlineLabel == swimlineLabel) {
-				//reuse id of previous swimline
-			} else if (swimlineLabel !== '' && previousSwimlineLabel != swimlineLabel) {
-				// create new swimline and save its id
-				timeline = FactorySwimline.create(timeline, swimlineLabel);
-				previousSwimlineId = timeline.swimlines.length - 1;
-			} else {
-				//reset previous Swimline id
-				previousSwimlineId = -1;
-			}
-			timeline.tasks[i].swimlineId = previousSwimlineId;
-			previousSwimlineLabel = swimlineLabel;
-		}
-		//update swimlines count of visibles / invisibles tasks
-		for (let i: number = 0; i < timeline.tasks.length; i++) {
-			if (timeline.tasks[i].swimlineId != -1) {
-				timeline.swimlines[timeline.tasks[i].swimlineId].countAllTasks++;
-				if (timeline.tasks[i].isShow) {
-					timeline.swimlines[timeline.tasks[i].swimlineId].countVisibleTasks++;
-				}
-			}
-		}
-		//update swimlines isShow to false if there is no shown task
-		for (let i: number = 0; i < timeline.swimlines.length; i++) {
-			if (timeline.swimlines[i].countVisibleTasks == 0) {
-				timeline.swimlines[i].isShow = false;
-			}
-		}
-
-		return timeline;
-	} */
-
 	static getStartAndEnd(tasks:Task[], milestones:Milestone[], showAll:boolean, differencial:string):{start:Date,end:Date}{
 		const start = FactoryTimeline.getMin(tasks, milestones, showAll);
 		const end = FactoryTimeline.getMax(tasks, milestones, showAll);
@@ -208,69 +161,13 @@ export class FactoryTimeline {
 		return {start: start, end: end}
 	}
 
-	/* protected static _processLimites(timeline: Timeline): Timeline {
-		const start = FactoryTimeline.getMin(timeline);
-		const end = FactoryTimeline.getMax(timeline);
-
-		timeline.differencial = Helpers.getEstimationOfDiff(start, end);
-
-		switch (timeline.differencial) {
-			case DIFF.isMoreThan20Years:
-			case DIFF.isBetween10YearsAnd20Years:
-				start.setFullYear(start.getFullYear() - 1);
-				end.setFullYear(end.getFullYear() + 1);
-				start.setDate(1);
-				end.setDate(1);
-				break;
-			case DIFF.isBetween6YearsAnd10Years:
-			case DIFF.isBetween3YearsAnd6Years:
-			case DIFF.isBetween20MonthsAnd3Years:
-			case DIFF.isBetween5MonthsAnd20Months:
-				if (start.getDate() < 15) {
-					start.setMonth(start.getMonth() - 1);
-				}
-				if (end.getDate() > 15) {
-					end.setMonth(end.getMonth() + 2);
-				} else {
-					end.setMonth(end.getMonth() + 1);
-				}
-				start.setDate(1);
-				end.setDate(1);
-				break;
-			case DIFF.isBetween1MonthAnd5Months:
-				start.setDate(start.getDate() - 5);
-				end.setDate(end.getDate() + 5);
-				break;
-			case DIFF.isBelow1Month:
-				start.setDate(start.getDate() - 2);
-				end.setDate(end.getDate() + 2);
-				break;
-		}
-
-		timeline.setStart(start);
-		timeline.setEnd(end);
-
-		return timeline;
-	} */
-
-	/* protected static _processViewboxResizing(timeline: Timeline): Timeline {
-		//Reprocess viewbox sizing
-		let len = timeline.tasks.length;
-		if (!timeline.showAll) {
-			len = Helpers.countVisibleTasksInList(timeline.tasks);
-		}
-		timeline.viewbox = `0 0 ${GRID.ALL_WIDTH} ${GRID.MILESTONE_H + GRID.ANNUAL_H + GRID.ONE_TASK_H * len + GRID.TODAY_H}`;
-
-		return timeline;
-	} */
-
 	/**
 	 * Initiate a brand new mocked Timeline for demo purpose
 	 * @param timeline
 	 * @returns
 	 */
 	static initiate(timeline: Timeline): Timeline {
-		if (browser) {
+		//if (browser) {
 			const allTasksGrouped = [
 				{
 					title: 'Imagine the story',
@@ -445,7 +342,6 @@ export class FactoryTimeline {
 
 			let idTask = 0;
 			allTasksGrouped.forEach((tasks, index) => {
-				//timeline = FactorySwimline.create(timeline, swimline.title);
 				tasks.tasks.forEach((task) => {
 					const localStart = new Date(starting);
 					localStart.setDate(localStart.getDate() + task.start);
@@ -502,7 +398,7 @@ export class FactoryTimeline {
 			});
 
 			timeline.maxId = idTask;
-		}
+		//}
 		return timeline;
 	}
 }

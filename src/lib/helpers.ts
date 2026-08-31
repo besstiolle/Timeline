@@ -147,8 +147,4 @@ export class Helpers {
 		//Default return statement
 		return DIFF.isMoreThan20Years;
 	}
-
-	static hashString(val:number):number {
-		return val;
-	}
 }

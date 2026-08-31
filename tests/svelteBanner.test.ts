@@ -2,40 +2,37 @@ import { describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/svelte';
 
 import Banner from '$lib/components/Banner/Banner.svelte';
-import { DIFF, MONTHS } from '$lib/constantes';
+import { MONTHS } from '$lib/constantes';
 import { Rights } from '$lib/rights.class';
-import { Timeline, type Card } from '$lib/struct.class.svelte';
+import { Task, Timeline} from '$lib/struct.class.svelte';
 import { appState } from '$lib/state/appState.svelte';
 import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 
-vi.mock('$app/environment', () => ({
-	default: {
-		browser: true
-	}
-}));
+vi.mock('$app/environment', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('$app/environment')>();
+    return {
+        ...actual,
+        browser: true
+    };
+});
 
 describe('test Rendering', () => {
 
-	let currentTimeline = new Timeline('key', 'title');
-	currentTimeline.start = '2019-12-01';
-	currentTimeline.end = '2021-12-01';
-	currentTimeline.viewbox = '0 0 10 20';
-	currentTimeline.differencial = DIFF.isBetween20MonthsAnd3Years;
 
-	appState.currentTimeline = currentTimeline
-	appState.cards = new Array<Card>()
+	appState.currentTimeline = new Timeline('key', 'title')
+	appState.currentTimeline.tasks.push(new Task(1, 'label 1', '2020-01-01', '2020-12-31', true, 100, true, 'Swimline 1'))
 	appState.rights = new Rights()
 	volatileAppState.lastCommitedRemotely = -1
 	volatileAppState.lastUpdatedLocally = -1
 	volatileAppState._cancelRefreshLastUpdatedLocally = false
 
-	it('viexbox must be 0 0 10 20', () => {
+	it('viexbox must be 0 0 1000 115', () => {
 		const { container } = render(Banner /*, {name: 'World'}*/);
 		const resultsSvelte = container.querySelector('[data-testid="Banner.svelte"]');
-		expect((resultsSvelte as SVGSVGElement).getAttribute('viewBox')).toBe('0 0 10 20');
+		expect((resultsSvelte as SVGSVGElement).getAttribute('viewBox')).toBe('0 0 1000 145'); //(115 + 30 * task)
 	});
 
-	it('must be October on Jalon#0', () => {
+	it('must be december on Jalon#0', () => {
 		const { container } = render(Banner /*, {name: 'World'}*/);
 		const resultsJalonTextStart = container.querySelector('[data-testid="jalonText_0"]');
 		expect(resultsJalonTextStart).toBeDefined();
@@ -43,20 +40,20 @@ describe('test Rendering', () => {
 		expect((resultsJalonTextStart as HTMLElement).innerHTML).toBe(MONTHS[11]); //December
 	});
 
-	it('must be October on Jalon#1', () => {
+	it('must be new year on Jalon#1', () => {
 		const { container } = render(Banner /*, {name: 'World'}*/);
 		const resultsJalonTextNewYear = container.querySelector('[data-testid="jalonText_1"]');
 		expect(resultsJalonTextNewYear).toBeDefined();
 		expect(resultsJalonTextNewYear).not.toBeNull();
-		expect((resultsJalonTextNewYear as HTMLElement).innerHTML).toBe(MONTHS[1]); // M+2 : Feb.
+		expect((resultsJalonTextNewYear as HTMLElement).innerHTML).toBe('2020'); // M+1 : new Year.
 	});
 
-	it('must be October on Jalon#12', () => {
+	it('must be March on Jalon#15', () => {
 		const { container } = render(Banner /*, {name: 'World'}*/);
-		const resultsJalonTextEnd = container.querySelector('[data-testid="jalonText_12"]');
+		const resultsJalonTextEnd = container.querySelector('[data-testid="jalonText_15"]');
 		expect(resultsJalonTextEnd).toBeDefined();
 		expect(resultsJalonTextEnd).not.toBeNull();
-		expect((resultsJalonTextEnd as HTMLElement).innerHTML).toBe(MONTHS[11]); // OCtober
+		expect((resultsJalonTextEnd as HTMLElement).innerHTML).toBe(MONTHS[2]); // March
 	});
 
 	//  const {getByTestId} = render(Banner/*, {name: 'World'}*/)
