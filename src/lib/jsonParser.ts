@@ -54,7 +54,6 @@ export class JsonParser {
 		]
 
 		if(EXCLUDED.includes(key)){
-			console.info("excluded ", key, value)
 			return null
 		}
 
