@@ -8,8 +8,8 @@
 	
 	//Update Storage as soon as appState.Cards/Timeline are updated
 	$effect(() => {
-		console.debug("syncLocalStorage from +layout.svelte")
-		//Save update of appState into localstoragestandard Sta
+		//console.debug("syncLocalStorage from +layout.svelte")
+		//Save update of appState into localstorage
 		syncLocalStorage();
 	});
 

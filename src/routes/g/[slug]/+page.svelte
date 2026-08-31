@@ -18,6 +18,7 @@
 	import { toastComponentState } from '$lib/state/toastComponent.svelte';
 	import { appState } from '$lib/state/appState.svelte';
 	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
+	import { FactoryCards } from '$lib/factoryCards';
 
 	appState.rights = new Rights(page.url.searchParams);
 
@@ -110,6 +111,12 @@
 				appState.currentTimeline = currentTimeline;
 			})
 			.finally(() => {});
+	}
+
+	//(re)Create Cards
+	if(appState.currentTimeline && appState.currentTimeline.isInitiate){
+		//console.info("refresh cards with", appState.currentTimeline.title)
+		appState.cards = FactoryCards.updateCardsWithTimeline(appState.cards, appState.currentTimeline);
 	}
 		
 </script>

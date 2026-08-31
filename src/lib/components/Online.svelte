@@ -70,7 +70,6 @@
 			.finally(() => {});
 
 		//update cards with the online/offline information
-		//TODO : vérifier pertinence de cet update vs update réalisé dans l'obs du store
 		appState.cards = FactoryCards.updateCardsWithTimeline(appState.cards, appState.currentTimeline);
 	}
 	function doOnline() {
@@ -78,6 +77,7 @@
 			appState.currentTimeline.ownerKey = Helpers.randomeString(64);
 			appState.currentTimeline.writeKey = Helpers.randomeString(64);
 			appState.currentTimeline.readKey = Helpers.randomeString(64);
+			
 
 		create(appState.currentTimeline)
 			.then((responseWithMeta: ResponseWithMeta) => {
@@ -97,7 +97,6 @@
 			.finally(() => {});
 
 		//update cards with the online/offline information
-		//TODO : vérifier pertinence de cet update vs update réalisé dans l'obs du store
 		appState.cards = FactoryCards.updateCardsWithTimeline(appState.cards, appState.currentTimeline);
 	}
 

@@ -1,4 +1,3 @@
-import { FactorySwimline } from '$lib/factorySwimline';
 import { FactoryTimeline } from '$lib/factoryTimeline';
 import { Milestone, Task, Timeline, type abstractTimelineInterface } from '$lib/struct.class.svelte';
 

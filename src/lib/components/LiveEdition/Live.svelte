@@ -5,6 +5,20 @@
 	import { m } from '../../../paraglide/messages';
 	import { shadowBoxComponentState } from '$lib/state/shadowBoxComponentState.svelte';
 	import { appState } from '$lib/state/appState.svelte';
+	import { FactoryCards } from '$lib/factoryCards';
+
+	 $effect(() => {
+		if(appState.currentTimeline && appState.currentTimeline.isInitiate){
+			const cardIndex =  FactoryCards.getIndexByKey(appState.cards, appState.currentTimeline.key)
+			if(cardIndex !== null){
+				//console.info("update title from Live", appState.currentTimeline.title)
+				appState.cards[cardIndex].title = appState.currentTimeline.title;
+			}
+		}
+	}) 
+
+	let localTitle:string = $state(appState.currentTimeline.title)
+
 
 </script>
 
@@ -15,7 +29,7 @@
 		<input
 			id="titleOfTimeline"
 			type="text"
-			bind:value={appState.currentTimeline.title}
+			bind:value={localTitle}
 			class="w-2xl"
 		/>
 	</div>
