@@ -1,11 +1,7 @@
 import { Timeline, Card } from '$lib/struct.class.svelte';
 import { Rights } from '$lib/rights.class';
-import { untrack } from 'svelte';
-import { FactoryCards } from '$lib/factoryCards';
-import { FactoryTimeline } from '$lib/factoryTimeline';
 import { CustomLocalStorage } from '$lib/customLocalStorage';
-import { GRID, LOCAL_STORAGE } from '$lib/constantes';
-import { Helpers } from '$lib/helpers';
+import { volatileAppState } from './volatileAppState.svelte';
 
 /**
  * A state class with informations wich need to be persisted.
@@ -25,9 +21,12 @@ export function syncLocalStorage() {
 	if (appState.currentTimeline && appState.currentTimeline.isInitiate) {
 
 		CustomLocalStorage.save(appState.currentTimeline.key, appState.currentTimeline);
-		cards = FactoryCards.updateCardsWithTimeline(cards, appState.currentTimeline);
+		//cards = FactoryCards.updateCardsWithTimeline(cards, appState.currentTimeline);
 	}
 
-	CustomLocalStorage.save(LOCAL_STORAGE.KEY_CARDS, cards);
+	//CustomLocalStorage.save(LOCAL_STORAGE.KEY_CARDS, cards);
+
+	//Update volatileState
+	volatileAppState.lastUpdatedLocally = (new Date()).getTime()
 
 }

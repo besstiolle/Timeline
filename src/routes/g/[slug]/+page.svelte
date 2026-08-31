@@ -57,12 +57,17 @@
 			page.url.protocol + '//' + page.url.host + '/g/' + currentTimeline.key + queryString;
 	}
 
+	//If loading a local file
 	if (appState.rights.isNone()) {
 		if (!currentTimeline && browser) {
 			currentTimeline = new Timeline(slug, m.slug_default_timeline_title());
 			currentTimeline = FactoryTimeline.initiate(currentTimeline);
-		}
+		} 
 		appState.currentTimeline = currentTimeline;
+		if(currentTimeline && browser){
+			appState.rights = new Rights(slug)
+		}
+	//Si loading distant data from a local file
 	} else if (browser) {
 		let keyUrl = appState.rights.getTimelineField();
 		if (keyUrl == null) {
@@ -84,7 +89,6 @@
 				);
 
 				appState.currentTimeline = currentTimeline;
-				appState.rights = appState.rights;
 				//Update date of lastUpdated in the clone
 				volatileAppState.lastUpdatedLocally = 0;
 				volatileAppState.lastCommitedRemotely = responseWithMeta.meta.ts;

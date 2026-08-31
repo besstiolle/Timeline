@@ -115,11 +115,10 @@
 		appState.currentTimeline.showAll = !appState.currentTimeline.showAll;
 	}
 </script>
-
 <div class="rightButtons">
 	<div
 		class="rightButtonDisabled"
-		class:hidden={!appState.rights.hasWriter() ||
+		class:hidden={!appState.rights.hasWriter() || appState.currentTimeline.isOnline === false ||
 			volatileAppState.lastUpdatedLocally - volatileAppState.lastCommitedRemotely > 5000}
 		title="There is nothing to save"
 	>
@@ -128,6 +127,7 @@
 	<div
 		class="rightButton"
 		class:hidden={!appState.rights.hasWriter() ||
+			appState.currentTimeline.isOnline === false ||
 			commitState.inProgress ||
 			volatileAppState.lastUpdatedLocally - volatileAppState.lastCommitedRemotely < 5000}
 		onclick={onlineComponent.commit}
