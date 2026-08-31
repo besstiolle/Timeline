@@ -48,7 +48,7 @@
 	}
 </script>
 
-<div class="live__line show_{task.isShow}">
+<div class="live__line show_{task.isShow}" id="task_{task.id}">
 	<div class="live__input_top">
 		<!-- Boutons de commande -->
 		<div class="live_cmd" onclick={() => updateTaskField('isShow', !task.isShow)} onkeydown={() => updateTaskField('isShow', !task.isShow)} role="button" tabindex="0">

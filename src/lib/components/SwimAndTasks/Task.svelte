@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { GRID } from '$lib/constantes';
 	import { appState } from '$lib/state/appState.svelte';
-	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 	import type { TaskViewModel } from '$lib/viewModel';
 
 	interface Props {

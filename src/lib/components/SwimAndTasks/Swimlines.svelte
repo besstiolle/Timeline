@@ -1,28 +1,30 @@
 <script lang="ts">
 	import { COLORS, GRID } from '$lib/constantes';
+	import { FactorySwimline } from '$lib/factorySwimline';
 	import { Helpers } from '$lib/helpers';
 	import { appState } from '$lib/state/appState.svelte';
-	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 	import type { Task } from '$lib/struct.class.svelte';
-	import { displayableSwimlines as swimlinesToDerive, displayableTasks as tasksToDerive } from './SwimAndTasks';
+	import { displayableSwimlines, displayableTasks, type swimlinesToShowInterface} from './SwimAndTasks';
 
 
-	const displayableTasks = $derived(
-		tasksToDerive(appState.currentTimeline)
-	)
-
-	const displayableSwimlines = $derived(
-		swimlinesToDerive(appState.currentTimeline, displayableTasks)
-	)
+	const tasksToShow = $derived(displayableTasks());
+	const swimlinesToShow = $derived(displayableSwimlines());
+	
 
 	function toggleSwimlineVisibility(event: Event, id:number) {
-		let value = !appState.currentTimeline.swimlines[id].isShow;
+		const tasksVisiblesForThisSwimline = FactorySwimline.countVisibleTasksInListForSwimlineName(appState.currentTimeline.tasks, appState.currentTimeline.swimlines[id].label)
+		const value = !(tasksVisiblesForThisSwimline > 0)
 		appState.currentTimeline.tasks.forEach((task: Task) => {
 			if (task.swimlineId == id) {
 				task.isShow = value;
 			}
 		});
 	}
+
+	function isSwimlineVisible(s:swimlinesToShowInterface){
+		return FactorySwimline.hasVisibleTasksInListForSwimlineName(appState.currentTimeline.tasks, s.swimline.label)
+	}
+
 </script>
 
 <svg
@@ -32,9 +34,9 @@
 	y={GRID.MILESTONE_H + GRID.ANNUAL_H - 5}
 	id="svgSwimlineAndTasks"
 >
-	{#each displayableTasks as task, index (task.id)}
-		{#if displayableSwimlines.has(task.id)}
-			{@const localSwimline = displayableSwimlines.get(task.id)}
+	{#each tasksToShow as task, index (task.id)}
+		{#if swimlinesToShow.has(task.id)}
+			{@const localSwimline = swimlinesToShow.get(task.id)}
 			{#if localSwimline}
 				<g class="wrapperSwimline">
 				<rect
@@ -63,12 +65,12 @@
 					x={GRID.LEFT_WIDTH / 2}
 					y={index * GRID.ONE_TASK_H + 5 + localSwimline.height / 2}
 					font-size="10"
-					fill={localSwimline.swimline.isShow ? '#ffffff' : '#888888'}
+					fill={isSwimlineVisible(localSwimline) ? '#ffffff' : '#888888'}
 					>{localSwimline.swimline.label}</text
 				>
 
 				<image
-					xlink:href={localSwimline.swimline.isShow ? '/hide.png' : '/see.png'}
+					xlink:href={isSwimlineVisible(localSwimline) ? '/hide.png' : '/see.png'}
 					x="0"
 					y={index * GRID.ONE_TASK_H}
 					height="24"

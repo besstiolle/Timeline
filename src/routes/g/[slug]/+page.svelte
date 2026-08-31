@@ -18,7 +18,6 @@
 	import { toastComponentState } from '$lib/state/toastComponent.svelte';
 	import { appState } from '$lib/state/appState.svelte';
 	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
-	import { _processVolatile } from '../../+layout';
 
 	appState.rights = new Rights(page.url.searchParams);
 
@@ -41,11 +40,7 @@
 	}
 
 	let currentTimeline: Timeline = CustomLocalStorage.getTimeline(slug);
-	if(currentTimeline){
-		//Refresh other variables of volatileState
-		console.debug("processVolatile from [slug]/+page 1")
-		_processVolatile()
-	}
+
 
 	//If the local copie of Timeline has bigger rights than current url query parameter
 	//  We refresh the window.location with the higher rights
@@ -66,11 +61,6 @@
 		if (!currentTimeline && browser) {
 			currentTimeline = new Timeline(slug, m.slug_default_timeline_title());
 			currentTimeline = FactoryTimeline.initiate(currentTimeline);
-			if(currentTimeline){
-				//Refresh other variables of volatileState
-				console.debug("processVolatile from [slug]/+page 2")
-				_processVolatile()
-			}
 		}
 		appState.currentTimeline = currentTimeline;
 	} else if (browser) {
@@ -100,11 +90,6 @@
 				volatileAppState.lastCommitedRemotely = responseWithMeta.meta.ts;
 				// Tricks : Set to true if we don't want to refresh lastUpdatedLocally property
 				volatileAppState._cancelRefreshLastUpdatedLocally = true;
-				if(currentTimeline){
-					//Refresh other variables of volatileState
-					console.debug("processVolatile from [slug]/+page 3")		
-					_processVolatile()
-				}
 			})
 			.catch((err) => {
 				console.error('Error where calling get() in [slug].svelte : %o', err);

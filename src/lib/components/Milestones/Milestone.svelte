@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { appState } from '$lib/state/appState.svelte';
-	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 	import type { MilestoneViewModel } from '$lib/viewModel';
 
     interface Props {
@@ -20,7 +19,7 @@
 
 
 <svg
-    viewBox={volatileAppState.viewbox}
+    viewBox={appState.currentTimeline.viewbox}
     xmlns="http://www.w3.org/2000/svg"
     x={milestoneVM.xPosition}
     y={(i % 2) * 25}

@@ -1,30 +1,6 @@
-import { DIFF, GRID } from './constantes';
+import { GRID } from './constantes';
 import { FactoryTimeline } from './factoryTimeline';
 import { Helpers } from './helpers';
-import type { Rights } from './rights.class';
-/*
-export interface TimelineStoreInterface {
-	cards: Array<Card>;
-	currentTimeline: Timeline;
-	lastUpdatedLocally: number;
-	lastCommitedRemotely: number;
-	_cancelRefreshLastUpdatedLocally: boolean;
-	rights: Rights;
-}
-export class TimelineStore implements TimelineStoreInterface {
-	cards: Array<Card> = new Array<Card>();
-	currentTimeline: Timeline;
-	lastUpdatedLocally: number = -1;
-	lastCommitedRemotely: number = -1;
-	_cancelRefreshLastUpdatedLocally: boolean = false; // Tricks : Set to true if we don't want to refresh lastUpdatedLocally property
-	rights: Rights;
-
-	constructor(cards: Array<Card>, currentTimeline: Timeline, rights: Rights) {
-		this.cards = cards;
-		this.currentTimeline = currentTimeline;
-		this.rights = rights;
-	}
-}*/
 
 export class Card {
 	key: string = $state('');
@@ -62,13 +38,8 @@ export class Timeline {
 	title: string = $state('');
 	tasks: Array<Task> = $state(new Array<Task>());
 	milestones: Array<Milestone> = $state(new Array<Milestone>());
-	swimlines: Array<Swimline> = $state(new Array<Swimline>());
 	isInitiate: boolean = $state(false);
-	//start: string | null = $state(null);
-	//end: string | null = $state(null);
-	//differencial: string | null = $state(null);
 	maxId: number = $state(0);
-	//viewbox: string = $state('0 0 0 0');
 	showAll: boolean = $state(false);
 	isOnline: boolean = $state(false);
 	ownerKey: string | null = $state(null);
@@ -115,13 +86,8 @@ export class Timeline {
 			title: this.title, 
 			tasks: this.tasks,
 			milestones: this.milestones,
-			swimlines: this.swimlines,
 			isInitiate: this.isInitiate,
-	/* 		start: this.start,
-			end: this.end,
-			differencial: this.differencial, */
 			maxId: this.maxId,
-			/* viewbox: this.viewbox, */
 			showAll: this.showAll,
 			isOnline: this.isOnline,
 			ownerKey: this.ownerKey,
@@ -136,12 +102,8 @@ export class Timeline {
 
 	clone():Timeline {
 		let clone = new Timeline(this.key,this.title)
-		clone.isInitiate= this.isInitiate;/* 
-		clone.start= this.start;
-		clone.end= this.end;
-		clone.differencial= this.differencial; */
+		clone.isInitiate= this.isInitiate;
 		clone.maxId= this.maxId;
-		//clone.viewbox= this.viewbox;
 		clone.showAll= this.showAll;
 		clone.isOnline= this.isOnline;
 		clone.ownerKey= this.ownerKey;
@@ -157,12 +119,9 @@ export class Timeline {
 		this.tasks.map((task:Task) => clonedTasks.push(task))
 		const clonedMilestones:Milestone[] = []
 		this.milestones.map((milestone:Milestone) => clonedMilestones.push(milestone))
-		const clonedSwimlines:Swimline[] = []
-		this.swimlines.map((swimline:Swimline) => clonedSwimlines.push(swimline))
 
-		clone.tasks= clonedTasks;
-		clone.milestones= clonedMilestones;
-		clone.swimlines= clonedSwimlines;
+		clone.tasks = clonedTasks;
+		clone.milestones = clonedMilestones;
 
 		return clone
 	}
@@ -171,42 +130,6 @@ export class Timeline {
 		this.maxId++;
 		return this.maxId;
 	}
-/* 
-	getStart(): Date {
-		if (this.start == null) {
-			return new Date();
-		}
-		return new Date(this.start);
-	}
-
-	getStartTime(): number {
-		if (this.start == null) {
-			return new Date().getTime();
-		}
-		return new Date(this.start).getTime();
-	}
-
-	getEnd(): Date {
-		if (this.end == null) {
-			return new Date();
-		}
-		return new Date(this.end);
-	}
-
-	getEndTime(): number {
-		if (this.end == null) {
-			return new Date().getTime();
-		}
-		return new Date(this.end).getTime();
-	}
-
-	setStart(start: Date): void {
-		this.start = Helpers.toYYYY_MM_DD(start);
-	}
-
-	setEnd(end: Date): void {
-		this.end = Helpers.toYYYY_MM_DD(end);
-	} */
 
 	getStartFocus(): Date | null {
 		if (this.dateStartFocus == null) {
@@ -228,6 +151,57 @@ export class Timeline {
 
 	setEndFocus(endFocus: Date): void {
 		this.dateEndFocus = Helpers.toYYYY_MM_DD(endFocus);
+	}
+
+	get swimlines():Array<Swimline>{
+		console.info("getSwimline")
+		const swimlinesToReturn: Swimline[] = [];
+		let previousLabel = '';
+		let currentSwimline: Swimline | null = null;
+
+		this.tasks.forEach((task, index) => {
+			const label = task.swimline;
+
+			if (label !== '') {
+				// Create new swimline if label change
+				if (label !== previousLabel || !currentSwimline) {
+					currentSwimline = new Swimline(swimlinesToReturn.length, label);
+					previousLabel = label;
+					//Add the swimline to the list
+					swimlinesToReturn.push(currentSwimline);
+				}
+				
+				// add task to swimline
+				currentSwimline.tasksIndex.push(task.id);
+			} else {
+				task.swimlineId = -1;
+				previousLabel = '';
+				currentSwimline = null;
+			}
+		});
+
+		console.info("getSwimlines", swimlinesToReturn)
+
+		return swimlinesToReturn;
+	}
+
+	set swimlines(s:Array<Swimline>){
+		console.warn("loading old Json format with swimline in it.")
+	}
+
+	set start(s:string){
+		console.warn("start property is readonly.")
+	}
+
+	set end(s:string){
+		console.warn("end property is readonly.")
+	}
+	set viewbox(s:string){
+		console.warn("viewbox property is readonly.")
+	}
+
+	set differencial(s:number){
+		console.warn("differencial property is readonly.")
 	}
 }
 
@@ -350,25 +324,18 @@ export class Milestone {
 }
 
 export class Swimline {
-	label: string = $state(''); // the label of the swimline
-	countVisibleTasks: number = $state(-1); // Number of visible task
-	countAllTasks: number = $state(-1); // Number of visible task
-	isShow: boolean = $state(false); // If we need to see this Swimline
+	id: number;
+	label: string = ''; 
+	tasksIndex: number[] = [];
 
-	constructor(label: string) {
+	constructor(id:number, label: string) {
+		this.id = id;
 		this.label = label;
-		this.countVisibleTasks = 0;
-		this.countAllTasks = 0;
-		this.isShow = true;
 	}
-	toJSON() {
-        return { 
-			label: this.label, 
-			countVisibleTasks: this.countVisibleTasks,
-			countAllTasks: this.countAllTasks,
-			isShow: this.isShow
-		};
-    }
+
+	get countAllTasks(): number {
+		return this.tasksIndex.length;
+	}
 }
 
 export interface abstractTimelineInterface {

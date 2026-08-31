@@ -17,7 +17,7 @@ export class CustomLocalStorage {
 		if (!browser) {
 			return;
 		}
-		console.info("insert/update data in key '"+key+"'")
+		//console.info("insert/update data in key '"+key+"'")
 		localStorage.setItem(key, JSON.stringify(value, replacer));
 	}
 

@@ -1,5 +1,5 @@
 import { DIFF, GRID, TIMERS } from './constantes';
-import type { Task } from './struct.class.svelte';
+import { Task } from './struct.class.svelte';
 
 export class Helpers {
 	/**
@@ -40,13 +40,7 @@ export class Helpers {
 	 * @returns number of tasks visibles
 	 */
 	static countVisibleTasksInList(tasks: Task[]): number {
-		let count: number = 0;
-		tasks.forEach((task) => {
-			if (task.isShow) {
-				count++;
-			}
-		});
-		return count;
+		return tasks.filter((t) => t.isShow).length;
 	}
 
 	/**

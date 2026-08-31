@@ -14,7 +14,6 @@ export class JsonParser {
 			'isInitiate',
 			'maxId',
 			'viewbox',
-			'showAll', // Primitive type field of Timeline
 			'position',
 			'isShow',
 			'label',
@@ -26,28 +25,39 @@ export class JsonParser {
 			'showOutOfBounds',
 			'dateStartFocus',
 			'dateEndFocus',
-			'swimlineId',
-			'countVisibleTasks',
-			'countAllTasks',
 			'key',
 			'title',
-			'differencial', //Not Used Anymore
 			'isOnline',
 			'ownerKey',
 			'writeKey',
 			'readKey',
 			'tasks',
-			'milestones',
-			'swimlines', //Nothing to do, it's an array
+			'milestones', 
 			'date',
 			'dateStart',
 			'dateEnd', // date inside object in string format
+			'swimlineId',
+			'showAll', // Primitive type field of Timeline
+		];
+
+		const EXCLUDED: string[] = [
+			'swimlines', //Nothing to do, it's an array + //Not Used Anymore
+			'countVisibleTasks',//Not Used Anymore
+			'countAllTasks',//Not Used Anymore
+			'differencial', //Not Used Anymore
 			'start',//Not Used Anymore
 			'end', //Not Used Anymore// date outside object in string format
 
 			//Old key, not used anymore
 			'commitInProgress'
-		];
+
+		]
+
+		if(EXCLUDED.includes(key)){
+			console.info("excluded ", key, value)
+			return null
+		}
+
 		if (COMMONS.includes(key)) {
 			return value;
 		}

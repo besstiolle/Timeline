@@ -6,10 +6,8 @@
 	import Swimlines from './Swimlines.svelte';
 	import { TaskViewModel } from '$lib/viewModel';
 	import type { Task } from '$lib/struct.class.svelte';
-	import { derived } from 'svelte/store';
-	import { displayableTasks as tasksToDerive } from './SwimAndTasks';
+	import { displayableTasks } from './SwimAndTasks';
 	import { appState } from '$lib/state/appState.svelte';
-	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 
 
 	interface ActiveDragInterface{
@@ -23,9 +21,7 @@
 		initialRightXPosition:number,
 	}
 
-	const displayableTasks = $derived(
-		tasksToDerive(appState.currentTimeline)
-	)
+	const tasksToShow = $derived(displayableTasks());
 
 	type ACTION = 'L' | 'R' | 'P';
 
@@ -194,9 +190,12 @@
 </script>
 
 <svelte:window onmouseup={up} onmousemove={move} />
+
+
+
 <Swimlines />
 
-	{#each displayableTasks as task, index}
+	{#each tasksToShow as task, index}
 		<TaskComponent
 			i={index}
 			taskVM={new TaskViewModel(

@@ -107,13 +107,8 @@ export class FactoryTimeline {
 	static purge(timeline: Timeline): Timeline {
 		timeline.tasks = new Array<Task>();
 		timeline.milestones = new Array<Milestone>();
-		timeline.swimlines = new Array<Swimline>();
 		timeline.isInitiate = false;
-/* 		timeline.start = null;
-		timeline.end = null;
-		timeline.differencial = null; */
 		timeline.maxId = 0;
-//		timeline.viewbox = '0 0 0 0';
 		//timeline.showAll = false //Don't reset this parameter
 		//timeline.isOnline = false //Don't reset this parameter
 		//timeline.ownerKey = null //Don't reset this parameter
@@ -125,13 +120,13 @@ export class FactoryTimeline {
 	}
 
 	static refresh(timeline: Timeline): Timeline {
-		timeline = this._refreshSwimlines(timeline);
+		//timeline = this._refreshSwimlines(timeline);
 		//timeline = this._processLimites(timeline);
 		//timeline = this._processViewboxResizing(timeline);
 		return timeline;
 	}
 
-	protected static _refreshSwimlines(timeline: Timeline): Timeline {
+	/* protected static _refreshSwimlines(timeline: Timeline): Timeline {
 		timeline.swimlines = new Array<Swimline>();
 
 		let swimlineLabel: string;
@@ -171,7 +166,7 @@ export class FactoryTimeline {
 		}
 
 		return timeline;
-	}
+	} */
 
 	static getStartAndEnd(tasks:Task[], milestones:Milestone[], showAll:boolean, differencial:string):{start:Date,end:Date}{
 		const start = FactoryTimeline.getMin(tasks, milestones, showAll);
@@ -276,7 +271,7 @@ export class FactoryTimeline {
 	 */
 	static initiate(timeline: Timeline): Timeline {
 		if (browser) {
-			const swimlines = [
+			const allTasksGrouped = [
 				{
 					title: 'Imagine the story',
 					tasks: [
@@ -449,9 +444,9 @@ export class FactoryTimeline {
 			starting.setDate(starting.getDate() - 15);
 
 			let idTask = 0;
-			swimlines.forEach((swimline, index) => {
-				timeline = FactorySwimline.create(timeline, swimline.title);
-				swimline.tasks.forEach((task) => {
+			allTasksGrouped.forEach((tasks, index) => {
+				//timeline = FactorySwimline.create(timeline, swimline.title);
+				tasks.tasks.forEach((task) => {
 					const localStart = new Date(starting);
 					localStart.setDate(localStart.getDate() + task.start);
 					const localEnd = new Date(starting);
@@ -466,7 +461,7 @@ export class FactoryTimeline {
 							true,
 							task.progress,
 							task.show,
-							swimline.title,
+							tasks.title,
 							index
 						)
 					);

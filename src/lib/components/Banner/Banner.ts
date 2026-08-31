@@ -1,6 +1,5 @@
 import { DAYS, DIFF, GRID, MONTHS } from '$lib/constantes';
 import { appState } from '$lib/state/appState.svelte';
-import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 
 export interface jalonInterface {
 	left: number;

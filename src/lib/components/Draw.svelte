@@ -1,10 +1,7 @@
 <script lang="ts">
 	import html2canvas from 'html2canvas-pro';
-
 	import { browser } from '$app/environment';
-
 	import { Helpers } from '$lib/helpers';
-
 	import Today from '$lib/components/Today/Today.svelte';
 	import Live from '$lib/components/LiveEdition/Live.svelte';
 	import SwimAndTasks from '$lib/components/SwimAndTasks/SwimAndTasks.svelte';
@@ -17,7 +14,6 @@
 	import { shadowBoxComponentState } from '$lib/state/shadowBoxComponentState.svelte';
 	import Milestones from './Milestones/Milestones.svelte';
 	import { appState } from '$lib/state/appState.svelte';
-	import { inspect } from 'vitest/internal/browser';
 	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 
 	
