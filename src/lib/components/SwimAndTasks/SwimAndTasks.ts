@@ -1,6 +1,7 @@
 import { GRID } from "$lib/constantes";
 import { FactoryMilestone } from "$lib/factoryMilestone";
 import { FactorySwimline } from "$lib/factorySwimline";
+import { FactoryTask } from "$lib/factoryTask";
 import { appState } from "$lib/state/appState.svelte";
 import { Swimline, type Milestone, type Task, type Timeline } from "$lib/struct.class.svelte";
 
@@ -33,45 +34,62 @@ export function displayableTasks():Task[] {
  * return all the Swimline to display
  */
 export function displayableSwimlines(){
-    console.info("displayableSwimlines")
+    //console.info("displayableSwimlines")
     const showAll = appState.currentTimeline.showAll;
     const result = new Map<number, swimlinesToShowInterface>();
     const tasks = appState.currentTimeline.tasks.filter((task) => showAll || task.isShow);
 
-    console.info("displayableSwimlines tasks", tasks)
+    //console.info("displayableSwimlines tasks", tasks)
 
-    let previousSwimlineId: number = -1;
+    let previousSwimlineName: string;
     let position = 0;
 
 
     tasks.forEach((task: Task) => {
-        const swimlineId = task.swimlineId;
-        console.info("displayableSwimlines task id = ", task.id, "swimlineId = ", task.swimlineId)
-        if (previousSwimlineId == -1 || (swimlineId !== -1 && previousSwimlineId !== swimlineId)) {
-            console.info("displayableSwimlines add swimline")
-            const swimline = appState.currentTimeline.swimlines[swimlineId];
-            const countVisibleTasks = 
-                FactorySwimline.countVisibleTasksInListForSwimlineName(tasks, swimline.label)
-            const currentCounter = 
-                appState.currentTimeline.showAll
-                ? swimline.countAllTasks
-                : countVisibleTasks;
-
-            const height = currentCounter * GRID.ONE_TASK_H - 0.5;
-
-            result.set(task.id, {
-                swimline: swimline,
-                position: position,
-                height: height
+        const swimlineName = task.swimline;
+        //console.info("displayableSwimlines --------------")
+        //console.info("displayableSwimlines task id = ", task.id, "swimlineName = ", task.swimline)
+        if (previousSwimlineName == undefined || (previousSwimlineName && previousSwimlineName !== swimlineName)) {
+            //console.info("displayableSwimlines add swimline")
+            let swimline:Swimline|null = null;
+            appState.currentTimeline.swimlines.forEach(aSwimline => {
+                
+                if(aSwimline.label === swimlineName && aSwimline.tasksIds.includes(task.id)){
+                    //console.info("displayableSwimlines boucle affectation", aSwimline)
+                    swimline = aSwimline;
+                }
             });
 
-            position++;
+            if(swimline !== null){
+                const groupOfSameTask = FactoryTask.getSimilarTasksWithSameSwimline(task)
+                //console.info("displayableSwimlines groupOfSameTask", groupOfSameTask, task)
+
+                const countVisibleTasks = 
+                FactorySwimline.countVisibleTasksInListForSwimlineName(groupOfSameTask, (swimline as Swimline).label)
+                const currentCounter = 
+                    appState.currentTimeline.showAll
+                    ? (swimline as Swimline).countAllTasks
+                    : countVisibleTasks;
+
+                //console.info("displayableSwimlines countVisibleTasks", countVisibleTasks)
+
+                const height = currentCounter * GRID.ONE_TASK_H - 0.5;
+
+                result.set(task.id, {
+                    swimline: swimline,
+                    position: position,
+                    height: height
+                });
+
+                position++;
+            }            
+            
         } else {
-            console.info("displayableSwimlines reuse swimline id", previousSwimlineId)
+            //console.info("displayableSwimlines reuse swimline id", previousSwimlineName)
         }
 
-        previousSwimlineId = swimlineId;
+        previousSwimlineName = swimlineName;
     });
-    console.info("displayableSwimlines", result)
+    //console.info("displayableSwimlines", result)
     return result;
 };

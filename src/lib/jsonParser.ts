@@ -81,8 +81,7 @@ export class JsonParser {
 					value.hasProgress,
 					value.progress,
 					value.isShow,
-					value.swimline,
-					value.swimlineId
+					value.swimline
 				);
 			} else {
 				//This is a re-processed value, we don't need to reprocessing it right now

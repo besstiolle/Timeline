@@ -1,3 +1,4 @@
+import { appState } from './state/appState.svelte';
 import { Swimline, Task, Timeline } from './struct.class.svelte';
 
 export class FactorySwimline {
@@ -22,4 +23,5 @@ export class FactorySwimline {
 	static hasVisibleTasksInListForSwimlineName(tasks: Task[], swimlineName:string): boolean {
 		return FactorySwimline.countVisibleTasksInListForSwimlineName(tasks, swimlineName) > 0;
 	}
+
 }

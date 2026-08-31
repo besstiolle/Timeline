@@ -170,11 +170,10 @@ export class Timeline {
 					//Add the swimline to the list
 					swimlinesToReturn.push(currentSwimline);
 				}
-				
 				// add task to swimline
-				currentSwimline.tasksIndex.push(task.id);
+				currentSwimline.tasksIds.push(task.id);
+				currentSwimline.tasksIndex.push(index);
 			} else {
-				task.swimlineId = -1;
 				previousLabel = '';
 				currentSwimline = null;
 			}
@@ -214,7 +213,6 @@ export class Task {
 	progress: number = $state(-1);
 	isShow: boolean = $state(false);
 	swimline: string = $state('');
-	swimlineId: number = $state(-1);
 
 	constructor(
 		id: number,
@@ -224,8 +222,7 @@ export class Task {
 		hasProgress: boolean,
 		progress: number,
 		isShow: boolean,
-		swimline: string,
-		swimlineId: number
+		swimline: string
 	) {
 		this.id = id;
 		this.label = label;
@@ -235,7 +232,6 @@ export class Task {
 		this.progress = progress;
 		this.isShow = isShow;
 		this.swimline = swimline;
-		this.swimlineId = swimlineId;
 	}
 
 	toJSON() {
@@ -247,8 +243,7 @@ export class Task {
 			hasProgress: this.hasProgress,
 			progress: this.progress,
 			isShow: this.isShow,
-			swimline: this.swimline,
-			swimlineId: this.swimlineId
+			swimline: this.swimline
 		};
     }
 
@@ -277,8 +272,7 @@ export class Task {
 			this.hasProgress,
 			this.progress,
 			this.isShow,
-			this.swimline,
-			this.swimlineId,
+			this.swimline
 		)
 	}
 }
@@ -327,6 +321,7 @@ export class Swimline {
 	id: number;
 	label: string = ''; 
 	tasksIndex: number[] = [];
+	tasksIds: number[] = [];
 
 	constructor(id:number, label: string) {
 		this.id = id;

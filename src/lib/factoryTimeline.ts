@@ -461,8 +461,7 @@ export class FactoryTimeline {
 							true,
 							task.progress,
 							task.show,
-							tasks.title,
-							index
+							tasks.title
 						)
 					);
 					idTask++;

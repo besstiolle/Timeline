@@ -27,8 +27,7 @@ export function parseAbstractTimeline(
 					abstractTask.hasProgress === false ? abstractTask.hasProgress : true,
 					abstractTask.progress,
 					abstractTask.isShow === false ? abstractTask.isShow : true,
-					abstractTask.swimline,
-					-1
+					abstractTask.swimline
 				)
 			);
 		});

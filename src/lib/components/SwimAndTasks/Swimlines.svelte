@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { COLORS, GRID } from '$lib/constantes';
 	import { FactorySwimline } from '$lib/factorySwimline';
-	import { Helpers } from '$lib/helpers';
+	import { FactoryTask } from '$lib/factoryTask';
 	import { appState } from '$lib/state/appState.svelte';
 	import type { Task } from '$lib/struct.class.svelte';
 	import { displayableSwimlines, displayableTasks, type swimlinesToShowInterface} from './SwimAndTasks';
@@ -11,13 +11,22 @@
 	const swimlinesToShow = $derived(displayableSwimlines());
 	
 
-	function toggleSwimlineVisibility(event: Event, id:number) {
-		const tasksVisiblesForThisSwimline = FactorySwimline.countVisibleTasksInListForSwimlineName(appState.currentTimeline.tasks, appState.currentTimeline.swimlines[id].label)
+	function toggleSwimlineVisibility(event: Event, taskId:number) {
+		const taskParameter = FactoryTask.getById(appState.currentTimeline,taskId)
+		const tasksVisiblesForThisSwimline = FactorySwimline.countVisibleTasksInListForSwimlineName(
+			appState.currentTimeline.tasks, 
+			taskParameter.swimline)
+
 		const value = !(tasksVisiblesForThisSwimline > 0)
+
+		const allTasks = FactoryTask.getSimilarTasksWithSameSwimline(taskParameter)
+
 		appState.currentTimeline.tasks.forEach((task: Task) => {
-			if (task.swimlineId == id) {
-				task.isShow = value;
-			}
+			allTasks.forEach(taskOfSameSwimline => {
+				if (taskOfSameSwimline.id == task.id) {
+					task.isShow = value;
+				}
+			});
 		});
 	}
 
@@ -45,7 +54,7 @@
 					width={GRID.ALL_WIDTH}
 					height={localSwimline.height}
 					fill={COLORS[localSwimline.position % COLORS.length][0]}
-					id="c{task.swimlineId}"
+					id="c{task.swimline}"
 					role="none"
 					class="www"
 				/>
@@ -56,7 +65,7 @@
 					width={GRID.LEFT_WIDTH}
 					height={localSwimline.height}
 					fill={COLORS[localSwimline.position % COLORS.length][1]}
-					id="d{task.swimlineId}"
+					id="d{task.swimline}"
 					role="none"
 				/>
 
@@ -76,9 +85,9 @@
 					height="24"
 					width="24"
 					data-html2canvas-ignore="true"
-					onclick={(e) => toggleSwimlineVisibility(e, Helpers.hashString(task.swimlineId))}
-					onkeydown={(e) => toggleSwimlineVisibility(e, Helpers.hashString(task.swimlineId))}
-					id="s{task.swimlineId}"
+					onclick={(e) => toggleSwimlineVisibility(e, task.id)}
+					onkeydown={(e) => toggleSwimlineVisibility(e, task.id)}
+					id="s{task.swimline}"
 					class="toggleVisibility"
 					role="button"
 					tabindex="0"

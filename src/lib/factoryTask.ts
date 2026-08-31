@@ -1,3 +1,4 @@
+import { appState } from './state/appState.svelte';
 import { Task, type Timeline } from './struct.class.svelte';
 import { NotFoundException } from './timelineException.class';
 
@@ -93,8 +94,41 @@ export class FactoryTask {
 			task.hasProgress,
 			task.progress,
 			task.isShow,
-			task.swimline,
-			task.swimlineId
+			task.swimline
 		);
+	}
+
+	static getSimilarTasksWithSameSwimline(task:Task): Task[]{
+		
+		let previousSwimlineName = ''
+		let currentSwimlineName = '--1'
+		let list:Task[] = []
+		let tmpList:Task[] = []
+		let found:boolean = false
+		appState.currentTimeline.tasks.forEach(aTask => {
+			if(currentSwimlineName !== aTask.swimline){
+				previousSwimlineName = currentSwimlineName
+				currentSwimlineName = aTask.swimline
+				
+				//Si déjà trouvé + on switch de swimline + pas de liste persisté on peut l'affecter
+				if(found && list.length == 0) {					
+					list = [...tmpList]
+				}
+				tmpList = []
+			}
+
+			if(currentSwimlineName === aTask.swimline && aTask.id == task.id) {
+				found = true
+			}
+
+			tmpList.push(aTask)			
+		});
+
+		//A la fin, s'il n'y a rien dans list + on vient de le trouver => dernier élement => on pousse
+		if(found && list.length == 0){
+			list = [...tmpList]
+		}
+
+		return list
 	}
 }
