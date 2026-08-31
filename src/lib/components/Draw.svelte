@@ -112,9 +112,7 @@
 	}
 
 	function toggleShowHide() {
-		console.info("toggleShowHide was", appState.currentTimeline.showAll)
 		appState.currentTimeline.showAll = !appState.currentTimeline.showAll;
-		console.info("toggleShowHide is", appState.currentTimeline.showAll)
 	}
 </script>
 

@@ -154,7 +154,6 @@ export class Timeline {
 	}
 
 	get swimlines():Array<Swimline>{
-		console.info("getSwimline")
 		const swimlinesToReturn: Swimline[] = [];
 		let previousLabel = '';
 		let currentSwimline: Swimline | null = null;
@@ -178,8 +177,6 @@ export class Timeline {
 				currentSwimline = null;
 			}
 		});
-
-		console.info("getSwimlines", swimlinesToReturn)
 
 		return swimlinesToReturn;
 	}
