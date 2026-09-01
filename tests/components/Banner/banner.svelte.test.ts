@@ -24,7 +24,6 @@ describe('test Rendering', () => {
 	appState.rights = new Rights()
 	volatileAppState.lastCommitedRemotely = -1
 	volatileAppState.lastUpdatedLocally = -1
-	volatileAppState._cancelRefreshLastUpdatedLocally = false
 
 	it('viexbox must be 0 0 1000 115', () => {
 		const { container } = render(Banner /*, {name: 'World'}*/);

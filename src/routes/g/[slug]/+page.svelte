@@ -94,8 +94,7 @@
 				//Update date of lastUpdated in the clone
 				volatileAppState.lastUpdatedLocally = 0;
 				volatileAppState.lastCommitedRemotely = responseWithMeta.meta.ts;
-				// Tricks : Set to true if we don't want to refresh lastUpdatedLocally property
-				volatileAppState._cancelRefreshLastUpdatedLocally = true;
+
 			})
 			.catch((err) => {
 				console.error('Error where calling get() in [slug].svelte : %o', err);
