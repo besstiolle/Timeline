@@ -9,6 +9,7 @@
 
 	 $effect(() => {
 		if(appState.currentTimeline && appState.currentTimeline.isInitiate){
+			appState.currentTimeline.title = localTitle
 			const cardIndex =  FactoryCards.getIndexByKey(appState.cards, appState.currentTimeline.key)
 			if(cardIndex !== null){
 				//console.info("update title from Live", appState.currentTimeline.title)
