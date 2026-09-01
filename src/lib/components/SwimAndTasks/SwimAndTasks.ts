@@ -12,17 +12,6 @@ export interface swimlinesToShowInterface {
 }
 
 /**
- * return all the Milestones to display
- **/
-export function displayableMilestones():Milestone[] {
-    const showAll = appState.currentTimeline.showAll;
-
-    return appState.currentTimeline.milestones
-        .filter((milestone) => showAll || milestone.isShow)
-        .sort(FactoryMilestone.compare);
-};
-
-/**
  * return all the Tasks to display
  **/
 export function displayableTasks():Task[] {
@@ -38,13 +27,14 @@ export function displayableSwimlines(){
     const result = new Map<number, swimlinesToShowInterface>();
     const tasks = appState.currentTimeline.tasks.filter((task) => showAll || task.isShow);
 
-    let previousSwimlineName: string;
+    let previousSwimlineName: string='';
     let position = 0;
 
 
     tasks.forEach((task: Task) => {
         const swimlineName = task.swimline;
-        if (previousSwimlineName == undefined || (previousSwimlineName && previousSwimlineName !== swimlineName)) {
+        if (previousSwimlineName == '' || previousSwimlineName !== swimlineName) {
+            previousSwimlineName = swimlineName
             let swimline:Swimline|null = null;
             appState.currentTimeline.swimlines.forEach(aSwimline => {
                 
