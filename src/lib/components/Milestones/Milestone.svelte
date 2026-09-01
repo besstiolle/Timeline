@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { appState } from '$lib/state/appState.svelte';
-	import type { MilestoneViewModel } from '$lib/viewModel';
+	import type { MilestoneViewModel } from '$lib/viewModels/milestoneViewModel';
 
     interface Props {
         i: number;

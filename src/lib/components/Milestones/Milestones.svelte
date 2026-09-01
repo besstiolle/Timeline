@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { FactoryMilestone } from '$lib/factoryMilestone';
 	import { GRID } from '$lib/constantes';
-	import { MilestoneViewModel } from '$lib/viewModel';
 	import { Milestone } from '$lib/struct.class.svelte';
 	import MilestoneComponent from './Milestone.svelte';
 	import { Helpers } from '$lib/helpers';
 	import { displayableMilestones as milestonesToDerive } from './Milestones';
 	import { appState } from '$lib/state/appState.svelte';
+	import { MilestoneViewModel } from '$lib/viewModels/milestoneViewModel';
 
 	interface ActiveDragInterface{
 		milestoneId: number,

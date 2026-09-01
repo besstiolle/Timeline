@@ -1,7 +1,15 @@
 <script lang="ts">
 	import { GRID } from '$lib/constantes';
 	import { appState } from '$lib/state/appState.svelte';
-	import { getJalons } from './Banner';
+	import { BannerViewModel } from '$lib/viewModels/bannerViewModel';
+
+	const bannerVM = $derived(
+		new BannerViewModel(
+		appState.currentTimeline.start,
+		appState.currentTimeline.end,
+		appState.currentTimeline.differencial)
+	)
+
 </script>
 
 <svg xmlns="http://www.w3.org/2000/svg">
@@ -28,15 +36,15 @@
 	<g id="bannerSection">
 		<rect x="-10" y="0" width={GRID.MIDDLE_WIDTH + 50} height="25" fill="url(#Gradient1)" />
 		<rect x="-10" y="30" width={GRID.MIDDLE_WIDTH + 50} height="25" fill="url(#Gradient2)" />
-		{#each getJalons() as { left, label, classCss }, index (index)}
-			<path d="M{left} 6 v 14" fill="transparent" stroke="#818C9C" />
+		{#each bannerVM.jalonsVM as jalon, index (index)}
+			<path d="M{jalon.left} 6 v 14" fill="transparent" stroke="#818C9C" />
 			<text
 				data-testid="jalonText_{index}"
-				x={left + 5}
+				x={jalon.left + 5}
 				y="17"
 				font-size="12"
 				fill="#818C9C"
-				class={classCss}>{label}</text
+				class={jalon.classCss}>{jalon.label}</text
 			>
 		{/each}
 	</g>

@@ -4,10 +4,10 @@
 	import { FactoryTask } from '$lib/factoryTask';
 	import TaskComponent from './Task.svelte';
 	import Swimlines from './Swimlines.svelte';
-	import { TaskViewModel } from '$lib/viewModel';
 	import type { Task } from '$lib/struct.class.svelte';
 	import { displayableTasks } from './SwimAndTasks';
 	import { appState } from '$lib/state/appState.svelte';
+	import { TaskViewModel } from '$lib/viewModels/taskViewModel';
 
 
 	interface ActiveDragInterface{
