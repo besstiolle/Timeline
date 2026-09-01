@@ -1,4 +1,3 @@
-import { appState } from './state/appState.svelte';
 import { Task, type Timeline } from './struct.class.svelte';
 import { NotFoundException } from './timelineException.class';
 
@@ -98,13 +97,13 @@ export class FactoryTask {
 		);
 	}
 
-	static getSimilarTasksWithSameSwimline(task:Task): Task[]{
+	static getSimilarTasksWithSameSwimline(task:Task, listOfTasks:Task[]): Task[]{
 		
 		let currentSwimlineName = '--1'
 		let list:Task[] = []
 		let tmpList:Task[] = []
 		let found:boolean = false
-		appState.currentTimeline.tasks.forEach(aTask => {
+		listOfTasks.forEach(aTask => {
 			if(currentSwimlineName !== aTask.swimline){
 				currentSwimlineName = aTask.swimline
 				

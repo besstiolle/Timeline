@@ -2,7 +2,6 @@ import { describe, expect, it, vi } from 'vitest';
 import { FactoryTask } from '$lib/factoryTask';
 import { NotFoundException } from '$lib/timelineException.class';
 import { Task, Timeline } from '$lib/struct.class.svelte';
-import { appState } from '$lib/state/appState.svelte';
 
 //Mock console.error() to avoid vi console pollution
 vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -227,29 +226,29 @@ describe('FactoryTask.getSimilarTasksWithSameSwimline', () => {
 		'Swimline 1'
 	);
 
-	appState.currentTimeline.tasks = []
-	appState.currentTimeline.tasks.push(task1)
-	appState.currentTimeline.tasks.push(task2)
-	appState.currentTimeline.tasks.push(task3)
-	appState.currentTimeline.tasks.push(task4)
+	const listTasks:Task[] = []
+	listTasks.push(task1)
+	listTasks.push(task2)
+	listTasks.push(task3)
+	listTasks.push(task4)
 
 	it('FactoryTask.getSimilarTasksWithSameSwimline and no valid swmiline', () => {
-		const result = FactoryTask.getSimilarTasksWithSameSwimline(task_other)
+		const result = FactoryTask.getSimilarTasksWithSameSwimline(task_other, listTasks)
 		expect(result.length).toBe(0);
 	});
 	it('FactoryTask.getSimilarTasksWithSameSwimline and unique swmiline', () => {
-		const result = FactoryTask.getSimilarTasksWithSameSwimline(task3)
+		const result = FactoryTask.getSimilarTasksWithSameSwimline(task3, listTasks)
 		expect(result.length).toBe(1);
 		expect(result[0].label).toBe(task3.label);
 	});
 	it('FactoryTask.getSimilarTasksWithSameSwimline and first dispatched swmiline', () => {
-		const result = FactoryTask.getSimilarTasksWithSameSwimline(task1)
+		const result = FactoryTask.getSimilarTasksWithSameSwimline(task1, listTasks)
 		expect(result.length).toBe(2);
 		expect(result[0].label).toBe(task1.label);
 		expect(result[1].label).toBe(task2.label);
 	});
 	it('FactoryTask.getSimilarTasksWithSameSwimline and first dispatched swmiline', () => {
-		const result = FactoryTask.getSimilarTasksWithSameSwimline(task4)
+		const result = FactoryTask.getSimilarTasksWithSameSwimline(task4, listTasks)
 		expect(result.length).toBe(1);
 		expect(result[0].label).toBe(task4.label);
 	});

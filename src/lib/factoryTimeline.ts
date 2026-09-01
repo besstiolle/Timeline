@@ -1,4 +1,3 @@
-//import { browser } from '$app/environment';
 import { Helpers } from './helpers';
 import { Milestone, Task, Timeline } from './struct.class.svelte';
 import { DuplicateEntityException } from './timelineException.class';

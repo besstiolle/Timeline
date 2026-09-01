@@ -19,7 +19,7 @@
 
 		const value = !(tasksVisiblesForThisSwimline > 0)
 
-		const allTasks = FactoryTask.getSimilarTasksWithSameSwimline(taskParameter)
+		const allTasks = FactoryTask.getSimilarTasksWithSameSwimline(taskParameter, appState.currentTimeline.tasks)
 
 		appState.currentTimeline.tasks.forEach((task: Task) => {
 			allTasks.forEach(taskOfSameSwimline => {

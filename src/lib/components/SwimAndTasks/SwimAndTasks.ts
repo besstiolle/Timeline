@@ -43,7 +43,7 @@ export function displayableSwimlines(){
             });
 
             if(swimline !== null){
-                const groupOfSameTask = FactoryTask.getSimilarTasksWithSameSwimline(task)
+                const groupOfSameTask = FactoryTask.getSimilarTasksWithSameSwimline(task, appState.currentTimeline.tasks)
 
                 const countVisibleTasks = 
                 FactorySwimline.countVisibleTasksInListForSwimlineName(groupOfSameTask, (swimline as Swimline).label)
