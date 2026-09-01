@@ -4,7 +4,7 @@ import { defineConfig } from 'vitest/config';
 import tailwindcss from '@tailwindcss/vite';
 import { svelteTesting } from '@testing-library/svelte/vite';
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig(() => ({
 	plugins: [
 		paraglideVitePlugin({
 			project: './project.inlang',

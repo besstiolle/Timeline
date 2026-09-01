@@ -7,7 +7,6 @@
 	import { Helpers } from '$lib/helpers';
 	import { displayableMilestones as milestonesToDerive } from './Milestones';
 	import { appState } from '$lib/state/appState.svelte';
-	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 
 	interface ActiveDragInterface{
 		milestoneId: number,
@@ -47,8 +46,6 @@
 			return
 		}
 
-		const viewModel = new MilestoneViewModel(currentSelection, appState.currentTimeline)
-
 		//construction of activeDrag
 		activeDrag = {
 			milestoneId: milestoneId,
@@ -60,9 +57,8 @@
 
 	/**
 	 * Triggered every time user release the left clic of the mouse
-	 * @param event the event mouseup
 	 */
-	function up(event: MouseEvent) {
+	function up() {
 		//Security : we can't manipulate data if we are a simple Reader
 		if (appState.rights.isReader() || activeDrag === null) {
 			return;

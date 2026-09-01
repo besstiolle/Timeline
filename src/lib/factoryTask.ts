@@ -100,14 +100,12 @@ export class FactoryTask {
 
 	static getSimilarTasksWithSameSwimline(task:Task): Task[]{
 		
-		let previousSwimlineName = ''
 		let currentSwimlineName = '--1'
 		let list:Task[] = []
 		let tmpList:Task[] = []
 		let found:boolean = false
 		appState.currentTimeline.tasks.forEach(aTask => {
 			if(currentSwimlineName !== aTask.swimline){
-				previousSwimlineName = currentSwimlineName
 				currentSwimlineName = aTask.swimline
 				
 				//Si déjà trouvé + on switch de swimline + pas de liste persisté on peut l'affecter

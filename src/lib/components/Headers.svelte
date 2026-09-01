@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { resolve } from '$app/paths';
 	import { getLocale, locales, setLocale } from '../../paraglide/runtime';
 	import Version from './Version/Version.svelte';
 
@@ -32,7 +33,7 @@
 >
 	<div class="flex items-center space-x-4">
 		<nav>
-			<a href="/">Home</a>
+			<a href={resolve('/')}>Home</a>
 		</nav>
 	</div>
 	<div class="flex items-center space-x-4">

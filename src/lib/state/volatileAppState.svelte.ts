@@ -4,6 +4,8 @@
 export class VolatileAppState {
     lastUpdatedLocally = $state<number>(0);
     lastCommitedRemotely = $state<number>(0);
+
+    //FIXME : remove, unused (à priori)
     _cancelRefreshLastUpdatedLocally = $state<boolean>(false);
 
 }

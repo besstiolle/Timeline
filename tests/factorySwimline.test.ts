@@ -3,7 +3,7 @@ import { FactorySwimline } from '$lib/factorySwimline';
 import { Task } from '$lib/struct.class.svelte';
 
 describe('FactorySwimline.countVisibleTasksInListForSwimlineName', () => {
-	let tasks = []
+	const tasks:Task[] = []
 	tasks.push(new Task(1,'task#1','','',true,100,true,'A'))
 	tasks.push(new Task(2,'task#2','','',true,100,true,'A'))
 	tasks.push(new Task(3,'task#3','','',true,100,true,'B'))
@@ -27,7 +27,7 @@ describe('FactorySwimline.countVisibleTasksInListForSwimlineName', () => {
 });
 
 describe('FactorySwimline.hasVisibleTasksInListForSwimlineName', () => {
-	let tasks = []
+	const tasks:Task[] = []
 	tasks.push(new Task(1,'task#1','','',true,100,true,'A'))
 	tasks.push(new Task(2,'task#2','','',true,100,true,'A'))
 	tasks.push(new Task(3,'task#3','','',true,100,true,'B'))

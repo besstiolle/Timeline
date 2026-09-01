@@ -4,6 +4,8 @@
  * Use $lib/server/types.ts if the code is specific to the server
  */
 
+//TODO : moving various interface from project here
+
 export interface ResponseWithMeta {
 	meta: {
 		ts: number;

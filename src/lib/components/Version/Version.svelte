@@ -4,7 +4,7 @@
 	import {
 		getCurrentVersion,
 		getDistantVersion,
-		toString,
+		toLiteralString,
 		toVersion,
 		versionCompare
 	} from './Version';
@@ -83,11 +83,11 @@
 			role="button"
 			tabindex="0"
 		>
-			TimeChart v{toString(localVersion)}<span class="notification">◉</span>
+			TimeChart v{toLiteralString(localVersion)}<span class="notification">◉</span>
 		</div>
 	{:else}
 		<div use:myaction class={className}>
-			TimeChart v{toString(localVersion)}
+			TimeChart v{toLiteralString(localVersion)}
 		</div>
 	{/if}
 
@@ -104,8 +104,8 @@
 			<p>{m.version_fix()}🔥</p>
 		{/if}
 		<p>
-			<a href="https://github.com/besstiolle/Timeline/releases/tag/v{toString(distantVersion)}"
-				>{m.version_link_to_release()} {toString(distantVersion)}</a
+			<a href="https://github.com/besstiolle/Timeline/releases/tag/v{toLiteralString(distantVersion)}"
+				>{m.version_link_to_release()} {toLiteralString(distantVersion)}</a
 			>
 		</p>
 	</ShadowBox>{/if}

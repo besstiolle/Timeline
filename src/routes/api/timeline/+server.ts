@@ -151,15 +151,15 @@ function controlSlugAndKeys(
 		return new REGEX_FAILED_ProblemJsonResponse(instance, 'slug', slug, ALPHANUM64.source);
 	}
 	if (ownerKey !== null && !ownerKey.match(ALPHANUM64)) {
-		const value = ownerKey == null ? (ownerKey = '') : ownerKey;
+		const value = ownerKey == null ? '' : ownerKey;
 		return new REGEX_FAILED_ProblemJsonResponse(instance, 'ownerKey', value, ALPHANUM64.source);
 	}
 	if (writeKey == null || !writeKey.match(ALPHANUM64)) {
-		const value = writeKey == null ? (writeKey = '') : writeKey;
+		const value = writeKey == null ? '' : writeKey;
 		return new REGEX_FAILED_ProblemJsonResponse(instance, 'writeKey', value, ALPHANUM64.source);
 	}
 	if (readKey == null || !readKey.match(ALPHANUM64)) {
-		const value = readKey == null ? (readKey = '') : readKey;
+		const value = readKey == null ? '' : readKey;
 		return new REGEX_FAILED_ProblemJsonResponse(instance, 'readKey', value, ALPHANUM64.source);
 	}
 	if (ownerKey == null && writeKey == null && readKey == null) {

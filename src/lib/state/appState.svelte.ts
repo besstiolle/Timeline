@@ -3,6 +3,7 @@ import { Rights } from '$lib/rights.class';
 import { CustomLocalStorage } from '$lib/customLocalStorage';
 import { volatileAppState } from './volatileAppState.svelte';
 import { LOCAL_STORAGE } from '$lib/constantes';
+import { SvelteDate } from 'svelte/reactivity';
 
 /**
  * A state class with informations wich need to be persisted.
@@ -25,6 +26,6 @@ export function syncLocalStorage() {
 	CustomLocalStorage.save(LOCAL_STORAGE.KEY_CARDS, appState.cards);
 
 	//Update volatileState
-	volatileAppState.lastUpdatedLocally = (new Date()).getTime()
+	volatileAppState.lastUpdatedLocally = (new SvelteDate()).getTime()
 
 }

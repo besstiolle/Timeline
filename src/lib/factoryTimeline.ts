@@ -341,7 +341,7 @@ export class FactoryTimeline {
 			starting.setDate(starting.getDate() - 15);
 
 			let idTask = 0;
-			allTasksGrouped.forEach((tasks, index) => {
+			allTasksGrouped.forEach((tasks) => {
 				tasks.tasks.forEach((task) => {
 					const localStart = new Date(starting);
 					localStart.setDate(localStart.getDate() + task.start);

@@ -46,7 +46,7 @@
 			return;
 		}
 
-		let task = null
+		let task:Task;
 		try {
 			task = FactoryTask.getById(
 				appState.currentTimeline,taskId
@@ -75,7 +75,7 @@
 		//console.info("Down", activeDrag.taskId, activeDrag.initialLeftXPosition, activeDrag.initialRightXPosition, activeDrag.currentX)
 		
 	}
-	function up(event: MouseEvent): void {
+	function up(): void {
 		//Security : we can't manipulate data if we are a simple Reader
 		if (appState.rights.isReader()) {
 			return;
@@ -195,7 +195,7 @@
 
 <Swimlines />
 
-	{#each tasksToShow as task, index}
+	{#each tasksToShow as task, index (task.id)}
 		<TaskComponent
 			i={index}
 			taskVM={new TaskViewModel(

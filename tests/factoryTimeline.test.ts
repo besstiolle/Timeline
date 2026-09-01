@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { FactoryTimeline } from '$lib/factoryTimeline';
 import { DuplicateEntityException } from '$lib/timelineException.class';
-import { Milestone, Swimline, Task, Timeline } from '$lib/struct.class.svelte';
+import { Milestone, Task, Timeline } from '$lib/struct.class.svelte';
 import { DIFF } from '$lib/constantes';
 
 
@@ -168,7 +168,7 @@ describe('test FactoryTimeline.addMilestone', () => {
 describe('test FactoryTimeline.purge', () => {
 	let timeline = new Timeline('key', 'title');
 	timeline.showAll = true;
-	let timelinePurged = new Timeline('key', 'title');
+	const timelinePurged = new Timeline('key', 'title');
 	timelinePurged.showAll = true;
 
 	const date: string = '2020-01-01';

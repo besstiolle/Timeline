@@ -6,7 +6,6 @@
 	import { Milestone } from '$lib/struct.class.svelte';
 	import LiveTableMilestoneRow from './LiveTableMilestoneRow.svelte';
 	import { appState } from '$lib/state/appState.svelte';
-	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 
 	function onDelete(index: number) {
 		if (index < 0 || index > appState.currentTimeline.milestones.length - 1) {

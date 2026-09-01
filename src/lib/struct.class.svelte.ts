@@ -1,3 +1,4 @@
+import { SvelteDate } from 'svelte/reactivity';
 import { GRID } from './constantes';
 import { FactoryTimeline } from './factoryTimeline';
 import { Helpers } from './helpers';
@@ -12,7 +13,7 @@ export class Card {
 	constructor(key: string, title: string) {
 		this.key = key;
 		this.title = title;
-		this.lastUpdated = new Date();
+		this.lastUpdated = new SvelteDate();
 		this.isOnline = false;
 	}
 
@@ -26,7 +27,7 @@ export class Card {
     }
 
 	clone():Card {
-		let clone = new Card(this.key,this.title);
+		const clone = new Card(this.key,this.title);
 		clone.lastUpdated = this.lastUpdated;
 		clone.isOnline = this.isOnline;
 		return clone;
@@ -101,7 +102,7 @@ export class Timeline {
     }
 
 	clone():Timeline {
-		let clone = new Timeline(this.key,this.title)
+		const clone = new Timeline(this.key,this.title)
 		clone.isInitiate= this.isInitiate;
 		clone.maxId= this.maxId;
 		clone.showAll= this.showAll;
@@ -135,14 +136,14 @@ export class Timeline {
 		if (this.dateStartFocus == null) {
 			return null;
 		}
-		return new Date(this.dateStartFocus);
+		return new SvelteDate(this.dateStartFocus);
 	}
 
 	getEndFocus(): Date | null {
 		if (this.dateEndFocus == null) {
 			return null;
 		}
-		return new Date(this.dateEndFocus);
+		return new SvelteDate(this.dateEndFocus);
 	}
 
 	setStartFocus(startFocus: Date): void {
@@ -250,11 +251,11 @@ export class Task {
     }
 
 	getStart(): Date {
-		return new Date(this.dateStart);
+		return new SvelteDate(this.dateStart);
 	}
 
 	getEnd(): Date {
-		return new Date(this.dateEnd);
+		return new SvelteDate(this.dateEnd);
 	}
 
 	setStart(start: Date): void {
@@ -302,7 +303,7 @@ export class Milestone {
     }
 
 	getDate(): Date {
-		return new Date(this.date);
+		return new SvelteDate(this.date);
 	}
 
 	setDate(date: Date): void {

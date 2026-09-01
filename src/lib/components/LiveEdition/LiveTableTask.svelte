@@ -6,7 +6,6 @@
 	import { Task } from '$lib/struct.class.svelte';
 	import LiveTableTaskRow from './LiveTableTaskRow.svelte';
 	import { appState } from '$lib/state/appState.svelte';
-	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 
 	function onDelete(index: number) {
 		if (index < 0 || index > appState.currentTimeline.tasks.length - 1) {

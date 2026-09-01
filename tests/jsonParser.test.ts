@@ -2,6 +2,9 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { JsonParser } from '$lib/jsonParser';
 import { JsonParserException } from '$lib/timelineException.class';
 
+//Mock console.error() to avoid vi console pollution
+vi.spyOn(console, 'error').mockImplementation(() => {});
+
 describe('JsonParser - Fallback and Exception branches', () => {
 	beforeEach(() => {
 		vi.restoreAllMocks();

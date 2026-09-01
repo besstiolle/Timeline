@@ -17,7 +17,7 @@ export function getCurrentVersion(): Promise<ResponseWithMeta> {
 	return get();
 }
 
-export function toString(version: Version) {
+export function toLiteralString(version: Version) {
 	return version.x + '.' + version.y + '.' + version.z;
 }
 

@@ -4,6 +4,9 @@ import { NotFoundOnlineException } from '$lib/timelineException.class';
 import type { Timeline } from '$lib/struct.class.svelte';
 import { create, get, remove } from '$lib/timelineRepository';
 
+//Mock console.error() to avoid vi console pollution
+vi.spyOn(console, 'error').mockImplementation(() => {});
+
 describe('timelineRepository', () => {
 	beforeEach(() => {
 		vi.restoreAllMocks();

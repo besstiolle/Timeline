@@ -2,16 +2,7 @@
 	import { browser } from '$app/environment';
 	import { page } from '$app/state';
 
-	import { CustomLocalStorage } from '$lib/customLocalStorage';
-	import { Rights } from '$lib/rights.class';
-	import { JsonParser } from '$lib/jsonParser';
-	import { FactoryTimeline } from '$lib/factoryTimeline';
-	import { get } from '$lib/timelineRepository';
-
-	import Draw from '$lib/components/Draw.svelte';
-	import Toast from '$lib/components/Toast.svelte';
 	import { NotFoundOnlineException } from '$lib/timelineException.class';
-	import type { ResponseWithMeta } from '$lib/types';
 	import { m } from '../../../paraglide/messages';
 	import { Timeline } from '$lib/struct.class.svelte';
 	import { goto } from '$app/navigation';
@@ -19,6 +10,16 @@
 	import { appState } from '$lib/state/appState.svelte';
 	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
 	import { FactoryCards } from '$lib/factoryCards';
+	import { CustomLocalStorage } from '$lib/customLocalStorage';
+	import { Rights } from '$lib/rights.class';
+	import { JsonParser } from '$lib/jsonParser';
+	import { FactoryTimeline } from '$lib/factoryTimeline';
+	import { get } from '$lib/timelineRepository';
+	import type { ResponseWithMeta } from '$lib/types';
+
+	import Draw from '$lib/components/Draw.svelte';
+	import Toast from '$lib/components/Toast.svelte';
+	import { resolve } from '$app/paths';
 
 	appState.rights = new Rights(page.url.searchParams);
 
@@ -27,7 +28,7 @@
 	if (!slug.match('^[a-zA-Z0-9]{64}$')) {
 		$effect(() => {
 			const timer = setTimeout(() => {
-				goto('/');
+				goto(resolve('/'));
 			}, 1000);
 
 			// Clearing if user go somechere else before timing
