@@ -181,21 +181,26 @@ export class Timeline {
 		return swimlinesToReturn;
 	}
 
+	/** @deprecated Read-only property. Kept for JSON backward compatibility.*/
 	set swimlines(s:Array<Swimline>){
 		console.warn("loading old Json format with swimline in it.")
 	}
 
+	/** @deprecated Read-only property. Kept for JSON backward compatibility.*/
 	set start(s:string){
 		console.warn("start property is readonly.")
 	}
 
+	/** @deprecated Read-only property. Kept for JSON backward compatibility.*/
 	set end(s:string){
 		console.warn("end property is readonly.")
 	}
+	/** @deprecated Read-only property. Kept for JSON backward compatibility.*/
 	set viewbox(s:string){
 		console.warn("viewbox property is readonly.")
 	}
 
+	/** @deprecated Read-only property. Kept for JSON backward compatibility.*/
 	set differencial(s:number){
 		console.warn("differencial property is readonly.")
 	}

@@ -19,7 +19,12 @@ export default defineConfig(({ mode }) => ({
 		globals: true,
 		environment: 'jsdom',
 		coverage: {
-			reporter: ['text', 'json', 'html']
+			reporter: ['text', 'json', 'html'],
+			all: true,
+			exclude: [
+				'src/paraglide/**',
+				'src/lib/paraglide/**'
+			]
 		}
 	},
 	resolve: process.env.VITEST

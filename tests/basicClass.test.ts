@@ -1,6 +1,4 @@
 import { describe, expect, it, vi } from 'vitest';
-import { JsonParser } from '$lib/jsonParser';
-import { JsonParserException } from '$lib/timelineException.class';
 import { Rights } from '$lib/rights.class';
 import reviverCards_withCards from './json/reviverCards_withCards.json';
 import { Card, Timeline } from '$lib/struct.class.svelte';
