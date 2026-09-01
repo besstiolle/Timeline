@@ -1,7 +1,10 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { appState } from '$lib/state/appState.svelte';
 import { Timeline, Task } from '$lib/struct.class.svelte';
 import { getJalons } from '$lib/components/Banner/Banner';
+
+//Mock console.error() to avoid vi console pollution
+vi.spyOn(console, 'error').mockImplementation(() => {});
 
 describe('getJalons()', () => {
 	beforeEach(() => {

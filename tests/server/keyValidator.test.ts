@@ -3,6 +3,9 @@ import { Timeline } from '$lib/struct.class.svelte';
 import { CREDENTIALS_NOT_EQUALS_ProblemJsonResponse } from '$lib/api/problemJson';
 import { accessControl } from '$lib/server/keyValidator';
 
+//Mock console.error() to avoid vi console pollution
+vi.spyOn(console, 'error').mockImplementation(() => {});
+
 describe('accessControl()', () => {
 	const instance = '/api/timeline/test';
 

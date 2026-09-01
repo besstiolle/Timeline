@@ -86,6 +86,7 @@ describe('timelineRepository', () => {
 				status: 404
 			});
 			vi.stubGlobal('fetch', fetchMock);
+			vi.spyOn(console, 'error').mockImplementation(() => {});
 
 			await expect(get(params)).rejects.toThrow(NotFoundOnlineException);
 		});
@@ -126,6 +127,7 @@ describe('timelineRepository', () => {
 				status: 404
 			});
 			vi.stubGlobal('fetch', fetchMock);
+			vi.spyOn(console, 'error').mockImplementation(() => {});
 
 			await expect(remove(params)).rejects.toThrow(NotFoundOnlineException);
 		});

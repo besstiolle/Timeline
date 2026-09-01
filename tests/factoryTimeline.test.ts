@@ -33,8 +33,6 @@ describe('test FactoryTimeline.getMin', () => {
 		milestones.push(new Milestone(3, 'label 3', date2, true));
 		milestones.push(new Milestone(4, 'label 4', date2, false));
 
-		console.info(FactoryTimeline.getMin(tasks, milestones, false))
-
 		expect(FactoryTimeline.getMin(tasks, milestones, true)).toEqual(new Date(date3));
 		expect(FactoryTimeline.getMin(tasks, milestones, false)).toEqual(new Date(date4));
 	});

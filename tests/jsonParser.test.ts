@@ -39,6 +39,7 @@ describe('JsonParser - Fallback and Exception branches', () => {
 		it('should throw JsonParserException when an unexpected non-null key/value pair is encountered', () => {
 			const invalidKey = 'unrecognizedKey';
 			const invalidValue = 'unrecognizedValue';
+			vi.spyOn(console, 'error').mockImplementation(() => {});
 
 			expect(() => {
 				JsonParser.timelineReviver(invalidKey, invalidValue);
@@ -83,6 +84,7 @@ describe('JsonParser - Fallback and Exception branches', () => {
 		it('should throw JsonParserException when an unexpected non-null key/value pair is encountered', () => {
 			const invalidKey = 'corruptedField';
 			const invalidValue = 9999;
+			vi.spyOn(console, 'error').mockImplementation(() => {});
 
 			expect(() => {
 				JsonParser.cardsReviver(invalidKey, invalidValue);
