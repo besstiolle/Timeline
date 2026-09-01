@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
 import { LOCAL_STORAGE } from './constantes';
 import { JsonParser } from './jsonParser';
-import type { Card, Timeline } from './struct.class';
+import type { Card, Timeline } from './struct.class.svelte';
 
 export class CustomLocalStorage {
 	/**
@@ -17,8 +17,14 @@ export class CustomLocalStorage {
 		if (!browser) {
 			return;
 		}
-		//console.info("insert/update data in key '"+key+"'")
-		localStorage.setItem(key, JSON.stringify(value, replacer));
+		const json = JSON.stringify(value, replacer)
+		if(LOCAL_STORAGE.KEY_CARDS === key){
+			//console.info("insert/update data in cards ", json)
+		} else {
+			//console.info("insert/update data in key", key, value)	
+		}
+		localStorage.setItem(key, json);
+		
 	}
 
 	static getCards(): Array<Card> {

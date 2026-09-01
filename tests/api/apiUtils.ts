@@ -1,5 +1,5 @@
 import { JsonParser } from '$lib/jsonParser';
-import type { Timeline } from '$lib/struct.class';
+import type { Timeline } from '$lib/struct.class.svelte';
 import type { RequestEvent } from '@sveltejs/kit';
 import type { drizzle } from 'drizzle-orm/better-sqlite3';
 
@@ -39,7 +39,9 @@ export function toRequestEvent<E extends RequestEvent = RequestEvent>(request: R
     return request as unknown as E;
 }
 
-export const VALID_DUMMY_TIMELINE: Timeline = JSON.parse(
+export function getValideDummyTimeline(): Timeline {
+
+ return JSON.parse(
 	`{
   "key": "64CarForKey00000000000000000000000000000000000000000000000000000",
   "title": "My new Project",
@@ -52,8 +54,7 @@ export const VALID_DUMMY_TIMELINE: Timeline = JSON.parse(
       "hasProgress": true,
       "progress": 100,
       "isShow": true,
-      "swimline": "",
-      "swimlineId": -1
+      "swimline": ""
     },
     {
       "id": 1,
@@ -63,8 +64,7 @@ export const VALID_DUMMY_TIMELINE: Timeline = JSON.parse(
       "hasProgress": false,
       "progress": 0,
       "isShow": true,
-      "swimline": "",
-      "swimlineId": -1
+      "swimline": ""
     },
     {
       "id": 2,
@@ -74,8 +74,7 @@ export const VALID_DUMMY_TIMELINE: Timeline = JSON.parse(
       "hasProgress": true,
       "progress": 15,
       "isShow": true,
-      "swimline": "Swimline1",
-      "swimlineId": 0
+      "swimline": "Swimline1"
     },
     {
       "id": 3,
@@ -85,8 +84,7 @@ export const VALID_DUMMY_TIMELINE: Timeline = JSON.parse(
       "hasProgress": true,
       "progress": 0,
       "isShow": true,
-      "swimline": "Swimline1",
-      "swimlineId": 0
+      "swimline": "Swimline1"
     },
     {
       "id": 4,
@@ -96,8 +94,7 @@ export const VALID_DUMMY_TIMELINE: Timeline = JSON.parse(
       "hasProgress": true,
       "progress": 30,
       "isShow": false,
-      "swimline": "",
-      "swimlineId": -1
+      "swimline": ""
     },
     {
       "id": 5,
@@ -107,8 +104,7 @@ export const VALID_DUMMY_TIMELINE: Timeline = JSON.parse(
       "hasProgress": true,
       "progress": 100,
       "isShow": true,
-      "swimline": "",
-      "swimlineId": -1
+      "swimline": ""
     },
     {
       "id": 6,
@@ -118,8 +114,7 @@ export const VALID_DUMMY_TIMELINE: Timeline = JSON.parse(
       "hasProgress": true,
       "progress": 25,
       "isShow": true,
-      "swimline": "Swimline2",
-      "swimlineId": 1
+      "swimline": "Swimline2"
     },
     {
       "id": 7,
@@ -129,8 +124,7 @@ export const VALID_DUMMY_TIMELINE: Timeline = JSON.parse(
       "hasProgress": true,
       "progress": 75,
       "isShow": true,
-      "swimline": "",
-      "swimlineId": -1
+      "swimline": ""
     }
   ],
   "milestones": [
@@ -153,26 +147,8 @@ export const VALID_DUMMY_TIMELINE: Timeline = JSON.parse(
       "isShow": false
     }
   ],
-  "swimlines": [
-    {
-      "label": "Swimline1",
-      "countVisibleTasks": 2,
-      "countAllTasks": 2,
-      "isShow": true
-    },
-    {
-      "label": "Swimline2",
-      "countVisibleTasks": 1,
-      "countAllTasks": 1,
-      "isShow": true
-    }
-  ],
   "isInitiate": true,
-  "start": "2020-11-01",
-  "end": "2022-09-01",
-  "differencial": "isBetween20MonthsAnd3Years",
   "maxId": 11,
-  "viewbox": "0 0 1000 355",
   "showAll": true,
   "isOnline": true,
   "ownerKey": "64CarForOwnerKey000000000000000000000000000000000000000000000000",
@@ -184,4 +160,4 @@ export const VALID_DUMMY_TIMELINE: Timeline = JSON.parse(
   "dateEndFocus": null
 }`,
 	JsonParser.timelineReviver
-);
+ )};

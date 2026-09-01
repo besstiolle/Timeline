@@ -4,7 +4,7 @@ import { defineConfig } from 'vitest/config';
 import tailwindcss from '@tailwindcss/vite';
 import { svelteTesting } from '@testing-library/svelte/vite';
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig(() => ({
 	plugins: [
 		paraglideVitePlugin({
 			project: './project.inlang',
@@ -19,7 +19,12 @@ export default defineConfig(({ mode }) => ({
 		globals: true,
 		environment: 'jsdom',
 		coverage: {
-			reporter: ['text', 'json', 'html']
+			reporter: ['text', 'json', 'html'],
+			all: true,
+			exclude: [
+				'src/paraglide/**',
+				'src/lib/paraglide/**'
+			]
 		}
 	},
 	resolve: process.env.VITEST

@@ -1,12 +1,7 @@
 <script lang="ts">
 	import { GRID } from '$lib/constantes';
-	import { store } from '$lib/stores';
+	import { appState } from '$lib/state/appState.svelte';
 	import { getJalons } from './Banner';
-
-	let displayableStepInCalendar = $derived(
-		getJalons($store.currentTimeline)
-	);
-
 </script>
 
 <svg xmlns="http://www.w3.org/2000/svg">
@@ -25,7 +20,7 @@
 
 <svg
 	data-testid="Banner.svelte"
-	viewBox={$store.currentTimeline.viewbox}
+	viewBox={appState.currentTimeline.viewbox}
 	xmlns="http://www.w3.org/2000/svg"
 	x={GRID.LEFT_WIDTH}
 	y={GRID.MILESTONE_H}
@@ -33,7 +28,7 @@
 	<g id="bannerSection">
 		<rect x="-10" y="0" width={GRID.MIDDLE_WIDTH + 50} height="25" fill="url(#Gradient1)" />
 		<rect x="-10" y="30" width={GRID.MIDDLE_WIDTH + 50} height="25" fill="url(#Gradient2)" />
-		{#each displayableStepInCalendar as { left, label, classCss }, index (index)}
+		{#each getJalons() as { left, label, classCss }, index (index)}
 			<path d="M{left} 6 v 14" fill="transparent" stroke="#818C9C" />
 			<text
 				data-testid="jalonText_{index}"

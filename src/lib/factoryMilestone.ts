@@ -1,4 +1,4 @@
-import { Milestone, Timeline } from './struct.class';
+import { Milestone, Timeline } from './struct.class.svelte';
 import { NotFoundException } from './timelineException.class';
 
 export class FactoryMilestone {

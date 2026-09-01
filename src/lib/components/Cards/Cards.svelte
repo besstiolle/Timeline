@@ -4,13 +4,13 @@
 	import { FactoryCards } from '$lib/factoryCards';
 	import { FactoryPicto } from '$lib/factoryPicto';
 	import { Helpers } from '$lib/helpers';
-	import { store } from '$lib/stores';
 	import PopUpConfirmation from '$lib/components/PopUpConfirmation.svelte';
 	import Toast from '$lib/components/Toast.svelte';
-	import { Card, Timeline } from '$lib/struct.class';
+	import { Card, Timeline } from '$lib/struct.class.svelte';
 	import { m } from '../../../paraglide/messages';
 	import { toastComponentState } from '$lib/state/toastComponent.svelte';
 	import { popupConfirmationComponentState } from '$lib/state/popupComponent.svelte';
+	import { appState } from '$lib/state/appState.svelte';
 
 	function show(event: MouseEvent | KeyboardEvent, index: number) {
 		event.stopPropagation();
@@ -36,7 +36,7 @@
 	 */
 	function duplicate(event: Event, key: string): void {
 		event.stopPropagation();
-		let clone: Timeline = structuredClone(CustomLocalStorage.getTimeline(key));
+		let clone: Timeline = CustomLocalStorage.getTimeline(key).clone();
 		clone.ownerKey = null;
 		clone.writeKey = null;
 		clone.readKey = null;
@@ -45,7 +45,7 @@
 		clone.key = Helpers.randomeString(64);
 
 		let newCard = new Card(clone['key'], clone['title']);
-		$store.cards = [...$store.cards, newCard];
+		appState.cards = [...appState.cards, newCard];
 		CustomLocalStorage.save(clone['key'], clone);
 	}
 
@@ -56,7 +56,7 @@
 	function generateTitle(title: string): string {
 		let index = 1;
 		while (true) {
-			if (FactoryCards.getFirstIndexByTitle($store.cards, title + ' [' + index + ']') !== null) {
+			if (FactoryCards.getFirstIndexByTitle(appState.cards, title + ' [' + index + ']') !== null) {
 				index++;
 			} else {
 				break;
@@ -126,9 +126,9 @@
 			return;
 		}
 		CustomLocalStorage.remove(key);
-		let index = FactoryCards.getIndexByKey($store.cards, key);
+		let index = FactoryCards.getIndexByKey(appState.cards, key);
 		if (index !== null) {
-			$store.cards = $store.cards.toSpliced(index, 1);
+			appState.cards = appState.cards.toSpliced(index, 1);
 		}
 
 		CustomLocalStorage.remove(LOCAL_STORAGE.KEY_PICTO + key);
@@ -165,7 +165,7 @@
 </script>
 
 <div class="w-6xl m-auto mt-10 flex flex-wrap">
-	{#each $store.cards as card, index (card.key)}
+	{#each appState.cards as card, index (card.key)}
 		<!-- One card-->
 		<div class="basis-1/3">
 			<div

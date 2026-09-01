@@ -6,7 +6,7 @@ import { TIMELINE_NOT_FOUND_ProblemJsonResponse } from '$lib/api/problemJson';
 import { _FALLBACK, _OPTIONS, requestToInstance } from '$lib/api/apiUtils';
 import { REGEX_FAILED_ProblemJsonResponse } from '$lib/api/problemJson';
 import { EMPTY_KEYS_ProblemJsonResponse } from '$lib/api/problemJson';
-import type { Timeline } from '$lib/struct.class';
+import type { Timeline } from '$lib/struct.class.svelte';
 import type { RequestHandler } from './$types';
 
 const ALPHANUM64 = new RegExp('^[A-Z0-9a-z]{64}$');

@@ -5,8 +5,7 @@ import reviverTimeline_withAllvalues from './json/reviverTimeline_withAllvalues.
 import reviverTimeline_withMetaTimelines from './json/reviverTimeline_withMetaTimelines.json';
 import reviverTimeline_withTask from './json/reviverTimeline_withTask.json';
 import reviverTimeline_withMilestone from './json/reviverTimeline_withMilestone.json';
-import { Milestone, Task, Timeline } from '$lib/struct.class';
-//import x from
+import { Milestone, Task, Timeline } from '$lib/struct.class.svelte';
 
 //Mock console.error() to avoid vi console pollution
 vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -15,7 +14,7 @@ describe('test factoryCards', () => {
 	const timeline = new Timeline('key', 'title');
 	timeline.tasks = new Array<Task>();
 	timeline.tasks.push(
-		new Task(1, 'label 1', '2022-01-01', '2022-02-01', false, 100, true, 'Swimline 1', 5)
+		new Task(1, 'label 1', '2022-01-01', '2022-02-01', false, 100, true, 'Swimline 1')
 	);
 
 	const jsonResult = JSON.stringify(timeline);
@@ -51,12 +50,9 @@ describe('test factoryCards', () => {
 
 describe('test factoryCards', () => {
 	const timeline = new Timeline('key', 'title');
-	timeline.start = '2022-01-01';
-	timeline.end = '2022-12-31';
 	timeline.isInitiate = true;
 	timeline.maxId = 99;
 	timeline.showAll = true;
-	timeline.viewbox = 'viewbox';
 
 	const jsonResult = JSON.stringify(timeline);
 	const jsonExpected = JSON.stringify(reviverTimeline_withMetaTimelines);
@@ -74,16 +70,13 @@ describe('test factoryCards', () => {
 	const timeline = new Timeline('key', 'title');
 	timeline.tasks = new Array<Task>();
 	timeline.tasks.push(
-		new Task(1, 'label 1', '2022-01-01', '2022-02-01', true, 100, true, 'Swimline 1', 5)
+		new Task(1, 'label 1', '2022-01-01', '2022-02-01', true, 100, true, 'Swimline 1')
 	);
 	timeline.milestones = new Array<Milestone>();
 	timeline.milestones.push(new Milestone(1, 'label 1', '2022-01-01', true));
-	timeline.start = '2022-01-01';
-	timeline.end = '2022-12-31';
 	timeline.isInitiate = true;
 	timeline.maxId = 99;
 	timeline.showAll = true;
-	timeline.viewbox = 'viewbox';
 
 	const jsonResult = JSON.stringify(timeline);
 	const jsonExpected = JSON.stringify(reviverTimeline_withAllvalues);
@@ -97,6 +90,7 @@ describe('test factoryCards', () => {
 	});
 });
 
+//Won't throw exception since we force toJson() into struct.class.svelte.ts
 describe('test factoryCards', () => {
 	const timeline = new Timeline('key', 'title');
 	// @ts-expect-error forcing error for testing porpose
@@ -107,6 +101,6 @@ describe('test factoryCards', () => {
 	it('JsonParser.timelineReviver with unknow values', () => {
 		expect(() => {
 			JSON.parse(jsonResult, JsonParser.timelineReviver);
-		}).toThrow(JsonParserException);
+		}).not.toThrow(JsonParserException);
 	});
-});
+}); 

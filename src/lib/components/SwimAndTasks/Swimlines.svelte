@@ -1,41 +1,51 @@
 <script lang="ts">
 	import { COLORS, GRID } from '$lib/constantes';
-	import { store } from '$lib/stores';
-	import type { Task } from '$lib/struct.class';
-	import { displayableSwimlines as swimlinesToDerive, displayableTasks as tasksToDerive } from './SwimAndTasks';
+	import { FactorySwimline } from '$lib/factorySwimline';
+	import { FactoryTask } from '$lib/factoryTask';
+	import { appState } from '$lib/state/appState.svelte';
+	import type { Task } from '$lib/struct.class.svelte';
+	import { displayableSwimlines, displayableTasks, type swimlinesToShowInterface} from './SwimAndTasks';
 
 
-	const displayableTasks = $derived(
-		tasksToDerive($store.currentTimeline)
-	)
+	const tasksToShow = $derived(displayableTasks());
+	const swimlinesToShow = $derived(displayableSwimlines());
+	
 
-	const displayableSwimlines = $derived(
-		swimlinesToDerive($store.currentTimeline, displayableTasks)
-	)
+	function toggleSwimlineVisibility(event: Event, taskId:number) {
+		const taskParameter = FactoryTask.getById(appState.currentTimeline,taskId)
+		const tasksVisiblesForThisSwimline = FactorySwimline.countVisibleTasksInListForSwimlineName(
+			appState.currentTimeline.tasks, 
+			taskParameter.swimline)
 
-	function toggleSwimlineVisibility(event: Event, id:number) {
-		let value = !$store.currentTimeline.swimlines[id].isShow;
-		store.update((s) => {
-			s.currentTimeline.tasks.forEach((task: Task) => {
-				if (task.swimlineId == id) {
+		const value = !(tasksVisiblesForThisSwimline > 0)
+
+		const allTasks = FactoryTask.getSimilarTasksWithSameSwimline(taskParameter)
+
+		appState.currentTimeline.tasks.forEach((task: Task) => {
+			allTasks.forEach(taskOfSameSwimline => {
+				if (taskOfSameSwimline.id == task.id) {
 					task.isShow = value;
 				}
 			});
-			return { ...s };
 		});
 	}
+
+	function isSwimlineVisible(s:swimlinesToShowInterface){
+		return FactorySwimline.hasVisibleTasksInListForSwimlineName(appState.currentTimeline.tasks, s.swimline.label)
+	}
+
 </script>
 
 <svg
-	viewBox={$store.currentTimeline.viewbox}
+	viewBox={appState.currentTimeline.viewbox}
 	xmlns="http://www.w3.org/2000/svg"
 	x="0"
 	y={GRID.MILESTONE_H + GRID.ANNUAL_H - 5}
 	id="svgSwimlineAndTasks"
 >
-	{#each displayableTasks as task, index (task.id)}
-		{#if displayableSwimlines.has(task.id)}
-			{@const localSwimline = displayableSwimlines.get(task.id)}
+	{#each tasksToShow as task, index (task.id)}
+		{#if swimlinesToShow.has(task.id)}
+			{@const localSwimline = swimlinesToShow.get(task.id)}
 			{#if localSwimline}
 				<g class="wrapperSwimline">
 				<rect
@@ -44,7 +54,7 @@
 					width={GRID.ALL_WIDTH}
 					height={localSwimline.height}
 					fill={COLORS[localSwimline.position % COLORS.length][0]}
-					id="c{task.swimlineId}"
+					id="c{task.swimline}"
 					role="none"
 					class="www"
 				/>
@@ -55,7 +65,7 @@
 					width={GRID.LEFT_WIDTH}
 					height={localSwimline.height}
 					fill={COLORS[localSwimline.position % COLORS.length][1]}
-					id="d{task.swimlineId}"
+					id="d{task.swimline}"
 					role="none"
 				/>
 
@@ -64,20 +74,20 @@
 					x={GRID.LEFT_WIDTH / 2}
 					y={index * GRID.ONE_TASK_H + 5 + localSwimline.height / 2}
 					font-size="10"
-					fill={localSwimline.swimline.isShow ? '#ffffff' : '#888888'}
+					fill={isSwimlineVisible(localSwimline) ? '#ffffff' : '#888888'}
 					>{localSwimline.swimline.label}</text
 				>
 
 				<image
-					xlink:href={localSwimline.swimline.isShow ? '/hide.png' : '/see.png'}
+					xlink:href={isSwimlineVisible(localSwimline) ? '/hide.png' : '/see.png'}
 					x="0"
 					y={index * GRID.ONE_TASK_H}
 					height="24"
 					width="24"
 					data-html2canvas-ignore="true"
-					onclick={(e) => toggleSwimlineVisibility(e, task.swimlineId)}
-					onkeydown={(e) => toggleSwimlineVisibility(e, task.swimlineId)}
-					id="s{task.swimlineId}"
+					onclick={(e) => toggleSwimlineVisibility(e, task.id)}
+					onkeydown={(e) => toggleSwimlineVisibility(e, task.id)}
+					id="s{task.swimline}"
 					class="toggleVisibility"
 					role="button"
 					tabindex="0"

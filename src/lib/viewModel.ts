@@ -1,5 +1,5 @@
-import type { Milestone, Task, Timeline } from "./struct.class";
-import { GRID, MONTHS } from '$lib/constantes';
+import type { Milestone, Task, Timeline } from "./struct.class.svelte";
+import { MONTHS } from '$lib/constantes';
 import { Helpers } from '$lib/helpers';
 
 export class MilestoneViewModel{
@@ -30,8 +30,8 @@ export class MilestoneViewModel{
     get xPosition():number{
         return Helpers.getViewportXFromDate(
             this.#milestone.getDate(),
-			this.#timeline.getStart(),
-			this.#timeline.getEnd()
+			this.#timeline.start,
+			this.#timeline.end
         )
         - 10
     }
@@ -85,8 +85,8 @@ export class TaskViewModel {
     get leftGrayXPosition(): number{
         return Helpers.getViewportXFromDate(
 			this.#task.getStart(),
-			this.#timeline.getStart(),
-			this.#timeline.getEnd()
+			this.#timeline.start,
+			this.#timeline.end
 		)
     }
 
@@ -99,8 +99,8 @@ export class TaskViewModel {
 
         return Helpers.getViewportXFromDate(
             endDate,
-			this.#timeline.getStart(),
-			this.#timeline.getEnd()
+			this.#timeline.start,
+			this.#timeline.end
         )
     }
 

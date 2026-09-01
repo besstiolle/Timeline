@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { FactoryCards } from '$lib/factoryCards';
-import { Card, Timeline } from '$lib/struct.class';
+import { Card, Timeline } from '$lib/struct.class.svelte';
 
 vi.mock('$app/environment', () => ({
 	default: {
@@ -9,7 +9,7 @@ vi.mock('$app/environment', () => ({
 	}
 }));
 
-describe('test factoryCards', () => {
+describe('test factoryCards.updateCardsWithTimeline', () => {
 	
 
 	it('FactoryCards.updateCardsWithTimeline with an existing key', () => {
@@ -41,7 +41,9 @@ describe('test factoryCards', () => {
 		expect(cardsResult[3].title).toEqual(timeline.title);
 		expect(cardsResult[3].lastUpdated).toBeDefined();
 	});
+});
 
+describe('test factoryCards.getIndexByKey', () => {
 	it('FactoryCards.getIndexByKey with various parameters', () => {
 		const cards = new Array<Card>();
 		cards.push(new Card('key1', 'title1'));
@@ -53,6 +55,9 @@ describe('test factoryCards', () => {
 		expect(FactoryCards.getIndexByKey(cards, 'key2')).toEqual(1);
 	});
 
+});
+
+describe('test factoryCards.getFirstIndexByTitle', () => {
 	it('FactoryCards.getFirstIndexByTitle with various parameters', () => {
 		const cards1 = new Array<Card>();
 		cards1.push(new Card('key1', 'title1'));

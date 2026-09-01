@@ -1,5 +1,5 @@
 import type { ResponseWithMeta } from '$lib/types';
-import type { Timeline } from './struct.class';
+import type { Timeline } from './struct.class.svelte';
 import { NotFoundOnlineException } from './timelineException.class';
 
 //const endpoint = import.meta.env.VITE_API_ENDPOINT_BASE_URL + '.netlify/functions/timeline?'

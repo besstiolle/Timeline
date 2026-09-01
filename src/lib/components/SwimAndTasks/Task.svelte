@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { GRID } from '$lib/constantes';
-	import { store } from '$lib/stores';
+	import { appState } from '$lib/state/appState.svelte';
 	import type { TaskViewModel } from '$lib/viewModel';
 
 	interface Props {
@@ -27,7 +27,7 @@
 </script>
 
 <svg
-	viewBox={$store.currentTimeline.viewbox}
+	viewBox={appState.currentTimeline.viewbox}
 	xmlns="http://www.w3.org/2000/svg"
 	x="0"
 	y={i * GRID.ONE_TASK_H + GRID.MILESTONE_H + GRID.ANNUAL_H}
@@ -109,7 +109,7 @@
 		>{taskVM.labelRight}</text
 	>
 
-	{#if $store.rights.isWriter() || $store.rights.isOwner()}
+	{#if appState.rights.isWriter() || appState.rights.isOwner()}
 
 		<!-- Draggable overlay -->
 		<rect
@@ -131,7 +131,7 @@
 			width="15px"
 			height="15px"
 			viewBox="0 0 20 20"
-			class:grabbable={!$store.rights.isReader() && taskVM.isGrabbable}
+			class:grabbable={!appState.rights.isReader() && taskVM.isGrabbable}
 			class="draggabledElement"
 		>
 			<use href="#filler" onmousedown={(e) => downLeft(e, taskVM.id)} role="presentation" />
@@ -144,7 +144,7 @@
 			width="15px"
 			height="15px"
 			viewBox="0 0 20 20"
-			class:grabbable={!$store.rights.isReader() && taskVM.isGrabbable}
+			class:grabbable={!appState.rights.isReader() && taskVM.isGrabbable}
 			class="draggabledElement"
 		>
 			<use href="#filler" onmousedown={(e) => downRight(e, taskVM.id)} role="presentation" />
@@ -158,7 +158,7 @@
 				width="15px"
 				height="15px"
 				viewBox="0 0 20 20"
-				class:grabbable={!$store.rights.isReader() && taskVM.isGrabbable}
+				class:grabbable={!appState.rights.isReader() && taskVM.isGrabbable}
 				class="draggabledElement"
 			>
 				<use href="#filler" onmousedown={(e) => downProgress(e, taskVM.id)} role="presentation" />

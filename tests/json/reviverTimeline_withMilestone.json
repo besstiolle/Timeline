@@ -10,13 +10,8 @@
 			"isShow": true
 		}
 	],
-	"swimlines": [],
 	"isInitiate": false,
-	"start": null,
-	"end": null,
-	"differencial": null,
 	"maxId": 0,
-	"viewbox": "0 0 0 0",
 	"showAll": false,
 	"isOnline": false,
 	"ownerKey": null,

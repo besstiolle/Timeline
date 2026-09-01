@@ -13,7 +13,7 @@ import {
 } from '$lib/api/problemJson';
 import { requestToInstance as requestToInstance } from '$lib/api/apiUtils';
 import { _FALLBACK, _OPTIONS } from '$lib/api/apiUtils';
-import type { Timeline } from '$lib/struct.class';
+import type { Timeline } from '$lib/struct.class.svelte';
 
 const ALPHANUM64 = new RegExp('^[A-Z0-9a-z]{64}$');
 
@@ -92,7 +92,7 @@ export const POST: RequestHandler = async (requestEvent) => {
 	}
 
 	//Prepare a clone for insertion
-	const timelineForInsertion = structuredClone(timelineFromParam);
+	const timelineForInsertion = timelineFromParam.clone();
 
 	//We can retrive ownerKey from db if existing (case : a write push a Timeline)
 	if (timelineFromDb !== undefined && timelineOwnerKey == null) {
@@ -151,15 +151,15 @@ function controlSlugAndKeys(
 		return new REGEX_FAILED_ProblemJsonResponse(instance, 'slug', slug, ALPHANUM64.source);
 	}
 	if (ownerKey !== null && !ownerKey.match(ALPHANUM64)) {
-		const value = ownerKey == null ? (ownerKey = '') : ownerKey;
+		const value = ownerKey == null ? '' : ownerKey;
 		return new REGEX_FAILED_ProblemJsonResponse(instance, 'ownerKey', value, ALPHANUM64.source);
 	}
 	if (writeKey == null || !writeKey.match(ALPHANUM64)) {
-		const value = writeKey == null ? (writeKey = '') : writeKey;
+		const value = writeKey == null ? '' : writeKey;
 		return new REGEX_FAILED_ProblemJsonResponse(instance, 'writeKey', value, ALPHANUM64.source);
 	}
 	if (readKey == null || !readKey.match(ALPHANUM64)) {
-		const value = readKey == null ? (readKey = '') : readKey;
+		const value = readKey == null ? '' : readKey;
 		return new REGEX_FAILED_ProblemJsonResponse(instance, 'readKey', value, ALPHANUM64.source);
 	}
 	if (ownerKey == null && writeKey == null && readKey == null) {

@@ -1,5 +1,5 @@
 import { CREDENTIALS_NOT_EQUALS_ProblemJsonResponse } from '$lib/api/problemJson';
-import type { Timeline } from '$lib/struct.class';
+import type { Timeline } from '$lib/struct.class.svelte';
 
 /**
  * Security control between informations provided and the instance of Timeline

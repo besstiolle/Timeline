@@ -1,60 +1,66 @@
-import { browser } from '$app/environment';
+//import { browser } from '$app/environment';
 import { Helpers } from './helpers';
-import { FactorySwimline } from './factorySwimline';
-import { Milestone, Swimline, Task, Timeline } from './struct.class';
-import { DIFF, GRID } from './constantes';
+import { Milestone, Task, Timeline } from './struct.class.svelte';
 import { DuplicateEntityException } from './timelineException.class';
+import { DIFF } from './constantes';
 
 export class FactoryTimeline {
 	/**
 	 * Return the min date of all tasks & all minestones.
 	 *   If there is no tasks/milestones it return the date of the system
-	 * @param timeline the Timeline to investigate
+	 * @param tasks the list of task
+	 * @param milestones the list of milestones
+	 * @param showAll if we want to see everything, even the hiddens tasks/milestones
 	 * @returns <Date> the min date of milestones & tasks in the Timeline
 	 */
-	static getMin(timeline: Timeline): Date {
-		if (timeline.tasks.length === 0 && timeline.milestones.length === 0) {
-			return new Date();
+	static getMin(tasks:Task[], milestones:Milestone[], showAll:boolean): Date {
+		const today = new Date();
+		if (tasks.length === 0 && milestones.length === 0) {
+			return today
 		}
 
-		let min: Date = new Date('2999-12-31');
-		timeline.tasks.forEach((task) => {
-			if ((timeline.showAll || task.isShow) && min > task.getStart()) {
+		let min: Date|null = null
+		tasks.forEach((task) => {
+			if ((showAll || task.isShow) && (min == null || min > task.getStart())) {
 				min = task.getStart();
 			}
 		});
-		timeline.milestones.forEach((milestone) => {
-			if ((timeline.showAll || milestone.isShow) && min > milestone.getDate()) {
+		milestones.forEach((milestone) => {
+			if ((showAll || milestone.isShow) && (min == null || min > milestone.getDate())) {
 				min = milestone.getDate();
 			}
 		});
 
-		return min;
+		return min?min:today;
 	}
 
 	/**
 	 * Return the max date of all tasks & all minestones.
 	 *   If there is no tasks/milestones it return the date of the system
-	 * @param timeline the Timeline to investigate
+	 * @param tasks the list of task
+	 * @param milestones the list of milestones
+	 * @param showAll if we want to see everything, even the hiddens tasks/milestones
 	 * @returns <Date> the max date of milestones & tasks in the Timeline
 	 */
-	static getMax(timeline: Timeline): Date {
-		if (timeline.tasks.length === 0 && timeline.milestones.length === 0) {
-			return new Date();
+	static getMax(tasks:Task[], milestones:Milestone[], showAll:boolean): Date {
+		const today = new Date();
+		if (tasks.length === 0 && milestones.length === 0) {
+			return today;
 		}
 
-		let max: Date = new Date('1900-01-01');
-		timeline.tasks.forEach((task) => {
-			if ((timeline.showAll || task.isShow) && max < task.getEnd()) {
+		let max: Date|null = null
+		tasks.forEach((task) => {
+			if ((showAll || task.isShow) && (max == null || max < task.getEnd())) {
 				max = task.getEnd();
 			}
 		});
-		timeline.milestones.forEach((milestone) => {
-			if ((timeline.showAll || milestone.isShow) && max < milestone.getDate()) {
+		milestones.forEach((milestone) => {
+			if ((showAll || milestone.isShow) && (max == null || max < milestone.getDate())) {
 				max = milestone.getDate();
 			}
 		});
-		return max;
+
+		return max?max:today;
 	}
 
 	/**
@@ -103,13 +109,8 @@ export class FactoryTimeline {
 	static purge(timeline: Timeline): Timeline {
 		timeline.tasks = new Array<Task>();
 		timeline.milestones = new Array<Milestone>();
-		timeline.swimlines = new Array<Swimline>();
 		timeline.isInitiate = false;
-		timeline.start = null;
-		timeline.end = null;
-		timeline.differencial = null;
 		timeline.maxId = 0;
-		timeline.viewbox = '0 0 0 0';
 		//timeline.showAll = false //Don't reset this parameter
 		//timeline.isOnline = false //Don't reset this parameter
 		//timeline.ownerKey = null //Don't reset this parameter
@@ -120,62 +121,11 @@ export class FactoryTimeline {
 		return timeline;
 	}
 
-	static refresh(timeline: Timeline): Timeline {
-		timeline = this._refreshSwimlines(timeline);
-		timeline = this._processLimites(timeline);
-		timeline = this._processViewboxResizing(timeline);
-		return timeline;
-	}
-
-	protected static _refreshSwimlines(timeline: Timeline): Timeline {
-		timeline.swimlines = new Array<Swimline>();
-
-		let swimlineLabel: string;
-		let previousSwimlineLabel = '';
-		let previousSwimlineId = -1;
-
-		//Initiate each swimline
-		for (let i: number = 0; i < timeline.tasks.length; i++) {
-			swimlineLabel = timeline.tasks[i].swimline;
-			if (swimlineLabel !== '' && previousSwimlineLabel == swimlineLabel) {
-				//reuse id of previous swimline
-			} else if (swimlineLabel !== '' && previousSwimlineLabel != swimlineLabel) {
-				// create new swimline and save its id
-				timeline = FactorySwimline.create(timeline, swimlineLabel);
-				previousSwimlineId = timeline.swimlines.length - 1;
-			} else {
-				//reset previous Swimline id
-				previousSwimlineId = -1;
-			}
-			timeline.tasks[i].swimlineId = previousSwimlineId;
-			previousSwimlineLabel = swimlineLabel;
-		}
-		//update swimlines count of visibles / invisibles tasks
-		for (let i: number = 0; i < timeline.tasks.length; i++) {
-			if (timeline.tasks[i].swimlineId != -1) {
-				timeline.swimlines[timeline.tasks[i].swimlineId].countAllTasks++;
-				if (timeline.tasks[i].isShow) {
-					timeline.swimlines[timeline.tasks[i].swimlineId].countVisibleTasks++;
-				}
-			}
-		}
-		//update swimlines isShow to false if there is no shown task
-		for (let i: number = 0; i < timeline.swimlines.length; i++) {
-			if (timeline.swimlines[i].countVisibleTasks == 0) {
-				timeline.swimlines[i].isShow = false;
-			}
-		}
-
-		return timeline;
-	}
-
-	protected static _processLimites(timeline: Timeline): Timeline {
-		const start = FactoryTimeline.getMin(timeline);
-		const end = FactoryTimeline.getMax(timeline);
-
-		timeline.differencial = Helpers.getEstimationOfDiff(start, end);
-
-		switch (timeline.differencial) {
+	static getStartAndEnd(tasks:Task[], milestones:Milestone[], showAll:boolean, differencial:string):{start:Date,end:Date}{
+		const start = FactoryTimeline.getMin(tasks, milestones, showAll);
+		const end = FactoryTimeline.getMax(tasks, milestones, showAll);
+	
+		switch (differencial) {
 			case DIFF.isMoreThan20Years:
 			case DIFF.isBetween10YearsAnd20Years:
 				start.setFullYear(start.getFullYear() - 1);
@@ -207,22 +157,8 @@ export class FactoryTimeline {
 				end.setDate(end.getDate() + 2);
 				break;
 		}
-
-		timeline.setStart(start);
-		timeline.setEnd(end);
-
-		return timeline;
-	}
-
-	protected static _processViewboxResizing(timeline: Timeline): Timeline {
-		//Reprocess viewbox sizing
-		let len = timeline.tasks.length;
-		if (!timeline.showAll) {
-			len = Helpers.countVisibleTasksInList(timeline.tasks);
-		}
-		timeline.viewbox = `0 0 ${GRID.ALL_WIDTH} ${GRID.MILESTONE_H + GRID.ANNUAL_H + GRID.ONE_TASK_H * len + GRID.TODAY_H}`;
-
-		return timeline;
+	
+		return {start: start, end: end}
 	}
 
 	/**
@@ -231,8 +167,8 @@ export class FactoryTimeline {
 	 * @returns
 	 */
 	static initiate(timeline: Timeline): Timeline {
-		if (browser) {
-			const swimlines = [
+		//if (browser) {
+			const allTasksGrouped = [
 				{
 					title: 'Imagine the story',
 					tasks: [
@@ -405,9 +341,8 @@ export class FactoryTimeline {
 			starting.setDate(starting.getDate() - 15);
 
 			let idTask = 0;
-			swimlines.forEach((swimline, index) => {
-				timeline = FactorySwimline.create(timeline, swimline.title);
-				swimline.tasks.forEach((task) => {
+			allTasksGrouped.forEach((tasks) => {
+				tasks.tasks.forEach((task) => {
 					const localStart = new Date(starting);
 					localStart.setDate(localStart.getDate() + task.start);
 					const localEnd = new Date(starting);
@@ -422,8 +357,7 @@ export class FactoryTimeline {
 							true,
 							task.progress,
 							task.show,
-							swimline.title,
-							index
+							tasks.title
 						)
 					);
 					idTask++;
@@ -464,7 +398,7 @@ export class FactoryTimeline {
 			});
 
 			timeline.maxId = idTask;
-		}
+		//}
 		return timeline;
 	}
 }

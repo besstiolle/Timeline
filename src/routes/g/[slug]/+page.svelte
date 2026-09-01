@@ -1,34 +1,34 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { page } from '$app/state';
-	import { store } from '$lib/stores';
 
+	import { NotFoundOnlineException } from '$lib/timelineException.class';
+	import { m } from '../../../paraglide/messages';
+	import { Timeline } from '$lib/struct.class.svelte';
+	import { goto } from '$app/navigation';
+	import { toastComponentState } from '$lib/state/toastComponent.svelte';
+	import { appState } from '$lib/state/appState.svelte';
+	import { volatileAppState } from '$lib/state/volatileAppState.svelte';
+	import { FactoryCards } from '$lib/factoryCards';
 	import { CustomLocalStorage } from '$lib/customLocalStorage';
 	import { Rights } from '$lib/rights.class';
 	import { JsonParser } from '$lib/jsonParser';
 	import { FactoryTimeline } from '$lib/factoryTimeline';
 	import { get } from '$lib/timelineRepository';
+	import type { ResponseWithMeta } from '$lib/types';
 
 	import Draw from '$lib/components/Draw.svelte';
 	import Toast from '$lib/components/Toast.svelte';
-	import { NotFoundOnlineException } from '$lib/timelineException.class';
-	import type { ResponseWithMeta } from '$lib/types';
-	import { m } from '../../../paraglide/messages';
-	import { Timeline } from '$lib/struct.class';
-	import { goto } from '$app/navigation';
-	import { toastComponentState } from '$lib/state/toastComponent.svelte';
+	import { resolve } from '$app/paths';
 
-	store.update((s) => {
-		s.rights = new Rights(page.url.searchParams);
-		return { ...s };
-	});
+	appState.rights = new Rights(page.url.searchParams);
 
 	const slug = page.params.slug as string;
 
 	if (!slug.match('^[a-zA-Z0-9]{64}$')) {
 		$effect(() => {
 			const timer = setTimeout(() => {
-				goto('/');
+				goto(resolve('/'));
 			}, 1000);
 
 			// Clearing if user go somechere else before timing
@@ -43,14 +43,15 @@
 
 	let currentTimeline: Timeline = CustomLocalStorage.getTimeline(slug);
 
+
 	//If the local copie of Timeline has bigger rights than current url query parameter
 	//  We refresh the window.location with the higher rights
 	let queryString = null;
-	if (!$store.rights.hasOwner() && currentTimeline?.ownerKey) {
+	if (!appState.rights.hasOwner() && currentTimeline?.ownerKey) {
 		queryString = '?o=' + currentTimeline.ownerKey;
-	} else if (!$store.rights.hasWriter() && currentTimeline?.writeKey) {
+	} else if (!appState.rights.hasWriter() && currentTimeline?.writeKey) {
 		queryString = '?w=' + currentTimeline.writeKey;
-	} else if (!$store.rights.hasReader() && currentTimeline?.readKey) {
+	} else if (!appState.rights.hasReader() && currentTimeline?.readKey) {
 		queryString = '?r=' + currentTimeline.readKey;
 	}
 	if (queryString) {
@@ -58,21 +59,23 @@
 			page.url.protocol + '//' + page.url.host + '/g/' + currentTimeline.key + queryString;
 	}
 
-	if ($store.rights.isNone()) {
+	//If loading a local file
+	if (appState.rights.isNone()) {
 		if (!currentTimeline && browser) {
 			currentTimeline = new Timeline(slug, m.slug_default_timeline_title());
 			currentTimeline = FactoryTimeline.initiate(currentTimeline);
+		} 
+		appState.currentTimeline = currentTimeline;
+		if(currentTimeline && browser){
+			appState.rights = new Rights(slug)
 		}
-		store.update((s) => {
-			s.currentTimeline = currentTimeline;
-			return { ...s };
-		});
+	//Si loading distant data from a local file
 	} else if (browser) {
-		let keyUrl = $store.rights.getTimelineField();
+		let keyUrl = appState.rights.getTimelineField();
 		if (keyUrl == null) {
 			keyUrl = '';
 		}
-		let valueUrl = $store.rights.getSlugParamKeyValue();
+		let valueUrl = appState.rights.getSlugParamKeyValue();
 		if (valueUrl == null) {
 			valueUrl = '';
 		}
@@ -87,16 +90,11 @@
 					JsonParser.timelineReviver
 				);
 
-				//We're using the tricks of cloning the content of the Svelte store to avoid multiple refresh of store
-				let cloneStore = structuredClone($store);
+				appState.currentTimeline = currentTimeline;
 				//Update date of lastUpdated in the clone
-				cloneStore.lastUpdatedLocally = 0;
-				cloneStore.lastCommitedRemotely = responseWithMeta.meta.ts;
-				cloneStore.currentTimeline = currentTimeline;
-				cloneStore.rights = $store.rights;
-				// Tricks : Set to true if we don't want to refresh lastUpdatedLocally property
-				cloneStore._cancelRefreshLastUpdatedLocally = true;
-				store.set(cloneStore);
+				volatileAppState.lastUpdatedLocally = 0;
+				volatileAppState.lastCommitedRemotely = responseWithMeta.meta.ts;
+
 			})
 			.catch((err) => {
 				console.error('Error where calling get() in [slug].svelte : %o', err);
@@ -110,23 +108,26 @@
 				} else {
 					toastComponentState.show(m.slug_toast_remote_offline(), false, 0);
 				}
-				
-				store.update((s) => {
-					s.currentTimeline = currentTimeline;
-					return { ...s };
-				});
+				appState.currentTimeline = currentTimeline;
 			})
 			.finally(() => {});
 	}
+
+	//(re)Create Cards
+	if(appState.currentTimeline && appState.currentTimeline.isInitiate){
+		//console.info("refresh cards with", appState.currentTimeline.title)
+		appState.cards = FactoryCards.updateCardsWithTimeline(appState.cards, appState.currentTimeline);
+	}
+		
 </script>
 
 <svelte:head>
 	<title
-		>[T-C] {$store.currentTimeline ? $store.currentTimeline.title : m.slug_default_title()}</title
+		>[T-C] {appState.currentTimeline ? appState.currentTimeline.title : m.slug_default_title()}</title
 	>
 </svelte:head>
 
-{#if $store.currentTimeline?.isInitiate}
+{#if appState.currentTimeline?.isInitiate}
 	<Draw />
 {/if}
 

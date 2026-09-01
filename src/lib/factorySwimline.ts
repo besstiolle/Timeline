@@ -1,14 +1,26 @@
-import { Swimline, Timeline } from './struct.class';
+import { Task } from './struct.class.svelte';
 
 export class FactorySwimline {
+
 	/**
-	 * create à insert a new Swimline based on its label. Return the new id/index
-	 * @param timeline the Timeline to insert to
-	 * @param label the label of the Swimline to create
-	 * @returns the timeline with the new Swimline.
+	 * Return the number of tasks visible (task.isShow=true) inside the list of tasks
+	 * 	when tasks.swimline equals swimlineName parameter
+	 * @param tasks The list of Task to look inside
+	 * @param swimlineName The name of swimline
+	 * @returns number of tasks visibles
 	 */
-	static create(timeline: Timeline, label: string): Timeline {
-		timeline.swimlines.push(new Swimline(label));
-		return timeline;
+	static countVisibleTasksInListForSwimlineName(tasks: Task[], swimlineName:string): number {
+		return tasks.filter((t) => (t.isShow && t.swimline == swimlineName)).length;
 	}
+
+	/**
+	 * Return true if at last one task of the list is visible for this swimline
+	 * @param tasks The list of Task to look inside
+	 * @param swimlineName The name of swimline
+	 * @returns boolean 
+	 */
+	static hasVisibleTasksInListForSwimlineName(tasks: Task[], swimlineName:string): boolean {
+		return FactorySwimline.countVisibleTasksInListForSwimlineName(tasks, swimlineName) > 0;
+	}
+
 }

@@ -1,11 +1,25 @@
 <script lang="ts">
-	import { store } from '$lib/stores';
-
 	import LiveTableTask from './LiveTableTask.svelte';
 	import LiveTableMilestone from './LiveTableMilestone.svelte';
 	import ShadowBox from '$lib/components/ShadowBox.svelte';
 	import { m } from '../../../paraglide/messages';
 	import { shadowBoxComponentState } from '$lib/state/shadowBoxComponentState.svelte';
+	import { appState } from '$lib/state/appState.svelte';
+	import { FactoryCards } from '$lib/factoryCards';
+
+	 $effect(() => {
+		if(appState.currentTimeline && appState.currentTimeline.isInitiate){
+			appState.currentTimeline.title = localTitle
+			const cardIndex =  FactoryCards.getIndexByKey(appState.cards, appState.currentTimeline.key)
+			if(cardIndex !== null){
+				//console.info("update title from Live", appState.currentTimeline.title)
+				appState.cards[cardIndex].title = appState.currentTimeline.title;
+			}
+		}
+	}) 
+
+	let localTitle:string = $state(appState.currentTimeline.title)
+
 
 </script>
 
@@ -16,7 +30,7 @@
 		<input
 			id="titleOfTimeline"
 			type="text"
-			bind:value={$store.currentTimeline.title}
+			bind:value={localTitle}
 			class="w-2xl"
 		/>
 	</div>
@@ -25,14 +39,14 @@
 	<div>
 		<label for="showToday">{m.live_editor_show_today_vertical_line()} : </label><input
 			type="checkbox"
-			bind:checked={$store.currentTimeline.showToday}
+			bind:checked={appState.currentTimeline.showToday}
 			name="showToday"
 			id="showToday"
 		/>
 	</div>
-	<!--<div><label for={LIVE_PREFIX.TSF}>A custom start date to make a focus : </label><input type="date" id="{LIVE_PREFIX.TSF}" value="{$store.currentTimeline.dateStartFocus}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore2(LIVE_PREFIX.TSF)} on:blur={() => updateStore2(LIVE_PREFIX.TSF)}></div>
-    <div><label for={LIVE_PREFIX.TEF}>A custom end  date to make a focus : </label><input type="date" id="{LIVE_PREFIX.TEF}" value="{$store.currentTimeline.dateEndFocus}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore2(LIVE_PREFIX.TEF)} on:blur={() => updateStore2(LIVE_PREFIX.TEF)}></div>
-    <div><label for="showOutOfBounds">Show Tasks & Milestones even if theirs start & end date are out of limit of custom dates : </label><input type="checkbox" bind:checked="{$store.currentTimeline.showOutOfBounds}"  name="showOutOfBounds" id="showOutOfBounds" /></div>-->
+	<!--<div><label for={LIVE_PREFIX.TSF}>A custom start date to make a focus : </label><input type="date" id="{LIVE_PREFIX.TSF}" value="{appState.currentTimeline.dateStartFocus}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore2(LIVE_PREFIX.TSF)} on:blur={() => updateStore2(LIVE_PREFIX.TSF)}></div>
+    <div><label for={LIVE_PREFIX.TEF}>A custom end  date to make a focus : </label><input type="date" id="{LIVE_PREFIX.TEF}" value="{appState.currentTimeline.dateEndFocus}" min="1900-01-01" max="2999-12-31" on:change={() => updateStore2(LIVE_PREFIX.TEF)} on:blur={() => updateStore2(LIVE_PREFIX.TEF)}></div>
+    <div><label for="showOutOfBounds">Show Tasks & Milestones even if theirs start & end date are out of limit of custom dates : </label><input type="checkbox" bind:checked="{appState.currentTimeline.showOutOfBounds}"  name="showOutOfBounds" id="showOutOfBounds" /></div>-->
 </ShadowBox>{/if}
 
 <style>

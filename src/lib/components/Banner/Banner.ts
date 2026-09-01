@@ -1,5 +1,5 @@
-import type { Timeline } from '$lib/struct.class';
 import { DAYS, DIFF, GRID, MONTHS } from '$lib/constantes';
+import { appState } from '$lib/state/appState.svelte';
 
 export interface jalonInterface {
 	left: number;
@@ -7,11 +7,11 @@ export interface jalonInterface {
 	classCss: string;
 }
 
-export function getJalons(timeline: Timeline): jalonInterface[] {
-	let dateIncremental = timeline.getStart();
-	const msStart = timeline.getStartTime();
-	const msEnd = timeline.getEndTime();
-	const differencial = timeline.differencial;
+export function getJalons(): jalonInterface[] {
+	let dateIncremental = new Date(appState.currentTimeline.start);
+	const msStart = appState.currentTimeline.start.getTime();
+	const msEnd = appState.currentTimeline.end.getTime();
+	const differencial = appState.currentTimeline.differencial;
 
 	let i = 0;
 	const jalons: jalonInterface[] = [];
@@ -19,7 +19,8 @@ export function getJalons(timeline: Timeline): jalonInterface[] {
 	let innerLabel: number | string = '';
 	let left: number;
 
-	while (i < 100 && timeline.getEndTime() >= dateIncremental.getTime()) {
+	while (i < 100 && appState.currentTimeline.end.getTime() >= dateIncremental.getTime()) {
+	
 		i++;
 		left = ((dateIncremental.getTime() - msStart) / (msEnd - msStart)) * GRID.MIDDLE_WIDTH;
 		innerClassCss = '';

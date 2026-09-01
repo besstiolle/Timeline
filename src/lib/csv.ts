@@ -5,7 +5,7 @@ import type {
 	abstractTaskInterface,
 	abstractTimelineInterface,
 	Timeline
-} from './struct.class';
+} from './struct.class.svelte';
 
 const RC: string = '\r\n';
 const SEPARATOR: string = ';';

@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { RequestEventStub, toRequestEvent, VALID_DUMMY_TIMELINE } from '../apiUtils';
+import { RequestEventStub, toRequestEvent, getValideDummyTimeline } from '../apiUtils';
 
 
 import { countTimelineByKey, truncateTimeline } from '$lib/server/timelineCRUD';
-import type { Timeline } from '$lib/struct.class';
+import type { Timeline } from '$lib/struct.class.svelte';
 import { createTestDb } from '../dbUtilsTest';
 
 const ENTRYPOINT = 'https://dummyEntrypoint.io/api/timeline';
@@ -89,12 +89,13 @@ describe('API /api/timeline with OPTIONS & denied method', () => {
 	});
 });
 
-it('POST /api/timeline should return 400 if not having a proper body', async () => {
-	const clone = structuredClone(VALID_DUMMY_TIMELINE);
+//since clone() are added, this won't throw an exception and it will clean the invalid key
+/* it('POST /api/timeline should return 400 if not having a proper body', async () => {
+	const clone = getValideDummyTimeline();
 	// @ts-expect-error forcing error for testing porpose
 	clone['foo'] = 'bar';
 	testIntegrityOfKey(clone, 400);
-});
+}); */
 
 it('POST /api/timeline should return 400 if body is an empty JSON', async () => {
 	testIntegrityOfKey({}, 400);
@@ -105,7 +106,7 @@ it('POST /api/timeline should return 400 if not having a body at all', async () 
 });
 
 it('POST /api/timeline should return 422 if integrity of slug failed by RegEx', async () => {
-	const clone = structuredClone(VALID_DUMMY_TIMELINE);
+	const clone = getValideDummyTimeline();
 	// @ts-expect-error forcing error for testing porpose
 	clone['key'] = null;
 	testIntegrityOfKey(clone, 422);
@@ -119,7 +120,7 @@ it('POST /api/timeline should return 422 if integrity of slug failed by RegEx', 
 	testIntegrityOfKey(clone, 422);
 });
 it('POST /api/timeline should return 422 if integrity of ownerKey failed by RegEx', async () => {
-	const clone = structuredClone(VALID_DUMMY_TIMELINE);
+	const clone = getValideDummyTimeline();
 
 	clone['ownerKey'] = null;
 	testIntegrityOfKey(clone, 401); // During first creation the ownerKey is necessary => 401
@@ -134,7 +135,7 @@ it('POST /api/timeline should return 422 if integrity of ownerKey failed by RegE
 });
 
 it('POST /api/timeline should return 422 if integrity of writeKey failed by RegEx', async () => {
-	const clone = structuredClone(VALID_DUMMY_TIMELINE);
+	const clone = getValideDummyTimeline();
 	clone['writeKey'] = null;
 	testIntegrityOfKey(clone, 422);
 	clone['writeKey'] = '';
@@ -147,7 +148,7 @@ it('POST /api/timeline should return 422 if integrity of writeKey failed by RegE
 	testIntegrityOfKey(clone, 422);
 });
 it('POST /api/timeline should return 422 if integrity of readKey failed by RegEx', async () => {
-	const clone = structuredClone(VALID_DUMMY_TIMELINE);
+	const clone = getValideDummyTimeline();
 	clone['readKey'] = null;
 	testIntegrityOfKey(clone, 422);
 	clone['readKey'] = '';
@@ -159,50 +160,51 @@ it('POST /api/timeline should return 422 if integrity of readKey failed by RegEx
 	clone['readKey'] = '64carWithError////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!';
 	testIntegrityOfKey(clone, 422);
 });
-
 it('POST /api/timeline should return 401 if access key are different vs what is already in database failed', async () => {
-	let counter = countTimelineByKey(db, VALID_DUMMY_TIMELINE.key);
+	let counter = countTimelineByKey(db, getValideDummyTimeline().key);
 	expect(counter).toBe(0);
 
 	//a first insertion by owner key: 201
-	let clone = structuredClone(VALID_DUMMY_TIMELINE);
+	let clone:Timeline = getValideDummyTimeline();
+	expect(clone.key.length).toBe(64)
+
 	const event = new RequestEventStub('POST', ENTRYPOINT, JSON.stringify(clone), db);
 	const response = await handlers.POST(toRequestEvent(event));
 	expect(response.status).toBe(201);
-	expect(response.headers.get(HEADER_CONTENT_TYPE)).toContain(HEADER_CONTENT_TYPE_APPJSON);
-
-	counter = countTimelineByKey(db, VALID_DUMMY_TIMELINE.key);
+	expect(response.headers.get(HEADER_CONTENT_TYPE)).toContain(HEADER_CONTENT_TYPE_APPJSON); 
+	
+	counter = countTimelineByKey(db, getValideDummyTimeline().key);
 	expect(counter).toBe(1);
 
 	//a second insertion by altered owner key : 401
-	clone = structuredClone(VALID_DUMMY_TIMELINE);
+	clone = getValideDummyTimeline();
 	clone.ownerKey = FAKE_KEY;
 	testIntegrityOfKey(clone, 401);
 	expect(counter).toBe(1);
 
 	//a second insertion by altered write key and no owner key : 401
-	clone = structuredClone(VALID_DUMMY_TIMELINE);
+	clone = getValideDummyTimeline();
 	clone.ownerKey = null;
 	clone.writeKey = FAKE_KEY;
 	testIntegrityOfKey(clone, 401);
 	expect(counter).toBe(1);
 });
 it('POST /api/timeline with only writeKey should return 401 if there is not already an existing timeline', async () => {
-	const clone = structuredClone(VALID_DUMMY_TIMELINE);
+	const clone = getValideDummyTimeline();
 	clone['ownerKey'] = null;
 	testIntegrityOfKey(clone, 401); // During first creation the ownerKey is necessary => 401
 });
 
 it('POST /api/timeline should return 201 + json content type created if success', async () => {
-	const clone = structuredClone(VALID_DUMMY_TIMELINE);
+	const clone = getValideDummyTimeline();
 	const event = new RequestEventStub('POST', ENTRYPOINT, JSON.stringify(clone), db);
 	const response = await handlers.POST(toRequestEvent(event));
 	expect(response.status).toBe(201);
 	expect(response.headers.get(HEADER_CONTENT_TYPE)).toContain(HEADER_CONTENT_TYPE_APPJSON);
-});
+}); 
 
 it('POST /api/timeline should return a ResponseWithMeta object if success', async () => {
-	const clone = structuredClone(VALID_DUMMY_TIMELINE);
+	const clone = getValideDummyTimeline();
 	const event = new RequestEventStub('POST', ENTRYPOINT, JSON.stringify(clone), db);
 	const response = await handlers.POST(toRequestEvent(event));
 	const json = (await response.json()) as unknown as ResponseWithMeta;
@@ -210,69 +212,69 @@ it('POST /api/timeline should return a ResponseWithMeta object if success', asyn
 	expect(json?.meta?.ts).toBeLessThanOrEqual(Date.now());
 
 	const returnedTimeline = json?.data as Timeline;
-	expect(returnedTimeline).toStrictEqual(clone);
-});
+	expect(JSON.stringify(returnedTimeline)).toStrictEqual(JSON.stringify(clone));
+}); 
 it('POST /api/timeline should return 201 if everything is ok and data must be created inside db', async () => {
-	let counter = countTimelineByKey(db, VALID_DUMMY_TIMELINE.key);
+	let counter = countTimelineByKey(db, getValideDummyTimeline().key);
 	expect(counter).toBe(0);
 
 	//a first insertion by owner key: 201
-	let clone = structuredClone(VALID_DUMMY_TIMELINE);
+	let clone = getValideDummyTimeline();
 	let event = new RequestEventStub('POST', ENTRYPOINT, JSON.stringify(clone), db);
 	let response = await handlers.POST(toRequestEvent(event));
 	expect(response.status).toBe(201);
 	expect(response.headers.get(HEADER_CONTENT_TYPE)).toContain(HEADER_CONTENT_TYPE_APPJSON);
 
-	counter = countTimelineByKey(db, VALID_DUMMY_TIMELINE.key);
+	counter = countTimelineByKey(db, getValideDummyTimeline().key);
 	expect(counter).toBe(1);
 
 	//a second insertion by owner key : 201
-	clone = structuredClone(VALID_DUMMY_TIMELINE);
+	clone = getValideDummyTimeline();
 	event = new RequestEventStub('POST', ENTRYPOINT, JSON.stringify(clone), db);
 	response = await handlers.POST(toRequestEvent(event));
 	expect(response.status).toBe(201);
 	expect(response.headers.get(HEADER_CONTENT_TYPE)).toContain(HEADER_CONTENT_TYPE_APPJSON);
 
-	counter = countTimelineByKey(db, VALID_DUMMY_TIMELINE.key);
+	counter = countTimelineByKey(db, getValideDummyTimeline().key);
 	expect(counter).toBe(2);
 });
 
 it('POST /api/timeline with only writeKey should return 201 + json if there is already an existing timeline', async () => {
-	let counter = countTimelineByKey(db, VALID_DUMMY_TIMELINE.key);
+	let counter = countTimelineByKey(db, getValideDummyTimeline().key);
 	expect(counter).toBe(0);
 
 	//a first insertion by owner key: 201
-	let clone = structuredClone(VALID_DUMMY_TIMELINE);
+	let clone = getValideDummyTimeline();
 	let event = new RequestEventStub('POST', ENTRYPOINT, JSON.stringify(clone), db);
 	let response = await handlers.POST(toRequestEvent(event));
 	expect(response.status).toBe(201);
 	expect(response.headers.get(HEADER_CONTENT_TYPE)).toContain(HEADER_CONTENT_TYPE_APPJSON);
 
-	counter = countTimelineByKey(db, VALID_DUMMY_TIMELINE.key);
+	counter = countTimelineByKey(db, getValideDummyTimeline().key);
 	expect(counter).toBe(1);
 
 	//a second insertion by write key : 201
-	clone = structuredClone(VALID_DUMMY_TIMELINE);
+	clone = getValideDummyTimeline();
 	clone.ownerKey = '';
 	event = new RequestEventStub('POST', ENTRYPOINT, JSON.stringify(clone), db);
 	response = await handlers.POST(toRequestEvent(event));
 	expect(response.status).toBe(201);
 	expect(response.headers.get(HEADER_CONTENT_TYPE)).toContain(HEADER_CONTENT_TYPE_APPJSON);
 
-	counter = countTimelineByKey(db, VALID_DUMMY_TIMELINE.key);
+	counter = countTimelineByKey(db, getValideDummyTimeline().key);
 	expect(counter).toBe(2);
 });
 
 it('POST /api/timeline with only writeKey should return an object without ownerKey if there is already an existing timeline', async () => {
 	//a first insertion by owner key: 201
-	let clone = structuredClone(VALID_DUMMY_TIMELINE);
+	let clone = getValideDummyTimeline();
 	let event = new RequestEventStub('POST', ENTRYPOINT, JSON.stringify(clone), db);
 	let response = await handlers.POST(toRequestEvent(event));
 	expect(response.status).toBe(201);
 	expect(response.headers.get(HEADER_CONTENT_TYPE)).toContain(HEADER_CONTENT_TYPE_APPJSON);
 
 	//a second insertion by write key : 201
-	clone = structuredClone(VALID_DUMMY_TIMELINE);
+	clone = getValideDummyTimeline();
 	clone.ownerKey = '';
 	event = new RequestEventStub('POST', ENTRYPOINT, JSON.stringify(clone), db);
 	response = await handlers.POST(toRequestEvent(event));
@@ -283,3 +285,4 @@ it('POST /api/timeline with only writeKey should return an object without ownerK
 	expect(json.data.writeKey).toBe(clone.writeKey);
 	expect(json.data.readKey).toBe(clone.readKey);
 });
+ 

@@ -3,10 +3,12 @@
 export class popupConfirmationComponentClassState {
 	showClassName = $state(false)
 	_message: string = $state('');
-	_validation =  (args: string[]) => {};
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	_validation =  (_args: string[]) => {};
 	_validationText: string = $state('');
 	_validationArgs: string[] = [];
-	_cancelation =  (args: string[]) => {};
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	_cancelation =  (_args: string[]) => {};
 	_cancelationText: string = $state('');
 	_cancelationArgs: string[] = [];
 
