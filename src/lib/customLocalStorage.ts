@@ -28,7 +28,11 @@ export class CustomLocalStorage {
 	}
 
 	static getCards(): Array<Card> {
-		return this.get(LOCAL_STORAGE.KEY_CARDS, JsonParser.cardsReviver) as Array<Card>;
+		const cards = this.get(LOCAL_STORAGE.KEY_CARDS, JsonParser.cardsReviver) as Array<Card>;
+		if(cards == null){
+			return new Array<Card>()
+		} 
+		return cards
 	}
 
 	static getTimeline(key: string): Timeline {
@@ -54,7 +58,6 @@ export class CustomLocalStorage {
 		}
 
 		const localValue = localStorage.getItem(key)
-
 		if (localValue === null) {
 			return null;
 		}

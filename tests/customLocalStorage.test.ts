@@ -47,6 +47,11 @@ describe('test CustomLocalStorage', () => {
 
 			expect(result).toBeNull();
 		});
+		
+		it('should return Array<Cards> when key cards does not exist in localStorage', () => {
+			const result = CustomLocalStorage.getCards();
+			expect(result).not.toBeNull();
+		});
 
 		it('should retrieve timeline and invoke timelineReviver', () => {
 			const timelineMock = { key: 't1', title: 'My Timeline' } as Timeline;
