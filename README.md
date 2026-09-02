@@ -4,22 +4,32 @@ A free and public tool to organise your timeline charts entirely made with [Svel
 
 Take a look on [our demo](https://timechart.dev/) and give your feedback [here](https://github.com/besstiolle/Timeline/issues).
 
-## Roadmap
+<p align="center"><img src="https://i.imgboxy.com/048dbr.png" alt="Preview of the homepage" width="80%"/></p>
+<p align="center"><img src="https://i.imgboxy.com/x3n1wu.png" alt="Preview of a customized Timeline" width="80%"/></p>
 
-Currently, there is no clear roadmap but we have done a lot of great stuff!
+## Main features
 
 - ✔️ Allow multiple charts for the same session
 - ✔️ Allow switching between your charts
-- ✔️ Improve rendering when the graph is spread over very long periods (> 15 months)
-- ✔️ Allow [.toml](https://github.com/toml-lang/toml) files's usage
-- ✔️ Guessing encoding of your files
-- ✔️ Allow users to save their charts remotely
-- ✔️ Share charts between user
+- ✔️ The chart can be adapted to suit both short and long timelines
+- ✔️ Export and import your creations as CSV or TOML files
+- ✔️ Take a screenshot and download a high-fidelity image to your computer
+- ✔️ There are no limits on your creations, whether in terms of the number of timelines, tasks or milestones. 
+- ✔️ You can choose to keep your data entirely offline or to save your creations on the remote server
+- ✔️ You can share your creations with different levels of access rights: read-only, read & write, or owner rights
+- ✔️ **free, just like a free beer** – whether on [our demo](https://timechart.dev/) instance or via self-hosting using our [Docker image](https://hub.docker.com/r/besstiolle/timechart)
 
-But we continue to have lots of exciting ideas
+<p align="center"><img src="https://i.imgboxy.com/kr84ub.gif" alt="Preview of the homepage"/></p>
+<p align="center">Most of the controls can be operated using the mouse</p>
+<p align="center"><img src="https://i.imgboxy.com/ye758k.gif" alt="Preview of a customized Timeline"/></p>
+<p align="center">Export / Import and share your creations using a simple security mechanism</p>
+<p align="center"><img src="https://i.imgboxy.com/lirn2z.gif" alt="Preview of a customized Timeline"/></p>
+<p align="center">Simply take a screenshot of your timeline in light mode or dark mode</p>
 
-- 🔥 Improve tests coverage
-- 📅 Adding more control on data (length of string / validation of date / ...)
+## Roadmap
+
+We continue to have lots of exciting ideas
+
 - 📅 Implementing other types of charts (like gantt) [see #4](https://github.com/besstiolle/Timeline/issues/4)
 - 📅 New options to customize color [see #2](https://github.com/besstiolle/Timeline/issues/2)
 - 📅 Zooming in/out on your charts [see #3](https://github.com/besstiolle/Timeline/issues/3)
