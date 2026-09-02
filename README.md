@@ -4,8 +4,8 @@ A free and public tool to organise your timeline charts entirely made with [Svel
 
 Take a look on [our demo](https://timechart.dev/) and give your feedback [here](https://github.com/besstiolle/Timeline/issues).
 
-<p align="center"><img src="https://i.imgboxy.com/048dbr.png" alt="Preview of the homepage" width="80%"/></p>
-<p align="center"><img src="https://i.imgboxy.com/x3n1wu.png" alt="Preview of a customized Timeline" width="80%"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/5dedcc9d-f4e9-4ba1-8cfc-31e910513994" alt="Preview of the homepage" width="80%"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/73df1294-57f6-420c-ae28-94848192f09e" alt="Preview of a customized Timeline" width="80%"/></p>
 
 ## Main features
 
@@ -19,17 +19,19 @@ Take a look on [our demo](https://timechart.dev/) and give your feedback [here](
 - ✔️ You can share your creations with different levels of access rights: read-only, read & write, or owner rights
 - ✔️ **free, just like a free beer** – whether on [our demo](https://timechart.dev/) instance or via self-hosting using our [Docker image](https://hub.docker.com/r/besstiolle/timechart)
 
-<p align="center"><img src="https://i.imgboxy.com/kr84ub.gif" alt="Preview of the homepage"/></p>
+<p align="center"><video src="https://github.com/user-attachments/assets/10c52e27-b543-4655-9d0d-bc84ea53b110" autoplay loop muted width="100%"></video></p>
 <p align="center">Most of the controls can be operated using the mouse</p>
-<p align="center"><img src="https://i.imgboxy.com/ye758k.gif" alt="Preview of a customized Timeline"/></p>
+<p align="center"><video src="https://github.com/user-attachments/assets/411717aa-717d-4810-b842-a9e1057a49e7" autoplay loop muted width="100%"></video></p>
 <p align="center">Export / Import and share your creations using a simple security mechanism</p>
-<p align="center"><img src="https://i.imgboxy.com/lirn2z.gif" alt="Preview of a customized Timeline"/></p>
+<p align="center"><video src="https://github.com/user-attachments/assets/d9e826e8-c086-4a51-86bc-712135c90874" autoplay loop muted width="100%"></video></p>
 <p align="center">Simply take a screenshot of your timeline in light mode or dark mode</p>
+
 
 ## Roadmap
 
 We continue to have lots of exciting ideas
 
+- 📅 Adding more control on data (length of string / validation of date / ...)
 - 📅 Implementing other types of charts (like gantt) [see #4](https://github.com/besstiolle/Timeline/issues/4)
 - 📅 New options to customize color [see #2](https://github.com/besstiolle/Timeline/issues/2)
 - 📅 Zooming in/out on your charts [see #3](https://github.com/besstiolle/Timeline/issues/3)
