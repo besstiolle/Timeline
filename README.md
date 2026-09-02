@@ -19,11 +19,11 @@ Take a look on [our demo](https://timechart.dev/) and give your feedback [here](
 - ✔️ You can share your creations with different levels of access rights: read-only, read & write, or owner rights
 - ✔️ **free, just like a free beer** – whether on [our demo](https://timechart.dev/) instance or via self-hosting using our [Docker image](https://hub.docker.com/r/besstiolle/timechart)
 
-<p align="center"><video src="https://github.com/user-attachments/assets/10c52e27-b543-4655-9d0d-bc84ea53b110" autoplay loop muted width="100%"></video></p>
+<p align="center"><video src="https://github.com/user-attachments/assets/d9e826e8-c086-4a51-86bc-712135c90874" autoplay loop muted width="100%"></video></p>
 <p align="center">Most of the controls can be operated using the mouse</p>
 <p align="center"><video src="https://github.com/user-attachments/assets/411717aa-717d-4810-b842-a9e1057a49e7" autoplay loop muted width="100%"></video></p>
 <p align="center">Export / Import and share your creations using a simple security mechanism</p>
-<p align="center"><video src="https://github.com/user-attachments/assets/d9e826e8-c086-4a51-86bc-712135c90874" autoplay loop muted width="100%"></video></p>
+<p align="center"><video src="https://github.com/user-attachments/assets/10c52e27-b543-4655-9d0d-bc84ea53b110" autoplay loop muted width="100%"></video></p>
 <p align="center">Simply take a screenshot of your timeline in light mode or dark mode</p>
 
 
