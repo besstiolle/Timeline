@@ -53,12 +53,22 @@ export class CustomLocalStorage {
 			return null;
 		}
 
-		if (localStorage.getItem(key) === null) {
+		const localValue = localStorage.getItem(key)
+
+		if (localValue === null) {
 			return null;
 		}
 
 		//console.info("get for key '%o'", key)
-		return JSON.parse(localStorage.getItem(key) as string, reviver);
+		let result:string | Timeline | Card[] | null = null
+		try{
+			result = JSON.parse(localValue as string, reviver)
+		} catch(e){
+			console.warn('JsonParserException for key', key, " with value ", localValue)
+			console.warn('The exception was', e)
+		}
+		return result;
+		
 	}
 
 	/**
