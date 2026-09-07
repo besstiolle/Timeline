@@ -44,6 +44,10 @@ Thank you everybody for your help!
 - [Kevin Danezis](https://github.com/besstiolle)
 - [CMCmike](https://github.com/CMCmike)
 
+ ### Contributions on translation
+
+- Italian : [albanobattistella](https://github.com/albanobattistella) 
+
 ### Developing
 
 ```bash
@@ -183,6 +187,7 @@ The following translations are currently available:
 
 - ✅ English
 - ✅ Français
+- ✅ Italiano by [albanobattistella](https://github.com/albanobattistella)
 
 Don't hesitate to push a PR to improve translation coverage.
 
